@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incontro 1 - Capire gli strumenti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .agent-sim-grid { grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); }
+  @media (max-width: 900px) {
+    .agent-sim-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { gap: 8px !important; padding: 0 10px !important; }
+    .bottom-bar button, .bottom-bar a { padding: 10px 14px !important; font-size: var(--fs-xs) !important; min-height: 44px; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 64px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- simulazione chatbot/agente (codice condiviso con simulazione-agente.html) ---------- */
+/* Nota: per garantire il funzionamento aprendo il file da file:// (Babel standalone non può
+   caricare script esterni via XHR da file locali in molti browser), il componente è duplicato
+   in modo controllato in incontro-1/slide.html e incontro-1/simulazione-agente.html. */
+
+const AGENT_TASK = 'Prepara l\'elenco delle uscite di novembre con i docenti accompagnatori mancanti, partendo dal file delle pratiche.';
+
+const AGENT_STEPS = [
+  { action: 'Fa un piano', detail: 'Prima di muoversi, elenca cosa deve fare: aprire il file, filtrare, controllare, scrivere il riepilogo.', icon: '📝' },
+  { action: 'Legge il file', detail: 'Apre "pratiche-uscite-novembre.xlsx" (dati di prova) e ne guarda il contenuto.', icon: '📂',
+    options: ['Manda subito una mail a tutti i docenti', 'Apre il file delle pratiche di novembre', 'Chiede a te di incollare i dati a mano'], correct: 1 },
+  { action: 'Usa uno strumento', detail: 'Filtra le righe: tiene solo le pratiche di novembre senza un nome nella colonna "accompagnatore".', icon: '🔎',
+    options: ['Rilegge tutto il file a mano, riga per riga', 'Cancella le righe che non capisce', 'Usa uno strumento per filtrare le pratiche senza accompagnatore'], correct: 2 },
+  { action: 'Trova il problema', detail: 'Il filtro restituisce 3 pratiche senza accompagnatore: "Uscita museo civico", "Visita azienda agricola" e "Teatro in lingua inglese".', icon: '🧾',
+    options: ['Trova le pratiche senza un accompagnatore assegnato', 'Non trova nessuna pratica incompleta', 'Si ferma e chiede a te di continuare'], correct: 0 },
+  { action: 'Scrive il riepilogo', detail: 'Crea il file "riepilogo-uscite-novembre.md" con l\'elenco completo e le pratiche da sistemare in evidenza.', icon: '✍️',
+    options: ['Invia da solo una mail ai docenti coinvolti', 'Chiude tutto senza salvare nulla', 'Scrive un file di riepilogo con l\'elenco e le pratiche da sistemare'], correct: 2 },
+  { action: 'Si controlla', detail: 'Riconta le pratiche guardando anche le altre colonne: per "Teatro in lingua inglese" l\'accompagnatore è scritto nella colonna "note". Le pratiche senza accompagnatore sono 2, non 3: corregge il riepilogo.', icon: '🔁',
+    options: ['Considera il lavoro finito senza riguardarlo', 'Ricontrolla i conteggi e corregge un errore che aveva fatto', 'Ricomincia tutto il compito da capo'], correct: 1 },
+  { action: 'Consegna', detail: 'Presenta il riepilogo corretto e segnala le due pratiche da completare, pronte per essere controllate da una persona.', icon: '📬',
+    options: ['Consegna il riepilogo e segnala cosa manca', 'Approva da solo le uscite incomplete', 'Elimina le pratiche incomplete dal file'], correct: 0 },
+];
+
+function ChatbotColumn() {
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '9px', display: 'flex', flexDirection: 'column', gap: '4px', minHeight: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+        <span style={{ fontSize: '26px' }}>💬</span>
+        <h3 style={{ color: colors.info, margin: 0 }}>Chatbot</h3>
+      </div>
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Tu:</strong> {AGENT_TASK}
+      </div>
+      <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «Certo, incollami qui l'elenco delle pratiche e ti dico quali sembrano senza accompagnatore.»
+      </div>
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Tu:</strong> (copi e incolli a mano le righe del file, sperando di non saltarne nessuna)
+      </div>
+      <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «In base a quello che mi hai incollato, sembrano mancare gli accompagnatori per 2 o 3 uscite» <em>(può sbagliare il conteggio: non ha riletto il file da solo)</em>.
+      </div>
+      <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: `1px dashed ${colors.border}`, fontSize: 'var(--fs-sm)', color: colors.textMuted }}>
+        Finisce qui: il testo che risponde. Copiare i dati giusti, controllare il conteggio e scrivere il riepilogo restano compiti tuoi.
+      </div>
+    </div>
+  );
+}
+
+function AgentColumn({ compact }) {
+  const [step, setStep] = useState(0);
+  const [guessMode, setGuessMode] = useState(false);
+  const [guess, setGuess] = useState(null);
+  const [revealed, setRevealed] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [totalGuesses, setTotalGuesses] = useState(0);
+  const [log, setLog] = useState([AGENT_STEPS[0]]);
+
+  const atEnd = step >= AGENT_STEPS.length - 1;
+  const nextStepData = !atEnd ? AGENT_STEPS[step + 1] : null;
+
+  const startGuess = () => { setGuess(null); setRevealed(false); setGuessMode(true); };
+
+  const pickGuess = (idx) => {
+    if (revealed) return;
+    setGuess(idx);
+    setRevealed(true);
+    setTotalGuesses(t => t + 1);
+    if (idx === nextStepData.correct) setCorrectCount(c => c + 1);
+  };
+
+  const advance = () => {
+    if (atEnd) return;
+    const next = step + 1;
+    setStep(next);
+    setLog(l => [...l, AGENT_STEPS[next]]);
+    setGuessMode(false);
+    setGuess(null);
+    setRevealed(false);
+  };
+
+  const restart = () => {
+    setStep(0);
+    setLog([AGENT_STEPS[0]]);
+    setGuessMode(false);
+    setGuess(null);
+    setRevealed(false);
+    setCorrectCount(0);
+    setTotalGuesses(0);
+  };
+
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '9px', display: 'flex', flexDirection: 'column', gap: '4px', minHeight: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '26px' }}>🤖</span>
+          <h3 style={{ color: colors.success, margin: 0 }}>Agente</h3>
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted }}>
+          Previsioni giuste: <strong style={{ color: colors.accent }}>{correctCount}/{totalGuesses}</strong>
+        </div>
+      </div>
+
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Compito:</strong> {AGENT_TASK}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: compact ? '120px' : '260px', overflowY: 'auto', padding: '4px 0' }}>
+        <div style={{ fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '1px', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>Registro delle azioni</div>
+        {log.map((s, i) => (
+          <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '6px 8px' }}>
+            <span style={{ fontSize: '20px' }}>{s.icon}</span>
+            <div>
+              <div style={{ color: colors.text, fontWeight: 600, fontSize: 'var(--fs-sm)' }}>{s.action}</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)' }}>{s.detail}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {!atEnd && !guessMode && (
+        <button onClick={startGuess} style={{ padding: '8px 16px', minHeight: '40px', background: colors.info, border: 'none', borderRadius: '6px', color: colors.bg, fontWeight: 600, cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+          Indovina la prossima mossa →
+        </button>
+      )}
+
+      {!atEnd && guessMode && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Cosa farà adesso l'agente?</div>
+          {nextStepData.options.map((opt, idx) => {
+            let bg = colors.bgLight, border = colors.border, color = colors.textDim;
+            if (revealed) {
+              if (idx === nextStepData.correct) { bg = colors.success + '25'; border = colors.success; color = colors.text; }
+              else if (idx === guess) { bg = colors.danger + '20'; border = colors.danger; color = colors.text; }
+            }
+            return (
+              <button key={idx} onClick={() => pickGuess(idx)} disabled={revealed} style={{ textAlign: 'left', padding: '7px 12px', minHeight: '38px', background: bg, border: `1px solid ${border}`, borderRadius: '6px', color, cursor: revealed ? 'default' : 'pointer', fontSize: 'var(--fs-sm)' }}>
+                {opt}
+              </button>
+            );
+          })}
+          {revealed && (
+            <button onClick={advance} style={{ padding: '8px 16px', minHeight: '40px', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: colors.bg, fontWeight: 600, cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+              Avanti →
+            </button>
+          )}
+        </div>
+      )}
+
+      {atEnd && (
+        <div style={{ background: colors.success + '15', border: `1px solid ${colors.success}40`, borderRadius: '6px', padding: '7px 12px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
+          Consegnato. L'agente ha pianificato, agito con uno strumento, controllato da solo e ha lasciato a una persona la decisione finale.
+        </div>
+      )}
+
+      <button onClick={restart} style={{ marginTop: 'auto', alignSelf: 'flex-start', padding: '6px 12px', minHeight: '36px', background: 'transparent', border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textMuted, cursor: 'pointer', fontSize: 'var(--fs-xs)' }}>
+        ↺ Ricomincia la simulazione
+      </button>
+    </div>
+  );
+}
+
+function AgentSimulation({ compact = false }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: compact ? '1fr 1fr' : 'minmax(0,1fr) minmax(0,1.2fr)', gap: '12px', alignItems: 'stretch' }} className="agent-sim-grid">
+      <ChatbotColumn />
+      <AgentColumn compact={compact} />
+    </div>
+  );
+}
+
+/* ---------- componenti di supporto ---------- */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '18px 22px', margin: '20px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ file }) => (
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px' }}>
+    <span>📄</span><span>{file}</span>
+  </div>
+);
+
+/* ---------- animazione 1: completamento di frase (testo che prevede testo) ---------- */
+/* Albero di continuazioni: a ogni passo le parole candidate dipendono dalle scelte
+   fatte prima (non sono le stesse a prescindere dal percorso). Percorsi diversi
+   portano a frasi diverse ma tutte sensate. Dati e percentuali inventati a scopo
+   illustrativo, non presi da un modello reale. */
+
+const CLOSE_GENERIC = { candidates: [
+  { w: '.', p: 0.46 },
+  { w: ', salvo imprevisti.', p: 0.22 },
+  { w: ' con tutti i docenti.', p: 0.18 },
+  { w: ', come da regolamento.', p: 0.14 },
+] };
+
+const NODE_LUNEDI_ALLE15 = { candidates: [
+  { w: ' in aula magna', p: 0.42, next: CLOSE_GENERIC },
+  { w: ' per lo scrutinio del primo quadrimestre', p: 0.33, next: CLOSE_GENERIC },
+  { w: ' per discutere il comportamento della classe', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_LUNEDI_POMERIGGIO = { candidates: [
+  { w: ' alle 15 in aula magna', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' alle 16:30 online', p: 0.32, next: CLOSE_GENERIC },
+  { w: ' per discutere le assenze ripetute', p: 0.28, next: CLOSE_GENERIC },
+] };
+const NODE_LUNEDI_AULA = { candidates: [
+  { w: ' alle 15', p: 0.45, next: CLOSE_GENERIC },
+  { w: ' alle 16', p: 0.30, next: CLOSE_GENERIC },
+  { w: ' per lo scrutinio', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_LUNEDI = { candidates: [
+  { w: ' alle 15', p: 0.40, next: NODE_LUNEDI_ALLE15 },
+  { w: ' pomeriggio', p: 0.32, next: NODE_LUNEDI_POMERIGGIO },
+  { w: ' in aula magna', p: 0.28, next: NODE_LUNEDI_AULA },
+] };
+
+const NODE_GIOVEDI_ALLE14 = { candidates: [
+  { w: ' in presenza', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' per discutere la gita di maggio', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' con la segreteria', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_GIOVEDI_PRESENZA = { candidates: [
+  { w: ' alle 14', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' alle 15:30', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' per lo scrutinio', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_GIOVEDI_URGENZA = { candidates: [
+  { w: ' per un episodio in classe', p: 0.50, next: CLOSE_GENERIC },
+  { w: ' alle 12', p: 0.30, next: CLOSE_GENERIC },
+  { w: ' con i genitori', p: 0.20, next: CLOSE_GENERIC },
+] };
+const NODE_GIOVEDI = { candidates: [
+  { w: ' alle 14', p: 0.38, next: NODE_GIOVEDI_ALLE14 },
+  { w: ' in presenza', p: 0.32, next: NODE_GIOVEDI_PRESENZA },
+  { w: ' con urgenza', p: 0.30, next: NODE_GIOVEDI_URGENZA },
+] };
+
+const NODE_COMPORTAMENTO = { candidates: [
+  { w: ' lunedì alle 15', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' con i genitori presenti', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' in presenza di tutti i docenti', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_ASSENZE = { candidates: [
+  { w: ' della 3ª Z', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' giovedì pomeriggio', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' e informare le famiglie', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_GITA = { candidates: [
+  { w: ' di fine anno', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' e gli accompagnatori mancanti', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' lunedì alle 16', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_DISCUTERE = { candidates: [
+  { w: ' il comportamento della classe', p: 0.36, next: NODE_COMPORTAMENTO },
+  { w: ' le assenze ripetute', p: 0.34, next: NODE_ASSENZE },
+  { w: ' la gita di maggio', p: 0.30, next: NODE_GITA },
+] };
+
+const NODE_QUADRIMESTRE1 = { candidates: [
+  { w: ' lunedì alle 15', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' giovedì in presenza', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' in aula magna', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_QUADRIMESTRE2 = { candidates: [
+  { w: ' a giugno', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' con tutti i docenti', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' lunedì pomeriggio', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_FINALE = { candidates: [
+  { w: ' delle classi quinte', p: 0.40, next: CLOSE_GENERIC },
+  { w: ' lunedì alle 15', p: 0.35, next: CLOSE_GENERIC },
+  { w: ' in presenza', p: 0.25, next: CLOSE_GENERIC },
+] };
+const NODE_SCRUTINIO = { candidates: [
+  { w: ' del primo quadrimestre', p: 0.42, next: NODE_QUADRIMESTRE1 },
+  { w: ' del secondo quadrimestre', p: 0.33, next: NODE_QUADRIMESTRE2 },
+  { w: ' finale', p: 0.25, next: NODE_FINALE },
+] };
+
+const COMPLETION_TREE = {
+  prefix: 'Il consiglio di classe è convocato per',
+  candidates: [
+    { w: ' lunedì', p: 0.38, next: NODE_LUNEDI },
+    { w: ' giovedì', p: 0.24, next: NODE_GIOVEDI },
+    { w: ' discutere', p: 0.23, next: NODE_DISCUTERE },
+    { w: ' lo scrutinio', p: 0.15, next: NODE_SCRUTINIO },
+  ]
+};
+
+function ProbBar({ label, prob, chosen, onClick, disabled }) {
+  return (
+    <button onClick={onClick} disabled={disabled} style={{
+      display: 'flex', alignItems: 'center', gap: '12px', width: '100%', textAlign: 'left',
+      background: chosen ? colors.accent + '20' : colors.bgLight,
+      border: `1px solid ${chosen ? colors.accent : colors.border}`,
+      borderRadius: '8px', padding: '9px 14px', marginBottom: '8px', cursor: disabled ? 'default' : 'pointer',
+      minHeight: '40px'
+    }}>
+      <span style={{ flex: '0 0 auto', minWidth: '48px', fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>
+        {Math.round(prob * 100)}%
+      </span>
+      <span style={{ flex: '1 1 auto', height: '10px', background: colors.bg, borderRadius: '5px', overflow: 'hidden' }}>
+        <span style={{ display: 'block', height: '100%', width: `${prob * 100}%`, background: `linear-gradient(90deg, ${colors.accent}, ${colors.accentAlt})` }} />
+      </span>
+      <span style={{ flex: '1 1 auto', color: colors.text, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{label}</span>
+    </button>
+  );
+}
+
+function SentenceCompletion() {
+  const [node, setNode] = useState(COMPLETION_TREE);
+  const [chosenWords, setChosenWords] = useState([]);
+
+  const finished = !node;
+
+  const pick = (cand) => {
+    if (finished) return;
+    setChosenWords(cw => [...cw, cand.w]);
+    setNode(cand.next || null);
+  };
+
+  const sample = () => {
+    const cands = node.candidates;
+    const r = Math.random();
+    let acc = 0, chosen = cands[cands.length - 1];
+    for (const c of cands) { acc += c.p; if (r <= acc) { chosen = c; break; } }
+    pick(chosen);
+  };
+
+  const restart = () => { setNode(COMPLETION_TREE); setChosenWords([]); };
+
+  const sentence = COMPLETION_TREE.prefix + chosenWords.join('');
+
+  return (
+    <div className="completion-grid" style={{ display: 'grid', gridTemplateColumns: finished ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)', gap: '20px', alignItems: 'start' }}>
+      <div>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 18px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text, minHeight: '1.6em' }}>
+          {sentence}<span style={{ color: colors.accent }}>{finished ? '' : ' ▌'}</span>
+        </div>
+
+        {finished && (
+          <Box type="tip" title="Cosa avete appena visto">
+            Ogni volta il modello sceglie una parola tra le più probabili, in base a quelle già scritte: non "sa" dove sta andando la frase. Le opzioni proposte a ogni passo cambiano in base al percorso già fatto, e per questo due giri possono finire in modo diverso.
+          </Box>
+        )}
+
+        <button onClick={restart} style={{ marginTop: '12px', padding: '8px 16px', minHeight: '40px', background: colors.bgLight, border: `1px solid ${colors.border}`, color: colors.textMuted, borderRadius: '6px', cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+          ↺ Ricomincia (provate un altro percorso)
+        </button>
+      </div>
+
+      {!finished && (
+        <div>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>
+            Candidate a questo passo (dipendono da quelle già scelte; percentuali di esempio) — clicca per scegliere:
+          </div>
+          {node.candidates.map((c, i) => (
+            <ProbBar key={i} label={c.w.trim()} prob={c.p} onClick={() => pick(c)} />
+          ))}
+          <button onClick={sample} style={{ marginTop: '2px', padding: '8px 16px', minHeight: '40px', background: 'transparent', border: `1px solid ${colors.info}`, color: colors.info, borderRadius: '6px', cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+            🎲 Lascia scegliere al modello (pesato sulle percentuali)
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- animazione 2: la scrivania (contesto e memoria) ---------- */
+
+const DESK_ITEMS = [
+  { key: 'richiesta', label: 'La tua richiesta', icon: '✉️' },
+  { key: 'documento', label: 'Documento allegato', icon: '📎' },
+  { key: 'risposte', label: 'Risposte precedenti', icon: '💬' },
+];
+
+function DeskMemory() {
+  const [onDesk, setOnDesk] = useState([]);
+
+  const add = (key) => { if (!onDesk.includes(key)) setOnDesk(d => [...d, key]); };
+  const newChat = () => setOnDesk([]);
+
+  return (
+    <div>
+      <div style={{
+        position: 'relative', minHeight: '220px', background: colors.bgLight, border: `2px solid ${colors.border}`,
+        borderRadius: '10px', padding: '24px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'flex-start',
+        alignContent: 'flex-start'
+      }}>
+        {onDesk.length === 0 && (
+          <div style={{ color: colors.textMuted, fontStyle: 'italic', fontSize: 'var(--fs-sm)' }}>Scrivania vuota: nuova chat, nessun ricordo.</div>
+        )}
+        {onDesk.map(key => {
+          const item = DESK_ITEMS.find(d => d.key === key);
+          return (
+            <div key={key} style={{ background: colors.bgCard, border: `1px solid ${colors.accent}60`, borderRadius: '8px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '10px', minWidth: '180px' }}>
+              <span style={{ fontSize: '26px' }}>{item.icon}</span>
+              <span style={{ color: colors.text, fontSize: 'var(--fs-sm)' }}>{item.label}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '18px' }}>
+        {DESK_ITEMS.map(item => (
+          <button key={item.key} onClick={() => add(item.key)} disabled={onDesk.includes(item.key)} style={{
+            padding: '10px 16px', minHeight: '44px', borderRadius: '6px', cursor: onDesk.includes(item.key) ? 'default' : 'pointer',
+            background: onDesk.includes(item.key) ? colors.bgLight : colors.info, border: 'none',
+            color: onDesk.includes(item.key) ? colors.textMuted : colors.bg, fontSize: 'var(--fs-sm)', fontWeight: 600
+          }}>
+            + {item.label}
+          </button>
+        ))}
+        <button onClick={newChat} style={{ padding: '10px 16px', minHeight: '44px', borderRadius: '6px', cursor: 'pointer', background: colors.danger, border: 'none', color: colors.bg, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>
+          🗑️ Nuova chat (svuota la scrivania)
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- dati delle slide ---------- */
+/* ogni voce: { block, title, content, notes } — block/minutes solo per il pannello note */
+
+const slides = [
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🎓</div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Incontro 1
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim }}>Capire gli strumenti</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '30px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: 'Slide di apertura. Aspettate che tutti siano seduti davanti al PC prima di iniziare. Non serve dire altro qui: si passa alla slide successiva per le presentazioni.'
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '26px' }}>Chi sono e da dove nasce il corso</h2>
+        <Glow>
+          <p>
+            Tra luglio e settembre 2026, con Claude Code (uno strumento di intelligenza artificiale che scrive programmi), ho costruito il <strong style={{ color: colors.text }}>Portale FSL</strong> e il <strong style={{ color: colors.text }}>Portale Viaggi</strong>, e ho rifatto da capo <strong style={{ color: colors.text }}>Prenota Risorse</strong> (nato nel 2025 come Prenota Carrello).
+          </p>
+        </Glow>
+        <ul style={{ marginTop: '22px', paddingLeft: '28px', color: colors.textDim }}>
+          <li>I tre portali sono in uso a scuola <strong style={{ color: colors.text }}>dal 10 settembre 2026</strong>.</li>
+          <li>C'è anche un bot, <strong style={{ color: colors.text }}>"Argo Briefing"</strong>, che legge il registro elettronico e prepara un riepilogo.</li>
+        </ul>
+        <Box type="tip" title="Come si lavora in questo corso">
+          Ogni 20-30 minuti si smette di ascoltare e si passa al PC. Non è una lezione da seguire in silenzio.
+        </Box>
+      </div>
+    ),
+    notes: 'Dite solo questi fatti, verificati: Portale FSL e Portale Viaggi costruiti tra luglio e settembre 2026 con Claude Code; Prenota Risorse (v2) rifatto da capo, nato nel 2025 come Prenota Carrello; tutti in uso dal 10 settembre 2026; Argo Briefing legge il registro elettronico. Non aggiungete numeri o dettagli non verificati. Spiegate il formato: blocchi corti, sempre seguiti da un\'attività al PC.'
+  },
+
+  /* --- blocco 0'-15' --- */
+  {
+    block: "0'-15' — Prima provate",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>0' – 15'</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Prima provate</h2>
+        <p style={{ color: colors.textDim }}>Aprite Gemini e scrivete <strong style={{ color: colors.text }}>tutti la stessa richiesta</strong>, parola per parola.</p>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
+            "Scrivi una mail alle famiglie della classe 3ª Z per avvisarle di un'uscita didattica al museo della città il 12 marzo 2026, dalle 9 alle 12. Tono cordiale, al massimo 120 parole."
+          </p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>(Dati inventati: la classe e la scuola non esistono davvero.)</p>
+      </div>
+    ),
+    notes: 'Fate scrivere questa identica richiesta a tutti, in Gemini, sul loro PC. Cronometrate 3-4 minuti. Non correggete nessuno: l\'obiettivo è avere risposte diverse da confrontare nella slide successiva.'
+  },
+  {
+    block: "0'-15' — Prima provate",
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🤔</div>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Perché le risposte sono diverse?</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Stessa richiesta, stesse parole. Eppure ogni PC ha scritto una mail diversa. Guardatevi intorno: quante versioni ci sono in aula?
+        </p>
+      </div>
+    ),
+    notes: 'Chiedete a voce alta a due o tre persone di leggere la loro mail. Fate notare le differenze di tono, lunghezza, dettagli inventati (orari, numero di telefono...). Non date ancora la risposta: la spiegazione arriva nel blocco successivo, sul "testo che prevede testo".'
+  },
+
+  /* --- blocco 15'-45' --- */
+  {
+    block: "15'-45' — Testo che prevede testo",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>15' – 45'</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Testo che prevede testo</h2>
+        <Glow>
+          <p>Questi strumenti non consultano un archivio di fatti verificati. Fanno una cosa sola, moltissime volte: <strong style={{ color: colors.text }}>prevedono la parola successiva</strong>, scegliendola tra le più probabili dopo quelle già scritte.</p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>Proviamolo insieme sulla slide successiva.</p>
+      </div>
+    ),
+    notes: 'Introduzione breve. Il punto chiave da far passare: non è memoria, è previsione statistica della parola successiva. Da qui nascono sia la varietà delle risposte viste prima, sia le allucinazioni che vedremo dopo.'
+  },
+  {
+    block: "15'-45' — Testo che prevede testo",
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Completate la frase</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Le opzioni proposte a ogni passo dipendono dalle parole già scelte prima. Percentuali di esempio, non quelle reali di un modello: servono solo a far vedere il meccanismo.</p>
+        <SentenceCompletion />
+      </div>
+    ),
+    notes: 'Fate cliccare parole diverse a persone diverse: a ogni passo le opzioni proposte cambiano in base al percorso già scelto, non sono sempre le stesse. Poi premete "ricomincia" e scegliete un percorso diverso davanti a tutti: la stessa frase iniziale porta a frasi finali diverse ma tutte sensate. Questo spiega perché le mail di prima erano tutte diverse: ogni volta si "pesca" tra parole probabili in base a quelle già scritte, non certe. Ribadite: le percentuali sono illustrative.'
+  },
+  {
+    block: "15'-45' — Testo che prevede testo",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '20px' }}>Perché inventa</h2>
+        <Glow>
+          <p>Se il modello scrive sempre il testo più probabile, quando non ha informazioni sicure produce comunque qualcosa: testo <strong style={{ color: colors.text }}>plausibile</strong>, scritto con lo stesso tono sicuro delle risposte corrette.</p>
+        </Glow>
+        <Box type="danger" title="Le allucinazioni">
+          Il modello non "consulta" un archivio verificato quando risponde: continua a scrivere la parola più plausibile, anche se il fatto citato non esiste.
+        </Box>
+      </div>
+    ),
+    notes: 'Concetto centrale del blocco. Insistete sul fatto che non è un guasto occasionale: è la conseguenza diretta di "prevedere la parola successiva". Un modello non distingue internamente "so questo per certo" da "sto indovinando bene": il tono della risposta è sempre sicuro.'
+  },
+  {
+    block: "15'-45' — Testo che prevede testo",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Un esempio</h2>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '20px 24px', marginBottom: '18px' }}>
+          <p style={{ color: colors.textDim, marginBottom: '10px' }}><strong style={{ color: colors.text }}>Domanda:</strong> "Quale articolo del regolamento d'istituto vieta l'uso del cellulare durante le uscite didattiche?"</p>
+          <p style={{ color: colors.textDim }}><strong style={{ color: colors.danger }}>Risposta inventata:</strong> "È l'articolo 14, comma 3, del regolamento d'istituto." <em>(numero e comma inventati con sicurezza, il regolamento vero magari non lo dice affatto in questi termini)</em></p>
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Il problema non è la sicurezza del tono: è che nessuno ha controllato la fonte.</p>
+      </div>
+    ),
+    notes: 'Esempio inventato apposta per l\'aula: nessun regolamento vero viene citato. Fate notare che una risposta del genere, se incollata in una comunicazione ufficiale senza controllo, diventa un errore firmato dalla scuola.'
+  },
+  {
+    block: "15'-45' — Testo che prevede testo",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Caccia all'errore</h2>
+        <p style={{ color: colors.textDim }}>
+          Chiedete all'IA articoli, circolari, sentenze, libri e dati che non esistono: sono inventati apposta. Il compito è vedere se l'IA inventa una risposta o ammette di non sapere, e capire da cosa lo si riconosce.
+        </p>
+        <ActivityBadge file="dati-demo/caccia-all-errore.md" />
+      </div>
+    ),
+    notes: 'Le otto richieste sono nel foglio dati-demo/caccia-all-errore.md (scheda 2 delle esercitazioni). Assegnate due richieste a testa, lasciate circa 15 minuti, poi raccogliete a voce due o tre "scoperte" prima di passare al blocco successivo.'
+  },
+
+  /* --- blocco 45'-75' --- */
+  {
+    block: "45'-75' — Contesto e memoria",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>45' – 75'</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Contesto e memoria</h2>
+        <Glow>
+          <p>Immaginate una <strong style={{ color: colors.text }}>scrivania</strong>. Il modello vede solo quello che in quel momento sta sulla scrivania: quello che scrivete voi, i documenti allegati, le risposte date prima nella stessa chat.</p>
+        </Glow>
+        <Box type="warn" title="Chat nuova = scrivania vuota">
+          Aprire una nuova chat significa iniziare con una scrivania sgombra: non ci sono le conversazioni di ieri né gli allegati di un'altra chat. Al massimo qualche breve appunto, se la memoria dello strumento è attiva.
+        </Box>
+      </div>
+    ),
+    notes: 'Metafora centrale del blocco: la scrivania. Fate capire che non è "memoria debole", è un confine netto: dentro la stessa chat il modello ha davanti tutto quello che ci è passato sopra (finché la chat non diventa lunghissima); in una chat nuova no. Alcuni strumenti salvano pochi appunti tra una chat e l\'altra (la "memoria"), ma non sono la copia delle conversazioni: ne parla la dispensa, cap. 3.'
+  },
+  {
+    block: "45'-75' — Contesto e memoria",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La scrivania, in pratica</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '20px' }}>Aggiungete fogli sulla scrivania, poi provate ad aprire una "nuova chat".</p>
+        <DeskMemory />
+      </div>
+    ),
+    notes: 'Fate aggiungere i tre elementi uno per uno, poi premete "nuova chat" davanti a tutti: la scrivania si svuota. Collegate subito all\'attività successiva: stessa domanda, con e senza il documento allegato.'
+  },
+  {
+    block: "45'-75' — Contesto e memoria",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Stessa domanda, due scrivanie</h2>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Aprite una chat nuova e chiedete: "Nel nostro istituto, per una visita guidata di una giornata con 27 studenti, quanti docenti accompagnatori servono e con quanto anticipo va presentata la domanda?" — senza allegare nulla.</li>
+          <li>Aprite un'altra chat nuova, allegate il documento di prova del regolamento viaggi e ripetete la stessa identica domanda.</li>
+          <li>Confrontate le due risposte: quale cita numeri precisi? Quale li inventa?</li>
+        </ol>
+        <ActivityBadge file="dati-demo/regolamento-viaggi-di-prova.md" />
+      </div>
+    ),
+    notes: 'Il documento da allegare è dati-demo/regolamento-viaggi-di-prova.md, già pronto (scheda 3 delle esercitazioni). Risposta giusta con il documento: 3 accompagnatori (art. 4, comma 1) e 17 giorni (art. 3, comma 2). Girate tra i banchi durante l\'attività: il punto da far emergere è che senza il documento il modello risponde comunque, ma con numeri plausibili non garantiti.'
+  },
+
+  { block: 'Pausa', content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>☕</div>
+        <h2 style={{ color: colors.accent }}>Pausa — 15 minuti</h2>
+      </div>
+    ), notes: 'Pausa di 15 minuti (75\'-90\'). Al ritorno si parte con "I progetti nelle chat".' },
+
+  /* --- blocco 90'-150' --- */
+  {
+    block: "90'-150' — I progetti nelle chat",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>90' – 150'</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>I progetti nelle chat</h2>
+        <Glow>
+          <p>Un "progetto" in chat è uno spazio che tiene insieme <strong style={{ color: colors.text }}>istruzioni</strong>, <strong style={{ color: colors.text }}>documenti</strong> e <strong style={{ color: colors.text }}>conversazioni</strong> che restano, invece di sparire a ogni nuova chat.</p>
+        </Glow>
+        <p style={{ color: colors.textDim, marginTop: '18px' }}>È come mettere dei fogli fissi sulla scrivania, che non vengono tolti quando si "cambia chat" dentro lo stesso progetto.</p>
+      </div>
+    ),
+    notes: 'Collegate esplicitamente alla metafora della scrivania vista prima: un progetto tiene alcuni fogli fissati sulla scrivania anche quando si apre una nuova conversazione dentro quel progetto.'
+  },
+  {
+    block: "90'-150' — I progetti nelle chat",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '22px' }}>Tre nomi, la stessa idea</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+          {[
+            { name: 'Gem', tool: 'Gemini', icon: '💎' },
+            { name: 'Notebook', tool: 'NotebookLM', icon: '📓' },
+            { name: 'Progetto', tool: 'Claude', icon: '🗂️' },
+          ].map(x => (
+            <div key={x.name} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '22px', textAlign: 'center' }}>
+              <div style={{ fontSize: '40px', marginBottom: '10px' }}>{x.icon}</div>
+              <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{x.name}</div>
+              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{x.tool}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '20px' }}>Il nome e i menu cambiano, l'idea è la stessa: documenti e istruzioni pronte, senza doverli ripetere ogni volta.</p>
+      </div>
+    ),
+    notes: 'Non entrate nei dettagli di interfaccia (pulsanti, menu): possono cambiare. Il messaggio da far passare è solo il paragone concettuale: sono tre modi diversi di fare la stessa cosa.'
+  },
+  {
+    block: "90'-150' — I progetti nelle chat",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Il tuo primo Gem</h2>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Create un nuovo Gem con l'account Google della scuola.</li>
+          <li>Scrivete le istruzioni di base (chi è, a cosa serve).</li>
+          <li>Caricate i documenti di prova (regolamento viaggi, orario di prova).</li>
+          <li>Fate una domanda preparata e controllate la risposta.</li>
+        </ol>
+        <ActivityBadge file="incontro-1/esercitazioni.md" />
+      </div>
+    ),
+    notes: 'Il testo esatto delle istruzioni da far incollare è in incontro-1/esercitazioni.md. Girate tra i banchi: la difficoltà più comune è trovare dove si caricano i documenti nell\'interfaccia del momento. Non serve che il Gem sia perfetto: serve che ognuno ne abbia creato uno.'
+  },
+  {
+    block: "90'-150' — I progetti nelle chat",
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🔎</div>
+        <h2 style={{ color: colors.warn, marginBottom: '18px' }}>Controllate sempre le fonti</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Anche dentro un Gem o un notebook con i documenti caricati, controllate sempre da quale documento arriva ogni affermazione, prima di usarla.
+        </p>
+      </div>
+    ),
+    notes: 'Chiusura del blocco Gem. Ribadite: avere documenti caricati riduce le invenzioni, ma non le azzera. La verifica della fonte resta un passaggio umano, sempre.'
+  },
+
+  /* --- blocco 150'-170' --- */
+  {
+    block: "150'-170' — Chatbot e agente",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>150' – 170'</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Chatbot e agente</h2>
+        <p style={{ color: colors.textDim }}>Diamo lo <strong style={{ color: colors.text }}>stesso compito</strong> a un chatbot e a un agente:</p>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.text }}>
+            "Prepara l'elenco delle uscite di novembre con i docenti accompagnatori mancanti, partendo dal file delle pratiche."
+          </p>
+        </Glow>
+        <ul style={{ marginTop: '18px', paddingLeft: '28px', color: colors.textDim }}>
+          <li><strong style={{ color: colors.info }}>Chatbot:</strong> risponde con del testo, chiede di incollare i dati, può inventare, finisce lì.</li>
+          <li><strong style={{ color: colors.success }}>Agente:</strong> fa un piano, apre il file, usa uno strumento, controlla da solo e consegna.</li>
+        </ul>
+      </div>
+    ),
+    notes: 'Introducete la simulazione principale del corso. Spiegate le due colonne prima di avanzare: a sinistra un chatbot normale, a destra un agente. Il compito è identico, i dati sono inventati (nessuna pratica reale).'
+  },
+  {
+    block: "150'-170' — Chatbot e agente",
+    content: () => (
+      <div style={{ padding: '2px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '2px' }}>La simulazione</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>
+          Prima di ogni passo dell'agente, provate a indovinare la mossa: tre opzioni, una sola è quella giusta.
+        </p>
+        {AgentSimulation ? <AgentSimulation compact={true} /> : <p style={{ color: colors.danger }}>Componente della simulazione non caricato.</p>}
+      </div>
+    ),
+    notes: 'Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Fate notare il registro delle azioni nella colonna di destra: è lo stesso linguaggio semplice che i partecipanti troveranno nella pagina che apriranno sul proprio PC. Alla fine confrontate con la colonna chatbot: il chatbot si è fermato al testo, l\'agente ha anche verificato e corretto un proprio errore di conteggio.'
+  },
+  {
+    block: "150'-170' — Chatbot e agente",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Provatela voi</h2>
+        <p style={{ color: colors.textDim }}>
+          Aprite sul vostro PC la stessa simulazione e provate a indovinare ogni mossa dell'agente prima che avvenga.
+        </p>
+        <ActivityBadge file="incontro-1/simulazione-agente.html" />
+      </div>
+    ),
+    notes: 'Fate aprire il file incontro-1/simulazione-agente.html direttamente dal file system (doppio clic, si apre nel browser). Lasciate 5-8 minuti per giocare fino in fondo, poi chiedete a mano alzata quanti hanno indovinato tutte le mosse.'
+  },
+
+  /* --- chiusura --- */
+  {
+    block: "170'-180' — Chiusura",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>170' – 180'</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '22px' }}>Una cosa che proverò questa settimana</h2>
+        <Box type="tip">
+          Scrivete su un foglio una sola cosa, concreta, che proverete a fare entro la prossima settimana con questi strumenti.
+        </Box>
+        <p style={{ color: colors.textMuted, marginTop: '10px' }}>Non serve che sia grande: basta che sia vera e verificabile la settimana prossima.</p>
+      </div>
+    ),
+    notes: 'Distribuite un foglio o fate scrivere su un\'app condivisa. Raccogliete i foglietti: serviranno all\'apertura dell\'incontro 2 ("com\'è andato il Gem provato durante la settimana").'
+  },
+  {
+    block: "170'-180' — Chiusura",
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>➡️</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Il prossimo incontro</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Nell'incontro 2 vediamo come sono nati i portali della scuola, da una procedura di carta a un servizio, il caso di Argo Briefing e quando è meglio non delegare una decisione all'intelligenza artificiale.
+        </p>
+      </div>
+    ),
+    notes: 'Ultima slide. Ricordate data e luogo dell\'incontro 2, se già confermati. Ringraziate e chiudete.'
+  },
+];
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
+  useEffect(() => {
+    document.title = `Incontro 1 — ${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(64px + 42vh)' : '80px', minHeight: 'calc(100vh - 140px)' }}>
+        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>
+        <button onClick={prev} disabled={current === 0} style={{ padding: '10px 22px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← Indietro</button>
+        <button onClick={() => setNotesOn(v => !v)} style={{ padding: '10px 22px', minHeight: '44px', background: notesOn ? colors.warn : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: notesOn ? colors.bg : colors.textDim, cursor: 'pointer', fontSize: 'var(--fs-sm)', fontWeight: 600 }}>
+          {notesOn ? 'Nascondi note' : 'Note (N)'}
+        </button>
+        <button onClick={toggleFullscreen} style={{ padding: '10px 22px', minHeight: '44px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textDim, cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+          Schermo intero (F)
+        </button>
+        <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 22px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: 700 }}>Avanti →</button>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

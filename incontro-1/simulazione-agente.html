@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulazione: chatbot o agente? — Incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(14px, 0.7vw + 11px, 16px);
+    --fs-sm: clamp(16px, 0.85vw + 12px, 18px);
+    --fs-body: clamp(18px, 1vw + 13px, 21px);
+    --fs-h2: clamp(26px, 2vw + 16px, 36px);
+    --lh-body: 1.55;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; }
+  h1, h2 { font-family: 'Fraunces', serif; }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  .agent-sim-grid { grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); }
+  @media (max-width: 900px) {
+    .agent-sim-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- simulazione chatbot/agente (duplicata in modo controllato in slide.html:
+   ogni modifica va fatta in entrambi i file) ---------- */
+
+const AGENT_TASK = 'Prepara l\'elenco delle uscite di novembre con i docenti accompagnatori mancanti, partendo dal file delle pratiche.';
+
+const AGENT_STEPS = [
+  { action: 'Fa un piano', detail: 'Prima di muoversi, elenca cosa deve fare: aprire il file, filtrare, controllare, scrivere il riepilogo.', icon: '📝' },
+  { action: 'Legge il file', detail: 'Apre "pratiche-uscite-novembre.xlsx" (dati di prova) e ne guarda il contenuto.', icon: '📂',
+    options: ['Manda subito una mail a tutti i docenti', 'Apre il file delle pratiche di novembre', 'Chiede a te di incollare i dati a mano'], correct: 1 },
+  { action: 'Usa uno strumento', detail: 'Filtra le righe: tiene solo le pratiche di novembre senza un nome nella colonna "accompagnatore".', icon: '🔎',
+    options: ['Rilegge tutto il file a mano, riga per riga', 'Cancella le righe che non capisce', 'Usa uno strumento per filtrare le pratiche senza accompagnatore'], correct: 2 },
+  { action: 'Trova il problema', detail: 'Il filtro restituisce 3 pratiche senza accompagnatore: "Uscita museo civico", "Visita azienda agricola" e "Teatro in lingua inglese".', icon: '🧾',
+    options: ['Trova le pratiche senza un accompagnatore assegnato', 'Non trova nessuna pratica incompleta', 'Si ferma e chiede a te di continuare'], correct: 0 },
+  { action: 'Scrive il riepilogo', detail: 'Crea il file "riepilogo-uscite-novembre.md" con l\'elenco completo e le pratiche da sistemare in evidenza.', icon: '✍️',
+    options: ['Invia da solo una mail ai docenti coinvolti', 'Chiude tutto senza salvare nulla', 'Scrive un file di riepilogo con l\'elenco e le pratiche da sistemare'], correct: 2 },
+  { action: 'Si controlla', detail: 'Riconta le pratiche guardando anche le altre colonne: per "Teatro in lingua inglese" l\'accompagnatore è scritto nella colonna "note". Le pratiche senza accompagnatore sono 2, non 3: corregge il riepilogo.', icon: '🔁',
+    options: ['Considera il lavoro finito senza riguardarlo', 'Ricontrolla i conteggi e corregge un errore che aveva fatto', 'Ricomincia tutto il compito da capo'], correct: 1 },
+  { action: 'Consegna', detail: 'Presenta il riepilogo corretto e segnala le due pratiche da completare, pronte per essere controllate da una persona.', icon: '📬',
+    options: ['Consegna il riepilogo e segnala cosa manca', 'Approva da solo le uscite incomplete', 'Elimina le pratiche incomplete dal file'], correct: 0 },
+];
+
+function ChatbotColumn() {
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '9px', display: 'flex', flexDirection: 'column', gap: '4px', minHeight: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+        <span style={{ fontSize: '26px' }}>💬</span>
+        <h3 style={{ color: colors.info, margin: 0 }}>Chatbot</h3>
+      </div>
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Tu:</strong> {AGENT_TASK}
+      </div>
+      <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «Certo, incollami qui l'elenco delle pratiche e ti dico quali sembrano senza accompagnatore.»
+      </div>
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Tu:</strong> (copi e incolli a mano le righe del file, sperando di non saltarne nessuna)
+      </div>
+      <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «In base a quello che mi hai incollato, sembrano mancare gli accompagnatori per 2 o 3 uscite» <em>(può sbagliare il conteggio: non ha riletto il file da solo)</em>.
+      </div>
+      <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: `1px dashed ${colors.border}`, fontSize: 'var(--fs-sm)', color: colors.textMuted }}>
+        Finisce qui: il testo che risponde. Copiare i dati giusti, controllare il conteggio e scrivere il riepilogo restano compiti tuoi.
+      </div>
+    </div>
+  );
+}
+
+function AgentColumn({ compact }) {
+  const [step, setStep] = useState(0);
+  const [guessMode, setGuessMode] = useState(false);
+  const [guess, setGuess] = useState(null);
+  const [revealed, setRevealed] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [totalGuesses, setTotalGuesses] = useState(0);
+  const [log, setLog] = useState([AGENT_STEPS[0]]);
+
+  const atEnd = step >= AGENT_STEPS.length - 1;
+  const nextStepData = !atEnd ? AGENT_STEPS[step + 1] : null;
+
+  const startGuess = () => { setGuess(null); setRevealed(false); setGuessMode(true); };
+
+  const pickGuess = (idx) => {
+    if (revealed) return;
+    setGuess(idx);
+    setRevealed(true);
+    setTotalGuesses(t => t + 1);
+    if (idx === nextStepData.correct) setCorrectCount(c => c + 1);
+  };
+
+  const advance = () => {
+    if (atEnd) return;
+    const next = step + 1;
+    setStep(next);
+    setLog(l => [...l, AGENT_STEPS[next]]);
+    setGuessMode(false);
+    setGuess(null);
+    setRevealed(false);
+  };
+
+  const restart = () => {
+    setStep(0);
+    setLog([AGENT_STEPS[0]]);
+    setGuessMode(false);
+    setGuess(null);
+    setRevealed(false);
+    setCorrectCount(0);
+    setTotalGuesses(0);
+  };
+
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '9px', display: 'flex', flexDirection: 'column', gap: '4px', minHeight: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '26px' }}>🤖</span>
+          <h3 style={{ color: colors.success, margin: 0 }}>Agente</h3>
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted }}>
+          Previsioni giuste: <strong style={{ color: colors.accent }}>{correctCount}/{totalGuesses}</strong>
+        </div>
+      </div>
+
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Compito:</strong> {AGENT_TASK}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: compact ? '120px' : '260px', overflowY: 'auto', padding: '4px 0' }}>
+        <div style={{ fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '1px', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>Registro delle azioni</div>
+        {log.map((s, i) => (
+          <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '6px 8px' }}>
+            <span style={{ fontSize: '20px' }}>{s.icon}</span>
+            <div>
+              <div style={{ color: colors.text, fontWeight: 600, fontSize: 'var(--fs-sm)' }}>{s.action}</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)' }}>{s.detail}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {!atEnd && !guessMode && (
+        <button onClick={startGuess} style={{ padding: '8px 16px', minHeight: '40px', background: colors.info, border: 'none', borderRadius: '6px', color: colors.bg, fontWeight: 600, cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+          Indovina la prossima mossa →
+        </button>
+      )}
+
+      {!atEnd && guessMode && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Cosa farà adesso l'agente?</div>
+          {nextStepData.options.map((opt, idx) => {
+            let bg = colors.bgLight, border = colors.border, color = colors.textDim;
+            if (revealed) {
+              if (idx === nextStepData.correct) { bg = colors.success + '25'; border = colors.success; color = colors.text; }
+              else if (idx === guess) { bg = colors.danger + '20'; border = colors.danger; color = colors.text; }
+            }
+            return (
+              <button key={idx} onClick={() => pickGuess(idx)} disabled={revealed} style={{ textAlign: 'left', padding: '7px 12px', minHeight: '38px', background: bg, border: `1px solid ${border}`, borderRadius: '6px', color, cursor: revealed ? 'default' : 'pointer', fontSize: 'var(--fs-sm)' }}>
+                {opt}
+              </button>
+            );
+          })}
+          {revealed && (
+            <button onClick={advance} style={{ padding: '8px 16px', minHeight: '40px', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: colors.bg, fontWeight: 600, cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>
+              Avanti →
+            </button>
+          )}
+        </div>
+      )}
+
+      {atEnd && (
+        <div style={{ background: colors.success + '15', border: `1px solid ${colors.success}40`, borderRadius: '6px', padding: '7px 12px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
+          Consegnato. L'agente ha pianificato, agito con uno strumento, controllato da solo e ha lasciato a una persona la decisione finale.
+        </div>
+      )}
+
+      <button onClick={restart} style={{ marginTop: 'auto', alignSelf: 'flex-start', padding: '6px 12px', minHeight: '36px', background: 'transparent', border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textMuted, cursor: 'pointer', fontSize: 'var(--fs-xs)' }}>
+        ↺ Ricomincia la simulazione
+      </button>
+    </div>
+  );
+}
+
+function AgentSimulation({ compact = false }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: compact ? '1fr 1fr' : 'minmax(0,1fr) minmax(0,1.2fr)', gap: '12px', alignItems: 'stretch' }} className="agent-sim-grid">
+      <ChatbotColumn />
+      <AgentColumn compact={compact} />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div style={{ minHeight: '100vh', padding: '24px 20px 60px' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <a href="slide.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Torna alle slide</a>
+
+        <h1 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', marginTop: '18px', marginBottom: '14px' }}>
+          Chatbot o agente?
+        </h1>
+
+        <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${colors.warn}`, borderRadius: '0 8px 8px 0', padding: '18px 22px', marginBottom: '26px' }}>
+          <p style={{ color: colors.textDim, margin: 0 }}>
+            <strong style={{ color: colors.text }}>Come si gioca:</strong> prima di ogni passo dell'agente, premete "Indovina la prossima mossa", scegliete una delle tre opzioni e guardate quale si colora di verde, poi premete "Avanti" per leggere nel registro cosa ha fatto l'agente. Il contatore in alto a destra della colonna Agente conta le previsioni azzeccate.
+          </p>
+        </div>
+
+        {AgentSimulation ? <AgentSimulation compact={false} /> : (
+          <p style={{ color: colors.danger }}>La simulazione non si è caricata. Ricaricate la pagina.</p>
+        )}
+
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          Dati inventati per l'esercitazione: nessuna pratica, uscita o persona reale della scuola.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

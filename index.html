@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corso IA per la scuola — Indice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --accent: #d9a441;
+    --accent-alt: #f0c169;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; min-height: 100vh; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 60px 24px 80px; }
+  h1 { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(32px, 4vw, 48px); margin-bottom: 8px; }
+  .subtitle { color: var(--text-muted); font-size: clamp(16px, 1.2vw, 19px); margin-bottom: 40px; }
+  .incontro { margin-bottom: 34px; }
+  .incontro h2 { font-size: clamp(20px, 1.8vw, 24px); color: var(--accent); margin-bottom: 14px; }
+  .links { display: flex; flex-wrap: wrap; gap: 12px; }
+  a.card {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 20px; min-height: 44px; text-decoration: none; color: var(--text);
+    font-size: 17px; transition: border-color 0.15s;
+  }
+  a.card:hover, a.card:focus-visible { border-color: var(--accent); }
+  a.card .arrow { color: var(--accent); }
+  .disabled {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg-card); border: 1px dashed var(--border); border-radius: 8px;
+    padding: 14px 20px; min-height: 44px; color: var(--text-muted); font-size: 17px;
+  }
+  footer { color: var(--text-muted); font-size: 14px; margin-top: 50px; border-top: 1px solid var(--border); padding-top: 20px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Corso di intelligenza artificiale per il personale della scuola</h1>
+    <p class="subtitle">ITTS "Belluzzi-Da Vinci" — Rimini. Docente: Thomas Casali.</p>
+
+    <div class="incontro">
+      <h2>Incontro 1 — Capire gli strumenti</h2>
+      <div class="links">
+        <a class="card" href="incontro-1/slide.html">Slide dell'incontro <span class="arrow">→</span></a>
+        <a class="card" href="incontro-1/simulazione-agente.html">Simulazione: chatbot o agente? <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="incontro">
+      <h2>Incontro 2 — Dalla carta al servizio, e usare l'IA con giudizio</h2>
+      <div class="disabled">In preparazione</div>
+    </div>
+
+    <div class="incontro">
+      <h2>Incontro 3 — Agenti al lavoro</h2>
+      <div class="disabled">In preparazione</div>
+    </div>
+
+    <div class="incontro">
+      <h2>Incontro 4 — Laboratorio idee</h2>
+      <div class="disabled">In preparazione</div>
+    </div>
+
+    <footer>Materiali costruiti con dati inventati: nessun dato reale di studenti, famiglie o personale della scuola.</footer>
+  </div>
+</body>
+</html>
