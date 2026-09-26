@@ -72,6 +72,8 @@
     font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
   }
   .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
   .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
 </style>
 </head>
@@ -271,9 +273,9 @@ const Box = ({ type = 'info', title, children }) => {
   const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
   const c = cfg[type];
   return (
-    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '18px 22px', margin: '20px 0' }}>
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
       {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
-      <div style={{ color: colors.textDim }}>{children}</div>
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
     </div>
   );
 };
@@ -284,11 +286,236 @@ const BlockTag = ({ children }) => (
   </div>
 );
 
-const ActivityBadge = ({ file }) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px' }}>
-    <span>📄</span><span>{file}</span>
-  </div>
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
 );
+
+/* ---------- schemi riusabili (arricchimento slide + nuove sezioni) ---------- */
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+function SourceCheckMock() {
+  return (
+    <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '16px 20px', maxWidth: '520px', margin: '0 auto' }}>
+      <p style={{ fontSize: 'var(--fs-sm)', color: colors.textDim, margin: 0 }}>
+        <span style={{ background: colors.success + '35', borderRadius: '4px', padding: '1px 4px' }}>Il modulo di richiesta va firmato dal dirigente scolastico.</span>{' '}
+        <span style={{ background: colors.warn + '35', borderRadius: '4px', padding: '1px 4px' }}>La domanda va presentata con largo anticipo.</span>
+      </p>
+      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '12px', fontSize: 'var(--fs-xs)', color: colors.textMuted }}>
+        <span>🟢 contenuto simile trovato online</span>
+        <span>🟠 diverso o non trovato</span>
+      </div>
+      <div style={{ marginTop: '12px', display: 'inline-block', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '5px 12px', fontSize: 'var(--fs-xs)', color: colors.info }}>📎 Fonti</div>
+    </div>
+  );
+}
+
+function CanvasDiagram() {
+  return (
+    <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '16px', width: '200px', textAlign: 'center' }}>
+        <div style={{ fontSize: '24px', marginBottom: '6px' }}>💬</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>Chat</div>
+        <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>la conversazione</div>
+      </div>
+      <div style={{ fontSize: '24px', color: colors.textMuted }} aria-hidden="true">⇄</div>
+      <div style={{ background: colors.accent + '15', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '16px', width: '200px', textAlign: 'center' }}>
+        <div style={{ fontSize: '24px', marginBottom: '6px' }}>📝</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>Documento (Canvas)</div>
+        <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>si modifica pezzo per pezzo, senza riscrivere tutto</div>
+      </div>
+    </div>
+  );
+}
+
+function NotebookDiagram() {
+  const outputs = ['🎧 Panoramica audio', '🧠 Mappa mentale', '📘 Guida allo studio', '❓ Quiz e flashcard'];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)' }}>📎 Documenti caricati (le fonti)</div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '10px 22px', color: colors.text, fontWeight: 700 }}>📓 Gemini Notebook</div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <ChipRow items={outputs} />
+    </div>
+  );
+}
+
+function ConnectedAppsDiagram() {
+  const apps = [
+    { icon: '📧', label: 'Gmail' },
+    { icon: '📁', label: 'Drive' },
+    { icon: '📄', label: 'Documenti' },
+    { icon: '📅', label: 'Calendar' },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center' }}>
+        {apps.map((a, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '14px 18px', textAlign: 'center', minWidth: '110px' }}>
+            <div style={{ fontSize: '28px' }}>{a.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{a.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '20px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '10px', padding: '12px 24px', color: colors.text, fontWeight: 700, textAlign: 'center' }}>
+        💬 Chatbot — solo per le app che l'amministratore ha abilitato
+      </div>
+    </div>
+  );
+}
+
+function FunctionsMapDiagram() {
+  const categories = [
+    { title: 'Cerca e verifica', color: colors.info, items: ['Ricerca sul web e fonti', 'Deep Research'] },
+    { title: 'Lavora sui documenti', color: colors.success, items: ['Allegati (PDF, foto, tabelle)', 'Canvas', 'Gemini Notebook'] },
+    { title: 'Sceglie come rispondere', color: colors.warn, items: ['Modello veloce o che ragiona', 'Immagini e voce'] },
+    { title: 'Ricorda (o no) e si collega', color: colors.purple, items: ['Cronologia e chat temporanea', 'App connesse'] },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+      <div style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, color: colors.bg, fontWeight: 800, borderRadius: '30px', padding: '10px 26px', fontSize: 'var(--fs-body)' }}>
+        💬 Un chatbot, oggi
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', width: '100%' }}>
+        {categories.map((c, i) => (
+          <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '14px 16px' }}>
+            <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>{c.title}</div>
+            <ul style={{ paddingLeft: '18px', margin: 0, color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.6 }}>
+              {c.items.map((it, j) => <li key={j}>{it}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AgentWordsDiagram() {
+  const nodes = [
+    { key: 'strumenti', x: 132, y: 88, r: 64, color: colors.info, label: 'Strumenti', fontSize: 20 },
+    { key: 'connettori', x: 550, y: 88, r: 64, color: colors.success, label: 'Connettori', fontSize: 19 },
+    { key: 'skill', x: 132, y: 297, r: 64, color: colors.warn, label: 'Skill', fontSize: 22 },
+    { key: 'plugin', x: 550, y: 297, r: 64, color: colors.purple, label: 'Plugin', fontSize: 21 },
+  ];
+  const center = { x: 341, y: 193, r: 84 };
+  const sub = { x: 341, y: 363, r: 59, color: colors.danger, label: 'Subagenti' };
+  return (
+    <svg viewBox="0 0 682 440" style={{ width: '100%', maxWidth: '680px', height: 'auto', display: 'block', margin: '0 auto' }} role="img" aria-label="Schema: l'agente al centro, collegato a strumenti, connettori, skill e plugin, e ai subagenti sotto di sé">
+      <defs>
+        <linearGradient id="agentGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor={colors.accent} />
+          <stop offset="100%" stopColor={colors.accentAlt} />
+        </linearGradient>
+      </defs>
+      {nodes.map(n => (
+        <line key={'l-' + n.key} x1={center.x} y1={center.y} x2={n.x} y2={n.y} stroke={colors.border} strokeWidth="2" />
+      ))}
+      <line x1={center.x} y1={center.y} x2={sub.x} y2={sub.y} stroke={colors.border} strokeWidth="2" strokeDasharray="7 7" />
+      {nodes.map(n => (
+        <g key={n.key}>
+          <circle cx={n.x} cy={n.y} r={n.r} fill={colors.bgLight} stroke={n.color} strokeWidth="3" />
+          <text x={n.x} y={n.y} textAnchor="middle" dominantBaseline="middle" fill={colors.text} fontSize={n.fontSize} fontFamily="'Public Sans', sans-serif" fontWeight="700">{n.label}</text>
+        </g>
+      ))}
+      <circle cx={sub.x} cy={sub.y} r={sub.r} fill={colors.bgLight} stroke={sub.color} strokeWidth="3" />
+      <text x={sub.x} y={sub.y} textAnchor="middle" dominantBaseline="middle" fill={colors.text} fontSize="19" fontFamily="'Public Sans', sans-serif" fontWeight="700">{sub.label}</text>
+      <circle cx={center.x} cy={center.y} r={center.r} fill="url(#agentGrad)" stroke={colors.accent} strokeWidth="3" />
+      <text x={center.x} y={center.y} textAnchor="middle" dominantBaseline="middle" fill={colors.bg} fontSize="26" fontFamily="'Public Sans', sans-serif" fontWeight="800">Agente</text>
+    </svg>
+  );
+}
+
+function LadderDiagram() {
+  const steps = [
+    { n: 1, label: 'Chatbot che risponde', h: 55, color: colors.textMuted },
+    { n: 2, label: '+ ricerca sul web e allegati', h: 95, color: colors.info },
+    { n: 3, label: '+ app connesse ai servizi', h: 135, color: colors.warn },
+    { n: 4, label: 'Agente: strumenti, permessi, skill', h: 175, color: colors.success },
+  ];
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', minHeight: '260px' }}>
+      {steps.map(s => (
+        <div key={s.n} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '155px' }}>
+          <div style={{ color: colors.text, fontSize: 'var(--fs-xs)', fontWeight: 600, textAlign: 'center', marginBottom: '8px', minHeight: '48px' }}>{s.label}</div>
+          <div style={{ width: '100%', height: `${s.h}px`, background: s.color + '30', border: `2px solid ${s.color}`, borderRadius: '8px 8px 3px 3px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '8px' }}>
+            <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: s.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.n}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 /* ---------- animazione 1: completamento di frase (testo che prevede testo) ---------- */
 /* Albero di continuazioni: a ogni passo le parole candidate dipendono dalle scelte
@@ -529,7 +756,7 @@ function DeskMemory() {
 }
 
 /* ---------- dati delle slide ---------- */
-/* ogni voce: { block, title, content, notes } — block/minutes solo per il pannello note */
+/* ogni voce: { block, title, content, notes } — block solo per il pannello note, senza minutaggio */
 
 const slides = [
   {
@@ -552,35 +779,38 @@ const slides = [
   {
     block: 'Apertura',
     content: () => (
-      <div style={{ padding: '16px 30px 0' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Perché siamo qui</h2>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Thomas Casali, docente dell'istituto</p>
+      <div style={{ padding: '10px 30px 0' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Perché siamo qui</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Thomas Casali, docente dell'istituto</p>
         <Glow>
           <p>
             Usare l'intelligenza artificiale <strong style={{ color: colors.text }}>con consapevolezza</strong> nel lavoro di organizzazione della scuola: circolari, moduli, prenotazioni, pratiche che passano da un ufficio all'altro.
           </p>
         </Glow>
-        <ul style={{ marginTop: '14px', paddingLeft: '28px', color: colors.textDim }}>
+        <ul style={{ marginTop: '10px', paddingLeft: '28px', color: colors.textDim }}>
           <li><strong style={{ color: colors.text }}>Incontro 1</strong>, oggi: come funzionano questi strumenti e perché a volte sbagliano.</li>
           <li><strong style={{ color: colors.text }}>Incontro 2</strong>: da una procedura di carta a un servizio, e quando non delegare.</li>
           <li><strong style={{ color: colors.text }}>Incontro 3</strong>: un agente costruisce un piccolo strumento da una richiesta in italiano.</li>
           <li><strong style={{ color: colors.text }}>Incontro 4</strong>: un problema del vostro lavoro diventa una proposta.</li>
         </ul>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px', marginBottom: '-4px' }}>Vedremo anche esempi reali di procedure della nostra scuola riorganizzate con l'IA.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px', marginBottom: '-4px' }}>Vedremo anche esempi reali di procedure della nostra scuola riorganizzate con l'IA.</p>
         <Box type="tip" title="Come si lavora in questo corso">
-          Ogni 20-30 minuti si smette di ascoltare e si passa al PC.
+          Si smette spesso di ascoltare e si passa al PC.
         </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>
+          I materiali di oggi (fogli e documenti delle attività) sono su <strong style={{ color: colors.text }}>thomascasali.github.io/corso-ia-scuola-slide/materiali/incontro-1/</strong>
+        </p>
       </div>
     ),
-    notes: 'Presentatevi in una riga: nome e ruolo nell\'istituto. Poi dite a cosa serve il corso: non si impara a programmare, si impara a usare questi strumenti con giudizio nel lavoro di organizzazione. Scorrete i quattro incontri senza entrare nei dettagli. Gli esempi di procedure della scuola si vedono nell\'incontro 2: qui basta dire che ci saranno. Spiegate il formato: blocchi corti, sempre seguiti da un\'attività al PC.'
+    notes: 'Presentatevi in una riga: nome e ruolo nell\'istituto. Poi dite a cosa serve il corso: non si impara a programmare, si impara a usare questi strumenti con giudizio nel lavoro di organizzazione. Scorrete i quattro incontri senza entrare nei dettagli. Gli esempi di procedure della scuola si vedono nell\'incontro 2: qui basta dire che ci saranno. Spiegate il formato: blocchi corti, sempre seguiti da un\'attività al PC. Leggete a voce alta l\'indirizzo dei materiali, così chi vuole lo scrive subito.'
   },
 
-  /* --- blocco 0'-15' --- */
+  /* --- blocco 1: prima provate --- */
   {
-    block: "0'-15' — Prima provate",
+    block: "Blocco 1 — Prima provate",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <BlockTag>0' – 15'</BlockTag>
+        <BlockTag>Blocco 1</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Prima provate</h2>
         <p style={{ color: colors.textDim }}>Aprite Gemini e scrivete <strong style={{ color: colors.text }}>tutti la stessa richiesta</strong>, parola per parola.</p>
         <Glow>
@@ -594,7 +824,7 @@ const slides = [
     notes: 'Fate scrivere questa identica richiesta a tutti, in Gemini, sul loro PC. Cronometrate 3-4 minuti. Non correggete nessuno: l\'obiettivo è avere risposte diverse da confrontare nella slide successiva.'
   },
   {
-    block: "0'-15' — Prima provate",
+    block: "Blocco 1 — Prima provate",
     content: () => (
       <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🤔</div>
@@ -607,12 +837,12 @@ const slides = [
     notes: 'Chiedete a voce alta a due o tre persone di leggere la loro mail. Fate notare le differenze di tono, lunghezza, dettagli inventati (orari, numero di telefono...). Non date ancora la risposta: la spiegazione arriva nel blocco successivo, sul "testo che prevede testo".'
   },
 
-  /* --- blocco 15'-45' --- */
+  /* --- blocco 2: testo che prevede testo --- */
   {
-    block: "15'-45' — Testo che prevede testo",
+    block: "Blocco 2 — Testo che prevede testo",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <BlockTag>15' – 45'</BlockTag>
+        <BlockTag>Blocco 2</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Testo che prevede testo</h2>
         <Glow>
           <p>Questi strumenti non consultano un archivio di fatti verificati. Fanno una cosa sola, moltissime volte: <strong style={{ color: colors.text }}>prevedono la parola successiva</strong>, scegliendola tra le più probabili dopo quelle già scritte.</p>
@@ -623,7 +853,7 @@ const slides = [
     notes: 'Introduzione breve. Il punto chiave da far passare: non è memoria, è previsione statistica della parola successiva. Da qui nascono sia la varietà delle risposte viste prima, sia le allucinazioni che vedremo dopo.'
   },
   {
-    block: "15'-45' — Testo che prevede testo",
+    block: "Blocco 2 — Testo che prevede testo",
     content: () => (
       <div style={{ padding: '14px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Completate la frase</h2>
@@ -634,7 +864,7 @@ const slides = [
     notes: 'Fate cliccare parole diverse a persone diverse: a ogni passo le opzioni proposte cambiano in base al percorso già scelto, non sono sempre le stesse. Poi premete "ricomincia" e scegliete un percorso diverso davanti a tutti: la stessa frase iniziale porta a frasi finali diverse ma tutte sensate. Questo spiega perché le mail di prima erano tutte diverse: ogni volta si "pesca" tra parole probabili in base a quelle già scritte, non certe. Ribadite: le percentuali sono illustrative.'
   },
   {
-    block: "15'-45' — Testo che prevede testo",
+    block: "Blocco 2 — Testo che prevede testo",
     content: () => (
       <div style={{ padding: '30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '20px' }}>Perché inventa</h2>
@@ -649,7 +879,25 @@ const slides = [
     notes: 'Concetto centrale del blocco. Insistete sul fatto che non è un guasto occasionale: è la conseguenza diretta di "prevedere la parola successiva". Un modello non distingue internamente "so questo per certo" da "sto indovinando bene": il tono della risposta è sempre sicuro. Anticipate che nell\'attività non chiederemo cose impossibili: oggi i modelli se ne accorgono spesso. Gli errori da temere sono quelli che sembrano giusti.'
   },
   {
-    block: "15'-45' — Testo che prevede testo",
+    block: "Blocco 2 — Testo che prevede testo",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '10px' }}>La catena che porta a inventare</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '22px' }}>Tre passaggi, sempre nello stesso ordine: nessuno dei tre è un errore di sistema.</p>
+        <FlowChain steps={[
+          { icon: '❓', label: 'Manca il dato preciso', color: colors.danger },
+          { icon: '✍️', label: 'Il modello completa comunque', sub: 'perché il suo compito è finire la frase', color: colors.warn },
+          { icon: '🙂', label: 'Lo scrive con tono sicuro', sub: 'identico a quando la risposta è giusta', color: colors.info },
+        ]} />
+        <Box type="tip" title="Da ricordare">
+          Il tono sicuro non è un indizio: una risposta giusta e una inventata si leggono allo stesso modo.
+        </Box>
+      </div>
+    ),
+    notes: 'Riprendete lo schema a voce, un passaggio alla volta, indicandoli sullo schermo. Il punto da far fissare: il tono sicuro con cui è scritta una risposta non dice nulla sul fatto che sia vera. È la stessa identica voce, sia che il dato ci sia sia che manchi. Collegate alla prossima slide, dove si vede un esempio concreto costruito apposta per il corso.'
+  },
+  {
+    block: "Blocco 2 — Testo che prevede testo",
     content: () => (
       <div style={{ padding: '30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Un esempio</h2>
@@ -665,7 +913,7 @@ const slides = [
     notes: 'Esempio inventato apposta per l\'aula: nessun regolamento vero viene citato. Fate notare che la risposta non ha niente di strano, ed è questo il punto. I modelli di oggi si accorgono spesso delle domande su cose impossibili (una data che non esiste, un ente di fantasia) e lo dicono. Gli errori che passano sono quelli credibili: una risposta come questa, incollata in una comunicazione ufficiale senza controllo, diventa un errore firmato dalla scuola.'
   },
   {
-    block: "15'-45' — Testo che prevede testo",
+    block: "Blocco 2 — Testo che prevede testo",
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <BlockTag>Attività</BlockTag>
@@ -675,9 +923,9 @@ const slides = [
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
           {[
-            { l: 'A', t: 'Trova gli errori', c: colors.danger, d: 'Una risposta dell\'IA su un viaggio a Torino, da confrontare con il regolamento. Gli errori nascosti sono cinque.', f: 'Risposta da verificare', m: '7 min, a coppie' },
-            { l: 'B', t: 'La premessa falsa', c: colors.warn, d: 'Con il regolamento allegato, tre domande che danno per scontata una cosa sbagliata. L\'IA vi corregge o vi segue?', f: 'Caccia all\'errore', m: '5 min, uno dei due' },
-            { l: 'C', t: 'Chiedi le fonti', c: colors.info, d: 'Tre studi con autore, anno e link. Poi si aprono e si cercano, uno per uno.', f: 'Caccia all\'errore', m: '5 min, l\'altro' },
+            { l: 'A', t: 'Trova gli errori', c: colors.danger, d: 'Una risposta dell\'IA su un viaggio a Torino, da confrontare con il regolamento. Gli errori nascosti sono cinque.', f: 'Risposta da verificare', href: '../materiali/incontro-1/risposta-da-verificare.html', m: '7 min, a coppie' },
+            { l: 'B', t: 'La premessa falsa', c: colors.warn, d: 'Con il regolamento allegato, tre domande che danno per scontata una cosa sbagliata. L\'IA vi corregge o vi segue?', f: 'Caccia all\'errore', href: '../materiali/incontro-1/caccia-all-errore.html#parte-b-la-premessa-falsa', m: '5 min, uno dei due' },
+            { l: 'C', t: 'Chiedi le fonti', c: colors.info, d: 'Tre studi con autore, anno e link. Poi si aprono e si cercano, uno per uno.', f: 'Caccia all\'errore', href: '../materiali/incontro-1/caccia-all-errore.html#parte-c-chiedi-le-fonti-e-controllale', m: '5 min, l\'altro' },
           ].map(x => (
             <div key={x.l} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
@@ -685,22 +933,25 @@ const slides = [
                 <strong style={{ color: colors.text, fontSize: 'var(--fs-sm)' }}>{x.t}</strong>
               </div>
               <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.45 }}>{x.d}</p>
-              <div style={{ marginTop: 'auto', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted }}>📄 {x.f}<br />⏱ {x.m}</div>
+              <div style={{ marginTop: 'auto', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>
+                <a href={x.href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="activity-link" style={{ color: colors.info, textDecoration: 'underline', textUnderlineOffset: '3px' }}>📄 {x.f}</a>
+                <div style={{ color: colors.textMuted, marginTop: '4px' }}>⏱ {x.m}</div>
+              </div>
             </div>
           ))}
         </div>
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Se l'IA corregge la premessa o porta fonti vere, va bene lo stesso: l'abitudine da prendere è controllare.</p>
       </div>
     ),
-    notes: 'Scheda 2 delle esercitazioni. Parte A (7 minuti, a coppie): il foglio "Risposta da verificare" contiene una risposta scritta per il corso nello stile di un assistente IA, con cinque errori credibili in mezzo a molte informazioni giuste. Le soluzioni sono nel file a parte risposta-da-verificare-soluzioni.md. Parti B e C (5 minuti, una a testa dentro la coppia): le domande sono sul foglio "Caccia all\'errore". Per la B si allega il regolamento a una chat nuova di Gemini, la stessa mossa che torna nella scheda 3. Avvisate che nella B e nella C il risultato cambia da un PC all\'altro: se l\'IA corregge la premessa o trova studi veri, non è un fallimento, è un risultato da raccontare. Chiudete chiedendo quanti errori della parte A ha trovato ogni coppia e quale è sfuggito più spesso.'
+    notes: 'Scheda 2 delle esercitazioni. Parte A (7 minuti, a coppie): il foglio "Risposta da verificare" contiene una risposta scritta per il corso nello stile di un assistente IA, con cinque errori credibili in mezzo a molte informazioni giuste. Le soluzioni le avete nel materiale del docente. Parti B e C (5 minuti, una a testa dentro la coppia): le domande sono sul foglio "Caccia all\'errore". Per la B si allega il regolamento a una chat nuova di Gemini, la stessa mossa che torna nella scheda 3. Avvisate che nella B e nella C il risultato cambia da un PC all\'altro: se l\'IA corregge la premessa o trova studi veri, non è un fallimento, è un risultato da raccontare. Chiudete chiedendo quanti errori della parte A ha trovato ogni coppia e quale è sfuggito più spesso.'
   },
 
-  /* --- blocco 45'-75' --- */
+  /* --- blocco 3: contesto e memoria --- */
   {
-    block: "45'-75' — Contesto e memoria",
+    block: "Blocco 3 — Contesto e memoria",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <BlockTag>45' – 75'</BlockTag>
+        <BlockTag>Blocco 3</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Contesto e memoria</h2>
         <Glow>
           <p>Immaginate una <strong style={{ color: colors.text }}>scrivania</strong>. Il modello vede solo quello che in quel momento sta sulla scrivania: quello che scrivete voi, i documenti allegati, le risposte date prima nella stessa chat.</p>
@@ -713,7 +964,7 @@ const slides = [
     notes: 'Metafora centrale del blocco: la scrivania. Fate capire che non è "memoria debole", è un confine netto: dentro la stessa chat il modello ha davanti tutto quello che ci è passato sopra (finché la chat non diventa lunghissima); in una chat nuova no. Alcuni strumenti salvano pochi appunti tra una chat e l\'altra (la "memoria"), ma non sono la copia delle conversazioni: ne parla la dispensa, cap. 3.'
   },
   {
-    block: "45'-75' — Contesto e memoria",
+    block: "Blocco 3 — Contesto e memoria",
     content: () => (
       <div style={{ padding: '30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La scrivania, in pratica</h2>
@@ -724,35 +975,36 @@ const slides = [
     notes: 'Fate aggiungere i tre elementi uno per uno, poi premete "nuova chat" davanti a tutti: la scrivania si svuota. Collegate subito all\'attività successiva: stessa domanda, con e senza il documento allegato.'
   },
   {
-    block: "45'-75' — Contesto e memoria",
+    block: "Blocco 3 — Contesto e memoria",
     content: () => (
       <div style={{ padding: '30px' }}>
         <BlockTag>Attività</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Stessa domanda, due scrivanie</h2>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Stessa domanda, due scrivanie</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 20 minuti.</p>
         <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
           <li>Aprite una chat nuova e chiedete: "Nel nostro istituto, per una visita guidata di una giornata con 27 studenti, quanti docenti accompagnatori servono e con quanto anticipo va presentata la domanda?" — senza allegare nulla.</li>
           <li>Aprite un'altra chat nuova, allegate il documento di prova del regolamento viaggi e ripetete la stessa identica domanda.</li>
           <li>Confrontate le due risposte: quale cita numeri precisi? Quale li inventa?</li>
         </ol>
-        <ActivityBadge file="dati-demo/regolamento-viaggi-di-prova.md" />
+        <ActivityBadge href="../materiali/incontro-1/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
       </div>
     ),
-    notes: 'Il documento da allegare è dati-demo/regolamento-viaggi-di-prova.md, già pronto (scheda 3 delle esercitazioni). Risposta giusta con il documento: 3 accompagnatori (art. 4, comma 1) e 17 giorni (art. 3, comma 2). Girate tra i banchi durante l\'attività: il punto da far emergere è che senza il documento il modello risponde comunque, ma con numeri plausibili non garantiti.'
+    notes: 'Il documento da allegare è il regolamento viaggi di prova, già pronto (scheda 3 delle esercitazioni). Le risposte giuste sono nella scheda 3 delle esercitazioni. Girate tra i banchi durante l\'attività: il punto da far emergere è che senza il documento il modello risponde comunque, ma con numeri plausibili non garantiti.'
   },
 
   { block: 'Pausa', content: () => (
       <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>☕</div>
-        <h2 style={{ color: colors.accent }}>Pausa — 15 minuti</h2>
+        <h2 style={{ color: colors.accent }}>Pausa</h2>
       </div>
-    ), notes: 'Pausa di 15 minuti (75\'-90\'). Al ritorno si parte con "I progetti nelle chat".' },
+    ), notes: 'Pausa. Al ritorno si parte con "I progetti nelle chat".' },
 
-  /* --- blocco 90'-150' --- */
+  /* --- blocco 4: i progetti nelle chat --- */
   {
-    block: "90'-150' — I progetti nelle chat",
+    block: "Blocco 4 — I progetti nelle chat",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <BlockTag>90' – 150'</BlockTag>
+        <BlockTag>Blocco 4</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>I progetti nelle chat</h2>
         <Glow>
           <p>Un "progetto" in chat è uno spazio che tiene insieme <strong style={{ color: colors.text }}>istruzioni</strong>, <strong style={{ color: colors.text }}>documenti</strong> e <strong style={{ color: colors.text }}>conversazioni</strong> che restano, invece di sparire a ogni nuova chat.</p>
@@ -763,14 +1015,14 @@ const slides = [
     notes: 'Collegate esplicitamente alla metafora della scrivania vista prima: un progetto tiene alcuni fogli fissati sulla scrivania anche quando si apre una nuova conversazione dentro quel progetto.'
   },
   {
-    block: "90'-150' — I progetti nelle chat",
+    block: "Blocco 4 — I progetti nelle chat",
     content: () => (
       <div style={{ padding: '30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '22px' }}>Tre nomi, la stessa idea</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
           {[
             { name: 'Gem', tool: 'Gemini', icon: '💎' },
-            { name: 'Notebook', tool: 'NotebookLM', icon: '📓' },
+            { name: 'Notebook', tool: 'Gemini Notebook', icon: '📓' },
             { name: 'Progetto', tool: 'Claude', icon: '🗂️' },
           ].map(x => (
             <div key={x.name} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '22px', textAlign: 'center' }}>
@@ -786,24 +1038,45 @@ const slides = [
     notes: 'Non entrate nei dettagli di interfaccia (pulsanti, menu): possono cambiare. Il messaggio da far passare è solo il paragone concettuale: sono tre modi diversi di fare la stessa cosa.'
   },
   {
-    block: "90'-150' — I progetti nelle chat",
+    block: "Blocco 4 — I progetti nelle chat",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Come è fatto un Gem</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Sotto il nome, sono sempre le stesse tre cose messe insieme.</p>
+        <ConvergeDiagram
+          inputs={[
+            { icon: '📋', label: 'Istruzioni' },
+            { icon: '📎', label: 'Documenti caricati' },
+            { icon: '❓', label: 'La tua domanda' },
+          ]}
+          outputIcon="💬"
+          outputLabel="Risposta"
+          outputSub="con citazioni ai documenti caricati, quando ci sono"
+        />
+      </div>
+    ),
+    notes: 'Mostrate lo schema e collegatelo a quello che stanno per fare: nella prossima slide scrivono loro le istruzioni e caricano loro i documenti. Ribadite: le citazioni aiutano, ma vanno comunque aperte e controllate, come nella slide "Controllate sempre le fonti" più avanti.'
+  },
+  {
+    block: "Blocco 4 — I progetti nelle chat",
     content: () => (
       <div style={{ padding: '30px' }}>
         <BlockTag>Attività</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Il tuo primo Gem</h2>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il tuo primo Gem</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>50 minuti: circa 20 per creare il Gem, 30 per interrogarlo e controllarlo.</p>
         <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
           <li>Create un nuovo Gem con l'account Google della scuola.</li>
           <li>Scrivete le istruzioni di base (chi è, a cosa serve).</li>
           <li>Caricate i documenti di prova (regolamento viaggi, orario di prova).</li>
           <li>Fate una domanda preparata e controllate la risposta.</li>
         </ol>
-        <ActivityBadge file="incontro-1/esercitazioni.md" />
+        <ActivityBadge href="../materiali/incontro-1/istruzioni-da-incollare.html" label="Istruzioni da incollare" />
       </div>
     ),
-    notes: 'Il testo esatto delle istruzioni da far incollare è in incontro-1/esercitazioni.md. Girate tra i banchi: la difficoltà più comune è trovare dove si caricano i documenti nell\'interfaccia del momento. Non serve che il Gem sia perfetto: serve che ognuno ne abbia creato uno.'
+    notes: 'Il testo esatto delle istruzioni da far incollare è nel foglio "Istruzioni da incollare" dei materiali. Girate tra i banchi: la difficoltà più comune è trovare dove si caricano i documenti nell\'interfaccia del momento. Non serve che il Gem sia perfetto: serve che ognuno ne abbia creato uno.'
   },
   {
-    block: "90'-150' — I progetti nelle chat",
+    block: "Blocco 4 — I progetti nelle chat",
     content: () => (
       <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🔎</div>
@@ -816,12 +1089,188 @@ const slides = [
     notes: 'Chiusura del blocco Gem. Ribadite: avere documenti caricati riduce le invenzioni, ma non le azzera. La verifica della fonte resta un passaggio umano, sempre.'
   },
 
-  /* --- blocco 150'-170' --- */
+  /* --- blocco 5: cosa sa fare un chatbot oggi --- */
   {
-    block: "150'-170' — Chatbot e agente",
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <BlockTag>150' – 170'</BlockTag>
+        <BlockTag>Blocco 5</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa sa fare un chatbot oggi</h2>
+        <p style={{ color: colors.textDim, marginBottom: '20px' }}>Oltre a rispondere con del testo, un chatbot come Gemini ha una serie di funzioni pensate per casi diversi. Le vediamo una per una, con un esempio dalla vita della scuola.</p>
+        <FunctionsMapDiagram />
+      </div>
+    ),
+    notes: 'Presentate la mappa a voce, categoria per categoria, senza entrare ancora nei dettagli: sono solo i nomi delle nove slide che seguono. Chiedete alla sala quante di queste funzioni hanno già usato almeno una volta, per capire da dove partire con il ritmo di questo blocco.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.info, marginBottom: '6px' }}>1. Ricerca sul web e fonti</h2>
+        <p style={{ color: colors.textDim }}>Quando la risposta usa informazioni trovate online, compare il pulsante <strong style={{ color: colors.text }}>Fonti</strong>. Nel menu sotto la risposta c'è anche <strong style={{ color: colors.text }}>"Verifica la risposta"</strong>: confronta il testo con una ricerca e colora le frasi.</p>
+        <div style={{ margin: '18px 0' }}>
+          <SourceCheckMock />
+        </div>
+        <Box type="warn" title="Attenzione">
+          I link trovati da "Verifica la risposta" non sono per forza le fonti usate per scrivere la risposta: vanno aperti e letti, non solo guardati.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Esempio: la segreteria chiede una sintesi di una norma trovata online prima di incollarla in una circolare, e controlla il colore delle frasi.</p>
+      </div>
+    ),
+    notes: 'Fate notare che il verde non è una garanzia assoluta, è un indizio in più. Se avete tempo, fate cercare a qualcuno in sala una domanda reale su un argomento pubblico e guardate insieme dal vivo il pulsante Fonti e "Verifica la risposta".'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.info, marginBottom: '6px' }}>2. Deep Research</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Fa un piano, esplora molte pagine (di solito con la Ricerca Google) e scrive un rapporto lungo con le fonti citate. Di solito lavora per alcuni minuti, non pochi secondi.</p>
+        <FlowChain steps={[
+          { icon: '📝', label: 'La domanda' },
+          { icon: '🗺️', label: 'Piano di ricerca' },
+          { icon: '🌐', label: 'Esplora molte pagine', sub: 'qualche minuto di attesa' },
+          { icon: '📚', label: 'Rapporto con le fonti' },
+        ]} />
+        <Box type="warn" title="Attenzione">
+          Per usarlo serve avere 18 anni o più, e per gli account Education Google la descrive come una versione con meno possibilità: i limiti esatti si verificano in laboratorio, con l'account della scuola.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Esempio: l'ufficio tecnico confronta più fornitori per un bando e lascia lavorare Deep Research qualche minuto prima di leggere il rapporto.</p>
+      </div>
+    ),
+    notes: 'Il tempo di attesa è la differenza pratica più visibile: non è una risposta immediata, ci vogliono minuti. Se qualcuno l\'ha già provato con l\'account della scuola, fatelo raccontare: è uno dei punti segnati come da verificare in laboratorio.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.success, marginBottom: '6px' }}>3. Allegati</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Si possono allegare PDF, foto di un foglio scritto a mano, tabelle, screenshot e altri file. Esistono limiti indicativi di numero e dimensione: da riverificare in laboratorio con l'account della scuola.</p>
+        <ChipRow items={['📄 PDF', '🖼️ Foto di un foglio scritto a mano', '📊 Tabelle', '🖥️ Screenshot']} />
+        <Box type="danger" title="Attenzione ai dati personali">
+          Negli allegati vanno solo documenti di prova o già resi anonimi: mai un modulo con nomi veri di studenti, famiglie o personale.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Esempio: un docente fotografa con il telefono un modulo vuoto e chiede di trascriverne i campi in una tabella.</p>
+      </div>
+    ),
+    notes: 'Ribadite con fermezza la regola sui dati personali, collegandola a quelle già viste per il corso: negli allegati delle attività di oggi ci sono solo documenti di prova. Se qualcuno chiede i numeri esatti dei limiti, rimandate alla verifica in laboratorio.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.success, marginBottom: '6px' }}>4. Canvas</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Apre un documento affiancato alla chat, da modificare pezzo per pezzo: un testo lungo, un foglio semplice, del codice, senza doverlo ricopiare ogni volta.</p>
+        <CanvasDiagram />
+        <Box type="tip" title="Esempio">
+          La segreteria scrive con Canvas la bozza di una circolare e la corregge un paragrafo alla volta, senza perdere il resto del testo.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Resta comunque testo generato: si rilegge come qualsiasi altra risposta, prima di usarlo.</p>
+      </div>
+    ),
+    notes: 'Se avete tempo, mostrate dal vivo l\'apertura di un Canvas su un testo qualunque e una correzione mirata a un solo paragrafo: è il dettaglio che fa capire la differenza rispetto a riscrivere tutto da capo in chat.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '0px 30px' }}>
+        <h2 style={{ color: colors.warn, marginBottom: '2px' }}>5. Gemini Notebook</h2>
+        <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '4px' }}>(prima si chiamava NotebookLM)</div>
+        <p style={{ color: colors.textDim, marginBottom: '6px' }}>Si caricano dei documenti e Gemini Notebook risponde solo in base a quelli, con citazioni. Dagli stessi documenti può generare anche una panoramica audio, una mappa mentale, una guida allo studio, quiz e flashcard.</p>
+        <NotebookDiagram />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>Esempio: la dirigenza carica il regolamento d'istituto e si fa preparare una panoramica audio da ascoltare prima di una riunione.</p>
+        <Box type="warn" title="Attenzione">
+          Le citazioni rimandano al documento caricato, ma vanno comunque aperte: l'estratto indicato può non essere preciso.
+        </Box>
+      </div>
+    ),
+    notes: 'Il prodotto si chiamava NotebookLM ed è diventato Gemini Notebook: a seconda di quando è stato aggiornato l\'account potreste vedere l\'uno o l\'altro nome nell\'interfaccia, segnalatelo dopo l\'incontro. Non va confuso con "Notebooks in Gemini" (le cartelle di progetto dentro l\'app Gemini): quelle, per il nostro dominio in Europa, non ci sono. Se qualcuno l\'ha già usato, chiedete quale delle funzioni di studio ha trovato più utile.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.warn, marginBottom: '6px' }}>6. Modello veloce o modello che ragiona</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Si può scegliere quale "motore" risponde: uno pensato per essere veloce, uno che si prende più tempo per ragionare prima di scrivere la risposta.</p>
+        <CompareTwo
+          left={{ icon: '⚡', title: 'Modello veloce', color: colors.info, points: ['Risponde quasi subito', 'Va bene per una mail, un riassunto, una bozza veloce'] }}
+          right={{ icon: '🧠', title: 'Modello che ragiona', color: colors.purple, points: ['Ci mette più tempo', 'Sbaglia meno sui calcoli e sui ragionamenti con più passaggi', 'Per chi paga a consumo, costa di più'] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Esempio: per un conto con più regole del regolamento conviene il modello che ragiona; per una mail di routine basta il veloce. I numeri veri dei costi arrivano nell'incontro 2.</p>
+      </div>
+    ),
+    notes: 'Non fate nomi di modelli né numeri di versione: cambiano continuamente, il concetto resta lo stesso. Il collegamento ai costi è solo un accenno, da riprendere con i numeri nell\'incontro 2: qui basta la domanda "chi decide quale motore usare, e quando conviene quello più lento?".'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '4px 30px' }}>
+        <h2 style={{ color: colors.purple, marginBottom: '4px' }}>7. Cronologia, chat temporanea e cosa resta salvato</h2>
+        <CompareTwo
+          left={{ icon: '💬', title: 'Chat normale', color: colors.info, points: ['Resta nella cronologia, si può riaprire', 'Si gestisce da Impostazioni e guida > Attività'] }}
+          right={{ icon: '🕓', title: 'Chat temporanea', color: colors.warn, points: ['Non compare tra le chat recenti', 'Resta conservata poco tempo', 'Non personalizza le risposte future', 'Sulla scuola: da verificare'] }}
+        />
+        <Box type="tip" title="Con l'account della scuola">
+          Con gli account Workspace for Education, chat e file caricati «non vengono rivisti da revisori umani né usati per migliorare i modelli di IA generativa» (Google).
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '4px' }}>La memoria delle chat passate non è disponibile con l'account della scuola: serve un account personale e 18 anni.</p>
+      </div>
+    ),
+    notes: 'Punto sensibile per la sala, soprattutto per la dirigenza: la dichiarazione sulla privacy per Education è ufficiale di Google, leggetela quasi testualmente. Se chiedono della chat temporanea sull\'account della scuola, dite che è tra i punti da verificare in laboratorio.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px', textAlign: 'center' }}>
+        <h2 style={{ color: colors.purple, marginBottom: '10px' }}>8. Immagini e voce</h2>
+        <div style={{ fontSize: 'var(--fs-display)', margin: '10px 0' }}>🖼️ 🎙️</div>
+        <p style={{ color: colors.textDim, maxWidth: '700px', margin: '0 auto' }}>Oltre al testo, si possono generare immagini e usare la voce per parlare con lo strumento invece di scrivere.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '16px' }}>Esempio: creare un'immagine per la locandina di un evento della scuola.</p>
+        <Box type="warn" title="Attenzione">
+          Disponibilità e limiti per l'account della scuola non sono confermati da una fonte ufficiale: si verificano in laboratorio.
+        </Box>
+      </div>
+    ),
+    notes: 'Slide volutamente breve: non è il cuore dell\'incontro. Se qualcuno chiede di provare a generare un\'immagine, rimandate a un momento libero o all\'attività "Esploriamo le funzioni" subito dopo.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '6px' }}>9. App connesse</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Si possono collegare Gmail, Drive, Documenti, Calendar e altri servizi: il chatbot li legge o li usa quando serve, solo per quelli che l'amministratore ha abilitato per la scuola.</p>
+        <ConnectedAppsDiagram />
+        <Box type="tip" title="Questo è già un connettore">
+          Un servizio esterno collegato a un chatbot è esattamente l'idea che ritroviamo tra poco parlando di agenti: lì li chiameremo "connettori".
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Esempio: la dirigenza chiede di controllare la propria agenda della settimana, e il chatbot guarda il Calendar collegato.</p>
+      </div>
+    ),
+    notes: 'Slide-ponte verso la sezione sugli agenti: sottolineate a voce la frase "questo è già un connettore", perché tornerà identica più avanti nell\'incontro. Chiedete alla sala quali app connesse sanno di avere attive: spesso nessuno lo sa con certezza, ed è un buon gancio per l\'attività successiva.'
+  },
+  {
+    block: "Blocco 5 — Cosa sa fare un chatbot oggi",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Esploriamo le funzioni</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 10-15 minuti, con l'account della scuola e solo dati inventati.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Scegliete 3 o 4 funzioni tra quelle del foglio.</li>
+          <li>Provatele su un caso a scelta tra quelli dei materiali di oggi (uscite, regolamento viaggi...).</li>
+          <li>Segnate sul foglio quali funzioni erano davvero attive sul vostro account, e quali no.</li>
+        </ol>
+        <ActivityBadge href="../materiali/incontro-1/esplora-le-funzioni.html" label="Esplora le funzioni" />
+      </div>
+    ),
+    notes: 'Il foglio "Esplora le funzioni" elenca sette funzioni, con una tabella da compilare per ognuna. Lasciate 10-15 minuti. Girate tra i banchi: l\'obiettivo non è che tutti provino tutto, ma che ogni coppia scopra concretamente cosa è acceso sul proprio account. Raccogliete alla fine, a voce, quali funzioni sono risultate non disponibili: è utile anche per aggiornare il corso.'
+  },
+
+  /* --- blocco 6: chatbot e agente --- */
+  {
+    block: "Blocco 6 — Chatbot e agente",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 6</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Chatbot e agente</h2>
         <p style={{ color: colors.textDim }}>Diamo lo <strong style={{ color: colors.text }}>stesso compito</strong> a un chatbot e a un agente:</p>
         <Glow>
@@ -838,7 +1287,27 @@ const slides = [
     notes: 'Introducete la simulazione principale del corso. Spiegate le due colonne prima di avanzare: a sinistra un chatbot normale, a destra un agente. Il compito è identico, i dati sono inventati (nessuna pratica reale).'
   },
   {
-    block: "150'-170' — Chatbot e agente",
+    block: "Blocco 6 — Chatbot e agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Il ciclo dell'agente</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '20px' }}>Cinque passaggi, in un ciclo che può ripetersi, prima che il lavoro torni a una persona.</p>
+        <FlowChain wrap={false} minItemWidth="120px" steps={[
+          { icon: '📝', label: 'Piano', color: colors.info },
+          { icon: '🔧', label: 'Azione con uno strumento', color: colors.purple },
+          { icon: '🔁', label: 'Controllo', color: colors.warn },
+          { icon: '📬', label: 'Consegna', color: colors.success },
+          { icon: '🧑‍⚖️', label: 'Decisione della persona', color: colors.accent },
+        ]} />
+        <Box type="tip" title="Da tenere a mente">
+          L'ultimo passaggio non lo fa l'agente: decide sempre qualcuno in carne e ossa. Lo vediamo passo per passo nella simulazione.
+        </Box>
+      </div>
+    ),
+    notes: 'Presentate lo schema come anteprima: nella slide successiva questi stessi cinque passaggi si vedranno uno alla volta, con la possibilità di indovinarli. Insistete già qui sull\'ultimo riquadro: anche quando l\'agente si è controllato da solo, la decisione finale resta a una persona.'
+  },
+  {
+    block: "Blocco 6 — Chatbot e agente",
     content: () => (
       <div style={{ padding: '2px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '2px' }}>La simulazione</h2>
@@ -851,27 +1320,208 @@ const slides = [
     notes: 'Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Fate notare il registro delle azioni nella colonna di destra: è lo stesso linguaggio semplice che i partecipanti troveranno nella pagina che apriranno sul proprio PC. Alla fine confrontate con la colonna chatbot: il chatbot si è fermato al testo, l\'agente ha anche verificato e corretto un proprio errore di conteggio.'
   },
   {
-    block: "150'-170' — Chatbot e agente",
+    block: "Blocco 6 — Chatbot e agente",
     content: () => (
       <div style={{ padding: '30px' }}>
         <BlockTag>Attività</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Provatela voi</h2>
         <p style={{ color: colors.textDim }}>
-          Aprite sul vostro PC la stessa simulazione e provate a indovinare ogni mossa dell'agente prima che avvenga.
+          Aprite sul vostro PC la stessa simulazione e provate a indovinare ogni mossa dell'agente prima che avvenga. 5-8 minuti.
         </p>
-        <ActivityBadge file="incontro-1/simulazione-agente.html" />
+        <ActivityBadge href="simulazione-agente.html" label="Simulazione: chatbot o agente?" />
       </div>
     ),
-    notes: 'Fate aprire il file incontro-1/simulazione-agente.html direttamente dal file system (doppio clic, si apre nel browser). Lasciate 5-8 minuti per giocare fino in fondo, poi chiedete a mano alzata quanti hanno indovinato tutte le mosse.'
+    notes: 'Fate aprire la simulazione dal link sulla slide. Lasciate 5-8 minuti per giocare fino in fondo, poi chiedete a mano alzata quanti hanno indovinato tutte le mosse.'
+  },
+
+  /* --- blocco 7: demo dal vivo --- */
+  {
+    block: "Blocco 7 — Demo dal vivo",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Blocco 7</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Ora dal vero</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Lo stesso compito della simulazione — l'elenco delle uscite di novembre, gli accompagnatori mancanti, il nome nascosto nella colonna "note" — ma questa volta non ci sono bottoni: Thomas lo fa davvero, con Claude Code, sugli stessi file di prova.</p>
+        <p style={{ color: colors.textDim, marginBottom: '20px' }}>Guardate cosa succede, non solo il risultato finale. Durata indicativa: 15-20 minuti.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+          {[
+            { q: 'Quali strumenti usa?', c: colors.info },
+            { q: 'Quando chiede il permesso?', c: colors.warn },
+            { q: 'Quando apre una procedura scritta (una skill)?', c: colors.purple },
+            { q: 'Come si controlla con il regolamento?', c: colors.success },
+            { q: 'Chi decide, alla fine?', c: colors.accent },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `4px solid ${x.c}`, borderRadius: '0 8px 8px 0', padding: '12px 16px' }}>
+              <p style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600, margin: 0 }}>{x.q}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    notes: 'Seguite il copione della demo (15-20 minuti indicativi). Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non pratiche reali.'
+  },
+  {
+    block: "Blocco 7 — Demo dal vivo",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Cosa abbiamo visto</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
+          {[
+            { icon: '🔧', term: 'Strumento', d: 'ogni azione concreta che ha fatto: leggere un file, cercare, scrivere', c: colors.info },
+            { icon: '🔐', term: 'Permesso', d: 'il momento in cui si è fermato a chiedere il vostro sì prima di continuare', c: colors.warn },
+            { icon: '📋', term: 'Skill', d: 'la procedura scritta che ha aperto solo quando serviva', c: colors.purple },
+            { icon: '🔁', term: 'Controllo', d: 'il momento in cui ha riguardato il proprio lavoro confrontandolo col regolamento', c: colors.success },
+            { icon: '🧑‍⚖️', term: 'Decisione umana', d: 'cosa è rimasto da decidere a una persona, alla fine', c: colors.accent },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '14px 16px' }}>
+              <div style={{ fontSize: '26px', marginBottom: '6px' }}>{x.icon}</div>
+              <div style={{ color: x.c, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{x.term}</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)' }}>{x.d}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>Strumento, controllo e decisione li avete già visti nel ciclo dell'agente; permesso e skill sono nuove. Nel prossimo blocco vediamo le parole per parlarne.</p>
+      </div>
+    ),
+    notes: 'Chiedete alla sala di riempire questi cinque riquadri con quello che hanno appena visto nella demo, prima di leggere le vostre descrizioni: "cosa avete visto che chiamiamo strumento? e permesso?". Questo schema è il ponte diretto verso la sezione successiva, dove ogni parola avrà una slide dedicata.'
+  },
+
+  /* --- blocco 8: le parole dell'agente --- */
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px 0' }}>
+        <BlockTag>Blocco 8</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '2px' }}>Le parole dell'agente</h2>
+        <p style={{ color: colors.textDim, marginBottom: '0px', fontSize: 'var(--fs-sm)' }}>Cinque parole che sentirete spesso, anche fuori da questo corso. Le vediamo una per una, sempre con un paragone dalla vita di tutti i giorni.</p>
+        <AgentWordsDiagram />
+      </div>
+    ),
+    notes: 'Mostrate lo schema e nominate le cinque parole senza ancora spiegarle: agente al centro, strumenti, connettori, skill e plugin intorno, subagenti collegati sotto in modo diverso (un agente che ne usa un altro). Le prossime slide le spiegano una alla volta, nello stesso ordine dello schema.'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.info, marginBottom: '6px' }}>Strumenti</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Le azioni concrete che un agente sa fare: leggere un file, cercare qualcosa, fare un calcolo, scrivere un documento.</p>
+        <Box type="info" title="Il paragone">
+          Sono gli attrezzi sulla scrivania: un martello non decide da solo di essere usato, ma quando serve è lì, pronto.
+        </Box>
+        <p style={{ color: colors.textDim, marginTop: '14px' }}>In Claude Code, ogni uso di uno strumento è visibile: si vede quale strumento è stato usato e con quali dati, e per le azioni più delicate l'agente si ferma a chiedere il permesso prima di procedere.</p>
+      </div>
+    ),
+    notes: 'Collegate esplicitamente alla demo appena vista: gli strumenti sono quello che avete visto usare a Claude Code (leggere il file, filtrare, scrivere il riepilogo). Il punto da far passare: uno strumento non è magia, è un\'azione precisa e visibile.'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.success, marginBottom: '6px' }}>Connettori</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Il collegamento a un servizio esterno: Drive, la posta, un calendario, un gestionale della scuola.</p>
+        <Box type="info" title="Il paragone">
+          È la chiave di un archivio: apre una porta precisa, non tutto l'edificio.
+        </Box>
+        <p style={{ color: colors.textDim, marginTop: '14px' }}>Dietro c'è spesso uno standard comune chiamato MCP: una specie di "presa standard" per collegare un'IA a un servizio, un po' come una presa USB-C. La stessa idea cambia nome da uno strumento all'altro: in Claude si chiama "connettori", in ChatGPT "app", in Gemini "App connesse" — le avete già viste poco fa.</p>
+      </div>
+    ),
+    notes: 'Riprendete esplicitamente la slide "App connesse" di Gemini vista prima: è lo stesso concetto con un nome diverso. Il paragone della presa USB-C è quello usato nella documentazione ufficiale: aiuta a far capire che è uno standard condiviso, non un\'invenzione di un singolo prodotto.'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.warn, marginBottom: '6px' }}>Skill</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Una procedura scritta, con eventuali modelli di documento, che l'agente apre solo quando gli serve davvero: non la tiene tutta in testa fin dall'inizio.</p>
+        <Box type="info" title="Il paragone">
+          È il prontuario per il collega nuovo: un titolo, una breve descrizione di quando usarlo, e dentro i passi da seguire.
+        </Box>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '14px 18px', marginTop: '14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+          <div style={{ color: colors.text, fontWeight: 700 }}>Nome: controllo-uscite</div>
+          <div style={{ color: colors.textMuted, marginTop: '4px' }}>Descrizione: procedura per controllare le pratiche di uscite e viaggi (accompagnatori mancanti, limiti per docente, date non ammesse) e scrivere il riepilogo.</div>
+          <div style={{ marginTop: '4px' }}>Primi passi: 1) leggi il file delle pratiche e il regolamento → 2) conta gli accompagnatori (art. 4) → 3) controlla i limiti per i viaggi d'istruzione → ...</div>
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>È lo stesso tema di questo corso: trasformare un modo di lavorare in una procedura scritta, chiara abbastanza da poter essere seguita anche da un agente.</p>
+      </div>
+    ),
+    notes: 'Il tema delle skill è il cuore del legame tra questo corso e il lavoro quotidiano: scrivere bene una procedura serve alle persone tanto quanto a un agente. Il riquadro sopra è la skill vista nella demo di prima (controllo-uscite): stesso nome, stessa descrizione, stessi primi passi.'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.purple, marginBottom: '6px' }}>Plugin</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Un pacchetto che mette insieme più skill, connettori e comandi pronti, e si installa in un colpo solo.</p>
+        <Box type="info" title="Il paragone">
+          È il kit completo di un ufficio: non si comprano graffette, faldoni e timbro uno alla volta, arrivano già insieme in una scatola.
+        </Box>
+        <p style={{ color: colors.textDim, marginTop: '14px' }}>Utile quando un intero modo di lavorare, non una sola procedura, va condiviso con altre persone o altri uffici, pronto all'uso.</p>
+      </div>
+    ),
+    notes: 'Slide breve, di collegamento tra Skill e Subagenti: non serve entrare nei dettagli tecnici di installazione, basta il paragone del kit. Se la sala fatica a distinguere skill e plugin, ripetete: la skill è un foglio del prontuario, il plugin è l\'intero raccoglitore.'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '6px' }}>Subagenti</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Un agente può affidare un pezzo di lavoro a un altro agente, con istruzioni proprie: riceve indietro solo il riassunto, non tutti i passaggi intermedi.</p>
+        <Box type="info" title="Il paragone">
+          È il collega a cui si affida un pezzo di lavoro, e che riporta solo il risultato: non tutti i passaggi che ha fatto per arrivarci.
+        </Box>
+        <p style={{ color: colors.textDim, marginTop: '14px' }}>Un modo diffuso di lavorare è proprio questo: un gruppo di agenti che si dividono i compiti, con uno di loro dedicato solo a controllare il lavoro degli altri prima che arrivi a una persona.</p>
+      </div>
+    ),
+    notes: 'Collegate al ciclo dell\'agente visto prima: il "controllo" a volte lo fa l\'agente stesso, altre volte lo fa un secondo agente dedicato solo a quello. Non serve nominare progetti specifici: basta il principio generale del "gruppo con un revisore".'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Dal chatbot all'agente: una scala</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Non è un confine netto: è una scala che si sale un gradino alla volta.</p>
+        <LadderDiagram />
+        <Box type="warn" title="Da ricordare">
+          Più strumenti ha a disposizione, più cose fa senza chiedere ogni volta: e più attenzione servono ai permessi e al controllo.
+        </Box>
+      </div>
+    ),
+    notes: 'Slide di chiusura della sezione: ripercorrete i quattro gradini collegandoli a quanto visto nell\'incontro (funzioni del chatbot = gradini 2 e 3, la demo = gradino 4). Il messaggio finale, da lasciare in sospeso fino all\'incontro 2: più autonomia significa più bisogno di regole su permessi e controllo, non il contrario.'
+  },
+  {
+    block: "Blocco 8 — Le parole dell'agente",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Abbinate le parole</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 10 minuti, solo a voce: non serve un foglio.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Riprendete le sei parole: strumento, connettore, skill, plugin, subagente, permesso.</li>
+          <li>Per ognuna, trovate un momento della demo appena vista (lista qui sotto) oppure, se nella demo non c'era, un esempio del vostro ufficio.</li>
+        </ol>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '16px 20px', marginTop: '14px' }}>
+          <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Momenti della demo</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, margin: 0 }}>
+            <li>Legge il file delle pratiche</li>
+            <li>Apre la procedura "controllo-uscite"</li>
+            <li>Chiede il permesso prima di eseguire un programma</li>
+            <li>Fa un conto con un piccolo programma</li>
+            <li>Chiede il permesso prima di scrivere il riepilogo</li>
+          </ul>
+        </div>
+      </div>
+    ),
+    notes: 'Nella demo non compariva nessun connettore, nessun plugin né un gruppo di subagenti: l\'agente lavorava da solo, e Thomas lo dice esplicitamente in chiusura. Chiedete alla sala dove userebbero un connettore o un plugin nel proprio ufficio, e se conoscono un compito abbastanza grande da valere un gruppo di agenti con un subagente per parte. Girate tra le coppie senza correggere: qui conta il ragionamento a voce, non una risposta unica giusta. Bastano 10 minuti.'
   },
 
   /* --- chiusura --- */
   {
-    block: "170'-180' — Chiusura",
+    block: "Chiusura",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <BlockTag>170' – 180'</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '22px' }}>Una cosa che proverò questa settimana</h2>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Una cosa che proverò questa settimana</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>10 minuti.</p>
         <Box type="tip">
           Scrivete su un foglio una sola cosa, concreta, che proverete a fare entro la prossima settimana con questi strumenti.
         </Box>
@@ -881,7 +1531,7 @@ const slides = [
     notes: 'Distribuite un foglio o fate scrivere su un\'app condivisa. Raccogliete i foglietti: serviranno all\'apertura dell\'incontro 2 ("com\'è andato il Gem provato durante la settimana").'
   },
   {
-    block: "170'-180' — Chiusura",
+    block: "Chiusura",
     content: () => (
       <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>➡️</div>
@@ -889,9 +1539,12 @@ const slides = [
         <p style={{ color: colors.textDim, maxWidth: '700px' }}>
           Nell'incontro 2 guardiamo come una procedura di carta diventa un servizio, con esempi presi dalla nostra scuola, e quando è meglio non delegare una decisione all'intelligenza artificiale.
         </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          I materiali di oggi restano su <strong style={{ color: colors.textDim }}>thomascasali.github.io/corso-ia-scuola-slide/materiali/incontro-1/</strong>
+        </p>
       </div>
     ),
-    notes: 'Ultima slide. Ricordate data e luogo dell\'incontro 2, se già confermati. Ringraziate e chiudete.'
+    notes: 'Ultima slide. Ricordate data e luogo dell\'incontro 2, se già confermati. Ricordate anche dove restano i materiali, per chi vuole rivedere un foglio a casa. Ringraziate e chiudete.'
   },
 ];
 

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materiali dell'incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #15120f; --bg-card: #1e1a15; --border: #3c332a;
+  --text: #f4eee3; --text-dim: #d2c8b8; --text-muted: #a89a83;
+  --accent: #d9a441; --accent-alt: #f0c169;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; min-height: 100vh; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 48px 20px 80px; }
+a.back { color: var(--text-muted); text-decoration: none; font-size: 15px; display: inline-block; margin-bottom: 22px; min-height: 44px; }
+a.back:hover, a.back:focus-visible { color: var(--accent); }
+h1 { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(28px, 4vw, 40px); margin-bottom: 8px; }
+.subtitle { color: var(--text-muted); font-size: clamp(15px, 1.1vw, 18px); margin-bottom: 36px; max-width: 640px; }
+.cards { display: grid; gap: 16px; }
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px 20px;
+}
+.card h2 { font-size: 19px; margin-bottom: 6px; color: var(--text); }
+.card p { color: var(--text-dim); font-size: 15px; margin-bottom: 4px; line-height: 1.5; }
+.card .used-in { color: var(--text-muted); font-size: 14px; margin-bottom: 12px; }
+.card .links { display: flex; flex-wrap: wrap; gap: 10px; }
+.card a.link {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px;
+  color: var(--accent); text-decoration: none; border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 14px; font-size: 14.5px;
+}
+.card a.link:hover, .card a.link:focus-visible { border-color: var(--accent); }
+footer { color: var(--text-muted); font-size: 14px; margin-top: 44px; border-top: 1px solid var(--border); padding-top: 20px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../../index.html">&larr; Torna all'indice del corso</a>
+    <h1>Materiali dell'incontro 1</h1>
+    <p class="subtitle">I fogli usati durante le attività al PC, da leggere sullo schermo o stampare. Documenti tutti inventati a scopo didattico.</p>
+    <div class="cards">
+      <div class="card">
+        <h2>Regolamento viaggi di prova</h2>
+        <p>Il regolamento inventato di uscite, visite guidate e viaggi d'istruzione, da allegare alle chat.</p>
+        <p class="used-in">"Stessa domanda, due scrivanie" e "Caccia all'errore", parti A e B.</p>
+        <div class="links">
+          <a class="link" href="regolamento-viaggi-di-prova.html">Apri la pagina &rarr;</a>
+          <a class="link" href="regolamento-viaggi-di-prova.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Orario di prova</h2>
+        <p>L'orario settimanale della classe 3ª Z e la disponibilità dei laboratori.</p>
+        <p class="used-in">"Il tuo primo Gem": si carica insieme al regolamento per rispondere alle domande che riguardano l'orario.</p>
+        <div class="links">
+          <a class="link" href="orario-di-prova.html">Apri la pagina &rarr;</a>
+          <a class="link" href="orario-di-prova.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Domande da fare al Gem o al notebook</h2>
+        <p>Dodici domande pronte da copiare nella chat, per controllare se l'assistente risponde in base ai documenti.</p>
+        <p class="used-in">"Il tuo primo Gem": si usano per interrogare il Gem o il notebook appena creato.</p>
+        <div class="links">
+          <a class="link" href="domande-preparate.html">Apri la pagina &rarr;</a>
+          <a class="link" href="domande-preparate.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Caccia all'errore</h2>
+        <p>Tre domande con una premessa sbagliata e una richiesta di studi da controllare.</p>
+        <p class="used-in">"Caccia all'errore", parti B e C.</p>
+        <div class="links">
+          <a class="link" href="caccia-all-errore.html">Apri la pagina &rarr;</a>
+          <a class="link" href="caccia-all-errore.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Risposta da verificare</h2>
+        <p>La risposta di un assistente IA su un viaggio a Torino, con cinque errori nascosti da trovare confrontandola con il regolamento.</p>
+        <p class="used-in">"Caccia all'errore", parte A.</p>
+        <div class="links">
+          <a class="link" href="risposta-da-verificare.html">Apri la pagina &rarr;</a>
+          <a class="link" href="risposta-da-verificare.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Istruzioni da incollare</h2>
+        <p>Il testo pronto da incollare nel Gem o nel notebook, perché rispondano solo in base ai documenti caricati.</p>
+        <p class="used-in">"Il tuo primo Gem": si incolla nel campo delle istruzioni del Gem o nelle impostazioni della chat del notebook.</p>
+        <div class="links">
+          <a class="link" href="istruzioni-da-incollare.html">Apri la pagina &rarr;</a>
+          <a class="link" href="istruzioni-da-incollare.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Esplora le funzioni</h2>
+        <p>Sette funzioni di Gemini e Gemini Notebook (prima NotebookLM) da provare in coppia, con una tabella da compilare.</p>
+        <p class="used-in">"Esploriamo le funzioni".</p>
+        <div class="links">
+          <a class="link" href="esplora-le-funzioni.html">Apri la pagina &rarr;</a>
+          <a class="link" href="esplora-le-funzioni.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Simulazione: chatbot o agente?</h2>
+        <p>La simulazione interattiva usata nell'attività "Provatela voi", per indovinare le mosse di un agente prima che le faccia.</p>
+        <p class="used-in">"Provatela voi".</p>
+        <div class="links">
+          <a class="link" href="../../incontro-1/simulazione-agente.html">Apri la simulazione &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <footer>Nessun dato reale di studenti, famiglie o personale della scuola.</footer>
+  </div>
+</body>
+</html>

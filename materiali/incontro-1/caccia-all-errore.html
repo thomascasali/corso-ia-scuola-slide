@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caccia all'errore — Materiali incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 1</a>
+  <a class="dl-btn" href="caccia-all-errore.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO INVENTATO A SCOPO DIDATTICO — non corrisponde a regole reali dell'istituto.</strong>
+Le domande si riferiscono al Regolamento viaggi di prova, un documento inventato. L'"Istituto Tecnico Dimostrativo" non esiste.</p>
+</blockquote>
+<h1 id="caccia-allerrore">Caccia all'errore</h1>
+<p>L'esercizio dura circa 15 minuti e ha tre parti.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Cosa si fa</th>
+<th>Tempo</th>
+<th>Materiale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. Trova gli errori</td>
+<td>A coppie, si confronta una risposta scritta da un assistente IA con il regolamento</td>
+<td>7 minuti</td>
+<td>foglio "Risposta da verificare" e regolamento viaggi di prova</td>
+</tr>
+<tr>
+<td>B. La premessa falsa</td>
+<td>Si fanno all'IA domande che danno per scontata una cosa sbagliata</td>
+<td>5 minuti, in contemporanea con la C</td>
+<td>regolamento viaggi di prova, da allegare alla chat</td>
+</tr>
+<tr>
+<td>C. Chiedi le fonti e controllale</td>
+<td>Si chiedono all'IA studi precisi e si verifica se esistono</td>
+<td>5 minuti, in contemporanea con la B</td>
+<td>solo Gemini e il browser</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nelle parti B e C, dentro ogni coppia, una persona fa la B e l'altra la C. Negli ultimi 2-3 minuti ci si racconta cosa è successo.</p>
+<hr />
+<h2 id="parte-a-trova-gli-errori">Parte A – Trova gli errori</h2>
+<p>Si fa sul foglio "Risposta da verificare", che contiene la risposta di un assistente IA a una domanda su un viaggio a Torino. La risposta è stata preparata per il corso e resta uguale per tutti: ogni coppia lavora sullo stesso testo, e gli errori da trovare sono cinque.</p>
+<p>Le istruzioni sono sul foglio. Le soluzioni le ha il docente.</p>
+<hr />
+<h2 id="parte-b-la-premessa-falsa">Parte B – La premessa falsa</h2>
+<p>Una premessa falsa è una domanda che dà per scontato qualcosa di sbagliato. Qui l'errore lo mettete voi, di proposito, e guardate se l'IA se ne accorge.</p>
+<p><strong>Come si lavora</strong></p>
+<ol>
+<li>In Gemini apri una chat nuova.</li>
+<li>Allega il regolamento viaggi di prova: nel riquadro dove si scrive cerca il pulsante per aggiungere un file (spesso è un "+" o una graffetta) e scegli il file. Aspetta che il nome del file compaia sopra il campo di testo.</li>
+<li>Copia la prima domanda, inviala e leggi la risposta.</li>
+<li>Segna: l'IA ha corretto la premessa, l'ha assecondata, oppure ha risposto giusto senza dire niente sulla premessa?</li>
+<li>Ripeti con le altre due domande, nella stessa chat.</li>
+</ol>
+<p><strong>Domanda 1</strong></p>
+<blockquote>
+<p>Secondo l'articolo 9 del regolamento, entro quanti giorni prima della partenza va consegnato il modulo con le informazioni sanitarie?</p>
+</blockquote>
+<p><strong>Domanda 2</strong></p>
+<blockquote>
+<p>Visto che il tetto di spesa per un viaggio d'istruzione è di 450 euro a studente, quanto possiamo spendere al massimo in tutto per 20 studenti?</p>
+</blockquote>
+<p><strong>Domanda 3</strong></p>
+<blockquote>
+<p>Dato che le classi terze possono fare viaggi d'istruzione di al massimo 2 notti, come organizzeresti un viaggio di 4 giorni per la 3ª Z?</p>
+</blockquote>
+<p>Il risultato cambia da una chat all'altra e da un PC all'altro. Se l'IA corregge la premessa, non è un esercizio fallito: è un risultato da raccontare agli altri, e conviene confrontarlo con quello del vicino, che magari con la stessa domanda ha avuto una risposta diversa.</p>
+<hr />
+<h2 id="parte-c-chiedi-le-fonti-e-controllale">Parte C – Chiedi le fonti e controllale</h2>
+<p><strong>Come si lavora</strong></p>
+<ol>
+<li>In Gemini apri una chat nuova, senza allegare niente.</li>
+<li>Copia questa richiesta:</li>
+</ol>
+<blockquote>
+<p>Mi servono 3 studi o ricerche sugli effetti del registro elettronico sulla comunicazione tra scuola e famiglia in Italia. Per ciascuno indica autore, anno, titolo, rivista o editore e il link.</p>
+</blockquote>
+<ol start="3">
+<li>Per ogni riferimento controlla:<ul>
+<li>il link si apre e porta proprio a quello studio, non alla pagina iniziale di un sito o a un altro documento?</li>
+<li>cercando il titolo esatto tra virgolette su Google (o su Google Scholar), lo studio esiste?</li>
+<li>l'autore esiste e ha scritto proprio quello studio, in quell'anno?</li>
+<li>il contenuto dello studio corrisponde a quello che l'IA gli attribuisce?</li>
+</ul>
+</li>
+<li>Segna per ogni riferimento: verificato, sbagliato in parte, non trovato.</li>
+</ol>
+<p>Se avanza tempo, rifai la richiesta aggiungendo in fondo "Rispondi senza cercare sul web" e confronta i riferimenti.</p>
+<hr />
+<h2 id="cosa-portarsi-a-casa">Cosa portarsi a casa</h2>
+<ul>
+<li>Gli errori che fanno danno sono quelli credibili: un numero vicino a quello giusto, un articolo vicino a quello giusto, una fonte con tutti i dati al loro posto.</li>
+<li>Un calcolo corretto non garantisce niente se il dato di partenza è sbagliato.</li>
+<li>Se la domanda contiene un errore, l'IA può seguirlo. Prima di chiedere, controllate cosa date per scontato.</li>
+<li>Un riferimento vale solo se l'avete aperto e letto voi.</li>
+</ul>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

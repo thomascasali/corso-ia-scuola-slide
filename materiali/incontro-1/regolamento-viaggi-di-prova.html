@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regolamento viaggi di prova — Materiali incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 1</a>
+  <a class="dl-btn" href="regolamento-viaggi-di-prova.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO INVENTATO A SCOPO DIDATTICO — non corrisponde a regole reali dell'istituto.</strong>
+L'"Istituto Tecnico Dimostrativo" non esiste. Numeri, date, moduli e scadenze sono stati scelti apposta per le esercitazioni del corso, alcuni volutamente insoliti.</p>
+</blockquote>
+<h1 id="istituto-tecnico-dimostrativo">Istituto Tecnico Dimostrativo</h1>
+<h2 id="regolamento-delle-uscite-didattiche-delle-visite-guidate-e-dei-viaggi-distruzione">Regolamento delle uscite didattiche, delle visite guidate e dei viaggi d'istruzione</h2>
+<p>Anno scolastico dimostrativo 2025/2026. Approvato dal Consiglio d'Istituto (immaginario) nella seduta del 14 ottobre 2025.</p>
+<hr />
+<h3 id="art-1-tipi-di-iniziativa">Art. 1 – Tipi di iniziativa</h3>
+<ol>
+<li>Il regolamento distingue tre tipi di iniziativa:<ul>
+<li>a) <strong>uscita didattica</strong>: si svolge entro l'orario delle lezioni della giornata e nel territorio del comune in cui ha sede l'istituto;</li>
+<li>b) <strong>visita guidata</strong>: occupa l'intera giornata, anche fuori comune, senza pernottamento;</li>
+<li>c) <strong>viaggio d'istruzione</strong>: dura più di un giorno e prevede almeno un pernottamento.</li>
+</ul>
+</li>
+<li>Le attività sportive e i progetti di Formazione Scuola Lavoro seguono regolamenti propri e non rientrano in questo documento.</li>
+</ol>
+<h3 id="art-2-chi-propone-liniziativa">Art. 2 – Chi propone l'iniziativa</h3>
+<ol>
+<li>L'iniziativa è proposta dal consiglio di classe, che indica un docente referente tra i docenti della classe.</li>
+<li>Il docente referente compila la proposta, raccoglie i documenti previsti dall'articolo 9 e li consegna alla Commissione viaggi.</li>
+<li>La Commissione viaggi controlla che la proposta rispetti il regolamento e la trasmette al dirigente scolastico per l'autorizzazione.</li>
+</ol>
+<h3 id="art-3-tempi-di-presentazione-della-domanda">Art. 3 – Tempi di presentazione della domanda</h3>
+<ol>
+<li>La domanda completa va consegnata alla Commissione viaggi <strong>almeno 38 giorni prima della partenza</strong> per i viaggi d'istruzione.</li>
+<li>Per le visite guidate il preavviso minimo è di <strong>17 giorni</strong>.</li>
+<li>Per le uscite didattiche il preavviso minimo è di <strong>6 giorni di lezione</strong>.</li>
+<li>Le domande consegnate in ritardo non vengono esaminate. Fa eccezione solo il caso di iniziative gratuite proposte da enti esterni (musei, università, enti pubblici): il dirigente può autorizzarle con un preavviso minimo di 9 giorni.</li>
+<li>Una domanda incompleta si considera non presentata finché non viene completata; il preavviso si conta dalla data in cui arriva l'ultimo documento mancante.</li>
+</ol>
+<h3 id="art-4-docenti-accompagnatori">Art. 4 – Docenti accompagnatori</h3>
+<ol>
+<li>Serve <strong>1 docente accompagnatore ogni 13 studenti partecipanti o frazione di 13</strong>. Esempio: da 1 a 13 studenti serve 1 accompagnatore, da 14 a 26 ne servono 2, da 27 a 39 ne servono 3.</li>
+<li>Per le visite guidate e i viaggi d'istruzione gli accompagnatori non possono comunque essere meno di 2, anche con gruppi piccoli.</li>
+<li>Per ogni studente con disabilità che partecipa si aggiunge un accompagnatore in più, che non rientra nel conteggio del comma 1. L'accompagnatore aggiuntivo può essere il docente di sostegno o un'altra figura indicata dal consiglio di classe.</li>
+<li>Per i viaggi d'istruzione il consiglio di classe indica anche un docente di riserva, che sostituisce un accompagnatore impossibilitato a partire.</li>
+<li>Nessun docente può accompagnare più di 2 viaggi d'istruzione nello stesso anno scolastico. Il limite non vale per uscite didattiche e visite guidate.</li>
+</ol>
+<h3 id="art-5-adesione-minima-della-classe">Art. 5 – Adesione minima della classe</h3>
+<ol>
+<li>Visite guidate e viaggi d'istruzione si svolgono solo se aderisce <strong>almeno il 71% degli studenti della classe</strong>. Il calcolo si fa sul numero di iscritti alla classe e il risultato si arrotonda sempre per eccesso. Esempio: in una classe di 20 studenti il 71% è 14,2, quindi servono almeno 15 adesioni.</li>
+<li>Se l'iniziativa coinvolge più classi, l'adesione minima si calcola classe per classe: una classe che non la raggiunge non partecipa.</li>
+<li>Le uscite didattiche coinvolgono tutta la classe. Gli studenti che per motivi documentati non partecipano restano a scuola e vengono affidati a un'altra classe.</li>
+</ol>
+<h3 id="art-6-tetto-di-spesa">Art. 6 – Tetto di spesa</h3>
+<ol>
+<li>La quota a carico di ogni studente non può superare:<ul>
+<li>a) <strong>385 euro</strong> per un viaggio d'istruzione;</li>
+<li>b) <strong>48 euro</strong> per una visita guidata;</li>
+<li>c) 12 euro per un'uscita didattica.</li>
+</ul>
+</li>
+<li>Nello stesso anno scolastico la spesa complessiva di uno studente per tutte le iniziative di questo regolamento non può superare 470 euro.</li>
+<li>Per iniziative con costo complessivo superiore a 2.000 euro il docente referente allega almeno 2 preventivi di fornitori diversi.</li>
+<li>Le famiglie in difficoltà economica possono chiedere un contributo alla segreteria con una domanda riservata. Il contributo copre al massimo il 60% della quota.</li>
+</ol>
+<h3 id="art-7-periodi-in-cui-non-si-parte">Art. 7 – Periodi in cui non si parte</h3>
+<ol>
+<li>Non si svolgono visite guidate né viaggi d'istruzione nei seguenti periodi:<ul>
+<li>a) <strong>dal 12 maggio 2026 fino al termine delle lezioni</strong>;</li>
+<li>b) dal 26 al 31 gennaio 2026, settimana degli scrutini del primo periodo;</li>
+<li>c) le prime due settimane di lezione, cioè fino al 26 settembre 2025 compreso.</li>
+</ul>
+</li>
+<li>Le uscite didattiche sono ammesse anche nei periodi del comma 1, lettere a) e c), ma non nella settimana degli scrutini.</li>
+<li>Un viaggio d'istruzione che inizia prima di uno dei periodi esclusi non può terminare dentro quel periodo.</li>
+</ol>
+<h3 id="art-8-durata-e-classi-ammesse">Art. 8 – Durata e classi ammesse</h3>
+<ol>
+<li>Le classi prime e seconde non partecipano a viaggi d'istruzione: possono fare uscite didattiche e visite guidate.</li>
+<li>Le classi terze e quarte possono fare viaggi d'istruzione di <strong>al massimo 3 notti</strong>.</li>
+<li>Le classi quinte possono fare viaggi d'istruzione di al massimo 4 notti.</li>
+<li>In tutto l'anno scolastico ogni classe può dedicare a visite guidate e viaggi d'istruzione al massimo 7 giorni di lezione. Le uscite didattiche non si contano.</li>
+</ol>
+<h3 id="art-9-documenti-richiesti">Art. 9 – Documenti richiesti</h3>
+<ol>
+<li>Alla domanda il docente referente allega:<ul>
+<li>a) il <strong>Modulo A</strong>, proposta del consiglio di classe con obiettivi, meta e date;</li>
+<li>b) l'elenco nominativo degli studenti partecipanti, tenuto dal docente referente e consegnato solo alla Commissione viaggi;</li>
+<li>c) il programma giornaliero, con orari di partenza e rientro;</li>
+<li>d) il <strong>Modulo B</strong>, dichiarazione di disponibilità firmata da ogni accompagnatore e dal docente di riserva;</li>
+<li>e) i preventivi, quando richiesti dall'articolo 6, comma 3.</li>
+</ul>
+</li>
+<li>Per i viaggi all'estero ogni partecipante presenta anche la fotocopia di un documento d'identità valido per l'espatrio, che scada almeno 3 mesi dopo la data di rientro.</li>
+</ol>
+<h3 id="art-10-consenso-delle-famiglie">Art. 10 – Consenso delle famiglie</h3>
+<ol>
+<li>Per gli studenti minorenni il <strong>Modulo C</strong> (consenso alla partecipazione) va firmato da <strong>entrambi i genitori</strong> o da chi esercita la responsabilità genitoriale. Se firma un solo genitore, deve dichiarare per iscritto che l'altro è informato e d'accordo.</li>
+<li>Per i viaggi d'istruzione il Modulo C va consegnato al docente referente almeno 21 giorni prima della partenza. Per le visite guidate bastano 7 giorni.</li>
+<li>Gli studenti maggiorenni firmano il Modulo C da soli. La scuola invia comunque una comunicazione alla famiglia.</li>
+<li>Insieme al Modulo C la famiglia versa un acconto pari al 30% della quota. L'acconto non si restituisce, salvo malattia documentata da certificato medico.</li>
+</ol>
+<h3 id="art-11-studenti-con-esigenze-sanitarie">Art. 11 – Studenti con esigenze sanitarie</h3>
+<ol>
+<li>Nessuno studente può essere escluso da un'iniziativa a causa di una condizione di salute, se con le cautele previste da questo articolo la partecipazione è possibile.</li>
+<li>La famiglia comunica allergie, intolleranze, terapie in corso ed eventuali farmaci salvavita con il <strong>Modulo D</strong>, consegnato <strong>in busta chiusa</strong> al docente referente almeno 15 giorni prima della partenza.</li>
+<li>Se uno studente ha bisogno di un farmaco salvavita, almeno un accompagnatore deve aver seguito la formazione sulla somministrazione dei farmaci organizzata dalla scuola.</li>
+<li>Il Modulo D è riservato: lo leggono solo gli accompagnatori e viene restituito alla famiglia entro 10 giorni dal rientro. Non si fotocopia e non si invia per posta elettronica.</li>
+</ol>
+<h3 id="art-12-comportamento-durante-liniziativa">Art. 12 – Comportamento durante l'iniziativa</h3>
+<ol>
+<li>Gli studenti seguono le indicazioni degli accompagnatori per tutta la durata dell'iniziativa, compresi i tempi liberi previsti dal programma.</li>
+<li>In caso di comportamento gravemente scorretto, gli accompagnatori avvisano il dirigente e la famiglia; il consiglio di classe valuta i provvedimenti al rientro.</li>
+<li>Entro 15 giorni dal rientro il docente referente consegna alla Commissione viaggi una breve relazione sull'iniziativa.</li>
+</ol>
+<h3 id="art-13-norme-finali">Art. 13 – Norme finali</h3>
+<ol>
+<li>Per quanto non previsto da questo regolamento decide il dirigente scolastico, sentita la Commissione viaggi.</li>
+<li>Il regolamento resta in vigore finché il Consiglio d'Istituto non lo modifica.</li>
+</ol>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risposta da verificare — Materiali incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 1</a>
+  <a class="dl-btn" href="risposta-da-verificare.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO INVENTATO A SCOPO DIDATTICO — non corrisponde a regole reali dell'istituto.</strong>
+La risposta qui sotto è stata scritta per il corso imitando lo stile di un assistente IA. Si basa sul Regolamento viaggi di prova e contiene apposta cinque errori. L'"Istituto Tecnico Dimostrativo" e la classe 3ª Z non esistono.</p>
+</blockquote>
+<h1 id="trova-gli-errori">Trova gli errori</h1>
+<p>Una collega ha chiesto a un assistente IA:</p>
+<blockquote>
+<p>Organizziamo un viaggio di 3 giorni a Torino per la 3ª Z (22 studenti): cosa dobbiamo fare secondo il regolamento e con che tempi?</p>
+</blockquote>
+<p>Questa è la risposta che ha ricevuto. In coppia, confrontatela con il regolamento viaggi di prova, punto per punto. Nella risposta ci sono cinque errori. Per ognuno segnate la frase sbagliata e l'articolo del regolamento che dice come stanno le cose.</p>
+<hr />
+<p>Ottima idea! Un viaggio di 3 giorni a Torino rientra nei <strong>viaggi d'istruzione</strong>, perché prevede almeno un pernottamento (art. 1, comma 1, lettera c). Ecco tutto quello che serve, in ordine.</p>
+<h2 id="1-si-puo-fare">1. Si può fare?</h2>
+<p>Sì. Le classi terze possono fare viaggi d'istruzione di <strong>al massimo 3 notti</strong> (art. 8, comma 2): un viaggio di 3 giorni ne prevede 2, quindi siete nei limiti. Ricordate che in tutto l'anno ogni classe può dedicare a visite guidate e viaggi al massimo <strong>7 giorni di lezione</strong> (art. 8, comma 4): questo viaggio ne occupa 3.</p>
+<p>Attenzione alle date. Non si parte:</p>
+<ul>
+<li>dal <strong>12 maggio 2026</strong> fino alla fine delle lezioni;</li>
+<li>dal <strong>26 al 31 gennaio 2026</strong>, settimana degli scrutini;</li>
+<li>nelle prime due settimane di lezione (art. 7, comma 1).</li>
+</ul>
+<p>Un viaggio che inizia prima di uno di questi periodi non può finire dentro il periodo (art. 7, comma 3).</p>
+<h2 id="2-quanti-studenti-devono-aderire">2. Quanti studenti devono aderire</h2>
+<p>Il viaggio si fa solo se aderisce <strong>almeno il 65% della classe</strong>, con arrotondamento per eccesso (art. 5, comma 1). Per la 3ª Z: 22 × 0,65 = 14,3, quindi servono <strong>almeno 15 adesioni</strong>.</p>
+<h2 id="3-gli-accompagnatori">3. Gli accompagnatori</h2>
+<p>Serve <strong>1 docente accompagnatore ogni 10 studenti</strong> o frazione (art. 4, comma 1). Se partecipano tutti e 22 gli studenti, servono quindi <strong>3 accompagnatori</strong>. In più:</p>
+<ul>
+<li>il consiglio di classe indica un <strong>docente di riserva</strong> (art. 4, comma 4);</li>
+<li>se partecipa uno studente con disabilità, si aggiunge un accompagnatore che non entra nel conteggio (art. 4, comma 3);</li>
+<li>ogni docente può accompagnare al massimo <strong>2 viaggi d'istruzione</strong> nello stesso anno (art. 4, comma 5): conviene verificarlo prima di fare i nomi.</li>
+</ul>
+<h2 id="4-i-costi">4. I costi</h2>
+<ul>
+<li>La quota di ogni studente non può superare <strong>385 euro</strong> (art. 6, comma 1, lettera a).</li>
+<li>Nell'anno, la spesa di uno studente per tutte le iniziative non può superare <strong>470 euro</strong> (art. 6, comma 2): se la classe ha già fatto altre uscite a pagamento, tenetene conto.</li>
+<li>Con 22 studenti il costo complessivo supererà quasi certamente i 2.000 euro, quindi servono <strong>almeno 2 preventivi</strong> di fornitori diversi (art. 6, comma 3).</li>
+<li>Le famiglie in difficoltà possono chiedere alla segreteria un contributo, fino al <strong>60% della quota</strong> (art. 6, comma 4).</li>
+</ul>
+<h2 id="5-i-documenti-da-allegare-alla-domanda">5. I documenti da allegare alla domanda</h2>
+<p>Il docente referente consegna alla Commissione viaggi (art. 9, comma 1):</p>
+<ul>
+<li><strong>Modulo A</strong>, la proposta del consiglio di classe con obiettivi, meta e date;</li>
+<li>l'<strong>elenco nominativo</strong> degli studenti partecipanti;</li>
+<li>il <strong>programma giornaliero</strong>, con orari di partenza e rientro;</li>
+<li><strong>Modulo B</strong>, la dichiarazione di disponibilità firmata da ogni accompagnatore e dal docente di riserva;</li>
+<li>i <strong>preventivi</strong>.</li>
+</ul>
+<p>Serve inoltre la <strong>fotocopia del documento d'identità</strong> di ogni partecipante, valido almeno fino a 3 mesi dopo il rientro (art. 9, comma 2).</p>
+<p>Ricordate che una domanda incompleta si considera non presentata: il preavviso si conta dal giorno in cui arriva l'ultimo documento (art. 3, comma 5).</p>
+<h2 id="6-le-scadenze">6. Le scadenze</h2>
+<p>Esempio con partenza <strong>lunedì 16 marzo 2026</strong> e rientro mercoledì 18:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Quando</th>
+<th>Cosa</th>
+<th>Riferimento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Almeno <strong>35 giorni</strong> prima: entro il <strong>9 febbraio</strong></td>
+<td>Domanda completa alla Commissione viaggi</td>
+<td>art. 3, comma 1</td>
+</tr>
+<tr>
+<td>Almeno <strong>21 giorni</strong> prima: entro il <strong>23 febbraio</strong></td>
+<td>Modulo C (consenso firmato da entrambi i genitori) e acconto del 30% della quota</td>
+<td>art. 10, commi 1, 2 e 4</td>
+</tr>
+<tr>
+<td>Almeno <strong>15 giorni</strong> prima: entro il <strong>1° marzo</strong></td>
+<td>Modulo D per allergie, terapie e farmaci, in busta chiusa al docente referente</td>
+<td>art. 11, comma 2</td>
+</tr>
+<tr>
+<td>Entro 10 giorni dal rientro</td>
+<td>Restituzione del Modulo D alle famiglie</td>
+<td>art. 11, comma 4</td>
+</tr>
+<tr>
+<td>Entro 15 giorni dal rientro</td>
+<td>Relazione del docente referente alla Commissione viaggi</td>
+<td>art. 14, comma 2</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="in-sintesi">In sintesi</h2>
+<ol>
+<li>Fate approvare la proposta dal consiglio di classe e scegliete il docente referente.</li>
+<li>Raccogliete le adesioni (almeno 15) e i nomi di 3 accompagnatori più una riserva.</li>
+<li>Chiedete 2 preventivi e controllate che la quota non superi i 385 euro.</li>
+<li>Consegnate la domanda completa almeno 35 giorni prima della partenza.</li>
+</ol>
+<p>Vuoi che ti prepari una bozza del Modulo A o una comunicazione per le famiglie?</p>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

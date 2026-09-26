@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orario di prova — Materiali incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 1</a>
+  <a class="dl-btn" href="orario-di-prova.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO INVENTATO A SCOPO DIDATTICO — non corrisponde a regole reali dell'istituto.</strong>
+La classe 3ª Z, i laboratori e i docenti non esistono. I docenti sono indicati con una lettera, senza nomi. Anche il numero di ore per materia è inventato.</p>
+</blockquote>
+<h1 id="istituto-tecnico-dimostrativo">Istituto Tecnico Dimostrativo</h1>
+<h2 id="orario-settimanale-della-classe-3a-z-e-disponibilita-dei-laboratori">Orario settimanale della classe 3ª Z e disponibilità dei laboratori</h2>
+<p>Anno scolastico dimostrativo 2025/2026, in vigore dal 6 ottobre 2025.
+Classe 3ª Z, indirizzo Informatica: 22 studenti.</p>
+<hr />
+<h3 id="1-scansione-delle-ore">1. Scansione delle ore</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Ora</th>
+<th>Inizio</th>
+<th>Fine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1ª</td>
+<td>8:00</td>
+<td>8:55</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>8:55</td>
+<td>9:50</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>9:50</td>
+<td>10:45</td>
+</tr>
+<tr>
+<td>Intervallo</td>
+<td>10:45</td>
+<td>10:55</td>
+</tr>
+<tr>
+<td>4ª</td>
+<td>10:55</td>
+<td>11:50</td>
+</tr>
+<tr>
+<td>5ª</td>
+<td>11:50</td>
+<td>12:45</td>
+</tr>
+<tr>
+<td>6ª</td>
+<td>12:45</td>
+<td>13:40</td>
+</tr>
+<tr>
+<td>7ª</td>
+<td>13:40</td>
+<td>14:35</td>
+</tr>
+</tbody>
+</table></div>
+<p>Le lezioni si svolgono dal lunedì al venerdì. La 7ª ora c'è solo il martedì e il giovedì.</p>
+<h3 id="2-docenti-della-classe">2. Docenti della classe</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Sigla</th>
+<th>Materia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prof. A.</td>
+<td>Italiano e Storia</td>
+</tr>
+<tr>
+<td>Prof. B.</td>
+<td>Matematica e Complementi di matematica</td>
+</tr>
+<tr>
+<td>Prof. C.</td>
+<td>Inglese</td>
+</tr>
+<tr>
+<td>Prof. D.</td>
+<td>Informatica</td>
+</tr>
+<tr>
+<td>Prof. E.</td>
+<td>Sistemi e reti</td>
+</tr>
+<tr>
+<td>Prof. F.</td>
+<td>Tecnologie e progettazione</td>
+</tr>
+<tr>
+<td>Prof. G.</td>
+<td>Scienze motorie</td>
+</tr>
+<tr>
+<td>Prof. H.</td>
+<td>Religione</td>
+</tr>
+<tr>
+<td>Prof. L.</td>
+<td>Insegnante tecnico-pratico: affianca il Prof. D. nelle ore di Informatica in laboratorio</td>
+</tr>
+<tr>
+<td>Prof. M.</td>
+<td>Telecomunicazioni</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="3-orario-della-3a-z">3. Orario della 3ª Z</h3>
+<p>Tra parentesi la sigla del docente. Dove non è indicato un laboratorio, la lezione si svolge nell'aula della classe (aula 14).</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Ora</th>
+<th>Lunedì</th>
+<th>Martedì</th>
+<th>Mercoledì</th>
+<th>Giovedì</th>
+<th>Venerdì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1ª</td>
+<td>Italiano (A)</td>
+<td>Sistemi e reti (E)</td>
+<td>Tecnologie (F)</td>
+<td>Informatica (D)</td>
+<td>Sistemi e reti (E), lab. Beta</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>Italiano (A)</td>
+<td>Sistemi e reti (E), lab. Beta</td>
+<td>Tecnologie (F), lab. Beta</td>
+<td>Informatica (D)</td>
+<td>Sistemi e reti (E), lab. Beta</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>Matematica (B)</td>
+<td>Storia (A)</td>
+<td>Telecomunicazioni (M)</td>
+<td>Telecomunicazioni (M), lab. Gamma</td>
+<td>Informatica (D + L), lab. Alfa</td>
+</tr>
+<tr>
+<td>4ª</td>
+<td>Informatica (D + L), lab. Alfa</td>
+<td>Inglese (C)</td>
+<td>Italiano (A)</td>
+<td>Telecomunicazioni (M), lab. Gamma</td>
+<td>Informatica (D + L), lab. Alfa</td>
+</tr>
+<tr>
+<td>5ª</td>
+<td>Informatica (D + L), lab. Alfa</td>
+<td>Matematica (B)</td>
+<td>Religione (H)</td>
+<td>Storia (A)</td>
+<td>Tecnologie (F)</td>
+</tr>
+<tr>
+<td>6ª</td>
+<td>Inglese (C)</td>
+<td>Scienze motorie (G), palestra</td>
+<td>Complementi di matematica (B)</td>
+<td>Inglese (C)</td>
+<td>Italiano (A)</td>
+</tr>
+<tr>
+<td>7ª</td>
+<td></td>
+<td>Scienze motorie (G), palestra</td>
+<td></td>
+<td>Matematica (B)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Totale: 32 ore settimanali.</p>
+<p>Ore per materia: Italiano 4, Storia 2, Inglese 3, Matematica 3, Complementi di matematica 1, Informatica 6, Sistemi e reti 4, Tecnologie e progettazione 3, Telecomunicazioni 3, Scienze motorie 2, Religione 1.</p>
+<h3 id="4-i-laboratori">4. I laboratori</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Laboratorio</th>
+<th>Posti</th>
+<th>Attrezzatura</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alfa</td>
+<td>24 postazioni con PC</td>
+<td>proiettore, stampante</td>
+<td>aperto tutti i giorni</td>
+</tr>
+<tr>
+<td>Beta</td>
+<td>18 postazioni con PC</td>
+<td>apparati di rete per le esercitazioni di Sistemi</td>
+<td>con più di 18 studenti si lavora in coppia su alcune postazioni</td>
+</tr>
+<tr>
+<td>Gamma</td>
+<td>12 banchi di elettronica</td>
+<td>strumenti di misura, saldatori</td>
+<td>chiuso il venerdì per manutenzione; con più di 12 studenti la classe si divide e usa il laboratorio a turni di mezza classe</td>
+</tr>
+</tbody>
+</table></div>
+<p>I laboratori non si usano alla 7ª ora, tranne il laboratorio Alfa il martedì.</p>
+<h3 id="5-occupazione-dei-laboratori">5. Occupazione dei laboratori</h3>
+<p>"Libero" vuol dire che il laboratorio si può prenotare. Le altre classi indicate (2ª W, 4ª Y, 5ª X) sono inventate come la 3ª Z.</p>
+<h4 id="laboratorio-alfa-24-postazioni">Laboratorio Alfa (24 postazioni)</h4>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Ora</th>
+<th>Lunedì</th>
+<th>Martedì</th>
+<th>Mercoledì</th>
+<th>Giovedì</th>
+<th>Venerdì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1ª</td>
+<td>5ª X</td>
+<td>Libero</td>
+<td>4ª Y</td>
+<td>2ª W</td>
+<td>Libero</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>5ª X</td>
+<td>Libero</td>
+<td>4ª Y</td>
+<td>2ª W</td>
+<td>Libero</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>Libero</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>3ª Z</td>
+</tr>
+<tr>
+<td>4ª</td>
+<td>3ª Z</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>3ª Z</td>
+</tr>
+<tr>
+<td>5ª</td>
+<td>3ª Z</td>
+<td>Libero</td>
+<td>2ª W</td>
+<td>Libero</td>
+<td>4ª Y</td>
+</tr>
+<tr>
+<td>6ª</td>
+<td>Libero</td>
+<td>Libero</td>
+<td>2ª W</td>
+<td>Libero</td>
+<td>4ª Y</td>
+</tr>
+<tr>
+<td>7ª</td>
+<td>chiuso</td>
+<td>5ª X</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="laboratorio-beta-18-postazioni">Laboratorio Beta (18 postazioni)</h4>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Ora</th>
+<th>Lunedì</th>
+<th>Martedì</th>
+<th>Mercoledì</th>
+<th>Giovedì</th>
+<th>Venerdì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1ª</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>3ª Z</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>4ª Y</td>
+<td>3ª Z</td>
+<td>3ª Z</td>
+<td>5ª X</td>
+<td>3ª Z</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>Libero</td>
+</tr>
+<tr>
+<td>4ª</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>2ª W</td>
+</tr>
+<tr>
+<td>5ª</td>
+<td>2ª W</td>
+<td>Libero</td>
+<td>Libero</td>
+<td>4ª Y</td>
+<td>2ª W</td>
+</tr>
+<tr>
+<td>6ª</td>
+<td>2ª W</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>4ª Y</td>
+<td>Libero</td>
+</tr>
+<tr>
+<td>7ª</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="laboratorio-gamma-12-banchi">Laboratorio Gamma (12 banchi)</h4>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Ora</th>
+<th>Lunedì</th>
+<th>Martedì</th>
+<th>Mercoledì</th>
+<th>Giovedì</th>
+<th>Venerdì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1ª</td>
+<td>Libero</td>
+<td>4ª Y</td>
+<td>5ª X</td>
+<td>Libero</td>
+<td>chiuso</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>Libero</td>
+<td>4ª Y</td>
+<td>5ª X</td>
+<td>Libero</td>
+<td>chiuso</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>5ª X</td>
+<td>Libero</td>
+<td>Libero</td>
+<td>3ª Z</td>
+<td>chiuso</td>
+</tr>
+<tr>
+<td>4ª</td>
+<td>5ª X</td>
+<td>Libero</td>
+<td>Libero</td>
+<td>3ª Z</td>
+<td>chiuso</td>
+</tr>
+<tr>
+<td>5ª</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>chiuso</td>
+</tr>
+<tr>
+<td>6ª</td>
+<td>Libero</td>
+<td>5ª X</td>
+<td>4ª Y</td>
+<td>Libero</td>
+<td>chiuso</td>
+</tr>
+<tr>
+<td>7ª</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+<td>chiuso</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="6-regole-di-prenotazione-dei-laboratori">6. Regole di prenotazione dei laboratori</h3>
+<ol>
+<li>Un laboratorio "Libero" si prenota almeno 2 giorni di lezione prima.</li>
+<li>Una classe non può prenotare più di 4 ore a settimana oltre a quelle già previste dal suo orario.</li>
+<li>Chi prenota il laboratorio Gamma deve essere accompagnato dall'insegnante tecnico-pratico.</li>
+</ol>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>
