@@ -552,23 +552,27 @@ const slides = [
   {
     block: 'Apertura',
     content: () => (
-      <div style={{ padding: '30px' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '26px' }}>Chi sono e da dove nasce il corso</h2>
+      <div style={{ padding: '16px 30px 0' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Perché siamo qui</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Thomas Casali, docente dell'istituto</p>
         <Glow>
           <p>
-            Tra luglio e settembre 2026, con Claude Code (uno strumento di intelligenza artificiale che scrive programmi), ho costruito il <strong style={{ color: colors.text }}>Portale FSL</strong> e il <strong style={{ color: colors.text }}>Portale Viaggi</strong>, e ho rifatto da capo <strong style={{ color: colors.text }}>Prenota Risorse</strong> (nato nel 2025 come Prenota Carrello).
+            Usare l'intelligenza artificiale <strong style={{ color: colors.text }}>con consapevolezza</strong> nel lavoro di organizzazione della scuola: circolari, moduli, prenotazioni, pratiche che passano da un ufficio all'altro.
           </p>
         </Glow>
-        <ul style={{ marginTop: '22px', paddingLeft: '28px', color: colors.textDim }}>
-          <li>I tre portali sono in uso a scuola <strong style={{ color: colors.text }}>dal 10 settembre 2026</strong>.</li>
-          <li>C'è anche un bot, <strong style={{ color: colors.text }}>"Argo Briefing"</strong>, che legge il registro elettronico e prepara un riepilogo.</li>
+        <ul style={{ marginTop: '14px', paddingLeft: '28px', color: colors.textDim }}>
+          <li><strong style={{ color: colors.text }}>Incontro 1</strong>, oggi: come funzionano questi strumenti e perché a volte sbagliano.</li>
+          <li><strong style={{ color: colors.text }}>Incontro 2</strong>: da una procedura di carta a un servizio, e quando non delegare.</li>
+          <li><strong style={{ color: colors.text }}>Incontro 3</strong>: un agente costruisce un piccolo strumento da una richiesta in italiano.</li>
+          <li><strong style={{ color: colors.text }}>Incontro 4</strong>: un problema del vostro lavoro diventa una proposta.</li>
         </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px', marginBottom: '-4px' }}>Vedremo anche esempi reali di procedure della nostra scuola riorganizzate con l'IA.</p>
         <Box type="tip" title="Come si lavora in questo corso">
-          Ogni 20-30 minuti si smette di ascoltare e si passa al PC. Non è una lezione da seguire in silenzio.
+          Ogni 20-30 minuti si smette di ascoltare e si passa al PC.
         </Box>
       </div>
     ),
-    notes: 'Dite solo questi fatti, verificati: Portale FSL e Portale Viaggi costruiti tra luglio e settembre 2026 con Claude Code; Prenota Risorse (v2) rifatto da capo, nato nel 2025 come Prenota Carrello; tutti in uso dal 10 settembre 2026; Argo Briefing legge il registro elettronico. Non aggiungete numeri o dettagli non verificati. Spiegate il formato: blocchi corti, sempre seguiti da un\'attività al PC.'
+    notes: 'Presentatevi in una riga: nome e ruolo nell\'istituto. Poi dite a cosa serve il corso: non si impara a programmare, si impara a usare questi strumenti con giudizio nel lavoro di organizzazione. Scorrete i quattro incontri senza entrare nei dettagli. Gli esempi di procedure della scuola si vedono nell\'incontro 2: qui basta dire che ci saranno. Spiegate il formato: blocchi corti, sempre seguiti da un\'attività al PC.'
   },
 
   /* --- blocco 0'-15' --- */
@@ -642,7 +646,7 @@ const slides = [
         </Box>
       </div>
     ),
-    notes: 'Concetto centrale del blocco. Insistete sul fatto che non è un guasto occasionale: è la conseguenza diretta di "prevedere la parola successiva". Un modello non distingue internamente "so questo per certo" da "sto indovinando bene": il tono della risposta è sempre sicuro.'
+    notes: 'Concetto centrale del blocco. Insistete sul fatto che non è un guasto occasionale: è la conseguenza diretta di "prevedere la parola successiva". Un modello non distingue internamente "so questo per certo" da "sto indovinando bene": il tono della risposta è sempre sicuro. Anticipate che nell\'attività non chiederemo cose impossibili: oggi i modelli se ne accorgono spesso. Gli errori da temere sono quelli che sembrano giusti.'
   },
   {
     block: "15'-45' — Testo che prevede testo",
@@ -653,24 +657,42 @@ const slides = [
           <p style={{ color: colors.textDim, marginBottom: '10px' }}><strong style={{ color: colors.text }}>Domanda:</strong> "Quale articolo del regolamento d'istituto vieta l'uso del cellulare durante le uscite didattiche?"</p>
           <p style={{ color: colors.textDim }}><strong style={{ color: colors.danger }}>Risposta inventata:</strong> "È l'articolo 14, comma 3, del regolamento d'istituto." <em>(numero e comma inventati con sicurezza, il regolamento vero magari non lo dice affatto in questi termini)</em></p>
         </div>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Il problema non è la sicurezza del tono: è che nessuno ha controllato la fonte.</p>
+        <Box type="warn" title="Gli errori pericolosi sono plausibili">
+          Nessuna data impossibile, nessun nome strano: un articolo che sembra quello giusto, un numero vicino a quello vero. Si trovano solo aprendo la fonte.
+        </Box>
       </div>
     ),
-    notes: 'Esempio inventato apposta per l\'aula: nessun regolamento vero viene citato. Fate notare che una risposta del genere, se incollata in una comunicazione ufficiale senza controllo, diventa un errore firmato dalla scuola.'
+    notes: 'Esempio inventato apposta per l\'aula: nessun regolamento vero viene citato. Fate notare che la risposta non ha niente di strano, ed è questo il punto. I modelli di oggi si accorgono spesso delle domande su cose impossibili (una data che non esiste, un ente di fantasia) e lo dicono. Gli errori che passano sono quelli credibili: una risposta come questa, incollata in una comunicazione ufficiale senza controllo, diventa un errore firmato dalla scuola.'
   },
   {
     block: "15'-45' — Testo che prevede testo",
     content: () => (
-      <div style={{ padding: '30px' }}>
+      <div style={{ padding: '24px 30px' }}>
         <BlockTag>Attività</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Caccia all'errore</h2>
-        <p style={{ color: colors.textDim }}>
-          Chiedete all'IA articoli, circolari, sentenze, libri e dati che non esistono: sono inventati apposta. Il compito è vedere se l'IA inventa una risposta o ammette di non sapere, e capire da cosa lo si riconosce.
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Caccia all'errore</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>
+          Niente trappole impossibili: si cercano gli errori credibili, quelli che nel lavoro passano inosservati. A coppie, circa 15 minuti.
         </p>
-        <ActivityBadge file="dati-demo/caccia-all-errore.md" />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
+          {[
+            { l: 'A', t: 'Trova gli errori', c: colors.danger, d: 'Una risposta dell\'IA su un viaggio a Torino, da confrontare con il regolamento. Gli errori nascosti sono cinque.', f: 'Risposta da verificare', m: '7 min, a coppie' },
+            { l: 'B', t: 'La premessa falsa', c: colors.warn, d: 'Con il regolamento allegato, tre domande che danno per scontata una cosa sbagliata. L\'IA vi corregge o vi segue?', f: 'Caccia all\'errore', m: '5 min, uno dei due' },
+            { l: 'C', t: 'Chiedi le fonti', c: colors.info, d: 'Tre studi con autore, anno e link. Poi si aprono e si cercano, uno per uno.', f: 'Caccia all\'errore', m: '5 min, l\'altro' },
+          ].map(x => (
+            <div key={x.l} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+                <span style={{ fontFamily: "'Fraunces', serif", fontSize: 'var(--fs-h3)', fontWeight: 700, color: x.c }}>{x.l}</span>
+                <strong style={{ color: colors.text, fontSize: 'var(--fs-sm)' }}>{x.t}</strong>
+              </div>
+              <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.45 }}>{x.d}</p>
+              <div style={{ marginTop: 'auto', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted }}>📄 {x.f}<br />⏱ {x.m}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Se l'IA corregge la premessa o porta fonti vere, va bene lo stesso: l'abitudine da prendere è controllare.</p>
       </div>
     ),
-    notes: 'Le otto richieste sono nel foglio dati-demo/caccia-all-errore.md (scheda 2 delle esercitazioni). Assegnate due richieste a testa, lasciate circa 15 minuti, poi raccogliete a voce due o tre "scoperte" prima di passare al blocco successivo.'
+    notes: 'Scheda 2 delle esercitazioni. Parte A (7 minuti, a coppie): il foglio "Risposta da verificare" contiene una risposta scritta per il corso nello stile di un assistente IA, con cinque errori credibili in mezzo a molte informazioni giuste. Le soluzioni sono nel file a parte risposta-da-verificare-soluzioni.md. Parti B e C (5 minuti, una a testa dentro la coppia): le domande sono sul foglio "Caccia all\'errore". Per la B si allega il regolamento a una chat nuova di Gemini, la stessa mossa che torna nella scheda 3. Avvisate che nella B e nella C il risultato cambia da un PC all\'altro: se l\'IA corregge la premessa o trova studi veri, non è un fallimento, è un risultato da raccontare. Chiudete chiedendo quanti errori della parte A ha trovato ogni coppia e quale è sfuggito più spesso.'
   },
 
   /* --- blocco 45'-75' --- */
@@ -865,7 +887,7 @@ const slides = [
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>➡️</div>
         <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Il prossimo incontro</h2>
         <p style={{ color: colors.textDim, maxWidth: '700px' }}>
-          Nell'incontro 2 vediamo come sono nati i portali della scuola, da una procedura di carta a un servizio, il caso di Argo Briefing e quando è meglio non delegare una decisione all'intelligenza artificiale.
+          Nell'incontro 2 guardiamo come una procedura di carta diventa un servizio, con esempi presi dalla nostra scuola, e quando è meglio non delegare una decisione all'intelligenza artificiale.
         </p>
       </div>
     ),
