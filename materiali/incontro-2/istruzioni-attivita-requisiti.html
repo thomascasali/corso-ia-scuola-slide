@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Istruzioni e richiesta da incollare — Materiali incontro 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 2</a>
+  <a class="dl-btn" href="istruzioni-attivita-requisiti.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO INVENTATO A SCOPO DIDATTICO.</strong> Il modulo citato ("Richiesta di uscita didattica")
+e l'istituto sono inventati: vedi il foglio "Scheda-procedura di carta".</p>
+</blockquote>
+<h1 id="dalla-carta-ai-requisiti-istruzioni-per-il-gruppo">Dalla carta ai requisiti — istruzioni per il gruppo</h1>
+<p><strong>Tempo.</strong> 25 minuti, a gruppi di 3-4 persone.</p>
+<h2 id="passaggi">Passaggi</h2>
+<ol>
+<li>
+<p>Leggete insieme il foglio "Scheda-procedura di carta": è la "Richiesta di uscita didattica",
+   un modulo di carta inventato per il corso.</p>
+</li>
+<li>
+<p>Aprite una chat nuova in Gemini.</p>
+</li>
+<li>
+<p>Descrivete il modulo a parole vostre, come fareste con un collega che non l'ha mai visto:
+   cosa contiene, chi lo compila, chi lo firma, cosa succede dopo che è stato consegnato.
+   Non incollate il testo del modulo: raccontatelo.</p>
+</li>
+<li>
+<p>Copiate e incollate questa richiesta, dopo aver descritto il modulo:</p>
+</li>
+</ol>
+<blockquote>
+<p>Sulla base di questa procedura di carta, elenca i requisiti che dovrebbe rispettare un
+servizio digitale che la sostituisce. Per ogni requisito scrivi una riga breve e precisa,
+come faresti per una specifica tecnica. Includi anche i controlli impliciti che oggi fa la
+segreteria a mano (per esempio sulle firme o sui tempi di consegna), anche se sul modulo non
+sono scritti in modo esplicito.</p>
+</blockquote>
+<ol start="5">
+<li>
+<p>Leggete l'elenco che ottenete. Individuate insieme almeno 3 requisiti che vi sembrano più
+   importanti, e uno che vi sembra mancare.</p>
+</li>
+<li>
+<p>Passate al foglio "Requisiti reali (estratto semplificato)" e confrontate.</p>
+</li>
+</ol>
+<h2 id="domande-per-il-confronto-da-discutere-nel-gruppo">Domande per il confronto, da discutere nel gruppo</h2>
+<ul>
+<li>Quali requisiti avevate già pensato voi, prima ancora di chiederli a Gemini?</li>
+<li>
+<p>Quali vi sono sfuggiti, e perché? (Spesso perché sul modulo di carta non erano scritti in modo
+  chiaro, solo "capiti" da chi lo usa da anni.)</p>
+</li>
+<li>
+<p>L'elenco di Gemini conteneva qualcosa che nella procedura reale non compare? Da dove pensate
+  venga, se non dal modulo che avete descritto?</p>
+</li>
+</ul>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

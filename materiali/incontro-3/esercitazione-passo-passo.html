@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esercitazione a coppie: il calendario dei laboratori — Materiali incontro 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 3</a>
+  <a class="dl-btn" href="esercitazione-passo-passo.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="esercitazione-a-coppie-il-calendario-dei-laboratori">Esercitazione a coppie: il calendario dei laboratori</h1>
+<p><strong>Obiettivo.</strong> Costruire, con Claude Code, una pagina con il calendario settimanale stampabile
+delle prenotazioni dei laboratori, partendo dalla stessa cartella di prova già aperta prima
+della pausa.</p>
+<p>Le richieste da incollare sono quattro (1, 2, 4 e 5): la 3 non si incolla, è un passaggio da fare
+con le vostre mani. Fatele <strong>una alla volta</strong>, aspettando che Claude Code finisca prima di
+incollare la successiva. Scrivetele con parole vostre, se preferite: l'importante è che dicano le
+stesse cose.</p>
+<h2 id="richiesta-1-guarda-i-dati">Richiesta 1 — Guarda i dati</h2>
+<pre><code>Guarda il file delle prenotazioni dei laboratori, il regolamento e l'avviso di manutenzione. Dimmi in poche righe cosa contengono, senza scrivere nessun file.
+</code></pre>
+<p>Prima di leggere la risposta, provate a rispondere voi due: quante prenotazioni ci sono? C'è
+qualcosa che vi sembra già in contraddizione tra i tre file?</p>
+<h2 id="richiesta-2-costruisci">Richiesta 2 — Costruisci</h2>
+<pre><code>Costruisci una pagina HTML, calendario-laboratori-ottobre.html, con il calendario settimanale (lunedì-venerdì, una colonna per ciascun laboratorio) delle prenotazioni di ottobre, pensata per essere stampata. Segnala chiaramente, nella pagina, ogni prenotazione che non rispetta il regolamento o cade in un giorno di chiusura per manutenzione.
+</code></pre>
+<p>Quando Claude Code chiede il permesso di creare il file, leggete cosa sta per fare prima di dire
+sì.</p>
+<h2 id="richiesta-3-apri-e-prova-non-si-incolla">Richiesta 3 — Apri e prova (non si incolla)</h2>
+<p>Il file <code>calendario-laboratori-ottobre.html</code> è stato creato nella stessa cartella di prova che
+avete aperto in Claude Code (di solito sul desktop, dove il docente l'ha copiata). Apritelo con un
+doppio clic: si apre nel browser. Guardatelo insieme: le prenotazioni segnalate come problematiche
+vi convincono? Ne vedete altre che non sono state segnalate?</p>
+<h2 id="richiesta-4-chiedi-una-revisione">Richiesta 4 — Chiedi una revisione</h2>
+<pre><code>Fai controllare il calendario che hai appena creato a un subagente che non l'ha scritto, con queste regole: ricontrolla ogni riga confrontandola voce per voce con il file delle prenotazioni, il regolamento e l'avviso di manutenzione, e dimmi cosa correggeresti, anche se pensi che il calendario sia già corretto.
+</code></pre>
+<h2 id="richiesta-5-correggi">Richiesta 5 — Correggi</h2>
+<p>Se la revisione ha trovato qualcosa da correggere:</p>
+<pre><code>Correggi il calendario in base a quello che hai appena trovato.
+</code></pre>
+<p>Se invece la revisione non ha trovato niente da correggere, va bene lo stesso: scrivete sul
+foglio delle osservazioni che il controllo ha confermato il lavoro già fatto, invece di trovare
+un errore. Anche questo è un risultato utile.</p>
+<h2 id="cosa-consegnare-alla-fine">Cosa consegnare alla fine</h2>
+<ul>
+<li>Il file <code>calendario-laboratori-ottobre.html</code>, aperto e funzionante.</li>
+<li>Una riga scritta a mano (o in una nota) con: quanti problemi avevate previsto voi alla
+  richiesta 1, quanti ne ha trovati l'agente, e se la revisione ne ha aggiunto o tolto qualcuno.</li>
+</ul>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

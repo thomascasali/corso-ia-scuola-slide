@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incontro 2 - Dalla carta al servizio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  @media (max-width: 900px) {
+    .two-col-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px; background: var(--bg-light); border: 1px solid var(--border); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--warn); cursor: pointer; border: 3px solid var(--bg); }
+  input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--warn); cursor: pointer; border: 3px solid var(--bg); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useMemo } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stessa libreria dell'incontro 1) ---------- */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- schemi nuovi per l'incontro 2 ---------- */
+
+function CaseCards({ cases }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '18px' }}>
+      {cases.map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${c.color}`, borderRadius: '10px', padding: '24px 20px', textAlign: 'center' }}>
+          <div style={{ fontSize: '44px', marginBottom: '12px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '8px' }}>{c.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)' }}>{c.sub}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TimelineDiagram() {
+  const events = [
+    { date: 'set 2025', label: 'Nasce "Prenota Carrello"', sub: 'prenotazione dei carrelli di PC', color: colors.info },
+    { date: 'inizio 2026', label: 'Nasce Argo Briefing', sub: 'il bot di riepilogo del registro', color: colors.purple },
+    { date: 'lug 2026', label: 'Iniziano Portale FSL e Portale Viaggi', sub: 'due mesi di lavoro', color: colors.warn },
+    { date: '26 ago 2026', label: '"Prenota Carrello" diventa "Prenota Risorse"', sub: 'esteso ad aule, laboratori, attrezzature', color: colors.info },
+    { date: '10 set 2026', label: 'I tre portali entrano in uso a scuola', sub: 'FSL, Viaggi, Prenota Risorse', color: colors.success },
+  ];
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'stretch', justifyContent: 'center' }}>
+      {events.map((e, i) => (
+        <React.Fragment key={i}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '180px', textAlign: 'center' }}>
+            <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: e.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{e.date}</div>
+            <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: e.color, marginBottom: '8px' }} />
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', minHeight: '52px' }}>{e.label}</div>
+            <div style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>{e.sub}</div>
+          </div>
+          {i < events.length - 1 && (
+            <div style={{ alignSelf: 'flex-start', marginTop: '8px', color: colors.textMuted, fontSize: '18px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ArgoOfficialDiagram() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+      <FlowChain wrap={false} minItemWidth="170px" steps={[
+        { icon: '🗂️', label: 'Registro elettronico', sub: 'lo stesso che usa un docente', color: colors.info },
+        { icon: '🔑', label: 'Stesso accesso di una persona', sub: 'non un canale ufficiale per programmi esterni', color: colors.warn },
+        { icon: '🤖', label: 'Argo Briefing legge i dati', sub: 'orario, verifiche, circolari', color: colors.purple },
+        { icon: '📋', label: 'Riepilogo automatico', sub: 'inviato ogni mattina', color: colors.success },
+      ]} />
+      <Box type="warn" title="Cosa vuol dire, in pratica">
+        Il registro non offre alla scuola una porta ufficiale pensata per programmi esterni come questo: il bot entra con le stesse credenziali con cui entrerebbe una persona. Funziona, ma non è una collaborazione con chi fa il registro: se cambia qualcosa dall'altra parte, il bot può smettere di funzionare senza preavviso, e va sistemato.
+      </Box>
+    </div>
+  );
+}
+
+const AI_ACT_LEVELS = [
+  { n: 4, label: 'Rischio inaccettabile', sub: 'vietato: es. riconoscere le emozioni delle persone a scuola o al lavoro', color: colors.danger },
+  { n: 3, label: 'Alto rischio', sub: 'regole rigide: es. selezione del personale, alcuni usi nella scuola', color: colors.warn },
+  { n: 2, label: 'Rischio limitato', sub: 'obbligo di trasparenza: un chatbot deve far capire che si sta parlando con un\'IA', color: colors.info },
+  { n: 1, label: 'Rischio minimo', sub: 'la maggior parte degli usi di oggi: filtri antispam, correttori ortografici, suggerimenti', color: colors.success },
+];
+
+function AIActLevels() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '720px', margin: '0 auto' }}>
+      {AI_ACT_LEVELS.map(l => (
+        <div key={l.n} style={{ display: 'flex', alignItems: 'center', gap: '14px', background: colors.bgLight, border: `1px solid ${l.color}50`, borderLeft: `6px solid ${l.color}`, borderRadius: '0 8px 8px 0', padding: '12px 18px' }}>
+          <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: l.color, fontWeight: 800, fontSize: 'var(--fs-h3)', minWidth: '34px' }}>{l.n}</div>
+          <div>
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{l.label}</div>
+            <div style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>{l.sub}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DelegoLegend() {
+  const cats = [
+    { label: 'Delego', color: colors.success, icon: '✅', d: 'Compito di bozza o organizzazione, senza dati delicati: si controlla comunque il risultato prima di usarlo, ma la decisione non serve.' },
+    { label: 'Delego con controllo', color: colors.warn, icon: '🔍', d: 'L\'IA prepara, ma una persona verifica ogni numero, ogni riferimento e ogni fatto prima che diventi definitivo.' },
+    { label: 'Non delego', color: colors.danger, icon: '🚫', d: 'La decisione, il giudizio o il dato sono troppo delicati: serve una persona responsabile dall\'inizio, non solo un controllo finale.' },
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: '14px' }}>
+      {cats.map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '16px 18px' }}>
+          <div style={{ fontSize: '26px', marginBottom: '6px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{c.label}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)' }}>{c.d}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReviewCycleDiagram() {
+  return (
+    <FlowChain wrap={false} minItemWidth="160px" steps={[
+      { icon: '✍️', label: 'Un agente scrive o modifica il servizio', color: colors.info },
+      { icon: '🔎', label: 'Un secondo agente lo rivede', sub: 'lo stesso ruolo del "revisore" visto nell\'incontro 1', color: colors.purple },
+      { icon: '🧾', label: 'Segnala problemi reali', sub: 'anche piccoli, anche di dettaglio', color: colors.warn },
+      { icon: '🛠️', label: 'Si corregge prima che arrivi agli utenti', color: colors.success },
+    ]} />
+  );
+}
+
+function ProviderDependencyDiagram() {
+  const cards = [
+    { icon: '💶', title: 'Cambia il prezzo', color: colors.warn, points: ['Un fornitore può alzare il prezzo da un giorno all\'altro.', 'Un servizio pensato per un uso quotidiano diventa costoso senza preavviso.'] },
+    { icon: '🔌', title: 'Chiude o cambia il servizio', color: colors.danger, points: ['Un fornitore può chiudere un prodotto o cambiarlo in modo che non funzioni più come prima.', 'Chi ci ha costruito sopra una procedura importante deve rifarla in fretta.'] },
+    { icon: '📦', title: 'Dove stanno i dati', color: colors.info, points: ['I dati caricati restano sui server del fornitore: vanno sapute le condizioni.', 'Serve poter riportare fuori i propri dati (esportabilità), non restarne prigionieri.'] },
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: '14px' }}>
+      {cards.map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '16px 18px' }}>
+          <div style={{ fontSize: '26px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '18px', margin: 0, color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.5 }}>
+            {c.points.map((p, j) => <li key={j}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- calcolatrice interattiva dei costi ---------- */
+/* Valori (pagine per chiamata, chiamate al giorno, prezzo per milione di token) sono
+   inventati a scopo illustrativo: servono a far vedere il meccanismo moltiplicativo,
+   non a stimare il costo reale di un servizio. Il fattore "token per pagina" è una
+   stima approssimativa dichiarata in slide, non un dato di un fornitore reale. */
+const TOKENS_PER_PAGE = 700;
+
+function formatNumber(n) {
+  return Math.round(n).toLocaleString('it-IT');
+}
+
+function formatEuro(n) {
+  return n.toLocaleString('it-IT', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + ' €';
+}
+
+function CostBar({ label, value, max, color, sub }) {
+  const pct = Math.min(100, (value / max) * 100);
+  return (
+    <div style={{ marginBottom: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--fs-xs)', color: colors.textMuted, marginBottom: '4px' }}>
+        <span>{label}</span>
+        <span style={{ color: colors.text, fontWeight: 700 }}>{sub}</span>
+      </div>
+      <div style={{ height: '18px', background: colors.bg, borderRadius: '9px', overflow: 'hidden', border: `1px solid ${colors.border}` }}>
+        <div style={{ height: '100%', width: `${pct}%`, background: color, borderRadius: '9px', transition: 'width 0.2s' }} />
+      </div>
+    </div>
+  );
+}
+
+function TokenCostCalculator() {
+  const [pagine, setPagine] = useState(3);
+  const [chiamate, setChiamate] = useState(30);
+  const [giorni, setGiorni] = useState(20);
+  const [prezzo, setPrezzo] = useState(2);
+
+  const tokensPerChiamata = pagine * TOKENS_PER_PAGE;
+  const chiamateTotali = chiamate * giorni;
+  const tokensTotali = tokensPerChiamata * chiamateTotali;
+  const costo = (tokensTotali / 1000000) * prezzo;
+  const costoDoppieChiamate = (tokensPerChiamata * (chiamate * 2) * giorni / 1000000) * prezzo;
+
+  const maxCosto = Math.max(costo, costoDoppieChiamate, 1);
+
+  return (
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px,1fr))', gap: '14px', marginBottom: '12px' }}>
+        <div>
+          <label style={{ display: 'block', color: colors.textDim, fontSize: 'var(--fs-xs)', marginBottom: '6px' }}>
+            Pagine di testo per chiamata: <strong style={{ color: colors.accent }}>{pagine}</strong>
+          </label>
+          <input type="range" min="1" max="20" value={pagine} onChange={e => setPagine(+e.target.value)} />
+        </div>
+        <div>
+          <label style={{ display: 'block', color: colors.textDim, fontSize: 'var(--fs-xs)', marginBottom: '6px' }}>
+            Chiamate al giorno: <strong style={{ color: colors.accent }}>{chiamate}</strong>
+          </label>
+          <input type="range" min="1" max="100" value={chiamate} onChange={e => setChiamate(+e.target.value)} />
+        </div>
+        <div>
+          <label style={{ display: 'block', color: colors.textDim, fontSize: 'var(--fs-xs)', marginBottom: '6px' }}>
+            Giorni: <strong style={{ color: colors.accent }}>{giorni}</strong>
+          </label>
+          <input type="range" min="1" max="30" value={giorni} onChange={e => setGiorni(+e.target.value)} />
+        </div>
+        <div>
+          <label style={{ display: 'block', color: colors.textDim, fontSize: 'var(--fs-xs)', marginBottom: '6px' }}>
+            Prezzo per milione di token: <strong style={{ color: colors.accent }}>{prezzo.toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} €</strong>
+          </label>
+          <input type="range" min="0.2" max="15" step="0.1" value={prezzo} onChange={e => setPrezzo(+e.target.value)} />
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px,1fr))', gap: '10px', marginBottom: '10px' }}>
+        <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>Chiamate totali</div>
+          <div style={{ color: colors.text, fontWeight: 800, fontSize: 'var(--fs-lead)' }}>{formatNumber(chiamateTotali)}</div>
+        </div>
+        <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>Token inviati in tutto</div>
+          <div style={{ color: colors.text, fontWeight: 800, fontSize: 'var(--fs-lead)' }}>{formatNumber(tokensTotali)}</div>
+        </div>
+        <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '12px 16px', textAlign: 'center' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>Costo stimato</div>
+          <div style={{ color: colors.accent, fontWeight: 800, fontSize: 'var(--fs-lead)' }}>{formatEuro(costo)}</div>
+        </div>
+      </div>
+
+      <CostBar label="Con i valori scelti sopra" value={costo} max={maxCosto} color={colors.accent} sub={formatEuro(costo)} />
+      <CostBar label="Se raddoppiano le chiamate al giorno (testo e prezzo invariati)" value={costoDoppieChiamate} max={maxCosto} color={colors.danger} sub={formatEuro(costoDoppieChiamate)} />
+
+      <Box type="warn" title="Numeri inventati a scopo di esempio">
+        Una pagina ≈ {TOKENS_PER_PAGE} token (stima, non un dato di un fornitore reale); il prezzo per milione di token è un valore di esempio, diverso da fornitore a fornitore. Il calcolo conta solo il testo inviato: anche le risposte dell'IA si pagano a parte, qui ignorate per restare semplici.
+      </Box>
+    </div>
+  );
+}
+
+/* ---------- app ---------- */
+
+const slides = [
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🗂️</div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Incontro 2
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim }}>Dalla carta al servizio, e usare l'IA con giudizio</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '30px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: 'Slide di apertura. Aspettate che tutti siano seduti davanti al PC. Prima di iniziare i contenuti si parte con la ripresa della settimana (slide successive).'
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '10px 30px 0' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Dove siamo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Richiamo veloce dei quattro incontri.</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li><strong style={{ color: colors.text }}>Incontro 1</strong>, fatto: come funzionano questi strumenti, chatbot e agente, le parole di base.</li>
+          <li><strong style={{ color: colors.text }}>Incontro 2</strong>, oggi: da una procedura di carta a un servizio, e quando non delegare.</li>
+          <li><strong style={{ color: colors.text }}>Incontro 3</strong>: un agente costruisce un piccolo strumento da una richiesta in italiano.</li>
+          <li><strong style={{ color: colors.text }}>Incontro 4</strong>: un problema del vostro lavoro diventa una proposta.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>
+          I materiali di oggi sono su{' '}
+          <a href="../materiali/incontro-2/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            thomascasali.github.io/corso-ia-scuola-slide/materiali/incontro-2/
+          </a>
+        </p>
+      </div>
+    ),
+    notes: 'Slide breve di orientamento, poi si passa subito alla ripresa della settimana. Leggete a voce alta l\'indirizzo dei materiali.'
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Com'è andato il Gem della settimana?</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 8 minuti, solo a voce.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Riprendi il foglio dell'impegno scritto la settimana scorsa (o ricordalo a voce).</li>
+          <li>Racconta al collega: hai provato la cosa che avevi scritto? È andata come pensavi?</li>
+          <li>Se non hai avuto tempo, va bene lo stesso: dì cosa ti ha fermato.</li>
+        </ol>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Non è un controllo, è un confronto: gli impegni che sono andati bene e quelli che si sono arenati dicono entrambi qualcosa di utile.</p>
+      </div>
+    ),
+    notes: 'Girate tra le coppie e raccogliete a voce 2-3 racconti davanti a tutti (uno andato bene, uno che si è arenato). Non serve un foglio da consegnare. Chi non aveva scritto nulla la settimana scorsa partecipa raccontando cosa ha usato comunque, anche senza impegno scritto.'
+  },
+
+  /* --- blocco 1: dalla carta al servizio --- */
+  {
+    block: 'Blocco 1 — Dalla carta al servizio',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 1</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Dalla carta al servizio</h2>
+        <Glow>
+          <p>Molte procedure della scuola nascono su carta: un modulo da compilare a mano, una firma, un foglio che passa da un ufficio all'altro. <strong style={{ color: colors.text }}>Trasformarla in un servizio</strong> vuol dire scrivere le stesse regole in un programma che le applica da solo, senza inventarne di nuove.</p>
+        </Glow>
+        <p style={{ color: colors.textMuted, marginTop: '18px' }}>Oggi guardiamo tre procedure della nostra scuola che hanno fatto questo passaggio, e cosa serve perché funzioni davvero.</p>
+      </div>
+    ),
+    notes: 'Introduzione al blocco. Il messaggio da far passare subito: un servizio non "inventa" regole nuove, applica quelle che c\'erano già sulla carta, in modo più veloce e con meno errori di trascrizione. Non entrate ancora nei casi specifici: arrivano nel blocco successivo.'
+  },
+  {
+    block: 'Blocco 1 — Dalla carta al servizio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Cos'è un requisito</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Una parola che sentirete spesso oggi: la vediamo con un esempio.</p>
+        <Box type="info" title="Definizione semplice">
+          Un requisito è una regola scritta in modo preciso, che dice cosa deve succedere in un caso preciso. Non un'idea generale ("le uscite vanno organizzate bene"), ma qualcosa che si può controllare ("serve un accompagnatore ogni tot studenti").
+        </Box>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '14px 18px', marginTop: '14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+          <div style={{ color: colors.textMuted }}>Sul modulo di carta: "Indicare gli accompagnatori."</div>
+          <div style={{ color: colors.text, marginTop: '6px' }}>Come requisito: "Serve almeno un accompagnatore ogni 15 studenti; per una classe con alunni con disabilità, il docente di sostegno è obbligatorio."</div>
+        </div>
+      </div>
+    ),
+    notes: 'Questa slide prepara direttamente l\'attività sui requisiti, più avanti nel blocco. Il punto è mostrare la differenza tra "quello che c\'è scritto sul modulo" (spesso vago) e "la regola precisa che il servizio deve applicare" (un requisito).'
+  },
+  {
+    block: 'Blocco 1 — Dalla carta al servizio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il percorso, in quattro passi</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '20px' }}>Sempre nello stesso ordine, anche quando si usa l'IA per andare più veloci.</p>
+        <FlowChain steps={[
+          { icon: '📝', label: 'Carta', sub: 'il modulo e le regole scritte da qualche parte', color: colors.textMuted },
+          { icon: '📋', label: 'Requisiti', sub: 'le stesse regole, scritte in modo preciso', color: colors.info },
+          { icon: '💻', label: 'Servizio', sub: 'un programma che applica quelle regole', color: colors.warn },
+          { icon: '🔍', label: 'Controlli', sub: 'collaudo, verifica umana, revisione', color: colors.success },
+        ]} />
+        <Box type="tip" title="Da ricordare">
+          Saltare il passo dei requisiti è la scorciatoia più pericolosa: si finisce per far scrivere un servizio direttamente da un'idea vaga, e le regole vere si scoprono (sbagliate) solo dopo.
+        </Box>
+      </div>
+    ),
+    notes: 'Schema centrale del blocco: tenetelo a mente, ci si torna implicitamente in ogni caso di studio (prima=carta, dopo=servizio, controlli=collaudo/revisione/verifica umana). "Requisiti" è il passo su cui si lavora nell\'attività a gruppi tra poco.'
+  },
+  {
+    block: 'Blocco 1 — Dalla carta al servizio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Tre casi della nostra scuola</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '22px' }}>Non sono la ragione di questo corso, sono tre esempi da studiare: cosa facevano prima, cosa fanno adesso, quali controlli sono serviti.</p>
+        <CaseCards cases={[
+          { icon: '🎓', title: 'Portale FSL', sub: 'le pratiche della Formazione Scuola Lavoro', color: colors.info },
+          { icon: '🚌', title: 'Portale Viaggi', sub: 'uscite didattiche e viaggi d\'istruzione', color: colors.warn },
+          { icon: '🏫', title: 'Prenota Risorse', sub: 'aule, laboratori e altre risorse', color: colors.success },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', margin: '26px 0 10px', textAlign: 'center' }}>Per ognuno vediamo lo stesso percorso:</p>
+        <FlowChain steps={[
+          { icon: '📝', label: 'Prima', sub: 'la carta', color: colors.textMuted },
+          { icon: '💻', label: 'Dopo', sub: 'il servizio', color: colors.warn },
+          { icon: '🔍', label: 'Controlli', sub: 'cosa è servito', color: colors.success },
+        ]} />
+      </div>
+    ),
+    notes: 'Presentate i tre nomi senza ancora entrare nei dettagli. Ribadite a voce che l\'obiettivo di oggi non è "guardate cosa ha fatto Thomas": sono esempi di procedure riorganizzate, utili per capire il percorso carta→requisiti→servizio→controlli. Tutti e tre sono in uso reale alla nostra scuola dal 10 settembre 2026.'
+  },
+
+  /* --- blocco 2: tre casi di studio --- */
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Blocco 2</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Quando è successo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Una linea del tempo, con le date verificate sui repository dei progetti.</p>
+        <TimelineDiagram />
+      </div>
+    ),
+    notes: 'Date ricontrollate sulla cronologia dei progetti (26/09/2026). Fate notare che "Prenota Carrello" esisteva già dal 2025, molto prima degli altri due: è il caso con la storia più lunga, e per questo è quello su cui ci sono più revisioni da raccontare più avanti (attività "trova il problema"). I tre portali sono entrati in uso lo stesso giorno, il 10 settembre 2026.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <ChipRow items={['🎓 Portale FSL']} />
+        <h2 style={{ color: colors.info, marginTop: '14px', marginBottom: '14px' }}>Prima: la carta</h2>
+        <Box type="info" title="La procedura FSL (ex PCTO)">
+          Un percorso di Formazione Scuola Lavoro passava per una serie di moduli cartacei: valutazione dei rischi dell'azienda, convenzione, scheda di progettazione, patto formativo con le firme di studente e genitori, registro delle presenze, diario di bordo, valutazioni finali, comunicazioni agli enti (INAIL, Direzione provinciale del lavoro). Il tutor teneva traccia di tutto su un foglio di calcolo.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Ogni firma andava raccolta di persona o per posta; se un modulo si perdeva o arrivava in ritardo, il percorso restava fermo.</p>
+      </div>
+    ),
+    notes: 'Numeri e dettagli verificati sulla documentazione interna del progetto. Non elencate tutti i moduli a memoria: basta rendere l\'idea della quantità di carta e di firme coinvolte in un solo percorso.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <ChipRow items={['🎓 Portale FSL']} />
+        <h2 style={{ color: colors.info, marginTop: '14px', marginBottom: '14px' }}>Dopo: il servizio, e i controlli</h2>
+        <Box type="success" title="Cosa fa il portale">
+          Lo stesso percorso, digitale: le firme di genitori, tutor aziendali e legali rappresentanti arrivano tramite un link ricevuto per email con un codice di verifica, senza bisogno di creare un account. I passaggi seguono un ordine controllato dal programma, e le comunicazioni agli enti si generano automaticamente dai dati già inseriti.
+        </Box>
+        <Box type="tip" title="Quali controlli sono serviti">
+          Un percorso di collaudo passo per passo su tutte le funzioni, con un buon numero di controlli automatici ripetuti a ogni modifica: una prova completa del ciclo in un ambiente di prova, prima dell'apertura a tutta la scuola.
+        </Box>
+      </div>
+    ),
+    notes: 'Dato verificato: 105 collaudi automatici superati, in un ambiente di prova, prima dell\'apertura a tutta la scuola. Non serve dire il numero esatto se rallenta il racconto: l\'importante è il concetto "prima si è collaudato tutto il ciclo, poi si è aperto agli utenti veri".'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <ChipRow items={['🚌 Portale Viaggi']} />
+        <h2 style={{ color: colors.warn, marginTop: '14px', marginBottom: '14px' }}>Prima: la carta</h2>
+        <Box type="info" title="Uscite didattiche e viaggi d'istruzione">
+          Un modulo cartaceo per ogni uscita o viaggio, con regole del regolamento d'istituto da verificare a mano: quanti studenti hanno aderito, quanti accompagnatori servono, il tetto di spesa massimo, la scadenza per presentare la domanda. Il referente della pratica, la commissione viaggi e la dirigenza controllavano ciascuno la propria parte, in sequenza.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Un conto sbagliato sul quorum di adesioni, o una data di scadenza calcolata male, si scopriva spesso solo all'ultimo passaggio.</p>
+      </div>
+    ),
+    notes: 'Regole di validazione verificate sulla documentazione interna (quorum 2/3, un accompagnatore ogni 15 studenti, tetti di spesa, scadenze). È la stessa procedura che userete nell\'attività sui requisiti tra poco: non anticipate i numeri esatti, arrivano nel foglio dell\'attività.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <ChipRow items={['🚌 Portale Viaggi']} />
+        <h2 style={{ color: colors.warn, marginTop: '14px', marginBottom: '14px' }}>Dopo: il servizio, e i controlli</h2>
+        <Box type="success" title="Cosa fa il portale">
+          Lo stesso modulo, digitale: quorum di adesioni, numero di accompagnatori, tetto di spesa e scadenze vengono controllati automaticamente dal programma, che segnala subito se qualcosa non torna invece di scoprirlo all'ultimo passaggio. La firma dei genitori arriva anche qui via email con un codice di verifica.
+        </Box>
+        <Box type="tip" title="Quali controlli sono serviti">
+          Un buon numero di controlli automatici ripetuti a ogni modifica, e una prova completa del flusso di richiesta dei preventivi, in un ambiente di prova, con accesso reale, prima di aprirlo alla scuola.
+        </Box>
+      </div>
+    ),
+    notes: 'Dato verificato: 49 collaudi automatici superati e una prova completa del flusso di richiesta dei preventivi, con accesso reale, in un ambiente di prova. Collegate mentalmente alla slide precedente: le stesse regole di prima, solo applicate automaticamente invece che a mano.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <ChipRow items={['🏫 Prenota Risorse']} />
+        <h2 style={{ color: colors.success, marginTop: '14px', marginBottom: '14px' }}>Prima: un servizio più piccolo</h2>
+        <Box type="info" title='Nato nel 2025 come "Prenota Carrello"'>
+          Questo caso non parte dalla carta pura: nel settembre 2025 era già nato un piccolo servizio per prenotare i carrelli di PC portatili condivisi tra le classi, con un calendario settimanale. Funzionava, ma copriva solo quel tipo di risorsa.
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Anche un servizio già digitale, quindi, può avere bisogno di essere ripensato quando cambiano le esigenze: è il caso che vediamo nella prossima slide.</p>
+      </div>
+    ),
+    notes: 'Utile far notare che non tutti i casi partono "dalla carta": questo mostra che il percorso requisiti→servizio→controlli si ripete anche quando si allarga un servizio già esistente, non solo quando si digitalizza qualcosa di cartaceo per la prima volta.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <ChipRow items={['🏫 Prenota Risorse']} />
+        <h2 style={{ color: colors.success, marginTop: '14px', marginBottom: '14px' }}>Dopo: "Prenota Risorse", e i controlli</h2>
+        <Box type="success" title="Cosa è cambiato il 26 agosto 2026">
+          Il servizio è stato ripensato da zero: non più solo carrelli di PC, ma qualunque risorsa prenotabile (aule, laboratori, attrezzature), ciascuna con le proprie regole su chi può prenotarla e se serve un'approvazione.
+        </Box>
+        <Box type="tip" title="Quali controlli sono serviti">
+          Qui il controllo interessante per noi è la revisione: prima delle nuove versioni principali, un secondo "sguardo" indipendente ha ricontrollato il lavoro cercando apposta cosa non tornava, con lo stesso ruolo del revisore visto nell'incontro 1. Ha trovato problemi reali, alcuni corretti negli aggiornamenti successivi, altri ancora in lista: li vediamo più avanti, nell'attività "trova il problema".
+        </Box>
+      </div>
+    ),
+    notes: 'Non anticipate i casi specifici: sono il cuore dell\'attività "trova il problema" più avanti nell\'incontro. Qui basta piantare il seme: "un revisore ha trovato problemi veri".'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Cosa hanno in comune (quasi tutti)</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Non tutti i punti valgono per tutti e tre i casi: lo segna l'etichetta sotto ciascuno.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px,1fr))', gap: '16px' }}>
+          {[
+            { icon: '📋', t: 'Requisiti scritti prima', d: 'Le regole del regolamento sono state messe nero su bianco prima di scrivere il servizio.', scope: 'FSL · Viaggi', color: colors.info },
+            { icon: '✍️', t: 'Firma digitale verificata', d: 'Un codice ricevuto via email al posto della firma di persona, per chi non ha un account della scuola.', scope: 'FSL · Viaggi', color: colors.info },
+            { icon: '🔍', t: 'Collaudo prima dell\'uso vero', d: 'Prove ripetute, spesso automatiche, prima di aprire il servizio a tutti.', scope: 'FSL · Viaggi', color: colors.info },
+            { icon: '🧑‍🏫', t: 'Decisione umana dove serve', d: 'Il programma applica le regole e segnala i casi dubbi: chi decide resta una persona.', scope: 'Tutti e tre', color: colors.success },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '16px 18px' }}>
+              <div style={{ fontSize: '28px', marginBottom: '8px' }}>{x.icon}</div>
+              <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{x.t}</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>{x.d}</div>
+              <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: x.color, border: `1px solid ${x.color}60`, borderRadius: '20px', padding: '3px 12px' }}>{x.scope}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '16px' }}>Per Prenota Risorse il controllo distintivo è un altro, la revisione: lo vedete tra poco.</p>
+      </div>
+    ),
+    notes: 'Slide di sintesi del blocco: chiedete alla sala di ritrovare questi punti nei casi a cui si applicano (etichette sotto ogni card). È il ponte verso l\'attività sui requisiti che segue subito dopo.'
+  },
+
+  /* --- attività requisiti --- */
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dalla carta ai requisiti</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A gruppi di 3-4, 25 minuti.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Guardate la scheda di una procedura di carta inventata (una richiesta di uscita didattica).</li>
+          <li>Descrivetela a Gemini a parole vostre e chiedetegli l'elenco dei requisiti che un servizio dovrebbe rispettare.</li>
+          <li>Confrontate l'elenco ottenuto con un estratto semplificato dei requisiti reali della procedura vera.</li>
+        </ol>
+        <ActivityBadge href="../materiali/incontro-2/istruzioni-attivita-requisiti.html" label="Istruzioni e richiesta da incollare" />
+      </div>
+    ),
+    notes: 'Scheda 3 delle esercitazioni. Distribuite (o fate aprire dal foglio materiali) la scheda-procedura-carta e le istruzioni. Il gruppo lavora in autonomia sui 25 minuti; girate tra i tavoli.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La procedura di carta di oggi</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Una richiesta di uscita didattica inventata, uguale per tutti i gruppi: "Modulo U1".</p>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '20px 22px', marginBottom: '18px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Cosa c'è scritto sul modulo</div>
+          <ChipRow items={['Classe', 'Data e orario', 'Meta e programma', 'Mezzo di trasporto', 'Costo indicativo', 'Accompagnatori e firme', 'Visto segreteria', 'Approvazione dirigenza']} />
+        </div>
+        <ActivityBadge href="../materiali/incontro-2/scheda-procedura-carta.html" label="Scheda-procedura di carta" />
+        <p style={{ color: colors.textDim, marginTop: '18px' }}>Descrivetela a Gemini come fareste con un collega: cosa contiene il modulo, chi lo compila, chi lo firma, cosa succede dopo. Poi chiedete l'elenco dei requisiti.</p>
+      </div>
+    ),
+    notes: 'La scheda è nei materiali dell\'incontro. È volutamente un modulo semplice, con pochi campi: l\'obiettivo non è essere esaustivi come il regolamento vero, ma allenarsi a tradurre "quello che c\'è scritto su un modulo" in requisiti precisi. Fate notare anche le note scritte a penna sul modulo (mancava una firma, forse serve l\'autorizzazione dei genitori, il modulo è arrivato in ritardo): sono i controlli impliciti che un buon elenco di requisiti deve cogliere.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Confronto con i requisiti reali</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>L'estratto semplificato viene dal Portale Viaggi reale della nostra scuola, ripulito e accorciato per il corso.</p>
+        <ActivityBadge href="../materiali/incontro-2/requisiti-viaggi-estratto.html" label="Requisiti reali (estratto semplificato)" />
+        <Box type="tip" title="Domande per il confronto">
+          Quali requisiti avevate già pensato voi? Quali vi sono sfuggiti, e perché (magari non erano scritti chiaramente sul modulo di carta)? L'elenco di Gemini conteneva qualcosa che nella procedura reale non c'è?
+        </Box>
+      </div>
+    ),
+    notes: 'Fate condividere a voce, a fine attività, un requisito che ogni gruppo aveva individuato e uno che gli era sfuggito. Il messaggio da far passare: un elenco di requisiti scritto da un\'IA è un buon punto di partenza, ma va sempre confrontato con chi conosce davvero la procedura (referenti, regolamenti), esattamente come le risposte di un chatbot vanno controllate.'
+  },
+
+  /* --- blocco 3: argo briefing --- */
+  {
+    block: 'Blocco 3 — Il caso Argo Briefing',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 3</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Il caso Argo Briefing</h2>
+        <Glow>
+          <p>Un altro esempio, diverso dai primi tre: un bot che ogni mattina <strong style={{ color: colors.text }}>legge il registro elettronico</strong> e prepara un <strong style={{ color: colors.text }}>riepilogo automatico</strong> (orario, verifiche del giorno, circolari nuove) per chi lo usa.</p>
+        </Glow>
+        <p style={{ color: colors.textMuted, marginTop: '16px' }}>Ci serve per parlare di una cosa che non abbiamo ancora toccato: da cosa dipende il costo di usare questi strumenti.</p>
+      </div>
+    ),
+    notes: 'Presentate il bot in una riga, senza entrare nei dettagli tecnici: serve solo come esempio concreto per introdurre il tema: da cosa dipende il costo.'
+  },
+  {
+    block: 'Blocco 3 — Il caso Argo Briefing',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.warn, marginBottom: '10px' }}>Perché non è un'integrazione ufficiale</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Un punto spesso frainteso: "legge il registro" non vuol dire che il registro e il bot collaborino.</p>
+        <ArgoOfficialDiagram />
+      </div>
+    ),
+    notes: 'Il punto pedagogico: un\'automazione costruita "dal di fuori" di un servizio, senza un accordo con chi lo gestisce, è più fragile di un\'integrazione ufficiale. Non serve il dettaglio tecnico di come funziona l\'accesso: il registro non offre alla scuola una via ufficiale pensata per programmi esterni.'
+  },
+  {
+    block: 'Blocco 3 — Il caso Argo Briefing',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Da cosa dipende il costo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Ogni volta che un programma "parla" con un'intelligenza artificiale come questa, quella richiesta ha un costo. Per capire da cosa dipende, serve una parola nuova: token.</p>
+        <Box type="info" title="Cos'è un token">
+          Un token è un pezzetto di testo: più o meno una parola breve, o un pezzo di una parola lunga. Quando scrivete a un'IA, sia la vostra domanda sia la risposta vengono contate in token: è l'unità con cui i fornitori fanno pagare l'uso.
+        </Box>
+      </div>
+    ),
+    notes: 'Non serve la precisione tecnica (byte-pair encoding, tokenizer specifici): basta far passare l\'idea "pezzo di testo, unità di misura del costo". Esempio pratico se serve: una pagina di testo scritto sono all\'incirca alcune centinaia di token.'
+  },
+  {
+    block: 'Blocco 3 — Il caso Argo Briefing',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>La formula del costo</h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.info}60`, borderTop: `4px solid ${colors.info}`, borderRadius: '8px', padding: '16px 20px', textAlign: 'center', minWidth: '160px' }}>
+            <div style={{ fontSize: '26px' }}>📄</div>
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>Quantità di testo inviata</div>
+          </div>
+          <div style={{ fontSize: '26px', color: colors.textMuted }}>×</div>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.warn}60`, borderTop: `4px solid ${colors.warn}`, borderRadius: '8px', padding: '16px 20px', textAlign: 'center', minWidth: '160px' }}>
+            <div style={{ fontSize: '26px' }}>🔁</div>
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>Numero di chiamate</div>
+          </div>
+          <div style={{ fontSize: '26px', color: colors.textMuted }}>×</div>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.purple}60`, borderTop: `4px solid ${colors.purple}`, borderRadius: '8px', padding: '16px 20px', textAlign: 'center', minWidth: '160px' }}>
+            <div style={{ fontSize: '26px' }}>💶</div>
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>Prezzo per token</div>
+          </div>
+        </div>
+        <Box type="tip" title="Da ricordare">
+          Non conta solo "quanto è lunga la domanda", conta anche quante volte al giorno il programma la fa. Un servizio che girasse ogni mattina per molte persone moltiplicherebbe lo stesso costo per ognuna di esse.
+        </Box>
+      </div>
+    ),
+    notes: 'Slide-ponte prima della calcolatrice interattiva. Fate notare la natura moltiplicativa: raddoppiare uno qualunque dei tre fattori raddoppia il costo. Lo si vede tra un attimo nella calcolatrice.'
+  },
+  {
+    block: 'Blocco 3 — Il caso Argo Briefing',
+    content: () => (
+      <div style={{ padding: '12px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Provate voi: la calcolatrice</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Muovete i cursori e guardate come cambia il costo stimato.</p>
+        <TokenCostCalculator />
+      </div>
+    ),
+    notes: 'Fate provare la calcolatrice sul proiettore, poi lasciate 3-4 minuti perché ognuno la muova sul proprio PC (è nella slide, non serve un link a parte). Mostrate in particolare la barra "se le chiamate al giorno raddoppiano": il costo raddoppia esattamente, perché è una moltiplicazione. Ribadite a voce che pagine-per-chiamata, chiamate, giorni e prezzo sono tutti scelti da chi costruisce e usa lo strumento: non sono un destino.'
+  },
+  {
+    block: 'Blocco 3 — Il caso Argo Briefing',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quattro scenari con la calcolatrice</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 10 minuti.</p>
+        <p style={{ color: colors.textDim }}>Tornate alla slide della calcolatrice (o apritela sul vostro PC) e provate i quattro scenari del foglio, segnando il costo stimato per ciascuno.</p>
+        <ActivityBadge href="../materiali/incontro-2/calcolatrice-scenari.html" label="Scenari da provare" />
+      </div>
+    ),
+    notes: 'Scheda 4 delle esercitazioni. La calcolatrice è dentro la slide precedente: chi vuole può tornare indietro con la freccia, oppure lavorare in coppia guardando lo schermo del proiettore mentre uno tiene il foglio. Girate tra i banchi e chiedete quale scenario li ha sorpresi di più.'
+  },
+
+  { block: 'Pausa', content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>☕</div>
+        <h2 style={{ color: colors.accent }}>Pausa</h2>
+      </div>
+    ), notes: 'Pausa. Al ritorno si parte con "Usare l\'IA con giudizio".' },
+
+  /* --- blocco 4: giudizio parte 1 --- */
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 4</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Usare l'IA con giudizio</h2>
+        <Glow>
+          <p>Fin qui abbiamo visto cosa questi strumenti sanno fare. Ora la domanda cambia: <strong style={{ color: colors.text }}>quando conviene farglielo fare</strong>, e quando no.</p>
+        </Glow>
+        <p style={{ color: colors.textMuted, marginTop: '16px' }}>Prima parte: dati dei minori e privacy, la legge europea sull'IA, la verifica umana.</p>
+      </div>
+    ),
+    notes: 'Introduzione al blocco. Collegate esplicitamente alle allucinazioni viste nell\'incontro 1: lì il problema era "l\'IA può sbagliare senza accorgersene", qui il tema è "anche quando non sbaglia, ci sono cose che non le si devono proprio dare o far decidere".'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '6px' }}>Dati dei minori e privacy</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Due parole da distinguere sempre.</p>
+        <CompareTwo
+          left={{ icon: '🪪', title: 'Dati personali', color: colors.info, points: ['Nome, cognome, classe, email, indirizzo.', 'Identificano una persona, ma da soli non rivelano aspetti delicati.'] }}
+          right={{ icon: '🩺', title: 'Dati particolari', color: colors.danger, points: ['Salute, disabilità, origine, opinioni, religione.', 'Categorie protette in modo più rigido: richiedono massima cautela.'] }}
+        />
+        <Box type="danger" title="Regola d'oro">
+          Con i minori, i dati particolari e altri dati delicati (una diagnosi, un'allergia, una condizione familiare) non si caricano mai in un chatbot o in un Gem, nemmeno "solo per fare una prova".
+        </Box>
+      </div>
+    ),
+    notes: 'Concetto centrale della privacy per il corso, già anticipato nella scheda 9 dell\'incontro 1 ("mai documenti con dati personali di studenti"). Qui si va più a fondo distinguendo dati personali (nome, classe) da dati particolari (salute, ecc.), che il GDPR tratta con regole più severe. Non serve citare articoli di legge specifici: il concetto generale basta.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '10px' }}>Cosa non caricare mai</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Elenchi nominativi di studenti, specie se legati a voti, assenze, comportamento o bisogni educativi speciali.</li>
+          <li>Dati sanitari: allergie, terapie, certificazioni, diagnosi.</li>
+          <li>Documenti con firme, codici fiscali, indirizzi di casa.</li>
+          <li>Qualunque cosa che, letta da un estraneo, farebbe capire chi è una persona specifica e cosa la riguarda.</li>
+        </ul>
+        <Box type="tip" title="La domanda da farsi prima di caricare qualcosa">
+          "Se questo file finisse per sbaglio nelle mani sbagliate, cosa succederebbe a chi ci è dentro?" Se la risposta preoccupa, non si carica: si anonimizza, si accorcia, o si lavora senza quel documento.
+        </Box>
+      </div>
+    ),
+    notes: 'Riprende e amplia la regola d\'oro dell\'incontro 1 (dispensa, cap. su privacy citato lì). Questa lista è volutamente pratica: usatela per collegarvi ai casi "lo delego o no?" che arrivano tra poco, dove più di un caso tocca proprio questi punti.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>L'AI Act, spiegato semplice</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Una legge europea che regola l'uso dell'intelligenza artificiale, con un'idea di fondo: più un uso è rischioso per le persone, più regole rigide gli si applicano.</p>
+        <AIActLevels />
+      </div>
+    ),
+    notes: 'Restate sul livello generale e ampiamente noto: legge europea, approccio a livelli di rischio. Non citate articoli o date di entrata in vigore specifiche: non sono state verificate per questo corso. Se qualcuno in sala chiede dettagli precisi, rimandate a un approfondimento successivo invece di rispondere a memoria.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa vuol dire per noi, a scuola</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim, marginBottom: '16px' }}>
+          <li><strong style={{ color: colors.text }}>Trasparenza:</strong> buona regola, dire quando un testo è stato preparato con l'IA, se conta per chi lo riceve.</li>
+          <li><strong style={{ color: colors.text }}>Supervisione umana:</strong> una persona resta responsabile della decisione finale, soprattutto quando riguarda uno studente.</li>
+        </ul>
+        <Box type="success" title="L'account della scuola, cosa dichiara Google">
+          Per gli account Workspace for Education (come il nostro), Google dichiara che le chat e i file caricati "non vengono rivisti da revisori umani né usati per migliorare i modelli di IA generativa". È una garanzia in più, ma non sostituisce il giudizio su cosa caricare.
+        </Box>
+      </div>
+    ),
+    notes: 'La dichiarazione è citata testualmente dalla pagina di supporto ufficiale di Google per la famiglia Education. Fate notare che questa garanzia riguarda "chi legge i dati dall\'altra parte", non "cosa è saggio caricare": le regole della slide precedente restano valide comunque.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La verifica umana, di nuovo</h2>
+        <p style={{ color: colors.textDim }}>Nell'incontro 1 avete visto che un'IA può inventare con lo stesso tono sicuro di una risposta giusta, e che un agente ben fatto si ferma a farsi controllare da una persona (o da un altro agente, il "revisore") prima di consegnare.</p>
+        <Box type="warn" title="La stessa regola vale qui">
+          Più una decisione è delicata, più la verifica umana deve arrivare presto, non solo alla fine: non basta "rileggere il risultato", a volte bisogna proprio non far decidere l'IA.
+        </Box>
+      </div>
+    ),
+    notes: 'Ponte di richiamo esplicito all\'incontro 1 (allucinazioni, ciclo dell\'agente, revisore) prima dell\'attività. Prepara la distinzione tra "delego con controllo" (verifica alla fine) e "non delego" (la decisione stessa non va data all\'IA) che l\'attività seguente chiede di applicare.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Tre categorie</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Le userete tra un attimo nell'attività.</p>
+        <DelegoLegend />
+      </div>
+    ),
+    notes: 'Leggete le tre definizioni a voce alta prima di passare all\'attività. Non date ancora esempi concreti: sono nel foglio dell\'attività, ed è meglio che il gruppo ci arrivi da solo.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Lo delego o no?</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A gruppi di 3-4, 20 minuti.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Leggete i dodici casi scolastici del foglio, uno alla volta.</li>
+          <li>Per ognuno scegliete: delego, delego con controllo, oppure non delego.</li>
+          <li>Scrivete una riga di motivazione: è la parte più importante, non la casella scelta.</li>
+        </ol>
+        <ActivityBadge href="../materiali/incontro-2/lo-delego-o-no.html" label="I dodici casi e la griglia" />
+      </div>
+    ),
+    notes: 'Scheda 5 delle esercitazioni. Le soluzioni ragionate (con la motivazione attesa per ogni caso) sono nel file del docente, non date ai gruppi. Girate tra i tavoli: se un gruppo è bloccato su un caso, fate ripartire dalla domanda "cosa succederebbe alla persona coinvolta se l\'IA sbagliasse qui?" invece di dare la risposta.'
+  },
+
+  /* --- blocco 5: giudizio parte 2 --- */
+  {
+    block: "Blocco 5 — Usare l'IA con giudizio (2)",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 5</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Seconda parte: costi, fornitori, cosa non delegare</h2>
+        <Glow>
+          <p>Non tutto quello che va tenuto d'occhio riguarda i dati. Alcuni rischi vengono da <strong style={{ color: colors.text }}>come funziona il mercato</strong> di questi strumenti: chi li fornisce, a che prezzo, e cosa succede se cambia idea.</p>
+        </Glow>
+      </div>
+    ),
+    notes: 'Introduzione al secondo blocco "con giudizio". Collegate al blocco sui costi visto prima della pausa: qui si allarga il discorso dal costo puro alla dipendenza dal fornitore in generale.'
+  },
+  {
+    block: "Blocco 5 — Usare l'IA con giudizio (2)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>La dipendenza dai fornitori</h2>
+        <ProviderDependencyDiagram />
+      </div>
+    ),
+    notes: 'Il messaggio generale: appoggiarsi a un servizio esterno vuol dire accettare che non tutto sia sotto il proprio controllo.'
+  },
+  {
+    block: "Blocco 5 — Usare l'IA con giudizio (2)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa non va mai delegato</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Mettendo insieme le due parti di oggi.</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Le decisioni che riguardano dati particolari e altri dati delicati di un minore (salute, disabilità, condizioni familiari).</li>
+          <li>I giudizi disciplinari o di valutazione su una persona specifica.</li>
+          <li>Le comunicazioni con conseguenze legali o economiche, senza che una persona ne controlli i fatti prima dell'invio.</li>
+          <li>Tenere l'unica copia di dati importanti solo dentro un servizio esterno, senza un modo per riportarli fuori.</li>
+        </ul>
+      </div>
+    ),
+    notes: 'Slide di sintesi dell\'intero blocco "con giudizio": riprende sia la parte privacy/AI Act sia quella su costi/fornitori. Utile leggerla lentamente, è la lista che la sala porterà via nel foglio dell\'impegno finale.'
+  },
+  {
+    block: "Blocco 5 — Usare l'IA con giudizio (2)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Le revisioni trovano problemi veri</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Lo stesso principio del "gruppo di agenti con un revisore" visto nell'incontro 1, applicato al caso di Prenota Risorse.</p>
+        <ReviewCycleDiagram />
+        <Box type="tip" title="Non basta scrivere bene: bisogna anche controllare">
+          Nel caso di Prenota Risorse, questo doppio sguardo ha trovato diversi problemi concreti: nella prossima attività ne vedrete alcuni, raccontati in modo semplice.
+        </Box>
+      </div>
+    ),
+    notes: 'Ponte diretto verso l\'attività "trova il problema". Ribadite che la fonte di questi casi è reale, riscritti senza dettagli tecnici.'
+  },
+  {
+    block: "Blocco 5 — Usare l'IA con giudizio (2)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Trova il problema</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A gruppi di 3-4, 20 minuti.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Leggete le quattro situazioni del foglio: sono raccontate come casi scolastici, in linguaggio semplice.</li>
+          <li>Per ognuna discutete: cosa non ha funzionato? Chi se ne accorgerebbe, e quando?</li>
+          <li>Provate a immaginare un modo per scoprirlo prima che diventasse un problema per qualcuno.</li>
+        </ol>
+        <ActivityBadge href="../materiali/incontro-2/trova-il-problema.html" label="Le quattro situazioni" />
+      </div>
+    ),
+    notes: 'Scheda 6 delle esercitazioni. Le soluzioni (cosa era il problema reale, come è stato trovato e corretto, e la fonte) sono nel file del docente, non date ai gruppi. A fine attività raccontate voi, per ciascun caso, cosa era successo davvero: è il momento più concreto dell\'incontro per far vedere che "revisione" non è un concetto astratto.'
+  },
+
+  /* --- chiusura --- */
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>In breve</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Cosa portarsi a casa da oggi</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Trasformare una procedura vuol dire scrivere bene i requisiti, prima di tutto: il servizio applica quelli, non ne inventa di nuovi.</li>
+          <li>Il costo di questi strumenti cresce moltiplicando quanto testo si invia per quante volte lo si invia, non sommandolo.</li>
+          <li>I dati particolari dei minori non si caricano mai, e non ogni decisione va delegata: a volte serve una persona fin dall'inizio.</li>
+          <li>Anche i servizi ben fatti hanno bisogno di essere controllati e revisionati: è così che si trovano i problemi prima che arrivino a chi li usa.</li>
+        </ul>
+      </div>
+    ),
+    notes: 'Slide di ricapitolazione: leggetela lentamente, è il collante tra i due grandi temi dell\'incontro (dalla carta al servizio; usare l\'IA con giudizio). Se il tempo stringe, questa è la slide che non va saltata.'
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Una cosa che proverò questa settimana</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>10 minuti.</p>
+        <Box type="tip">
+          Scrivete su un foglio un caso del vostro lavoro in cui, dopo oggi, decidereste "non delego" o "delego con controllo" invece di "delego" senza pensarci.
+        </Box>
+        <p style={{ color: colors.textMuted, marginTop: '10px' }}>Non serve che sia un caso grave: basta che sia vero e che riusciate a spiegare perché.</p>
+      </div>
+    ),
+    notes: 'Raccogliete i foglietti come nell\'incontro 1: serviranno all\'apertura dell\'incontro 3. A differenza della settimana scorsa, qui l\'impegno non è "provare uno strumento" ma "riconoscere un caso delicato nel proprio lavoro": è coerente con il tema di oggi.'
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>➡️</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Il prossimo incontro</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Nell'incontro 3 vediamo da vicino un gruppo di agenti al lavoro, con un gioco di ruolo, e poi tocca a voi: primo contatto pratico con Claude Code sui PC del laboratorio.
+        </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          I materiali di oggi restano su{' '}
+          <a href="../materiali/incontro-2/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            thomascasali.github.io/corso-ia-scuola-slide/materiali/incontro-2/
+          </a>
+        </p>
+      </div>
+    ),
+    notes: 'Ultima slide. Ricordate data e luogo dell\'incontro 3, se già confermati, e che dal terzo incontro serve l\'installazione di Claude Code sui PC (da programmare con l\'ufficio tecnico). Ringraziate e chiudete.'
+  },
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `Incontro 2 — ${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
+        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

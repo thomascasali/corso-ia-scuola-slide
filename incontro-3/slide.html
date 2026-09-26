@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incontro 3 - Agenti al lavoro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stesso impianto dell'incontro 1) ---------- */
+/* Nota: duplicati apposta in questo file, come già fatto tra incontro-1/slide.html e
+   incontro-1/simulazione-agente.html, perché Babel standalone non carica script esterni
+   via XHR quando il file si apre da file://. */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+const DurationBadge = ({ children }) => (
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
+    <span aria-hidden="true">⏱</span><span>{children}</span>
+  </div>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px', fontSize: 'var(--fs-sm)' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- schemi nuovi per l'incontro 3 ---------- */
+
+function StaffDiagram() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+      <div style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, color: colors.bg, fontWeight: 800, borderRadius: '10px', padding: '12px 22px', minWidth: '260px', textAlign: 'center' }}>
+        👤 Capo progetto — riceve, divide, assegna
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center' }}>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.info}`, borderRadius: '10px', padding: '12px 18px', minWidth: '190px', textAlign: 'center' }}>
+          🔧 Specialista — esegue una parte
+        </div>
+        <div style={{ background: colors.bgLight, border: `1px solid ${colors.info}`, borderRadius: '10px', padding: '12px 18px', minWidth: '190px', textAlign: 'center' }}>
+          🔧 Specialista — esegue un'altra parte
+        </div>
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.danger + '20', border: `1px solid ${colors.danger}`, borderRadius: '10px', padding: '12px 22px', minWidth: '260px', textAlign: 'center', color: colors.text, fontWeight: 700 }}>
+        🔍 Revisore — controlla il lavoro finito
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>
+        <span aria-hidden="true">⟲</span><span>se qualcosa non va, torna indietro a chi l'ha scritto</span>
+      </div>
+    </div>
+  );
+}
+
+function RoleGrid({ roles }) {
+  return (
+    <div className="role-grid" style={{ display: 'grid', gap: '14px', width: '100%' }}>
+      {roles.map((r, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ fontSize: '28px' }}>{r.icon}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.5 }}>{r.desc}</div>
+          {r.href && <ActivityBadge href={r.href} label={r.label || 'Apri la carta'} />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OmniRouteDiagram() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+        {['💻 PC 1', '💻 PC 2', '💻 PC …', '💻 PC n'].map((p, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '8px 14px', fontSize: 'var(--fs-xs)', color: colors.textDim }}>{p}</div>
+        ))}
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '10px', padding: '12px 26px', color: colors.text, fontWeight: 800, textAlign: 'center' }}>
+        ☎️ OmniRoute — il centralino, configurato da Thomas
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+        <div style={{ background: colors.success + '20', border: `1px solid ${colors.success}`, borderRadius: '8px', padding: '8px 14px', fontSize: 'var(--fs-xs)', color: colors.text }}>✅ fornitori nella lista bianca</div>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', marginTop: '2px' }}>
+        <div style={{ background: colors.danger + '15', border: `1px solid ${colors.danger}60`, borderRadius: '8px', padding: '6px 12px', fontSize: 'var(--fs-xs)', color: colors.textMuted, textDecoration: 'line-through' }}>fornitori che addestrano sui dati</div>
+        <div style={{ background: colors.danger + '15', border: `1px solid ${colors.danger}60`, borderRadius: '8px', padding: '6px 12px', fontSize: 'var(--fs-xs)', color: colors.textMuted, textDecoration: 'line-through' }}>anelli di riserva a pagamento</div>
+      </div>
+    </div>
+  );
+}
+
+function PermissionFlowDiagram() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <FlowChain wrap steps={[
+        { icon: '✍️', label: 'La tua richiesta', color: colors.info },
+        { icon: '🧭', label: "L'agente pianifica", color: colors.info },
+        { icon: '⚠️', label: 'Sta per cambiare qualcosa', color: colors.warn },
+      ]} />
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.bgLight, border: `1px solid ${colors.warn}`, borderRadius: '10px', padding: '10px 20px', color: colors.text, fontWeight: 700 }}>
+        Si ferma: «Posso farlo?»
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div style={{ background: colors.success + '20', border: `1px solid ${colors.success}`, borderRadius: '8px', padding: '10px 18px', color: colors.text, fontWeight: 700 }}>1. Yes → esegue quell'azione</div>
+        <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '10px 18px', color: colors.textDim, fontWeight: 700 }}>3. No → si ferma, non la fa</div>
+      </div>
+      <div style={{ fontSize: 'var(--fs-xs)', color: colors.textMuted }}>C'è anche una seconda opzione, che finisce con «for this session»: in questo corso non si usa mai.</div>
+    </div>
+  );
+}
+
+function ErrorsMapDiagram() {
+  const categories = [
+    { title: 'Richiesta vaga', color: colors.info, items: ['Troppe scelte lasciate all’agente', 'Formato e dati non specificati'] },
+    { title: 'Dati sporchi', color: colors.warn, items: ['Informazione scritta in un posto insolito', 'Un file incompleto o ambiguo'] },
+    { title: 'Dichiara senza controllare', color: colors.danger, items: ['"Ho riletto" senza una nuova lettura', 'Si vede nel registro, non nelle parole'] },
+    { title: 'Permessi troppo veloci', color: colors.purple, items: ['Sì senza leggere la richiesta', "L'errore più facile da evitare"] },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+      <div style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, color: colors.bg, fontWeight: 800, borderRadius: '30px', padding: '10px 26px', fontSize: 'var(--fs-body)' }}>
+        📋 Un compito consegnato all'agente
+      </div>
+      <div style={{ fontSize: '22px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', width: '100%' }}>
+        {categories.map((c, i) => (
+          <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '14px 16px' }}>
+            <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>{c.title}</div>
+            <ul style={{ paddingLeft: '18px', margin: 0, color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.6 }}>
+              {c.items.map((it, j) => <li key={j} style={{ fontSize: 'var(--fs-xs)' }}>{it}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TimelineBar() {
+  const segs = [
+    { label: 'Leggere e assegnare', min: 5, color: colors.info },
+    { label: 'Lavoro degli specialisti', min: 10, color: colors.warn },
+    { label: 'Revisione e chiusura', min: 5, color: colors.success },
+  ];
+  const total = segs.reduce((a, s) => a + s.min, 0);
+  return (
+    <div style={{ width: '100%', maxWidth: '620px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', width: '100%', height: '46px', borderRadius: '8px', overflow: 'hidden', border: `1px solid ${colors.border}` }}>
+        {segs.map((s, i) => (
+          <div key={i} style={{ width: `${(s.min / total) * 100}%`, background: s.color + '30', borderRight: i < segs.length - 1 ? `2px solid ${colors.bg}` : 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.text, fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 'var(--fs-xs)' }}>
+            {s.min}'
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px', justifyContent: 'center' }}>
+        {segs.map((s, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: 'var(--fs-xs)', color: colors.textMuted }}>
+            <span style={{ width: '10px', height: '10px', borderRadius: '3px', background: s.color, display: 'inline-block' }}></span>
+            {s.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TerminalMock({ folder, request, actions = [], permission }) {
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', overflow: 'hidden', maxWidth: '640px', margin: '0 auto' }}>
+      <div style={{ background: colors.bgLight, padding: '8px 14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, borderBottom: `1px solid ${colors.border}` }}>
+        {folder}
+      </div>
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {request && (
+          <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '8px 12px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+            <strong style={{ color: colors.text }}>Tu:</strong> {request}
+          </div>
+        )}
+        {actions.map((a, i) => (
+          <div key={i} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, paddingLeft: '6px' }}>{a}</div>
+        ))}
+        {permission && (
+          <div style={{ background: colors.warn + '15', border: `1px solid ${colors.warn}60`, borderRadius: '8px', padding: '10px 12px', marginTop: '4px' }}>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}>{permission.question}</div>
+            <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '8px' }}>(una domanda simile a questa compare in inglese)</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: colors.success + '20', border: `1px solid ${colors.success}`, borderRadius: '6px', padding: '5px 12px' }}>
+                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.text }}>1. Yes</span>
+                <span style={{ fontSize: 'var(--fs-xs)', color: colors.textDim }}>← si sceglie questa</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: colors.danger + '15', border: `1px solid ${colors.danger}60`, borderRadius: '6px', padding: '5px 12px' }}>
+                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted }}>2. (finisce con "for this session")</span>
+                <span style={{ fontSize: 'var(--fs-xs)', color: colors.textMuted }}>← mai, in questo corso</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '5px 12px' }}>
+                <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textDim }}>3. No</span>
+                <span style={{ fontSize: 'var(--fs-xs)', color: colors.textMuted }}>per fermarsi</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- slide ---------- */
+
+const MATERIALI_URL = 'thomascasali.github.io/corso-ia-scuola-slide/materiali/incontro-3/';
+
+const slides = [
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🤝</div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Incontro 3
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim }}>Agenti al lavoro</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '30px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: "Slide di apertura. Aspettate che tutti siano seduti prima di iniziare. Oggi si passa gran parte del tempo al PC con Claude Code: ricordate all'inizio dove si trova l'icona sul desktop, così chi arriva in ritardo la vede subito."
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '10px 30px 0' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dove eravamo rimasti</h2>
+        <p style={{ color: colors.textDim }}>
+          Nell'incontro 1 avete conosciuto le parole dell'agente: <strong style={{ color: colors.text }}>strumento, connettore, skill, plugin, subagente, permesso</strong>. Nell'incontro 2 siete passati da una procedura di carta a un servizio, e avete visto quando è meglio non delegare una decisione.
+        </p>
+        <Glow>
+          <p>
+            Oggi il tema è un altro pezzo di quella mappa: cosa succede quando <strong style={{ color: colors.text }}>più agenti lavorano insieme</strong>, con un revisore che controlla prima che il lavoro sia consegnato. Lo vivrete prima con un gioco di ruolo, poi lo vedrete fare a una macchina, poi lo proverete voi.
+          </p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>
+          I materiali di oggi sono su{' '}
+          <a href="../materiali/incontro-3/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            {MATERIALI_URL}
+          </a>
+        </p>
+      </div>
+    ),
+    notes: "Richiamate le sei parole dell'incontro 1 solo per nome, senza rispiegarle: chi non le ricorda le ritrova nel glossario della dispensa. Anticipate il programma di oggi in una riga: gioco di ruolo senza PC, poi demo, poi Claude Code in prima persona. Leggete a voce alta l'indirizzo dei materiali."
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Prima di cominciare</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Il foglietto dell'incontro 2</h2>
+        <DurationBadge>5 minuti</DurationBadge>
+        <Box type="tip">
+          Il docente ridistribuisce i foglietti raccolti alla fine dell'incontro 2: ognuno aveva scritto un caso concreto in cui aveva deciso di non delegare una decisione all'IA. Ascoltiamone un paio.
+        </Box>
+      </div>
+    ),
+    notes: "Attività di collegamento con l'incontro precedente, senza PC: ridistribuite i foglietti raccolti alla fine dell'incontro 2 (un caso in cui non si delega) e fatene raccontare un paio ad alta voce. Poi si passa al blocco 1."
+  },
+
+  /* --- blocco 1: un gruppo con un revisore --- */
+  {
+    block: 'Blocco 1 — Un gruppo con un revisore',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 1</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Un gruppo con un revisore</h2>
+        <p style={{ color: colors.textDim }}>
+          Nell'incontro 1 avete visto un agente lavorare da solo su un compito di uscite scolastiche. Per un compito più grande, con parti diverse tra loro, si può mettere al lavoro non un agente solo, ma un piccolo gruppo.
+        </p>
+        <Box type="tip">
+          Funziona come uno staff ben organizzato: chi coordina, chi esegue, chi controlla.
+        </Box>
+      </div>
+    ),
+    notes: "Riprendete in una riga il capitolo 7 della dispensa dell'incontro 1 (\"un gruppo di agenti con un revisore\"), senza rileggerlo per intero: oggi lo si vive davvero, prima con un gioco di ruolo."
+  },
+  {
+    block: 'Blocco 1 — Un gruppo con un revisore',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Lo schema dello staff</h2>
+        <StaffDiagram />
+      </div>
+    ),
+    notes: "Mostrate lo schema leggendolo dall'alto in basso: il capo progetto in cima riceve il compito, sotto i due specialisti eseguono le parti, in fondo il revisore controlla il risultato finito. La scritta con la freccia curva sotto il revisore è il punto più importante: un buon gruppo prevede che il lavoro possa tornare indietro a chi l'ha scritto, non è un fallimento se succede."
+  },
+  {
+    block: 'Blocco 1 — Un gruppo con un revisore',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>I tre ruoli, uno per uno</h2>
+        <RoleGrid roles={[
+          { icon: '👤', title: 'Chi coordina', color: colors.accent, desc: "Riceve il compito, lo divide in parti sensate, le assegna dicendo esattamente cosa serve. Non esegue lui le parti." },
+          { icon: '🔧', title: 'Gli specialisti', color: colors.info, desc: 'Eseguono ciascuno la propria parte, con le proprie istruzioni. Non si occupano della parte di un collega.' },
+          { icon: '🔍', title: 'Il revisore', color: colors.danger, desc: "Controlla il lavoro finito, senza averlo scritto lui. Può bocciarlo e rimandarlo indietro: deve poterlo fare." },
+        ]} />
+      </div>
+    ),
+    notes: "Un ruolo per riquadro: leggeteli insieme, sono la base delle carte di ruolo che distribuirete tra un minuto. In un gruppo di agenti, chi esegue una parte assegnata da chi coordina si chiama subagente, parola già vista nell'incontro 1: qui la vediamo interpretata da persone, tra poco anche da agenti veri."
+  },
+  {
+    block: 'Blocco 1 — Un gruppo con un revisore',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '16px' }}>Perché il revisore non è chi ha scritto</h2>
+        <Glow>
+          <p>Chi scrive un testo o un calcolo tende a rileggerlo con la propria logica già in testa: le scelte fatte scrivendo diventano invisibili proprio a chi le ha fatte, perché a quel punto sembrano ovvie.</p>
+        </Glow>
+        <Box type="warn" title="Il limite del revisore">
+          Un revisore, agente o persona, controlla quello che le sue istruzioni gli dicono di controllare. Quello che nessuno gli ha chiesto di guardare, può restare invisibile anche a lui.
+        </Box>
+      </div>
+    ),
+    notes: "Punto delicato, da preparare per la demo di tra poco: nella demo di oggi il revisore controllerà con attenzione tutto quello che le sue istruzioni gli dicono di controllare, e su un punto non scritto nelle istruzioni darà un giudizio discutibile. Anticipatelo appena, senza svelare quale sarà il punto."
+  },
+
+  /* --- blocco 2: il gioco di ruolo --- */
+  {
+    block: 'Blocco 2 — Il gioco di ruolo, senza PC',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🎭</div>
+        <BlockTag>Blocco 2</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Adesso lo vivete voi</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Prima di vedere un gruppo di agenti al lavoro, lo vivete con carta e penna: è l'unico momento di oggi lontano dal computer, ed è voluto.
+        </p>
+      </div>
+    ),
+    notes: "Spiegate perché niente PC in questo blocco: serve a vivere i quattro ruoli in prima persona, prima di vederli fare a una macchina. Chiedete di chiudere i portatili o mettere via i telefoni, per una volta."
+  },
+  {
+    block: 'Blocco 2 — Il gioco di ruolo, senza PC',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Come si organizza</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>Gruppi di <strong style={{ color: colors.text }}>quattro</strong>: un capo progetto, due specialisti, un revisore.</li>
+          <li>Una <strong style={{ color: colors.text }}>carta di ruolo</strong> a testa: leggete solo la vostra.</li>
+          <li>Una <strong style={{ color: colors.text }}>busta del compito</strong> per gruppo, al centro del tavolo: l'unica fonte di informazioni.</li>
+        </ul>
+        <TimelineBar />
+      </div>
+    ),
+    notes: "Distribuite le carte adesso, una per ruolo, e una busta per gruppo. Sottolineate: la busta è l'unica fonte, se un dato non c'è scritto lì non esiste, e va segnalato, non inventato. Mostrate la barra dei tempi: 5 minuti per leggere e assegnare, 10 per il lavoro degli specialisti, 5 per la revisione."
+  },
+  {
+    block: 'Blocco 2 — Il gioco di ruolo, senza PC',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Le quattro carte</h2>
+        <RoleGrid roles={[
+          { icon: '👤', title: 'Capo progetto', color: colors.accent, desc: 'Legge la busta, divide il compito, assegna, raccoglie i risultati.', href: '../materiali/incontro-3/gioco-ruolo-capoprogetto.html', label: 'Carta: Capo progetto' },
+          { icon: '🗺️', title: 'Specialista del percorso', color: colors.info, desc: 'Costruisce il percorso nei laboratori, con gli orari e i docenti.', href: '../materiali/incontro-3/gioco-ruolo-specialista-percorso.html', label: 'Carta: Specialista percorso' },
+          { icon: '✉️', title: 'Specialista della comunicazione', color: colors.warn, desc: "Scrive l'avviso per le famiglie, con tono accogliente.", href: '../materiali/incontro-3/gioco-ruolo-specialista-comunicazione.html', label: 'Carta: Specialista comunicazione' },
+          { icon: '🔍', title: 'Revisore', color: colors.danger, desc: 'Controlla il pacchetto finale contro la busta, e decide se è pronto.', href: '../materiali/incontro-3/gioco-ruolo-revisore.html', label: 'Carta: Revisore' },
+        ]} />
+      </div>
+    ),
+    notes: "Ogni carta è già stata stampata e distribuita: questa slide serve solo da riepilogo visivo, con i link per chi vuole rivederla dopo. Ricordate che ogni carta ha una parte 'cosa puoi fare' e una 'cosa non puoi fare': leggerle entrambe."
+  },
+  {
+    block: 'Blocco 2 — Il gioco di ruolo, senza PC',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Il compito: l'Open Day</h2>
+        <p style={{ color: colors.textDim }}>
+          Un evento inventato dell'Istituto Tecnico Dimostrativo: laboratori da aprire a turno, docenti con disponibilità diverse, un avviso da scrivere per le famiglie delle scuole medie. Tutti i dati sono nella busta.
+        </p>
+        <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-busta-open-day.html" label="Busta del compito: Open Day" />
+      </div>
+    ),
+    notes: "Non anticipate nulla di quello che c'è scritto nella busta: la trovano leggendola con attenzione, o no (i dettagli a cui fare attenzione sono nelle vostre note private del docente). Nessun problema se un gruppo non risolve tutto: l'obiettivo è vivere i ruoli, non vincere il rompicapo."
+  },
+  {
+    block: 'Blocco 2 — Il gioco di ruolo, senza PC',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>⏱️</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Via! 20 minuti</h2>
+        <p style={{ color: colors.textDim, maxWidth: '640px' }}>
+          Leggete solo la vostra carta. Usate solo quello che c'è nella busta. Alla fine il revisore dà un giudizio netto: approvato, oppure da correggere.
+        </p>
+      </div>
+    ),
+    notes: "Attività principale del blocco. Fate partire un timer visibile. Girate tra i gruppi senza intervenire nel merito: osservate se il capo progetto assegna compiti chiari, se il revisore controlla davvero o approva a naso. Intervenite solo se un gruppo è completamente bloccato."
+  },
+  {
+    block: 'Blocco 2 — Il gioco di ruolo, senza PC',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Un giro veloce</h2>
+        <Box type="tip">
+          Ogni gruppo, in 30 secondi: il pacchetto è stato approvato al primo giro, o rimandato indietro? Cosa è stato corretto?
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>
+          Avete appena fatto, con carta e penna, quello che vedremo fare a un gruppo di agenti nella prossima demo: chi coordina, chi esegue, chi controlla.
+        </p>
+      </div>
+    ),
+    notes: "Giro rapido tra i gruppi, senza dilungarsi. Chiudete con la frase di collegamento alla demo, dicendola quasi identica: crea continuità tra i due blocchi. Se un gruppo ha visto il revisore approvare senza controllare davvero, tenetelo pronto da richiamare più tardi."
+  },
+
+  /* --- blocco 3: demo dal vivo --- */
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 3</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Un gruppo di agenti scrive una circolare</h2>
+        <p style={{ color: colors.textDim }}>
+          Stessa struttura del gioco appena fatto — chi pianifica, chi scrive, chi controlla — questa volta con Claude Code sul proiettore, su dati inventati.
+        </p>
+        <Box type="tip" title="Una differenza dal gioco di ruolo">
+          Qui l'agente principale fa anche il lavoro dello specialista: pianifica e scrive lui stesso la circolare, poi delega solo il controllo al revisore. Nella carta "Capo progetto" del gioco, e nel metodo reale, chi coordina di solito non scrive: assegna. Con un compito piccolo come questo capita che lead e specialista coincidano.
+        </Box>
+      </div>
+    ),
+    notes: "Passate al copione della demo. Prima di iniziare distribuite il taccuino della demo."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>La storia di oggi</h2>
+        <ConvergeDiagram
+          inputs={[
+            { icon: '📝', label: 'Modulo compilato' },
+            { icon: '📐', label: 'Modello della scuola' },
+          ]}
+          outputIcon="📨"
+          outputLabel="Bozza di circolare, pronta per il controllo"
+          outputSub="Una docente ha compilato un modulo per un'uscita: va trasformato in circolare, seguendo il modello alla lettera."
+        />
+      </div>
+    ),
+    notes: "Mostrate i due file di partenza nell'editor (modulo compilato, modello della circolare). Il modello ha regole che non si toccano mai: niente numero di protocollo inventato, niente firma con un nome."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Il taccuino della demo</h2>
+        <Box type="tip">
+          Prima di ogni richiesta, scrivete cosa vi aspettate. Solo dopo, quando l'agente ha finito, scrivete cosa è successo davvero.
+        </Box>
+        <ActivityBadge href="../materiali/incontro-3/taccuino-demo.html" label="Foglio: Taccuino della demo" />
+      </div>
+    ),
+    notes: "Distribuite il taccuino adesso, se non l'avete già fatto. Ricordate: si scrive la previsione PRIMA di vedere il risultato, altrimenti perde senso."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h3 style={{ color: colors.info, marginBottom: '10px' }}>Richiesta 1 — il piano</h3>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
+            «Leggi il modulo compilato e il modello della circolare. Poi dimmi in tre righe come pensi di procedere, prima di scrivere qualsiasi cosa.»
+          </p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Solo lettura: nessun permesso richiesto.</p>
+      </div>
+    ),
+    notes: "Incollate la richiesta. Mentre l'agente risponde, fate scrivere la previsione sul taccuino se non l'hanno già fatta. Il punto da far notare: il piano arriva prima che venga scritto qualsiasi file."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h3 style={{ color: colors.info, marginBottom: '10px' }}>Richiesta 2 — scrivere la circolare</h3>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
+            «Scrivi la circolare seguendo esattamente il modello, in un nuovo file circolare-uscita-museo.md. Non modificare il modulo né il modello.»
+          </p>
+        </Glow>
+        <TerminalMock
+          folder="cartella-demo"
+          actions={['Write(circolare-uscita-museo.md)']}
+          permission={{ question: 'Do you want to create circolare-uscita-museo.md?' }}
+        />
+      </div>
+    ),
+    notes: "Rispondere con l'opzione Sì semplice, non quella che dice di non chiedere più: la sala deve vedere ogni richiesta di permesso. Aprire il file creato e leggerlo insieme: struttura in 8 punti, protocollo come segnaposto, firma senza nome."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h3 style={{ color: colors.info, marginBottom: '10px' }}>Richiesta 3 — la revisione, a un agente vero</h3>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
+            «Fai controllare la circolare che hai appena scritto dal subagente revisore, poi dimmi cosa ha trovato.»
+          </p>
+        </Glow>
+        <Box type="tip" title="Una riga con il nome del revisore">
+          Compare una riga diversa dalle altre, con il nome del subagente: <code>revisore-circolari</code>. È la delega vera a un secondo agente, con le sue istruzioni, senza lo strumento per scrivere file.
+        </Box>
+      </div>
+    ),
+    notes: "Prima di incollare, chiedete alla sala chi si aspetta che faccia la revisione: lo stesso agente o uno diverso? Quando compare la riga con il nome del revisore, fermatevi a spiegarla: è lo stesso principio del gioco di ruolo, un ruolo diverso per chi controlla. In una prova fatta in anticipo quella riga riportava lo strumento \"Agent\" con subagent_type \"revisore-circolari\": alla prova generale interattiva verificate la dicitura esatta che compare a schermo, prima di descriverla in aula."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h3 style={{ color: colors.success, marginBottom: '10px' }}>Il riassunto che arriva in chat</h3>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Struttura completa, nell'ordine giusto.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Protocollo lasciato come segnaposto, nessun numero inventato.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Firma impersonale, nessun nome.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Tutti i dati del modulo presenti, nessuno aggiunto.</li>
+        </ul>
+        <Box type="warn">
+          «Nessun problema trovato.» Questo è il riassunto che l'agente principale scrive dopo aver interrogato il revisore. Non è falso. Ma non è tutto quello che il revisore ha detto.
+        </Box>
+      </div>
+    ),
+    notes: "Leggete il riassunto così com'è arrivato nella prova, senza anticipare il problema. È la frase finale che l'agente principale scrive dopo la delega: non nomina la data in nessun punto. Lasciate la domanda in sospeso: 'è tutto quello che ha detto il revisore, o solo un riassunto?' — si scopre nella slide successiva, guardando la risposta integrale."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h3 style={{ color: colors.warn, marginBottom: '10px' }}>La risposta integrale del revisore</h3>
+        <Glow>
+          <p style={{ fontSize: 'var(--fs-sm)', color: colors.textDim, fontStyle: 'italic' }}>
+            «Protocollo — riga 7: [...]. Il segnaposto è rimasto intatto (non è stato inventato un numero) e la data è quella di oggi, come richiesto dal modello.»
+          </p>
+        </Glow>
+        <Box type="danger" title="Leggete il lavoro, non solo il riassunto">
+          Il revisore la data l'ha guardata, e l'ha pure motivata: dice che è "come richiesto dal modello". Questa frase, però, non è finita nel riassunto di prima: bisogna aprire la risposta per intero per trovarla.
+        </Box>
+      </div>
+    ),
+    notes: "Questa è la citazione testuale della risposta del subagente, presa dalla trascrizione della prova (piano B). Fatela leggere ad alta voce. Il punto da far passare: il riassunto dell'agente principale ha omesso proprio la frase più interessante, quella su cui vale la pena discutere. Non è successo per nascondere qualcosa: è quello che succede normalmente quando qualcuno riassume il lavoro di qualcun altro."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🧐</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Il revisore ha ragione?</h2>
+        <p style={{ color: colors.textDim, maxWidth: '650px' }}>
+          Rileggete la riga del modello: "Prot. n. [PROTOCOLLO DA ASSEGNARE IN SEGRETERIA] del [DATA DI OGGI]". Per il protocollo il modello dice esplicitamente di non inventare un numero. Per la data, dice qualcosa di altrettanto chiaro?
+        </p>
+      </div>
+    ),
+    notes: "Aprite anche il modello della circolare sul proiettore, non solo la circolare scritta, e lasciate che sia la sala a confrontare la riga della data con quella del protocollo, senza anticipare voi la conclusione. Il ragionamento completo, se vi serve un aiuto per guidare la discussione, è nel copione della demo."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h3 style={{ color: colors.info, marginBottom: '10px' }}>Richiesta 4 — la correzione</h3>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
+            «Guarda la data che hai messo vicino al numero di protocollo: è presa dal calendario di oggi, ma la circolare parla di un'uscita di ottobre 2025 con autorizzazione da consegnare entro il 14 ottobre 2025. Ha senso? Correggi se serve.»
+          </p>
+        </Glow>
+        <Box type="danger" title="Il punto centrale della demo">
+          Un'istruzione ambigua nel modello ha prodotto lo stesso errore in due agenti diversi, che l'hanno letta allo stesso modo. E il riassunto che ne è arrivato al capo progetto non lo segnalava: bisognava leggere il lavoro per intero.
+        </Box>
+      </div>
+    ),
+    notes: "Incollate la richiesta e mostrate la correzione: vedi il copione della demo per il confronto con l'incontro 1."
+  },
+  {
+    block: 'Blocco 3 — Demo dal vivo',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Cosa portare a casa</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>Un piano prima di scrivere, detto ad alta voce.</li>
+          <li>Un permesso richiesto prima di ogni file scritto o modificato.</li>
+          <li>Un'istruzione ambigua può produrre lo stesso errore in più agenti: non è sfortuna.</li>
+          <li>Il riassunto di chi coordina può saltare un dettaglio: leggere il lavoro, non solo il riassunto.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>
+          Nel vostro ufficio, quale compito dareste al "revisore" e quale al "chi scrive"? Sono già ruoli diversi, anche prima di qualsiasi agente?
+        </p>
+      </div>
+    ),
+    notes: "Chiudete il blocco con la domanda finale, lasciandola aperta: non serve una risposta in aula, serve iniziare a pensarci prima del prossimo blocco pratico."
+  },
+
+  /* --- blocco 4: primo contatto pratico --- */
+  {
+    block: 'Blocco 4 — Primo contatto con Claude Code',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 4</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Ora tocca a voi</h2>
+        <p style={{ color: colors.textDim }}>
+          Stesso programma appena visto al lavoro sul proiettore, questa volta sul vostro PC. I PC del laboratorio passano da OmniRoute verso i modelli della lista scelta da Thomas: il comportamento può quindi non essere identico, punto per punto, a quello della demo. Prima qualche minuto di contesto tecnico, poi si apre davvero.
+        </p>
+      </div>
+    ),
+    notes: "Blocco pratico: la sala apre Claude Code per la prima volta. Prima quattro slide di contesto (OmniRoute, cosa si vede, i permessi, le regole di sicurezza), poi si passa all'apertura vera."
+  },
+  {
+    block: 'Blocco 4 — Primo contatto con Claude Code',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Come è collegato Claude Code, qui</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>
+          Tutti i PC del laboratorio sono collegati a un unico "centralino", preparato in anticipo da Thomas: OmniRoute.
+        </p>
+        <OmniRouteDiagram />
+      </div>
+    ),
+    notes: "Spiegate con la metafora del centralino, senza entrare in dettagli tecnici, indirizzi o chiavi: OmniRoute riceve le richieste di ogni PC e le smista verso un elenco di fornitori scelti in anticipo, secondo regole decise prima da Thomas, non dal singolo utente al momento. Le regole escludono due categorie: fornitori che userebbero le richieste per addestrare i propri modelli, e fornitori usati solo come riserva a pagamento. Per chi è al PC cambia poco: si scrive come sempre, il centralino fa il resto dietro le quinte. Aggiungete comunque una nota prudente: anche con la lista bianca, le richieste escono dal PC e dalla scuola verso questi fornitori. È un motivo in più, oltre alla privacy degli studenti, per cui oggi si lavora solo su dati inventati."
+  },
+  {
+    block: 'Blocco 4 — Primo contatto con Claude Code',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa si vede aprendolo</h2>
+        <TerminalMock
+          folder="cartella-di-prova"
+          request="Cosa c'è in questa cartella? Spiegamelo in poche righe, senza modificare niente."
+          actions={['Read(prenotazioni-laboratori-ottobre-2025.csv)', 'Read(regolamento-uso-laboratori-breve.md)', 'Read(avviso-manutenzione.md)']}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>
+          In alto la <strong style={{ color: colors.text }}>cartella di lavoro</strong>: tutto quello che l'agente può leggere. In basso il riquadro dove scrivere. Le righe con "Read" sono il registro delle azioni: qui solo lettura, nessun permesso richiesto.
+        </p>
+      </div>
+    ),
+    notes: "Spiegate le tre parti della finestra: la cartella di lavoro in alto, il dialogo al centro, il registro delle azioni. Non serve saperci programmare: è una finestra di testo come tante, con dentro una conversazione."
+  },
+  {
+    block: 'Blocco 4 — Primo contatto con Claude Code',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>I permessi: cosa rispondere</h2>
+        <PermissionFlowDiagram />
+      </div>
+    ),
+    notes: "Mostrate lo schema: prima di ogni azione che modifica qualcosa (creare o modificare un file, eseguire un comando), l'agente si ferma e chiede, in inglese, una domanda simile a «Do you want to create...?» con tre opzioni numerate: 1. Yes; 2. una voce che finisce con «for this session»; 3. No. La regola pratica: leggere sempre la richiesta prima di rispondere, scegliere sempre la 1 (mai la 2, che toglierebbe la domanda per il resto della sessione), e usare la 3 o il tasto Esc per fermarsi. Le diciture esatte possono cambiare leggermente con gli aggiornamenti di Claude Code."
+  },
+  {
+    block: 'Blocco 4 — Primo contatto con Claude Code',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '16px' }}>Le regole di sicurezza di oggi</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>Solo la <strong style={{ color: colors.text }}>cartella di prova</strong>, solo dati inventati.</li>
+          <li>Leggere sempre una richiesta di permesso <strong style={{ color: colors.text }}>prima</strong> di rispondere sì.</li>
+          <li>Se qualcosa si blocca, aspettare qualche secondo, poi provare <span className="kbd">Esc</span>.</li>
+          <li>Se non si sblocca, alzare la mano: mai chiudere la finestra di scatto.</li>
+        </ul>
+      </div>
+    ),
+    notes: "Ripetete queste regole a voce, anche se sono già scritte sul foglio 'Prima richiesta': è il momento in cui la sala sta per usarle davvero. Mai un documento vero della scuola, con nomi di studenti, famiglie o colleghi."
+  },
+  {
+    block: 'Blocco 4 — Primo contatto con Claude Code',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Apri Claude Code</h2>
+        <DurationBadge>15 minuti</DurationBadge>
+        <p style={{ color: colors.textDim }}>Doppio clic sull'icona sul desktop, poi incolla:</p>
+        <Glow>
+          <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
+            «Cosa c'è in questa cartella? Spiegamelo in poche righe, senza modificare niente.»
+          </p>
+        </Glow>
+        <ActivityBadge href="../materiali/incontro-3/prima-richiesta.html" label="Foglio: Prima richiesta a Claude Code" />
+      </div>
+    ),
+    notes: "Attività al PC. Girate tra i banchi: le domande più comuni sono 'non trovo l'icona' (verificare con l'ufficio tecnico) e 'non succede niente' (aspettare 30-40 secondi, poi controllare la rete di quel PC). Fate leggere ad alta voce due o tre risposte."
+  },
+
+  /* --- pausa --- */
+  {
+    block: 'Pausa',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>☕</div>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Pausa</h2>
+        <p style={{ color: colors.textMuted }}>Lasciate aperta la cartella di prova: dopo la pausa la useremo ancora, per costruire uno strumento vero.</p>
+      </div>
+    ),
+    notes: "Pausa. Ricordate di non chiudere Claude Code se sta andando tutto bene: si riparte dalla stessa cartella per l'esercitazione a coppie."
+  },
+
+  /* --- blocco 5: esercitazione a coppie --- */
+  {
+    block: 'Blocco 5 — Costruite il vostro strumento',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 5</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Dalla stessa cartella, uno strumento vero</h2>
+        <p style={{ color: colors.textDim }}>
+          Stessi tre file di prima (prenotazioni, regolamento, avviso). Questa volta non chiedete solo di leggerli: costruite qualcosa che si possa stampare e usare.
+        </p>
+      </div>
+    ),
+    notes: "Introduzione breve al blocco: si riparte dalla cartella già esplorata prima della pausa, questa volta per costruire, non solo per leggere."
+  },
+  {
+    block: 'Blocco 5 — Costruite il vostro strumento',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>L'obiettivo</h2>
+        <ConvergeDiagram
+          inputs={[
+            { icon: '📊', label: 'Elenco prenotazioni (CSV)' },
+            { icon: '📐', label: 'Regolamento breve' },
+            { icon: '📌', label: 'Avviso di manutenzione' },
+          ]}
+          outputIcon="🗓️"
+          outputLabel="Calendario settimanale stampabile"
+          outputSub="Con le prenotazioni problematiche segnalate."
+        />
+      </div>
+    ),
+    notes: "Mostrate il traguardo prima di dare le richieste: una pagina HTML, calendario dei laboratori, che segnali da sola le prenotazioni in contraddizione con le regole. Non spiegate ancora quali sono i problemi: li trova (o no) l'agente, in coppia con voi che guardate."
+  },
+  {
+    block: 'Blocco 5 — Costruite il vostro strumento',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Cinque passaggi, quattro richieste</h2>
+        <FlowChain minItemWidth="130px" steps={[
+          { icon: '👀', label: '1. Guarda i dati', color: colors.info },
+          { icon: '🛠️', label: '2. Costruisci', color: colors.info },
+          { icon: '🖱️', label: '3. Apri e prova', color: colors.warn, sub: '(non si incolla)' },
+          { icon: '🔍', label: '4. Chiedi una revisione', color: colors.danger },
+          { icon: '✅', label: '5. Correggi', color: colors.success },
+        ]} />
+        <ActivityBadge href="../materiali/incontro-3/esercitazione-passo-passo.html" label="Foglio: i quattro passaggi da incollare" />
+      </div>
+    ),
+    notes: "Il foglio ha già scritte le quattro richieste da incollare (1, 2, 4, 5): la sala non deve inventarsele. Il passaggio 3 non si incolla: si apre il file HTML con doppio clic, dalla stessa cartella di prova, e lo si guarda insieme. Ricordate: un passaggio alla volta, aspettando la risposta prima di incollare il successivo. Attività di 35-40 minuti a coppie."
+  },
+  {
+    block: 'Blocco 5 — Costruite il vostro strumento',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>👥</div>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>A voi, in coppia</h2>
+        <DurationBadge>35-40 minuti, a coppie</DurationBadge>
+        <p style={{ color: colors.textDim, maxWidth: '650px' }}>
+          Se qualcosa non torna, chiamate il docente invece di insistere da soli: a volte basta riscrivere la richiesta con un dettaglio in più.
+        </p>
+      </div>
+    ),
+    notes: "Attività principale del blocco. Girate tra i banchi. Osservate soprattutto la richiesta 4 (la revisione) e la richiesta 5 (la correzione, o la conferma che va già bene): è il punto in cui si vede se la coppia ha capito il senso del controllo indipendente."
+  },
+
+  /* --- blocco 6: cosa è andato storto --- */
+  {
+    block: 'Blocco 6 — Cosa è andato storto',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Blocco 6</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Cosa è andato storto, e perché</h2>
+        <p style={{ color: colors.textDim }}>Due o tre coppie raccontano cosa hanno visto durante l'esercitazione, prima di guardare insieme lo schema.</p>
+      </div>
+    ),
+    notes: "Chiedete direttamente: 'chi ha visto qualcosa che non si aspettava?'. Raccogliete due o tre episodi veri prima di mostrare lo schema, così lo schema arriva dopo esempi concreti, non prima."
+  },
+  {
+    block: 'Blocco 6 — Cosa è andato storto',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Quattro modi in cui un lavoro con l'agente va storto</h2>
+        <ErrorsMapDiagram />
+      </div>
+    ),
+    notes: "Presentate le quattro categorie collegandole, dove possibile, agli episodi appena raccolti dalla sala. La terza (\"dichiara senza controllare\") è la più delicata: collegatela alla demo dell'incontro 1 (\"ho riletto il regolamento\" senza un nuovo Read). Il caso del revisore della demo di oggi è diverso e non va confuso con questo: lui la data l'ha guardata e motivata, non ignorata — è un esempio di istruzione ambigua letta allo stesso modo da due agenti, e di riassunto che omette un dettaglio, non di controllo saltato."
+  },
+  {
+    block: 'Blocco 6 — Cosa è andato storto',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Come prevenirli</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>Rileggere la richiesta prima di inviarla: dice davvero cosa serve?</li>
+          <li>Guardare i dati con i propri occhi, non fidarsi solo del riassunto.</li>
+          <li>Chiedere all'agente di elencare, uno per uno, i controlli fatti.</li>
+          <li>Leggere sempre la richiesta di permesso, prima di rispondere sì.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Nessuno di questi punti richiede di saper programmare: richiede la stessa attenzione che si userebbe rileggendo un documento scritto da un collega.</p>
+      </div>
+    ),
+    notes: "Chiudete il blocco con la domanda alla sala: 'cosa avreste potuto fare per accorgervi prima?' Lasciate che le risposte emergano prima di elencare voi questi quattro punti."
+  },
+
+  /* --- chiusura --- */
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Una cosa che proverò questa settimana</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>10 minuti.</p>
+        <Box type="tip">
+          Claude Code resta sui PC del laboratorio: a casa o in ufficio scrivete su un foglio,
+          invece, o un'idea da portare al prossimo incontro (un problema del vostro lavoro che
+          vorreste trasformare in un piccolo strumento), oppure una cosa concreta che proverete a
+          fare con Gemini, sempre su dati inventati o pubblici.
+        </Box>
+        <p style={{ color: colors.textMuted, marginTop: '10px' }}>L'idea per l'incontro 4 non deve essere già risolta: basta che sia un problema vero del vostro ufficio.</p>
+      </div>
+    ),
+    notes: "Raccogliete i foglietti: serviranno per l'apertura dell'incontro 4, dove ogni problema di lavoro diventerà una scheda-idea."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>➡️</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Il prossimo incontro</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Nell'incontro 4 un problema del vostro lavoro diventa una scheda-idea, e un'idea del gruppo prende forma in un prototipo, dal vivo.
+        </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          I materiali di oggi restano su{' '}
+          <a href="../materiali/incontro-3/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            {MATERIALI_URL}
+          </a>
+        </p>
+      </div>
+    ),
+    notes: "Ultima slide. Ricordate data e luogo dell'incontro 4, se già confermati. Ricordate dove restano i materiali di oggi. Ringraziate e chiudete."
+  },
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `Incontro 3 — ${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
+        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Come usare il Gem intervistatore — Materiali incontro 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 4</a>
+  <a class="dl-btn" href="come-usare-il-gem-intervistatore.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="come-usare-il-gem-intervistatore">Come usare il Gem intervistatore</h1>
+<blockquote>
+<p>DOCUMENTO INVENTATO A SCOPO DIDATTICO. Foglio per l'attività "Scheda-idea con il Gem
+intervistatore", incontro 4.</p>
+</blockquote>
+<p><strong>Obiettivo.</strong> Farsi intervistare da un Gem preparato dal docente per arrivare a una prima
+versione della propria scheda-idea, partendo da un problema vero del vostro lavoro (raccontato con
+dati inventati, se serve fare un esempio).</p>
+<h2 id="passaggi-al-pc">Passaggi al PC</h2>
+<ol>
+<li>
+<p>Apri il link del Gem "Intervistatore per la scheda-idea" che trovi proiettato o sul foglio
+   distribuito in aula (è un Gem di Gemini, condiviso dal docente con l'account della scuola).</p>
+</li>
+<li>
+<p>Scrivi un primo messaggio qualsiasi per iniziare, per esempio: "Ciao, sono pronto".</p>
+</li>
+<li>
+<p>Il Gem farà una domanda alla volta, a partire dal titolo della tua idea. Rispondi con calma,
+   una domanda per volta.</p>
+</li>
+<li>
+<p>Pensa a un problema vero del tuo lavoro quotidiano. Se nella risposta ti viene naturale
+   scrivere un nome, una classe o un dato reale, fermati e sostituiscilo con un esempio inventato
+   (una classe di fantasia, un nome inventato): il Gem te lo ricorderà comunque, se te ne
+   dimentichi.</p>
+</li>
+<li>
+<p>Alla fine delle domande il Gem scrive un riepilogo, già nel formato della scheda-idea.</p>
+</li>
+<li>Rileggi il riepilogo: è scritto con le tue parole, ma capita che qualcosa vada precisato o
+   corretto. Copia il testo finale nel modulo "Scheda-idea" (il foglio che il docente vi ha dato o
+   il file condiviso).</li>
+</ol>
+<h2 id="le-istruzioni-che-segue-il-gem">Le istruzioni che segue il Gem</h2>
+<p>Per trasparenza, ecco il testo che il docente ha dato al Gem: sapere come è stato istruito aiuta a
+capire perché fa domande in un certo ordine, e a cosa state rispondendo.</p>
+<pre><code>Sei l'intervistatore che aiuta il personale dell'Istituto Tecnico Dimostrativo a trasformare un
+problema del proprio lavoro in una &quot;scheda-idea&quot; chiara.
+
+Regole da seguire sempre:
+1. Al primo messaggio, presentati in una riga sola e fai subito la domanda a). Poi fai una domanda
+   alla volta e aspetta la risposta prima di passare alla successiva: non fare mai più di una
+   domanda nello stesso messaggio.
+2. Le domande, in quest'ordine, sono:
+   a) Che titolo daresti alla tua idea, in poche parole?
+   b) Chi usa oggi la procedura di cui vuoi parlare? (docenti, segreteria, ufficio tecnico,
+      dirigenza, studenti, famiglie: anche più di uno)
+   c) Come funziona oggi, passo per passo? Con quali strumenti (carta, mail, telefono, un file,
+      un gruppo WhatsApp...)?
+   d) Cosa non funziona, di preciso? Cosa si perde, cosa richiede troppo tempo, cosa genera
+      errori?
+   e) Come dovrebbe funzionare, secondo te? Descrivi il cambiamento in poche righe.
+   f) Quali dati sono coinvolti? (nomi, date, numeri, documenti, valutazioni...)
+   g) Chi potrebbe vedere questi dati?
+   h) Ci sono dati personali o di minori tra questi?
+   i) In una frase, come la presenteresti a un collega?
+3. Non accettare mai nomi di persone né classi con sezione (per esempio &quot;3ª B&quot;), nemmeno se
+   sembrano inventati: fai usare ruoli e descrizioni generiche (un docente, uno studente di terza,
+   l'ufficio tecnico) al posto di nomi propri o codici di classe. Se la persona che stai
+   intervistando li scrive comunque, fermati e chiedile di sostituirli con un ruolo generico prima
+   di continuare.
+4. Fai al massimo una domanda di chiarimento in più per ogni punto, se la risposta è troppo vaga
+   per essere utile: non insistere più di una volta.
+5. Quando hai raccolto tutte le risposte, scrivi un riepilogo finale con questa struttura esatta,
+   pronto da incollare in un modulo:
+
+   Titolo dell'idea:
+   Chi la userebbe oggi:
+   Come funziona oggi, passo per passo:
+   Cosa non funziona, di preciso:
+   Come dovrebbe funzionare:
+   Quali dati sono coinvolti:
+   Chi potrebbe vedere questi dati:
+   Ci sono dati personali o di minori:
+   Una frase per presentarla al gruppo:
+
+6. Dopo aver scritto il riepilogo, chiedi se la persona vuole correggere o aggiungere qualcosa
+   prima di chiudere.
+7. Nel riepilogo finale usa le parole della persona che hai intervistato, sistemate solo per
+   chiarezza: non aggiungere dettagli che non ti ha detto.
+8. Rispondi sempre in italiano, con un tono cordiale e informale, come a un collega.
+</code></pre>
+<h2 id="se-il-link-non-si-apre-piano-b">Se il link non si apre (piano B)</h2>
+<p>Se non riesci ad aprire il Gem condiviso, puoi crearne uno tuo in tre passi, usando le istruzioni
+qui sopra:</p>
+<ol>
+<li>
+<p>Vai su <strong>gemini.google.com</strong> con l'account della scuola, apri la sezione dei Gem e scegli di
+   crearne uno nuovo.</p>
+</li>
+<li>
+<p>Nel campo delle istruzioni, incolla il testo del riquadro "Le istruzioni che segue il Gem" qui
+   sopra, per intero.</p>
+</li>
+<li>
+<p>Salva il Gem e usalo come descritto nei passaggi 2-6: risponderai alle stesse domande, nello
+   stesso ordine.</p>
+</li>
+</ol>
+<h2 id="se-qualcosa-non-funziona">Se qualcosa non funziona</h2>
+<ul>
+<li>
+<p><strong>Non trovi il Gem nell'elenco:</strong> controlla di aver aperto il link con l'account della scuola,
+  non un account personale. Se il problema resta, alza la mano o crea il tuo Gem (vedi sopra).</p>
+</li>
+<li>
+<p><strong>Il Gem fa più di una domanda insieme:</strong> rispondi comunque una alla volta, nell'ordine che
+  preferisci: arriverà comunque a un riepilogo completo.</p>
+</li>
+<li>
+<p><strong>Non sai come rispondere a una domanda:</strong> scrivi "non lo so ancora" e passa oltre. Potrai
+  completarla dopo, a coppie, nella rifinitura.</p>
+</li>
+</ul>
+<footer>Materiale del corso di intelligenza artificiale per il personale della scuola — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

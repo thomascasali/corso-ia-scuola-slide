@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrice di voto delle idee — Incontro 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --accent: #d9a441;
+    --accent-alt: #f0c169;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --fs-xs: clamp(14px, 0.7vw + 11px, 16px);
+    --fs-sm: clamp(16px, 0.85vw + 12px, 19px);
+    --fs-body: clamp(17px, 1vw + 12px, 21px);
+    --fs-h2: clamp(26px, 2vw + 16px, 38px);
+    --lh-body: 1.5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Public Sans', -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.2; }
+  p, li, label { line-height: var(--lh-body); font-size: var(--fs-body); }
+  a { color: inherit; }
+  input[type="text"] {
+    font-family: inherit; font-size: var(--fs-body);
+    background: var(--bg); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; min-height: 44px;
+  }
+  input[type="text"]:focus-visible, button:focus-visible {
+    outline: 2px solid var(--info); outline-offset: 2px;
+  }
+  button { font-family: inherit; cursor: pointer; }
+  .score-btn {
+    min-width: 44px; min-height: 44px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text-dim); font-weight: 700; font-size: var(--fs-sm);
+  }
+  .score-btn.active-utilita { background: var(--success); border-color: var(--success); color: var(--bg); }
+  .score-btn.active-fattibilita { background: var(--info); border-color: var(--info); color: var(--bg); }
+  .score-btn.active-rischio { background: var(--danger); border-color: var(--danger); color: var(--bg); }
+  .idea-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .idea-card.is-example { border-style: dashed; }
+  .idea-title { font-weight: 700; font-size: var(--fs-body); color: var(--text); }
+  .example-chip {
+    display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs);
+    color: var(--warn); border: 1px solid var(--warn); border-radius: 20px; padding: 2px 10px;
+    margin-left: 8px; vertical-align: middle;
+  }
+  .criterio-label { font-size: var(--fs-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 6px; }
+  .remove-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+    border-radius: 8px; min-height: 44px; padding: 0 14px; font-size: var(--fs-xs);
+  }
+  .remove-btn:hover { border-color: var(--danger); color: var(--danger); }
+  .rank-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 40px; height: 40px; border-radius: 50%; font-weight: 800;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm);
+  }
+  .tied-chip {
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); color: var(--text-muted);
+    border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px;
+  }
+  .da-votare { color: var(--text-muted); font-size: var(--fs-sm); font-style: italic; }
+  @media (max-width: 640px) {
+    .criteri-row { flex-direction: column !important; align-items: stretch !important; }
+    .criteri-row > div { flex: none !important; min-width: 0 !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root" style="min-height:100vh; padding: 24px 20px 60px;">
+  <div style="max-width: 1000px; margin: 0 auto;">
+
+    <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: var(--fs-sm);">&larr; Materiali dell'incontro 4</a>
+
+    <h1 style="color: var(--accent); font-size: var(--fs-h2); margin-top: 18px; margin-bottom: 10px;">
+      Matrice di voto delle idee
+    </h1>
+    <p style="color: var(--text-dim); margin-bottom: 18px; max-width: 720px;">
+      Inserite le idee portate dai gruppi e, per ciascuna, i tre punteggi (utilità, fattibilità,
+      rischio privacy). La classifica si aggiorna da sola, ma conta solo le idee votate su tutti e
+      tre i criteri. Il punteggio complessivo è
+      <strong style="color: var(--text);">utilità + fattibilità &minus; rischio privacy</strong>:
+      più alto è meglio, e il rischio privacy conta in negativo.
+    </p>
+
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-left: 5px solid var(--info); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 20px;">
+      <p style="color: var(--text-dim); margin: 0; font-size: var(--fs-sm);">
+        <strong style="color: var(--text);">Questa pagina non salva nulla:</strong> tutto vive solo
+        nel browser aperto in questo momento. Se ricaricate la pagina o la chiudete, l'elenco si
+        azzera. Fotografate o riscrivete la classifica finale prima di uscire.
+      </p>
+    </div>
+
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-left: 5px solid var(--warn); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 26px;">
+      <p style="color: var(--text-dim); margin: 0; font-size: var(--fs-sm);">
+        <strong style="color: var(--warn);">Prima di votare per davvero:</strong> rimuovete la
+        scheda d'esempio qui sotto (badge "ESEMPIO"), oppure lasciatela senza punteggi: resta
+        comunque fuori dalla classifica finché non viene votata su tutti e tre i criteri.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;">
+      <input type="text" id="new-idea-input" placeholder="Titolo della nuova idea" aria-label="Titolo della nuova idea" style="flex: 1 1 280px;">
+      <button id="add-idea-btn" style="min-height: 44px; padding: 0 22px; background: linear-gradient(135deg, var(--accent), var(--accent-alt)); border: none; border-radius: 8px; color: var(--bg); font-weight: 700; font-size: var(--fs-sm);">
+        + Aggiungi idea
+      </button>
+      <button id="clear-all-btn" style="min-height: 44px; padding: 0 18px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); font-size: var(--fs-sm); display: none;">
+        Svuota l'elenco
+      </button>
+    </div>
+
+    <div id="ideas-list" style="display: flex; flex-direction: column; gap: 14px;"></div>
+    <p id="empty-message" style="color: var(--text-muted); text-align: center; padding: 40px 0; display: none;">
+      Nessuna idea in elenco. Aggiungetene una con il campo qui sopra.
+    </p>
+
+    <div id="classifica-section" style="margin-top: 34px; display: none;">
+      <h2 style="color: var(--accent); font-size: var(--fs-h2); margin-bottom: 8px;">Classifica</h2>
+      <p style="color: var(--text-muted); font-size: var(--fs-xs); margin-bottom: 14px;">
+        In caso di parità di punteggio, vince chi ha il rischio privacy più basso; a parità anche
+        su questo, chi ha la fattibilità più alta. Se restano identiche anche così, le idee sono
+        segnate "pari merito".
+      </p>
+      <div id="classifica" style="display: flex; flex-direction: column; gap: 8px;" aria-live="polite" aria-atomic="false"></div>
+    </div>
+
+    <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-top: 30px;">
+      Come si assegnano i punteggi: foglio "Griglia di valutazione delle idee"
+      (<a href="griglia-valutazione-idee.html" style="color: var(--accent); text-decoration: underline; text-underline-offset: 3px;">apri la pagina</a>).
+      In alternativa al voto con questo strumento, si può votare per alzata di mano: il docente
+      conta a voce i punteggi e li scrive qui, o direttamente su un foglio.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var CRITERI = [
+    { key: 'utilita', label: 'Utilità', cls: 'active-utilita', color: 'var(--success)',
+      help: '1 = solo per chi l\'ha proposta · 5 = utile a più uffici, spesso' },
+    { key: 'fattibilita', label: 'Fattibilità', cls: 'active-fattibilita', color: 'var(--info)',
+      help: '1 = mesi di lavoro, molti collegamenti · 5 = un prototipo in 20 minuti' },
+    { key: 'rischio', label: 'Rischio privacy', cls: 'active-rischio', color: 'var(--danger)',
+      help: '1 = nessun dato personale · 5 = dati di studenti o famiglie, minori inclusi (qui alto = peggio)' }
+  ];
+
+  var nextId = 1;
+  var idee = [
+    { id: nextId++, titolo: 'Esempio: cruscotto unico delle segnalazioni guasti', utilita: null, fattibilita: null, rischio: null, esempio: true }
+  ];
+
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+  }
+
+  function isComplete(idea) {
+    return idea.utilita !== null && idea.fattibilita !== null && idea.rischio !== null;
+  }
+
+  function punteggio(idea) {
+    return idea.utilita + idea.fattibilita - idea.rischio;
+  }
+
+  function coloreEsito(p) {
+    if (p >= 6) return 'var(--success)';
+    if (p >= 2) return 'var(--warn)';
+    return 'var(--danger)';
+  }
+
+  function scoreRowHtml(idea, criterio) {
+    var value = idea[criterio.key];
+    var buttons = [1, 2, 3, 4, 5].map(function (n) {
+      var active = value === n ? ' ' + criterio.cls : '';
+      return '<button class="score-btn' + active + '" data-id="' + idea.id + '" data-crit="' +
+        criterio.key + '" data-val="' + n + '" aria-pressed="' + (value === n) + '" ' +
+        'aria-label="' + criterio.label + ': ' + n + '">' + n + '</button>';
+    }).join('');
+    return (
+      '<div style="flex: 1 1 200px; min-width: 200px;">' +
+        '<div class="criterio-label" style="color:' + criterio.color + ';">' + criterio.label + '</div>' +
+        '<div style="display:flex; gap:6px; margin-bottom:4px;">' + buttons + '</div>' +
+        '<div style="font-size: var(--fs-xs); color: var(--text-muted);">' + criterio.help + '</div>' +
+      '</div>'
+    );
+  }
+
+  function ideaCardHtml(idea) {
+    var complete = isComplete(idea);
+    var scoreDisplay;
+    if (complete) {
+      var p = punteggio(idea);
+      var testo = p > 0 ? '+' + p : String(p);
+      scoreDisplay =
+        '<div style="text-align:right;">' +
+          '<div style="font-family:\'IBM Plex Mono\',monospace; font-weight:800; font-size: var(--fs-h2); color:' + coloreEsito(p) + '; line-height:1;">' + testo + '</div>' +
+          '<div style="font-size: var(--fs-xs); color: var(--text-muted);">punteggio</div>' +
+        '</div>';
+    } else {
+      scoreDisplay = '<div class="da-votare">da votare</div>';
+    }
+    var exampleChip = idea.esempio ? '<span class="example-chip">ESEMPIO</span>' : '';
+    var rows = CRITERI.map(function (c) { return scoreRowHtml(idea, c); }).join('');
+    return (
+      '<div class="idea-card' + (idea.esempio ? ' is-example' : '') + '" data-id="' + idea.id + '">' +
+        '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:14px; flex-wrap:wrap;">' +
+          '<span class="idea-title">' + escapeHtml(idea.titolo) + exampleChip + '</span>' +
+          '<div style="display:flex; align-items:center; gap:10px;">' +
+            scoreDisplay +
+            '<button class="remove-btn" data-action="remove" data-id="' + idea.id + '" aria-label="Rimuovi l\'idea \'' + escapeHtml(idea.titolo) + '\'">&#10005; Rimuovi</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="criteri-row" style="display:flex; gap:18px; flex-wrap:wrap;">' + rows + '</div>' +
+      '</div>'
+    );
+  }
+
+  function classificaHtml() {
+    var complete = idee.filter(isComplete).map(function (idea) {
+      return { idea: idea, p: punteggio(idea) };
+    });
+    if (complete.length === 0) return null;
+
+    complete.sort(function (a, b) {
+      if (b.p !== a.p) return b.p - a.p;
+      if (a.idea.rischio !== b.idea.rischio) return a.idea.rischio - b.idea.rischio;
+      return b.idea.fattibilita - a.idea.fattibilita;
+    });
+
+    var rank = 0;
+    var prevKey = null;
+    complete.forEach(function (entry, i) {
+      var key = entry.p + '|' + entry.idea.rischio + '|' + entry.idea.fattibilita;
+      if (key !== prevKey) rank = i + 1;
+      entry.rank = rank;
+      prevKey = key;
+    });
+    var counts = {};
+    complete.forEach(function (entry) { counts[entry.rank] = (counts[entry.rank] || 0) + 1; });
+
+    return complete.map(function (entry) {
+      var tied = counts[entry.rank] > 1;
+      var testo = entry.p > 0 ? '+' + entry.p : String(entry.p);
+      return (
+        '<div style="display:flex; align-items:center; gap:14px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; flex-wrap: wrap;">' +
+          '<span class="rank-badge" style="background:' + coloreEsito(entry.p) + '30; border: 2px solid ' + coloreEsito(entry.p) + '; color: var(--text);">' + entry.rank + '</span>' +
+          '<span style="flex:1; color: var(--text); font-weight:600; min-width: 160px;">' + escapeHtml(entry.idea.titolo) + '</span>' +
+          (tied ? '<span class="tied-chip">pari merito</span>' : '') +
+          '<span style="font-family:\'IBM Plex Mono\',monospace; font-weight:800; color:' + coloreEsito(entry.p) + ';">' + testo + '</span>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function render() {
+    var list = document.getElementById('ideas-list');
+    var emptyMsg = document.getElementById('empty-message');
+    var clearBtn = document.getElementById('clear-all-btn');
+    var classificaSection = document.getElementById('classifica-section');
+    var classifica = document.getElementById('classifica');
+
+    if (idee.length === 0) {
+      list.innerHTML = '';
+      emptyMsg.style.display = 'block';
+      clearBtn.style.display = 'none';
+    } else {
+      list.innerHTML = idee.map(ideaCardHtml).join('');
+      emptyMsg.style.display = 'none';
+      clearBtn.style.display = 'inline-block';
+    }
+
+    var rankingHtml = classificaHtml();
+    if (rankingHtml) {
+      classifica.innerHTML = rankingHtml;
+      classificaSection.style.display = 'block';
+    } else {
+      classifica.innerHTML = '';
+      classificaSection.style.display = 'none';
+    }
+  }
+
+  function addIdea() {
+    var input = document.getElementById('new-idea-input');
+    var titolo = input.value.trim();
+    if (!titolo) return;
+    idee.push({ id: nextId++, titolo: titolo, utilita: null, fattibilita: null, rischio: null, esempio: false });
+    input.value = '';
+    render();
+  }
+
+  document.getElementById('add-idea-btn').addEventListener('click', addIdea);
+  document.getElementById('new-idea-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') addIdea();
+  });
+  document.getElementById('clear-all-btn').addEventListener('click', function () {
+    idee = [];
+    render();
+  });
+
+  document.getElementById('ideas-list').addEventListener('click', function (e) {
+    var scoreBtn = e.target.closest('.score-btn');
+    if (scoreBtn) {
+      var id = Number(scoreBtn.getAttribute('data-id'));
+      var crit = scoreBtn.getAttribute('data-crit');
+      var val = Number(scoreBtn.getAttribute('data-val'));
+      var idea = idee.find(function (x) { return x.id === id; });
+      if (idea) { idea[crit] = val; render(); }
+      return;
+    }
+    var removeBtn = e.target.closest('[data-action="remove"]');
+    if (removeBtn) {
+      var rid = Number(removeBtn.getAttribute('data-id'));
+      idee = idee.filter(function (x) { return x.id !== rid; });
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
