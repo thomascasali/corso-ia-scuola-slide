@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Incontro 2 - Dalla carta al servizio</title>
+<title>Incontro 2 · AI Tools per l'Organizzazione scolastica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -343,6 +343,98 @@ function ProviderDependencyDiagram() {
   );
 }
 
+/* ---------- schemi "come sono nati i portali" ---------- */
+
+const PROMPT_CATEGORIES = {
+  obiettivo: { label: 'Obiettivo', icon: '🎯', color: colors.accent },
+  documenti: { label: 'Documenti e contesto', icon: '📄', color: colors.info },
+  ruoli: { label: 'Ruoli e permessi', icon: '🧑‍🤝‍🧑', color: colors.purple },
+  firma: { label: 'Carta e firma', icon: '✍️', color: colors.success },
+  vincoli: { label: 'Vincoli tecnici', icon: '⚙️', color: colors.danger },
+  metodo: { label: 'Modo di lavorare', icon: '🤝', color: '#5aa8a0' },
+  suggeriscimi: { label: '"Suggeriscimi"', icon: '💡', color: '#d97ba0' },
+};
+
+function PromptLegend({ only }) {
+  const keys = only || Object.keys(PROMPT_CATEGORIES);
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'center', marginBottom: '8px' }}>
+      {keys.map(k => {
+        const c = PROMPT_CATEGORIES[k];
+        return (
+          <span key={k} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: c.color + '18', border: `1px solid ${c.color}60`, borderRadius: '20px', padding: '2px 9px', fontSize: 'var(--fs-xs)', color: c.color, fontWeight: 700 }}>
+            <span aria-hidden="true">{c.icon}</span>{c.label}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function PromptBubble({ sub, lines, hideHeader }) {
+  return (
+    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      {!hideHeader && (
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '5px', flexWrap: 'wrap' }}>
+          <span aria-hidden="true">🧑‍💻</span>
+          <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-xs)' }}>Thomas → Claude Code</span>
+          {sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>— {sub}</span>}
+        </div>
+      )}
+      <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '4px 14px 14px 14px', padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+        {lines.map((l, i) => {
+          const cat = l.cat ? PROMPT_CATEGORIES[l.cat] : null;
+          return (
+            <div key={i} style={{ borderLeft: cat ? `4px solid ${cat.color}` : `4px solid ${colors.border}`, background: cat ? cat.color + '14' : 'transparent', borderRadius: '0 6px 6px 0', padding: '4px 9px' }}>
+              <div style={{ color: colors.text, fontSize: 'var(--fs-xs)', lineHeight: 1.3, fontFamily: "'IBM Plex Mono', monospace" }}>{l.text}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ProjectReuseDiagram() {
+  const nodes = [
+    { icon: '🚌', label: 'Portale Viaggi', sub: 'già realizzato', color: colors.warn },
+    { icon: '🎓', label: 'Portale FSL', sub: '"prendi spunto"', color: colors.info },
+  ];
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+      {nodes.map((n, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${n.color}60`, borderTop: `4px solid ${n.color}`, borderRadius: '8px', padding: '8px 16px', minWidth: '150px', textAlign: 'center' }}>
+            <div style={{ fontSize: '20px' }}>{n.icon}</div>
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-xs)' }}>{n.label}</div>
+            <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{n.sub}</div>
+          </div>
+          {i < nodes.length - 1 && <div style={{ color: colors.textMuted, fontSize: '18px' }} aria-hidden="true">→</div>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function AttachmentCards() {
+  const files = [
+    { icon: '📕', title: 'Regolamento viaggi', sub: 'PDF, il regolamento della scuola', color: colors.warn },
+    { icon: '📝', title: 'Modulo di uscita (esempio 1)', sub: '.docx, compilato', color: colors.info },
+    { icon: '📝', title: 'Modulo di uscita (esempio 2)', sub: '.docx, compilato', color: colors.info },
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: '16px' }}>
+      {files.map((f, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${f.color}60`, borderTop: `4px solid ${f.color}`, borderRadius: '10px', padding: '20px 16px', textAlign: 'center' }}>
+          <div style={{ fontSize: '38px', marginBottom: '10px' }}>{f.icon}</div>
+          <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{f.title}</div>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{f.sub}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ---------- calcolatrice interattiva dei costi ---------- */
 /* Valori (pagine per chiamata, chiamate al giorno, prezzo per milione di token) sono
    inventati a scopo illustrativo: servono a far vedere il meccanismo moltiplicativo,
@@ -449,6 +541,9 @@ const slides = [
     content: () => (
       <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🗂️</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
         <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
           Corso di intelligenza artificiale per il personale della scuola
         </div>
@@ -756,6 +851,115 @@ const slides = [
     notes: 'Fate condividere a voce, a fine attività, un requisito che ogni gruppo aveva individuato e uno che gli era sfuggito. Il messaggio da far passare: un elenco di requisiti scritto da un\'IA è un buon punto di partenza, ma va sempre confrontato con chi conosce davvero la procedura (referenti, regolamenti), esattamente come le risposte di un chatbot vanno controllate.'
   },
 
+  /* --- come sono nati i portali --- */
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '10px 28px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '2px' }}>Come sono nati questi due portali</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '8px' }}>I primi messaggi scritti a Claude Code, testo reale (refusi compresi), Portale Viaggi — parte 1 di 2.</p>
+        <PromptLegend only={['obiettivo', 'vincoli', 'documenti', 'firma', 'ruoli']} />
+        <PromptBubble sub="5 luglio 2026, ore 18:49 — con in allegato il regolamento e due moduli compilati" lines={[
+          { cat: 'obiettivo', text: 'voglio informatizzare e automatizzare completamente il sistema di gestione delle pratiche viaggi e uscite didattiche della mia scuola.' },
+          { cat: 'vincoli', text: 'il portale sviluppato con tecnologia nodejs con frontend a tutta discrezione (in base alle info nella nostra KB) con database posgres dovrà essere conteneirizzato su docker e posizionato sul portale della scuola. nel frattempo per tutta la fase di test possiamo utilizzare il nostro server su contabo nel quale abbiamo gli altri progetti.' },
+          { cat: 'documenti', text: 'per capire il funzionamento del sistema ti metto a disposizione il regolamento scolastico e i moduli per le uscite (in allegato due di esempio compilati).' },
+          { cat: 'firma', text: 'facciamo una ragionata insieme su come rimuovere completamente tutto il cartaceo, quindi consentire a studenti, genitori e docenti di firmare e prendere visione dei moduli di autorizzazione tramite il riconoscimento digitale (suggeriscimi come).' },
+          { cat: 'ruoli', text: 'il portale dovrà servire oltre a docenti che organizzano le uscite, alla commissione viaggi che le dovrà approvare, alla segreteria scolastica che dovrà seguire l\'iter del viaggio e gestire eventuali preventivi e richieste di preventivo.' },
+        ]} />
+      </div>
+    ),
+    notes: 'Prima slide del mini-blocco "come sono nati": è il messaggio reale, non un esempio ricostruito. Fate notare i refusi ("conteneirizzato", "posgres"): non hanno impedito nulla, è un promemoria utile per chi ha paura di "sbagliare il prompt". I colori a sinistra di ogni riquadro sono le stesse categorie della legenda in alto. Il testo completo è nel foglio materiali collegato più avanti.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Come sono nati questi due portali</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Stesso messaggio, Portale Viaggi — parte 2 di 2.</p>
+        <PromptLegend only={['vincoli', 'ruoli', 'metodo', 'suggeriscimi']} />
+        <PromptBubble lines={[
+          { cat: 'vincoli', text: 'per autenticare gli utenti scolastici possiamo utilizzare autenticazione Google sul dominio ittsrimini.edu.it.' },
+          { cat: 'ruoli', text: 'la dirigenza potrà vedere tutte le pratiche e porre un visto per ok, una richiesta di revisione con motivazione o un diniego.' },
+          { cat: 'metodo', text: 'analizza tutti i documenti ed estrapola tutte le info necessarie per la produzione dettagliata del sistema. sfrutta tutta la potenza agentica per svolgere il lavoro in modo parallelo e attento.' },
+          { cat: 'vincoli', text: 'per questo progetto crea un repo github provato sul mio git (trovi tutte ne info in kb)' },
+          { cat: 'suggeriscimi', text: 'in base alla tua esperienza suggeriscimi anche l\'implementazione di funzionalità che non ti ho elencato ma che possono esse utili per il nostro scopo.' },
+        ]} />
+      </div>
+    ),
+    notes: 'Seconda metà dello stesso messaggio. La riga "metodo" ("sfrutta tutta la potenza agentica... in modo parallelo e attento") è un richiamo diretto al lavoro con sotto-agenti visto nell\'incontro 1: non serve rispiegarlo, basta far notare il collegamento. L\'ultima riga ("suggeriscimi") è il punto su cui torna la slide di sintesi: Thomas ha chiesto lui stesso all\'IA di proporre funzioni a cui non aveva pensato.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>I documenti veri sono la fonte</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '20px' }}>Insieme al messaggio del Portale Viaggi sono arrivati tre allegati: non solo parole, anche i documenti veri della procedura.</p>
+        <AttachmentCards />
+        <Box type="tip" title="Perché conta">
+          Un prompt che si appoggia a documenti reali (un regolamento, dei moduli già compilati) dà all'IA di che leggere le regole vere della scuola, non solo l'idea generale che se ne ha a memoria. È lo stesso principio della scheda "Dalla carta ai requisiti" appena fatta.
+        </Box>
+      </div>
+    ),
+    notes: 'Collegate esplicitamente all\'attività appena conclusa: anche lì si partiva da un documento vero (la scheda-procedura di carta), non da una descrizione a voce. I moduli allegati erano compilati come esempio, non pratiche reali di studenti.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '8px 28px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '2px' }}>Il secondo progetto riparte dal primo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '8px' }}>Pochi giorni dopo, sempre a luglio, il prompt del Portale FSL non riparte da zero.</p>
+        <ProjectReuseDiagram />
+        <div style={{ marginTop: '8px' }}>
+          <PromptBubble hideHeader lines={[
+            { cat: 'metodo', text: '/goal voglio informatizzare e automatizzare completamente il sistema di gestione dei percorsi di Formazione Scuola Lavoro (FSL e per molti ex PCTO)' },
+            { cat: 'vincoli', text: 'esattamente come il portale che abbiamo già realizzato per la commissione viaggi (progetto commissione-viaggi-itts) da cui puoi prendere abbondantemente spunto' },
+          ]} />
+        </div>
+        <Box type="tip" title={`Cos'è quel "/goal" all'inizio`}>
+          <span style={{ fontSize: 'var(--fs-xs)' }}>Un comando di Claude Code: dichiara un obiettivo che l'agente persegue in autonomia finché non è raggiunto (o finché la persona non lo interrompe) — lo stesso ciclo dell'agente visto nell'incontro 1. Meglio se il traguardo è preciso, non vago: e comunque chi controlla il risultato resta sempre una persona.</span>
+        </Box>
+      </div>
+    ),
+    notes: 'Punto pedagogico: si impara di progetto in progetto, non si riparte sempre da zero. Sul "/goal": spiegatelo in una frase, senza dilungarvi sui dettagli tecnici del comando (lo stato dell\'obiettivo si vede scrivendo "/goal" da solo, non "/goal status" che non esiste; "/goal clear" toglie l\'obiettivo): l\'importante è collegarlo al ciclo dell\'agente già visto e ribadire che un obiettivo vago porta lontano dal risultato voluto. Il /goal di questo prompt ("voglio informatizzare...") è in realtà un obiettivo ampio, più una direzione che una condizione verificabile: proponetelo alla sala come esempio da discutere (come lo rendereste verificabile?).'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal prompt al servizio</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '20px' }}>Il prompt è solo il primo passo: quello che avete appena letto è l'inizio del percorso, non il progetto finito.</p>
+        <FlowChain wrap={false} minItemWidth="140px" steps={[
+          { icon: '💬', label: 'Prompt', sub: 'poche righe, anche imperfette', color: colors.accent },
+          { icon: '🗣️', label: 'Conversazione', sub: 'domande, chiarimenti', color: colors.info },
+          { icon: '📋', label: 'Requisiti scritti', sub: 'le regole precise', color: colors.purple },
+          { icon: '🔎', label: 'Revisioni', sub: 'un secondo sguardo', color: colors.warn },
+          { icon: '✅', label: 'Collaudo', sub: 'prove prima dell\'uso vero', color: colors.success },
+        ]} />
+        <Box type="warn" title="Da ricordare">
+          Nessuna delle schermate, dei campi o dei controlli che il portale ha oggi era scritta nel prompt iniziale: sono nati dopo, nella conversazione e nei passi che avete già visto in questo blocco (requisiti, servizio, controlli).
+        </Box>
+      </div>
+    ),
+    notes: 'Slide-ponte prima dell\'attività: chiude il cerchio con lo schema "carta → requisiti → servizio → controlli" visto a inizio blocco, applicandolo esplicitamente al modo in cui è nato un prompt. Utile far notare che anche un prompt breve, con dei refusi, può dare inizio a un buon percorso, se poi il percorso dopo è fatto con attenzione.'
+  },
+  {
+    block: 'Blocco 2 — I tre casi di studio',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Confrontate i vostri requisiti con questi prompt</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 10 minuti.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Riprendete l'elenco di requisiti scritto nell'attività "Dalla carta ai requisiti".</li>
+          <li>Leggete per intero i due prompt sul foglio (Portale Viaggi e Portale FSL).</li>
+          <li>Cosa c'è in questi prompt che nel vostro elenco mancava? Cosa cambiereste, scrivendolo oggi?</li>
+        </ol>
+        <ActivityBadge href="../materiali/incontro-2/come-sono-nati-i-portali.html" label="Come sono nati i portali: i primi prompt" />
+      </div>
+    ),
+    notes: 'Attività breve, si collega direttamente alla scheda 3 appena fatta: fate riprendere fisicamente il foglio con l\'elenco di requisiti scritto prima. Girate tra le coppie; a chiusura, raccogliete a voce un paio di risposte sulla domanda "cosa cambiereste".'
+  },
+
   /* --- blocco 3: argo briefing --- */
   {
     block: 'Blocco 3 — Il caso Argo Briefing',
@@ -874,24 +1078,8 @@ const slides = [
     block: "Blocco 4 — Usare l'IA con giudizio (1)",
     content: () => (
       <div style={{ padding: '24px 30px' }}>
-        <h2 style={{ color: colors.danger, marginBottom: '6px' }}>Dati dei minori e privacy</h2>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Due parole da distinguere sempre.</p>
-        <CompareTwo
-          left={{ icon: '🪪', title: 'Dati personali', color: colors.info, points: ['Nome, cognome, classe, email, indirizzo.', 'Identificano una persona, ma da soli non rivelano aspetti delicati.'] }}
-          right={{ icon: '🩺', title: 'Dati particolari', color: colors.danger, points: ['Salute, disabilità, origine, opinioni, religione.', 'Categorie protette in modo più rigido: richiedono massima cautela.'] }}
-        />
-        <Box type="danger" title="Regola d'oro">
-          Con i minori, i dati particolari e altri dati delicati (una diagnosi, un'allergia, una condizione familiare) non si caricano mai in un chatbot o in un Gem, nemmeno "solo per fare una prova".
-        </Box>
-      </div>
-    ),
-    notes: 'Concetto centrale della privacy per il corso, già anticipato nella scheda 9 dell\'incontro 1 ("mai documenti con dati personali di studenti"). Qui si va più a fondo distinguendo dati personali (nome, classe) da dati particolari (salute, ecc.), che il GDPR tratta con regole più severe. Non serve citare articoli di legge specifici: il concetto generale basta.'
-  },
-  {
-    block: "Blocco 4 — Usare l'IA con giudizio (1)",
-    content: () => (
-      <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '10px' }}>Cosa non caricare mai</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Con i minori, dati come una diagnosi, un'allergia o una condizione familiare (i "dati particolari") non si caricano mai in un chatbot o in un Gem, nemmeno "solo per fare una prova".</p>
         <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
           <li>Elenchi nominativi di studenti, specie se legati a voti, assenze, comportamento o bisogni educativi speciali.</li>
           <li>Dati sanitari: allergie, terapie, certificazioni, diagnosi.</li>
@@ -899,38 +1087,37 @@ const slides = [
           <li>Qualunque cosa che, letta da un estraneo, farebbe capire chi è una persona specifica e cosa la riguarda.</li>
         </ul>
         <Box type="tip" title="La domanda da farsi prima di caricare qualcosa">
-          "Se questo file finisse per sbaglio nelle mani sbagliate, cosa succederebbe a chi ci è dentro?" Se la risposta preoccupa, non si carica: si anonimizza, si accorcia, o si lavora senza quel documento.
+          "Se questo file finisse per sbaglio nelle mani sbagliate, cosa succederebbe a chi ci è dentro?" Se la risposta preoccupa, non si carica.
         </Box>
       </div>
     ),
-    notes: 'Riprende e amplia la regola d\'oro dell\'incontro 1 (dispensa, cap. su privacy citato lì). Questa lista è volutamente pratica: usatela per collegarvi ai casi "lo delego o no?" che arrivano tra poco, dove più di un caso tocca proprio questi punti.'
+    notes: 'Riprende e amplia la regola d\'oro già vista nella scheda 9 dell\'incontro 1 ("mai documenti con dati personali di studenti"). Restate sul concreto: cosa non si carica, non la tassonomia giuridica completa (dati personali/particolari): questa parte del corso deve restare pratica, non burocratica. Collegatevi ai casi "lo delego o no?" che arrivano tra poco.'
   },
   {
     block: "Blocco 4 — Usare l'IA con giudizio (1)",
     content: () => (
       <div style={{ padding: '24px 30px' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>L'AI Act, spiegato semplice</h2>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Una legge europea che regola l'uso dell'intelligenza artificiale, con un'idea di fondo: più un uso è rischioso per le persone, più regole rigide gli si applicano.</p>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Come anonimizzare, e cosa dichiara Google</h2>
+        <Box type="tip" title="Come anonimizzare un documento prima di usarlo">
+          Togliete nomi, cognomi e altri riferimenti diretti (sostituiteli con "Studente A" o un'iniziale inventata) e togliete i dettagli che, messi insieme, fanno riconoscere la persona (per esempio la classe insieme a un caso raro); raggruppate i dati invece di elencarli persona per persona quando il conteggio basta; se un dettaglio non serve al compito che state chiedendo, toglietelo prima di caricare il documento, non dopo.
+        </Box>
+        <Box type="success" title="L'account della scuola, cosa dichiara Google">
+          Per gli account Workspace for Education (come il nostro), Google dichiara che le chat e i file caricati "non vengono rivisti da revisori umani né usati per migliorare i modelli di IA generativa". È una garanzia in più, ma non sostituisce il giudizio su cosa caricare: le regole della slide precedente restano valide comunque.
+        </Box>
+      </div>
+    ),
+    notes: 'Due punti pratici, senza entrare in dettagli giuridici. La dichiarazione di Google è citata testualmente dalla pagina di supporto ufficiale per la famiglia Education. Se qualcuno chiede riferimenti normativi precisi (AI Act, GDPR), rimandate a chi segue la conformità della scuola: qui l\'obiettivo è un\'abitudine pratica, non un corso di diritto.'
+  },
+  {
+    block: "Blocco 4 — Usare l'IA con giudizio (1)",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>L'AI Act, in breve</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Un cenno, non un corso di diritto: una legge europea sull'IA, con un'idea di fondo. Più un uso è rischioso per le persone, più regole rigide gli si applicano.</p>
         <AIActLevels />
       </div>
     ),
-    notes: 'Restate sul livello generale e ampiamente noto: legge europea, approccio a livelli di rischio. Non citate articoli o date di entrata in vigore specifiche: non sono state verificate per questo corso. Se qualcuno in sala chiede dettagli precisi, rimandate a un approfondimento successivo invece di rispondere a memoria.'
-  },
-  {
-    block: "Blocco 4 — Usare l'IA con giudizio (1)",
-    content: () => (
-      <div style={{ padding: '24px 30px' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa vuol dire per noi, a scuola</h2>
-        <ul style={{ paddingLeft: '28px', color: colors.textDim, marginBottom: '16px' }}>
-          <li><strong style={{ color: colors.text }}>Trasparenza:</strong> buona regola, dire quando un testo è stato preparato con l'IA, se conta per chi lo riceve.</li>
-          <li><strong style={{ color: colors.text }}>Supervisione umana:</strong> una persona resta responsabile della decisione finale, soprattutto quando riguarda uno studente.</li>
-        </ul>
-        <Box type="success" title="L'account della scuola, cosa dichiara Google">
-          Per gli account Workspace for Education (come il nostro), Google dichiara che le chat e i file caricati "non vengono rivisti da revisori umani né usati per migliorare i modelli di IA generativa". È una garanzia in più, ma non sostituisce il giudizio su cosa caricare.
-        </Box>
-      </div>
-    ),
-    notes: 'La dichiarazione è citata testualmente dalla pagina di supporto ufficiale di Google per la famiglia Education. Fate notare che questa garanzia riguarda "chi legge i dati dall\'altra parte", non "cosa è saggio caricare": le regole della slide precedente restano valide comunque.'
+    notes: 'Un solo cenno di sintesi, con gli esempi scolastici già nella tabella: non aggiungete articoli di legge, date di entrata in vigore o i principi di trasparenza/supervisione separatamente (quello della supervisione umana torna, in pratica, nella prossima slide). Se qualcuno chiede dettagli precisi, rimandate a un approfondimento successivo: il corso resta concreto, non burocratico.'
   },
   {
     block: "Blocco 4 — Usare l'IA con giudizio (1)",

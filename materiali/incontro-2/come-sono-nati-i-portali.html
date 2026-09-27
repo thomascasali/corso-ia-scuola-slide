@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Come sono nati i portali: i primi prompt — Materiali incontro 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 2</a>
+  <a class="dl-btn" href="come-sono-nati-i-portali.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>TESTO REALE, RIPULITO SOLO PER LA PRIVACY.</strong> Questi sono davvero i primi messaggi scritti a
+Claude Code per far nascere il Portale Viaggi e il Portale FSL della nostra scuola. Sono lasciati
+quasi alla lettera, refusi compresi: è istruttivo vedere che non serve scrivere un prompt
+perfetto per iniziare bene. Sono stati tolti solo i percorsi sul computer di Thomas, il link a un
+foglio Google privato e il nome di una classe: al loro posto trovate una descrizione tra
+parentesi quadre.</p>
+</blockquote>
+<h1 id="come-sono-nati-i-portali-i-primi-prompt">Come sono nati i portali: i primi prompt</h1>
+<h2 id="un-glossarietto-prima-di-leggere">Un glossarietto, prima di leggere</h2>
+<p>Nei prompt compaiono alcuni nomi tecnici. Per il corso non serve saperli usare: basta sapere dove
+"girano" le cose e con che tecnologia sono scritte.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Termine</th>
+<th>Cosa vuol dire, in parole semplici</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Contabo</strong></td>
+<td>Un fornitore di server in affitto, usato per le prove prima di installare il portale sul server della scuola.</td>
+</tr>
+<tr>
+<td><strong>KB</strong> (base di conoscenza)</td>
+<td>Una raccolta di note e istruzioni scritte in precedenza, che l'IA può consultare invece di dover ripartire da zero ogni volta.</td>
+</tr>
+<tr>
+<td><strong>Node.js</strong></td>
+<td>La tecnologia con cui è scritto il "motore" del portale, la parte che elabora i dati dietro le quinte.</td>
+</tr>
+<tr>
+<td><strong>Postgres</strong> (PostgreSQL)</td>
+<td>Il programma che conserva in modo ordinato tutti i dati del portale: pratiche, firme, utenti.</td>
+</tr>
+<tr>
+<td><strong>Docker</strong></td>
+<td>Uno strumento che "impacchetta" il portale in un contenitore standard, così può girare allo stesso modo su computer diversi: prima il server di prova, poi quello della scuola.</td>
+</tr>
+<tr>
+<td><strong>React + Vite + Tailwind</strong></td>
+<td>Le tecnologie con cui è scritta la parte del portale che si vede e si usa a schermo: le pagine, i moduli, i pulsanti. Vite, in particolare, è lo strumento che prepara le pagine.</td>
+</tr>
+<tr>
+<td><strong>/goal</strong></td>
+<td>Un comando che dà a Claude Code un obiettivo dichiarato all'inizio, che l'agente tiene come traguardo e persegue in autonomia finché non è raggiunto (o finché la persona non lo interrompe). Funziona meglio con un traguardo preciso e verificabile ("i test passano"), non vago ("sistema il codice"). È lo stesso ciclo dell'agente visto nell'incontro 1: un obiettivo vago porta fuori strada, e chi controlla il risultato resta sempre una persona.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="prompt-del-portale-viaggi-5-luglio-2026">Prompt del Portale Viaggi (5 luglio 2026)</h2>
+<p>Allegati forniti insieme a questo messaggio: il regolamento viaggi della scuola e due moduli di
+uscita compilati come esempio.</p>
+<blockquote>
+<p>voglio informatizzare e automatizzare completamente il sistema di gestione delle pratiche viaggi e uscite didattiche della mia scuola.</p>
+<p>il portale sviluppato con tecnologia nodejs con frontend a tutta discrezione (in base alle info nella nostra KB) con database posgres dovrà essere conteneirizzato su docker e posizionato sul portale della scuola. nel frattempo per tutta la fase di test possiamo utilizzare il nostro server su contabo nel quale abbiamo gli altri progetti.</p>
+<p>per capire il funzionamento del sistema ti metto a disposizione il regolamento scolastico e i moduli per le uscite (in allegato due di esempio compilati).</p>
+<p>facciamo una ragionata insieme su come rimuovere completamente tutto il cartaceo, quindi consentire a studenti, genitori e docenti di firmare e prendere visione dei moduli di autorizzazione tramite il riconoscimento digitale (suggeriscimi come).</p>
+<p>il portale dovrà servire oltre a docenti che organizzano le uscite, alla commissione viaggi che le dovrà approvare, alla segreteria scolastica che dovrà seguire l'iter del viaggio e gestire eventuali preventivi e richieste di preventivo.</p>
+<p>per autenticare gli utenti scolastici possiamo utilizzare autenticazione Google sul dominio ittsrimini.edu.it.</p>
+<p>la dirigenza potrà vedere tutte le pratiche e porre un visto per ok, una richiesta di revisione con motivazione o un diniego.</p>
+<p>analizza tutti i documenti ed estrapola tutte le info necessarie per la produzione dettagliata del sistema. sfrutta tutta la potenza agentica per svolgere il lavoro in modo parallelo e attento.</p>
+<p>per questo progetto crea un repo github provato sul mio git (trovi tutte ne info in kb)</p>
+<p>in base alla tua esperienza suggeriscimi anche l'implementazione di funzionalità che non ti ho elencato ma che possono esse utili per il nostro scopo.</p>
+</blockquote>
+<h2 id="prompt-del-portale-fsl-luglio-2026">Prompt del Portale FSL (luglio 2026)</h2>
+<blockquote>
+<p>/goal voglio informatizzare e automatizzare completamente il sistema di gestione dei percorsi di Formazione Scuola Lavoro (FSL e per molti ex PCTO)</p>
+<p>il portale sviluppato con tecnologia nodejs con frontend react+vite+tailwind con database posgres dovrà essere conteneirizzato su docker e posizionato sul portale della scuola.</p>
+<p>esattamente come il portale che abbiamo già realizzato per la commissione viaggi (progetto commissione-viaggi-itts) da cui puoi prendere abbondantemente spunto</p>
+<p>nel frattempo per tutta la fase di test possiamo utilizzare il nostro server su contabo nel quale abbiamo gli altri progetti.</p>
+<p>per capire il funzionamento attuale di tutta la gestione FSL ho creato [cartella con i documenti e i modelli] nella quale ho messo tutta la documentazione e i modelli.</p>
+<p>per gestire la mia classe in FSL quest'anno ho utilizzato questo specchietto in google fogli che non è esaustivo ma mi ha aiutato molto: [un foglio di calcolo che usavo per seguire la classe]</p>
+<p>invece tutta la documentazione che ho prodotto per la classe di cui ero tutor la puoi trovare in [cartella con la documentazione della mia classe di tutor]</p>
+<p>suggerisco, dato che abbiamo a disposizione il google workspace istituzionale di strutturare tutto con google doc e google fogli.</p>
+<p>per farlo posso fare l'importazione dei documenti in una cartella del drive condiviso "Template" e poi sfruttare quelli per la compilazione dei documenti</p>
+<p>facciamo una ragionata insieme su come rimuovere completamente tutto il cartaceo, quindi consentire al responsabile scolastico della FSL, al docente Tutor FSL, dirigente scolastico, agli studenti, ai genitori, ai tutor esterni e alle aziende di svolgere tutte le procedure in modo automatico e direttamente sul portale eliminando o riducendo drasticamente l'utilizzo della carta.</p>
+<p>Sfruttiamo tutte le nostre conoscenze e competenze tecniche per studiare soluzioni che consentano di realizzare un sistema all'avanguardia per la gestione della FSL sotto tutti i punti di vista.</p>
+<p>per autenticare gli utenti scolastici possiamo utilizzare autenticazione Google sul dominio ittsrimini.edu.it come abbiamo già fatto per i progetti prenota-carrello e soprattutto commissione-viaggi-itts</p>
+<p>la dirigenza, così come il responsabile FSL della scuola e il personale della segreteria potrà vedere tutte le pratiche, i docenti tutor interni potranno vedere tutte le pratiche degli studenti assegnati mentre le persone esterne potranno vedere solo le pratiche che sono a loro assegnate (firma della convenzione, report di valutazione, etc etc)</p>
+<p>analizza tutti i documenti ed estrapola tutte le info necessarie per la produzione dettagliata del sistema. sfrutta tutta la potenza agentica per svolgere il lavoro in modo parallelo e attento.</p>
+<p>per questo progetto crea un repo github provato sul mio git (trovi tutte ne info in kb)</p>
+<p>in base alla tua esperienza e alla lettura della documentazione iniziale, suggeriscimi anche l'implementazione di funzionalità che non ti ho elencato ma che possono esse utili per il nostro scopo.</p>
+</blockquote>
+<h2 id="guida-allosservazione-cosa-ce-in-un-buon-prompt-iniziale">Guida all'osservazione: cosa c'è in un buon prompt iniziale</h2>
+<p>Rileggendo i due messaggi, si possono riconoscere alcuni ingredienti che tornano in entrambi:</p>
+<ul>
+<li><strong>Un obiettivo chiaro</strong>, detto nella prima riga: cosa si vuole ottenere, non come.</li>
+<li>
+<p><strong>Il contesto e i documenti come fonte</strong>: il regolamento e i moduli compilati per i Viaggi, una
+  cartella di documenti e uno specchietto già in uso per l'FSL. L'IA parte da materiale vero della
+  scuola, non da un'idea generica.</p>
+</li>
+<li>
+<p><strong>Chi userà il servizio, con quali ruoli e permessi</strong>: docenti, commissione viaggi, segreteria,
+  dirigenza per i Viaggi; responsabile FSL, tutor interni, dirigenza, studenti, genitori, tutor
+  esterni e aziende per l'FSL, ciascuno con cosa può vedere.</p>
+</li>
+<li>
+<p><strong>Come si entra</strong>: l'autenticazione Google sul dominio della scuola, indicata esplicitamente in
+  entrambi i casi.</p>
+</li>
+<li>
+<p><strong>Il problema della carta e della firma</strong>: l'obiettivo dichiarato di togliere il cartaceo, con
+  una richiesta esplicita di indicazioni per firmare digitalmente (il "suggeriscimi come" dei
+  Viaggi).</p>
+</li>
+<li>
+<p><strong>Vincoli tecnici</strong>, quando ci sono: le tecnologie, il contenitore Docker, dove far girare le
+  prove prima del server della scuola.</p>
+</li>
+<li>
+<p><strong>Il modo di lavorare richiesto</strong>: "facciamo una ragionata insieme", "analizza tutti i
+  documenti", "sfrutta tutta la potenza agentica... in modo parallelo e attento". Non è solo una
+  lista di richieste: è un invito a ragionare insieme prima di scrivere codice.</p>
+</li>
+<li>
+<p><strong>La richiesta di suggerire funzioni non elencate</strong>: entrambi i prompt chiudono chiedendo
+  all'IA di proporre, in base alla propria esperienza, funzionalità utili a cui Thomas non aveva
+  pensato.</p>
+</li>
+</ul>
+<p><strong>Cosa NON c'è</strong>, ed è altrettanto importante notarlo: nessun dettaglio su come sarà fatta ogni
+singola schermata, quali pulsanti ci saranno, come sarà il menu. Quel livello di dettaglio non
+nasce dal prompt iniziale: viene costruito dopo, nella conversazione successiva, con i requisiti
+scritti, le revisioni e il collaudo (lo stesso percorso carta → requisiti → servizio → controlli
+visto oggi).</p>
+<h2 id="la-differenza-tra-i-due-prompt">La differenza tra i due prompt</h2>
+<p>Il prompt del Portale FSL non riparte da zero: dice esplicitamente "esattamente come il portale
+che abbiamo già realizzato per la commissione viaggi... da cui puoi prendere abbondantemente
+spunto". Il secondo progetto riusa l'esperienza del primo (le stesse tecnologie, la stessa
+autenticazione Google, lo stesso modo di firmare digitalmente): si impara di progetto in progetto,
+non si riparte sempre daccapo.</p>
+<h2 id="domande-per-lattivita">Domande per l'attività</h2>
+<ul>
+<li>
+<p>Confrontate il vostro elenco di requisiti dell'attività precedente ("Dalla carta ai requisiti")
+  con questi due prompt: cosa c'è qui che nel vostro elenco mancava?</p>
+</li>
+<li>
+<p>C'è qualcosa in questi prompt che, guardandolo ora, cambiereste o scrivereste in modo diverso?</p>
+</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>
