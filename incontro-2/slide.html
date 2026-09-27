@@ -231,7 +231,8 @@ function TimelineDiagram() {
     { date: 'inizio 2026', label: 'Nasce Argo Briefing', sub: 'il bot di riepilogo del registro', color: colors.purple },
     { date: 'lug 2026', label: 'Iniziano Portale FSL e Portale Viaggi', sub: 'due mesi di lavoro', color: colors.warn },
     { date: '26 ago 2026', label: '"Prenota Carrello" diventa "Prenota Risorse"', sub: 'esteso ad aule, laboratori, attrezzature', color: colors.info },
-    { date: '10 set 2026', label: 'I tre portali entrano in uso a scuola', sub: 'FSL, Viaggi, Prenota Risorse', color: colors.success },
+    { date: '10 set 2026', label: 'I tre portali installati sul server della scuola', sub: 'un Raspberry Pi 5 nella rete dell\'istituto', color: colors.warn },
+    { date: 'ott 2026', label: 'Prenota Risorse in uso; FSL e Viaggi in collaudo', sub: 'prove reali prima di aprirli a tutti', color: colors.success },
   ];
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'stretch', justifyContent: 'center' }}>
@@ -570,7 +571,7 @@ const slides = [
         ]} />
       </div>
     ),
-    notes: 'Presentate i tre nomi senza ancora entrare nei dettagli. Ribadite a voce che l\'obiettivo di oggi non è "guardate cosa ha fatto Thomas": sono esempi di procedure riorganizzate, utili per capire il percorso carta→requisiti→servizio→controlli. Tutti e tre sono in uso reale alla nostra scuola dal 10 settembre 2026.'
+    notes: 'Presentate i tre nomi senza ancora entrare nei dettagli. Ribadite a voce che l\'obiettivo di oggi non è "guardate cosa ha fatto Thomas": sono esempi di procedure riorganizzate, utili per capire il percorso carta→requisiti→servizio→controlli. Il 10 settembre 2026 i tre portali sono stati installati sul server della scuola: Prenota Risorse è in uso da ottobre 2026, FSL e Viaggi hanno le funzionalità complete e sono in fase di collaudo, con prove reali prima di aprirli a tutti.'
   },
 
   /* --- blocco 2: tre casi di studio --- */
@@ -584,7 +585,7 @@ const slides = [
         <TimelineDiagram />
       </div>
     ),
-    notes: 'Date ricontrollate sulla cronologia dei progetti (26/09/2026). Fate notare che "Prenota Carrello" esisteva già dal 2025, molto prima degli altri due: è il caso con la storia più lunga, e per questo è quello su cui ci sono più revisioni da raccontare più avanti (attività "trova il problema"). I tre portali sono entrati in uso lo stesso giorno, il 10 settembre 2026.'
+    notes: 'Date ricontrollate sulla cronologia dei progetti (26/09/2026, aggiornate il 27/09/2026 su indicazione di Thomas). Fate notare che "Prenota Carrello" esisteva già dal 2025, molto prima degli altri due: è il caso con la storia più lunga, e per questo è quello su cui ci sono più revisioni da raccontare più avanti (attività "trova il problema"). I tre portali sono stati installati sullo stesso server lo stesso giorno, il 10 settembre 2026; Prenota Risorse è già in uso da ottobre, FSL e Viaggi sono ancora in collaudo.'
   },
   {
     block: 'Blocco 2 — I tre casi di studio',
@@ -612,9 +613,10 @@ const slides = [
         <Box type="tip" title="Quali controlli sono serviti">
           Un percorso di collaudo passo per passo su tutte le funzioni, con un buon numero di controlli automatici ripetuti a ogni modifica: una prova completa del ciclo in un ambiente di prova, prima dell'apertura a tutta la scuola.
         </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Il portale è consultabile su <a href="https://fsl.ittsrimini.edu.it" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">fsl.ittsrimini.edu.it</a>, ancora in collaudo.</p>
       </div>
     ),
-    notes: 'Dato verificato: 105 collaudi automatici superati, in un ambiente di prova, prima dell\'apertura a tutta la scuola. Non serve dire il numero esatto se rallenta il racconto: l\'importante è il concetto "prima si è collaudato tutto il ciclo, poi si è aperto agli utenti veri".'
+    notes: 'Dato verificato: 105 collaudi automatici superati, in un ambiente di prova, prima dell\'apertura a tutta la scuola. Non serve dire il numero esatto se rallenta il racconto: l\'importante è il concetto "prima si è collaudato tutto il ciclo, poi si apre agli utenti veri". Se il tempo lo consente, mostrate dal vivo il portale (fsl.ittsrimini.edu.it): è ancora in collaudo, quindi solo dati di prova a schermo, mai un caso reale di uno studente o di un\'azienda.'
   },
   {
     block: 'Blocco 2 — I tre casi di studio',
@@ -642,9 +644,10 @@ const slides = [
         <Box type="tip" title="Quali controlli sono serviti">
           Un buon numero di controlli automatici ripetuti a ogni modifica, e una prova completa del flusso di richiesta dei preventivi, in un ambiente di prova, con accesso reale, prima di aprirlo alla scuola.
         </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Il portale è consultabile su <a href="https://viaggi.ittsrimini.edu.it" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">viaggi.ittsrimini.edu.it</a>, ancora in collaudo.</p>
       </div>
     ),
-    notes: 'Dato verificato: 49 collaudi automatici superati e una prova completa del flusso di richiesta dei preventivi, con accesso reale, in un ambiente di prova. Collegate mentalmente alla slide precedente: le stesse regole di prima, solo applicate automaticamente invece che a mano.'
+    notes: 'Dato verificato: 49 collaudi automatici superati e una prova completa del flusso di richiesta dei preventivi, con accesso reale, in un ambiente di prova. Collegate mentalmente alla slide precedente: le stesse regole di prima, solo applicate automaticamente invece che a mano. Se il tempo lo consente, mostrate dal vivo il portale (viaggi.ittsrimini.edu.it): è ancora in collaudo, quindi solo dati di prova a schermo.'
   },
   {
     block: 'Blocco 2 — I tre casi di studio',
@@ -672,9 +675,10 @@ const slides = [
         <Box type="tip" title="Quali controlli sono serviti">
           Qui il controllo interessante per noi è la revisione: prima delle nuove versioni principali, un secondo "sguardo" indipendente ha ricontrollato il lavoro cercando apposta cosa non tornava, con lo stesso ruolo del revisore visto nell'incontro 1. Ha trovato problemi reali, alcuni corretti negli aggiornamenti successivi, altri ancora in lista: li vediamo più avanti, nell'attività "trova il problema".
         </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Il portale è consultabile su <a href="https://risorse.ittsrimini.edu.it" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">risorse.ittsrimini.edu.it</a>, in uso dalla scuola da ottobre 2026.</p>
       </div>
     ),
-    notes: 'Non anticipate i casi specifici: sono il cuore dell\'attività "trova il problema" più avanti nell\'incontro. Qui basta piantare il seme: "un revisore ha trovato problemi veri".'
+    notes: 'Non anticipate i casi specifici: sono il cuore dell\'attività "trova il problema" più avanti nell\'incontro. Qui basta piantare il seme: "un revisore ha trovato problemi veri". Se il tempo lo consente, mostrate dal vivo il portale (risorse.ittsrimini.edu.it), in uso dalla scuola da ottobre 2026: evitate comunque di mostrare prenotazioni reali di classi o docenti.'
   },
   {
     block: 'Blocco 2 — I tre casi di studio',
