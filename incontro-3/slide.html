@@ -877,19 +877,6 @@ const slides = [
     notes: "Attività al PC. Girate tra i banchi: le domande più comuni sono 'non trovo l'icona' (verificare con l'ufficio tecnico) e 'non succede niente' (aspettare 30-40 secondi, poi controllare la rete di quel PC). Fate leggere ad alta voce due o tre risposte."
   },
 
-  /* --- pausa --- */
-  {
-    block: 'Pausa',
-    content: () => (
-      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
-        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>☕</div>
-        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Pausa</h2>
-        <p style={{ color: colors.textMuted }}>Lasciate aperta la cartella di prova: dopo la pausa la useremo ancora, per costruire uno strumento vero.</p>
-      </div>
-    ),
-    notes: "Pausa. Ricordate di non chiudere Claude Code se sta andando tutto bene: si riparte dalla stessa cartella per l'esercitazione a coppie."
-  },
-
   /* --- blocco 5: esercitazione a coppie --- */
   {
     block: 'Blocco 5 — Costruite il vostro strumento',
@@ -902,7 +889,7 @@ const slides = [
         </p>
       </div>
     ),
-    notes: "Introduzione breve al blocco: si riparte dalla cartella già esplorata prima della pausa, questa volta per costruire, non solo per leggere."
+    notes: "Introduzione breve al blocco: si riparte dalla cartella già esplorata nel blocco precedente, questa volta per costruire, non solo per leggere."
   },
   {
     block: 'Blocco 5 — Costruite il vostro strumento',
