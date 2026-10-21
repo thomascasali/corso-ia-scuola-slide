@@ -1124,14 +1124,14 @@ const slides = [
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.info, marginBottom: '6px' }}>1. Ricerca sul web e fonti</h2>
-        <p style={{ color: colors.textDim }}>Quando la risposta usa informazioni trovate online, compare il pulsante <strong style={{ color: colors.text }}>Fonti</strong>. Nel menu sotto la risposta c'è anche <strong style={{ color: colors.text }}>"Verifica la risposta"</strong>: confronta il testo con una ricerca e colora le frasi.</p>
-        <div style={{ margin: '18px 0' }}>
+        <p style={{ color: colors.textDim, marginBottom: 0 }}>Se la risposta usa informazioni online, compare il pulsante <strong style={{ color: colors.text }}>Fonti</strong>. Nel menu sotto la risposta, <strong style={{ color: colors.text }}>"Verifica la risposta"</strong> confronta il testo con una ricerca e colora le frasi.</p>
+        <div style={{ margin: '10px 0' }}>
           <SourceCheckMock />
         </div>
         <Box type="warn" title="Attenzione">
           I link trovati da "Verifica la risposta" non sono per forza le fonti usate per scrivere la risposta: vanno aperti e letti, non solo guardati.
         </Box>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Esempio: la segreteria chiede una sintesi di una norma trovata online prima di incollarla in una circolare, e controlla il colore delle frasi.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px' }}>Esempio: la segreteria chiede una sintesi di una norma trovata online prima di incollarla in una circolare, e controlla il colore delle frasi.</p>
       </div>
     ),
     notes: 'Fate notare che il verde non è una garanzia assoluta, è un indizio in più. Se avete tempo, fate cercare a qualcuno in sala una domanda reale su un argomento pubblico e guardate insieme dal vivo il pulsante Fonti e "Verifica la risposta".'
