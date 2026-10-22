@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copione della pratica, gruppo B — Materiali Laboratorio Viaggi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali del Laboratorio Viaggi</a>
+  <a class="dl-btn" href="copione-pratica-gruppo-b.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="copione-della-pratica-gruppo-b">Copione della pratica, gruppo B</h1>
+<p>Classe di prova: <strong>4B LAB</strong>. Tutti i dati sono inventati: copiali così come sono scritti.</p>
+<h2 id="giro-1-visita-guidata-con-mezzo-a-pagamento">Giro 1: visita guidata con mezzo a pagamento</h2>
+<h3 id="dati-da-inserire-docente-referente">Dati da inserire (Docente referente)</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Cosa scrivere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tipo di attività</td>
+<td>Visita guidata</td>
+</tr>
+<tr>
+<td>Titolo della pratica</td>
+<td>Gruppo B - Visita all'Acquario di Cattolica</td>
+</tr>
+<tr>
+<td>Meta / destinazione</td>
+<td>Cattolica (RN)</td>
+</tr>
+<tr>
+<td>Classi coinvolte</td>
+<td>4B LAB</td>
+</tr>
+<tr>
+<td>Motivazioni educativo-didattiche</td>
+<td>Osservare gli ambienti marini dell'Adriatico e collegarli al programma di scienze. Visita con laboratorio sulla biodiversità.</td>
+</tr>
+<tr>
+<td>Data di partenza</td>
+<td>25/03/2027</td>
+</tr>
+<tr>
+<td>Mezzi di trasporto</td>
+<td>Pullman</td>
+</tr>
+<tr>
+<td>Luogo di partenza e di rientro</td>
+<td>Piazzale della scuola</td>
+</tr>
+<tr>
+<td>Ora di partenza / di rientro</td>
+<td>08:00 / 15:00</td>
+</tr>
+<tr>
+<td>Costo indicativo per alunno</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Serve un mezzo a pagamento</td>
+<td>Sì (spunta accesa)</td>
+</tr>
+<tr>
+<td>Programma dettagliato</td>
+<td>Ore 9:30 visita guidata all'acquario, ore 12:30 pranzo al sacco, ore 13:30 laboratorio sulla biodiversità.</td>
+</tr>
+<tr>
+<td>Docenti</td>
+<td>Referente: tu. Aggiungi un accompagnatore dal menu.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Non compilare le caselle «Presentazione tardiva» e «Deroga del Consiglio d'Istituto».</p>
+<h3 id="chi-fa-cosa-in-ordine">Chi fa cosa, in ordine</h3>
+<ol>
+<li><strong>Docente referente</strong>: compila i quattro passi, controlla il riquadro «Verifiche del regolamento», presenta la pratica e conferma gli avvisi.</li>
+<li><strong>Segreteria</strong>: trova la pratica in dashboard e preme <strong>Avvia raccolta firme</strong>.</li>
+<li><strong>Studente</strong>: in <strong>Le mie attività</strong> risponde <strong>Sì, aderisco</strong>.</li>
+<li><strong>Genitore</strong>: apre l'email «Autorizzazione richiesta: Gruppo B - Visita all'Acquario di Cattolica», apre l'attività, chiede il codice, lo digita e firma. Il genitore di Elisa e Matias (i gemelli) ha un solo link per due figli.</li>
+<li><strong>Docente referente</strong>: guarda le schede <strong>Adesioni</strong> e <strong>Autorizzazioni</strong>.</li>
+<li><strong>Segreteria</strong>: <strong>Chiudi raccolta e passa al controllo formale</strong>, poi <strong>Controllo formale OK → Commissione</strong>.</li>
+<li><strong>Commissione viaggi</strong>: <strong>Visto commissione → alla DS</strong>.</li>
+<li><strong>Dirigente Scolastica</strong>: <strong>VISTO della Dirigente</strong>, sceglie <strong>VISTO: si approva</strong>, <strong>Registra il visto</strong>.</li>
+<li><strong>Ufficio Patrimonio</strong>: <strong>+ Richiedi preventivo</strong>. Nome agenzia: <strong>Adriatica Tour Lab</strong>, email: quella che ti dà Thomas per questo gruppo.</li>
+<li><strong>Agenzia</strong>: apre il link ricevuto e carica l'offerta: importo totale <strong>245,00</strong>, quota per studente <strong>35,00</strong>, dettagli a piacere. <strong>Invia l'offerta</strong>.</li>
+<li><strong>Ufficio Patrimonio</strong>: nel confronto preme <strong>Seleziona</strong> sulla riga di Adriatica Tour Lab, scrive la motivazione («Unica offerta ricevuta, prezzo nei limiti») e conferma; poi <strong>Conferma pratica (offerta selezionata)</strong>.</li>
+</ol>
+<p>Fine del giro: la pratica è <strong>Confermata</strong>. Guardate insieme la scheda <strong>Timeline</strong>.</p>
+<h2 id="giro-2-uscita-didattica-genitori-separati">Giro 2: uscita didattica, genitori separati</h2>
+<p>Si cambia ruolo (vedi «Ruoli e rotazione») e si apre una nuova pratica con questi dati.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Cosa scrivere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tipo di attività</td>
+<td>Uscita didattica</td>
+</tr>
+<tr>
+<td>Titolo della pratica</td>
+<td>Gruppo B - Uscita alla Biblioteca Gambalunga</td>
+</tr>
+<tr>
+<td>Meta / destinazione</td>
+<td>Rimini</td>
+</tr>
+<tr>
+<td>Classi coinvolte</td>
+<td>4B LAB</td>
+</tr>
+<tr>
+<td>Motivazioni</td>
+<td>Imparare a cercare un documento storico in un catalogo.</td>
+</tr>
+<tr>
+<td>Data di partenza</td>
+<td>24/03/2027</td>
+</tr>
+<tr>
+<td>Mezzi di trasporto</td>
+<td>A piedi</td>
+</tr>
+<tr>
+<td>Luogo di partenza e di rientro</td>
+<td>Piazzale della scuola</td>
+</tr>
+<tr>
+<td>Ora di partenza / di rientro</td>
+<td>09:00 / 12:30</td>
+</tr>
+<tr>
+<td>Costo indicativo per alunno</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Serve un mezzo a pagamento</td>
+<td><strong>No</strong> (spunta spenta)</td>
+</tr>
+<tr>
+<td>Programma</td>
+<td>Ore 9:30 visita alla sala storica, ore 11:00 ricerca nel catalogo.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Che cosa cambia rispetto al Giro 1:</p>
+<ol>
+<li>Dopo il visto della Dirigente la pratica passa <strong>direttamente a Confermata</strong>: non ci sono i preventivi. L'Ufficio Patrimonio e l'agenzia non hanno nulla da fare in questo giro.</li>
+<li>Il genitore di Viola riceve <strong>due link</strong> (padre e madre separati) e firma due volte, una per ciascun genitore. La scheda <strong>Autorizzazioni</strong> del referente mostra «doppia firma richiesta».</li>
+<li>Il quorum delle adesioni è solo un avviso.</li>
+</ol>
+<p>Chi non ha un compito nella gara può provare a creare un viaggio d'istruzione e osservare quali errori compaiono.</p>
+<h2 id="cosa-controllare-alla-fine">Cosa controllare alla fine</h2>
+<ul>
+<li>Titolo con «Gruppo B - » all'inizio.</li>
+<li>Dopo il visto la pratica è passata da Preventivi (Giro 1) o direttamente a Confermata (Giro 2).</li>
+<li>Nella Timeline compaiono tutti i passaggi, con data e ora.</li>
+<li>Hai premuto <strong>Esci</strong>.</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

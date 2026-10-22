@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio Viaggi · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  .shot-grid { grid-template-columns: minmax(0, 1fr) 330px; }
+  @media (max-width: 900px) { .shot-grid { grid-template-columns: 1fr !important; } }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stesso impianto dell'incontro 1) ---------- */
+/* Nota: duplicati apposta in questo file, come già fatto tra incontro-1/slide.html e
+   incontro-1/simulazione-agente.html, perché Babel standalone non carica script esterni
+   via XHR quando il file si apre da file://. */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+const DurationBadge = ({ children }) => (
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
+    <span aria-hidden="true">⏱</span><span>{children}</span>
+  </div>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px', fontSize: 'var(--fs-sm)' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* Riquadri dei bottoni sugli screenshot (x, y, larghezza, altezza in pixel su immagini 1366x768). */
+const BOXES = {"01-accesso-login.png": [{"x": 492, "y": 461, "w": 382, "h": 48, "name": "Accedi con Google"}, {"x": 540, "y": 372, "w": 150, "h": 19, "name": "Ricordami per 30 giorni (da lasciare spento)"}], "02-referente-dashboard.png": [{"x": 1208, "y": 93, "w": 134, "h": 36, "name": "+ Nuova pratica"}], "03-referente-nuova-pratica-1-tipo.png": [{"x": 694, "y": 228, "w": 234, "h": 80, "name": "Visita guidata (tipo)"}, {"x": 452, "y": 352, "w": 351, "h": 38, "name": "Titolo della pratica"}, {"x": 452, "y": 434, "w": 150, "h": 34, "name": "Classe 4A LAB"}], "04-referente-nuova-pratica-2-date.png": [{"x": 855, "y": 543, "w": 188, "h": 19, "name": "Serve un mezzo a pagamento"}, {"x": 738, "y": 312, "w": 78, "h": 34, "name": "Pullman"}], "05-referente-nuova-pratica-4-errori.png": [{"x": 452, "y": 644, "w": 718, "h": 20, "name": "Verifiche del regolamento"}], "06-referente-nuova-pratica-5-accompagnatore.png": [{"x": 452, "y": 513, "w": 161, "h": 38, "name": "+ Aggiungi docente"}, {"x": 640, "y": 445, "w": 225, "h": 39, "name": "Docente (menu a tendina)"}], "07-referente-nuova-pratica-6-verifiche-ok.png": [{"x": 1046, "y": 626, "w": 149, "h": 38, "name": "Presenta la pratica"}, {"x": 930, "y": 626, "w": 108, "h": 38, "name": "Salva bozza"}], "08-referente-presenta-avvisi.png": [{"x": 689, "y": 510, "w": 230, "h": 38, "name": "Confermo nonostante gli avvisi"}], "09-referente-pratica-presentata.png": [{"x": 1251, "y": 87, "w": 91, "h": 28, "name": "Stato: Presentata"}, {"x": 960, "y": 265, "w": 82, "h": 44, "name": "Timeline (scheda)"}], "10-segreteria-dashboard.png": [{"x": 301, "y": 324, "w": 388, "h": 20, "name": "Pratica in attesa (riga)"}], "11-segreteria-avvia-raccolta.png": [{"x": 355, "y": 188, "w": 158, "h": 44, "name": "Avvia raccolta firme"}, {"x": 521, "y": 188, "w": 128, "h": 44, "name": "Annulla pratica"}], "12-studente-dashboard.png": [{"x": 12, "y": 137, "w": 232, "h": 40, "name": "Le mie attivita' (menu)"}], "13-studente-attivita-da-rispondere.png": [{"x": 538, "y": 294, "w": 104, "h": 36, "name": "Sì, aderisco"}, {"x": 650, "y": 293, "w": 53, "h": 38, "name": "No"}], "14-referente-adesioni.png": [{"x": 1118, "y": 329, "w": 224, "h": 38, "name": "Invia promemoria ai mancanti"}, {"x": 301, "y": 432, "w": 94, "h": 16, "name": "Barra del quorum"}], "15-genitore-link-personale.png": [{"x": 371, "y": 472, "w": 624, "h": 108, "name": "Attivita' Da firmare (prima riga)"}], "16-genitore-richiedi-codice.png": [{"x": 393, "y": 467, "w": 580, "h": 48, "name": "Richiedi il codice via email"}], "17-genitore-inserisci-codice.png": [{"x": 393, "y": 467, "w": 580, "h": 58, "name": "Codice ricevuto (6 cifre)"}, {"x": 393, "y": 541, "w": 580, "h": 48, "name": "Conferma il codice"}], "18-genitore-scheda-attivita.png": [], "19-genitore-firma.png": [{"x": 393, "y": 361, "w": 580, "h": 64, "name": "AUTORIZZO la partecipazione"}, {"x": 393, "y": 712, "w": 580, "h": 56, "name": "FIRMA"}], "20-genitore-firma-registrata.png": [{"x": 580, "y": 562, "w": 206, "h": 48, "name": "Scarica la ricevuta (PDF)"}], "21-referente-autorizzazioni.png": [{"x": 1155, "y": 329, "w": 187, "h": 38, "name": "Sollecita firme mancanti"}], "22-segreteria-controllo-formale-avvisi.png": [{"x": 689, "y": 468, "w": 230, "h": 38, "name": "Confermo nonostante gli avvisi"}], "23-commissione-dashboard.png": [{"x": 301, "y": 324, "w": 372, "h": 20, "name": "Pratica in attesa"}], "24-commissione-visto.png": [{"x": 355, "y": 188, "w": 214, "h": 44, "name": "Visto commissione → alla DS"}, {"x": 578, "y": 188, "w": 167, "h": 44, "name": "Rimanda al referente"}], "25-dirigente-dashboard.png": [{"x": 281, "y": 268, "w": 517, "h": 44, "name": "In attesa di una tua azione"}], "26-dirigente-pratica.png": [{"x": 355, "y": 188, "w": 168, "h": 44, "name": "VISTO della Dirigente"}, {"x": 960, "y": 265, "w": 82, "h": 44, "name": "Timeline (scheda)"}], "27-dirigente-visto-modale.png": [{"x": 485, "y": 303, "w": 248, "h": 20, "name": "VISTO: si approva"}, {"x": 485, "y": 373, "w": 243, "h": 20, "name": "Richiesta di revisione"}, {"x": 485, "y": 443, "w": 216, "h": 20, "name": "Diniego"}, {"x": 790, "y": 533, "w": 129, "h": 38, "name": "Registra il visto"}], "28-patrimonio-dashboard.png": [{"x": 301, "y": 324, "w": 391, "h": 20, "name": "Pratica"}], "29-patrimonio-richiesta-preventivo.png": [{"x": 447, "y": 198, "w": 472, "h": 38, "name": "Nome agenzia"}, {"x": 447, "y": 272, "w": 472, "h": 38, "name": "Email agenzia"}, {"x": 800, "y": 669, "w": 119, "h": 38, "name": "Invia richiesta"}], "30-agenzia-pagina-offerta.png": [{"x": 392, "y": 266, "w": 283, "h": 38, "name": "Importo totale offerto"}, {"x": 392, "y": 580, "w": 582, "h": 48, "name": "Invia l'offerta"}], "31-agenzia-offerta-inviata.png": [{"x": 397, "y": 171, "w": 572, "h": 28, "name": "Offerta inviata correttamente"}], "32-patrimonio-confronto-offerte.png": [{"x": 281, "y": 526, "w": 1060, "h": 44, "name": "Confronto offerte"}, {"x": 1246, "y": 617, "w": 74, "h": 26, "name": "Seleziona (riga Rimini Viaggi Lab)"}], "33-patrimonio-seleziona-offerta.png": [{"x": 447, "y": 367, "w": 472, "h": 78, "name": "Motivazione della selezione"}, {"x": 762, "y": 480, "w": 157, "h": 38, "name": "Conferma selezione"}], "34-patrimonio-offerta-selezionata.png": [{"x": 355, "y": 188, "w": 273, "h": 44, "name": "Conferma pratica (offerta selezionata)"}, {"x": 636, "y": 188, "w": 278, "h": 44, "name": "Annulla (quote lievitate / gara deserta)"}], "35-pratica-confermata-timeline.png": [{"x": 1243, "y": 87, "w": 99, "h": 28, "name": "Stato: Confermata"}, {"x": 756, "y": 175, "w": 82, "h": 44, "name": "Timeline (scheda)"}]};
+
+/* ---------- componenti nuovi per il Laboratorio Viaggi ---------- */
+
+const MATERIALI_URL = 'thomascasali.github.io/corso-ia-scuola-slide/materiali/laboratorio-viaggi/';
+const MAT = '../materiali/laboratorio-viaggi/';
+
+const roleColor = {
+  'Docente referente': colors.info,
+  'Segreteria': colors.warn,
+  'Commissione viaggi': colors.purple,
+  'Dirigente Scolastica': colors.danger,
+  'Ufficio Patrimonio': colors.success,
+  'Studente': colors.accentAlt,
+  'Genitore': colors.info,
+  'Agenzia': colors.warn,
+  'Tutti': colors.textMuted
+};
+
+function Shot({ file, role, title, text, duration, badges }) {
+  const W = 1366, H = 768;
+  const boxes = BOXES[file] || [];
+  const c = roleColor[role] || colors.accent;
+  return (
+    <div className="shot-grid" style={{ display: 'grid', gap: '22px', alignItems: 'start', padding: '6px 8px' }}>
+      <div style={{ position: 'relative', width: 'min(100%, calc((100vh - 170px) * 1.7786))', aspectRatio: '1366 / 768', border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.bgCard }}>
+        <img src={'img/' + file} alt={title + ' (' + role + ')'} style={{ width: '100%', height: '100%', display: 'block', borderRadius: '8px' }} />
+        {boxes.map((b, i) => (
+          <div key={i} aria-hidden="true" style={{ position: 'absolute', left: ((b.x - 4) / W * 100) + '%', top: ((b.y - 4) / H * 100) + '%', width: ((b.w + 8) / W * 100) + '%', height: ((b.h + 8) / H * 100) + '%', border: `3px solid ${colors.warn}`, borderRadius: '5px', boxShadow: '0 0 0 2px rgba(0,0,0,0.45)', background: 'rgba(217,164,65,0.10)' }}>
+            <span style={{ position: 'absolute', left: '-12px', top: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: colors.warn, color: colors.bg, fontWeight: 800, fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>{i + 1}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ display: 'inline-block', alignSelf: 'flex-start', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: c, border: `1px solid ${c}80`, borderRadius: '20px', padding: '3px 12px', textTransform: 'uppercase', letterSpacing: '1px' }}>{role}</div>
+        <h3 style={{ color: colors.text, fontSize: 'var(--fs-lead)' }}>{title}</h3>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.45 }}>{text}</p>
+        {boxes.length > 0 && (
+          <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '2px' }}>
+            {boxes.map((b, i) => (
+              <li key={i} style={{ display: 'flex', gap: '8px', alignItems: 'baseline', fontSize: 'var(--fs-xs)', lineHeight: 1.35, color: colors.textDim }}>
+                <span style={{ flex: '0 0 auto', width: '20px', height: '20px', borderRadius: '50%', background: colors.warn, color: colors.bg, fontWeight: 800, fontSize: '12px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+                <span style={{ fontSize: 'var(--fs-xs)' }}>{b.name}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+        {duration && <div><DurationBadge>{duration}</DurationBadge></div>}
+        {badges && badges.map((b, i) => <div key={i}><ActivityBadge href={MAT + b.href} label={b.label} /></div>)}
+      </div>
+    </div>
+  );
+}
+
+function CardGrid({ cards }) {
+  return (
+    <div className="role-grid" style={{ display: 'grid', gap: '14px', width: '100%' }}>
+      {cards.map((r, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ fontSize: '26px' }}>{r.icon}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{r.desc}</div>
+          {r.menu && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.4 }}>{r.menu}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TerminalMock({ folder, request, actions = [] }) {
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', overflow: 'hidden', maxWidth: '720px', margin: '0 auto' }}>
+      <div style={{ background: colors.bgLight, padding: '8px 14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, borderBottom: `1px solid ${colors.border}` }}>{folder}</div>
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {request && (
+          <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '8px 12px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+            <strong style={{ color: colors.text }}>Richiesta:</strong> {request}
+          </div>
+        )}
+        {actions.map((a, i) => (
+          <div key={i} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, paddingLeft: '6px' }}>{a}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const shot = (block, file, role, title, text, notes, extra = {}) => ({
+  block,
+  content: () => <Shot file={file} role={role} title={title} text={text} {...extra} />,
+  notes
+});
+
+const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
+  block,
+  content: () => (
+    <div style={{ padding: '14px 30px' }}>
+      <BlockTag>{tag}</BlockTag>
+      <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
+      <DurationBadge>{duration}</DurationBadge>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '6px 0 4px' }}>
+        {rows.map((r, i) => (
+          <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${roleColor[r[0]] || colors.accent}`, borderRadius: '6px', padding: '8px 14px' }}>
+            <span style={{ flex: '0 0 190px', color: roleColor[r[0]] || colors.accent, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r[0]}</span>
+            <span style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.4 }}>{r[1]}</span>
+          </div>
+        ))}
+      </div>
+      {tip && <Box type="tip">{tip}</Box>}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+      </div>
+    </div>
+  ),
+  notes
+});
+
+/* ---------- slide ---------- */
+
+const COPIONI = [
+  { href: 'copione-pratica-gruppo-a.html', label: 'Copione della pratica, gruppo A' },
+  { href: 'copione-pratica-gruppo-b.html', label: 'Copione della pratica, gruppo B' }
+];
+
+const slides = [
+  /* --- apertura --- */
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🚌</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Laboratorio Viaggi
+        </h1>
+        <p style={{ color: colors.textDim, maxWidth: '760px' }}>
+          Una lezione a parte, in laboratorio informatico: due gruppi, una pratica per gruppo, dalla proposta del docente alla conferma.
+        </p>
+      </div>
+    ),
+    notes: "Apertura. Dite subito tre cose: si lavora sul portale vero della scuola, in un anno di prova con dati inventati; tutto quello che inserite oggi verrà cancellato a fine corso; nessuno può rompere nulla di importante. Controllate che ogni PC abbia il browser aperto sulla pagina del portale (l'indirizzo lo scrivete alla lavagna)."
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Apertura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Che cosa facciamo oggi</h2>
+        <CompareTwo
+          left={{ icon: '🧭', color: colors.info, title: 'Proviamo la procedura', points: ["Una pratica per gruppo, dalla proposta alla conferma", "Ruolo per ruolo: ognuno vede il portale dalla parte di chi lo usa", "A metà i ruoli interni ruotano e cambia il caso"] }}
+          right={{ icon: '🤖', color: colors.accent, title: 'Vediamo un agente al lavoro', points: ["Alla fine raccogliamo le vostre richieste di modifica", "Una la fa Thomas dal vivo con Claude Code", "Voi guardate come si passa da una richiesta a una modifica provata"] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Obiettivo: sapere cosa deve fare ciascuno nella procedura dematerializzata di uscite e viaggi.</p>
+      </div>
+    ),
+    notes: "Due obiettivi. Il primo è formare: alla fine ognuno deve sapere cosa tocca a lui e cosa fanno gli altri prima e dopo di lui. Il secondo è mostrare cosa significa, in pratica, chiedere una modifica a un agente: non una dimostrazione astratta, ma una richiesta che nasce da una difficoltà incontrata da voi mezz'ora prima."
+  },
+
+  /* --- blocco 1: perché digitale --- */
+  {
+    block: 'Perché una procedura digitale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Perché una procedura digitale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dalla carta al portale</h2>
+        <CompareTwo
+          left={{ icon: '📄', color: colors.danger, title: 'Con i moduli cartacei', points: ["Un modulo per ogni passaggio: proposta, adesioni, autorizzazioni, preventivi, relazione", "I fogli passano da un ufficio all'altro e bisogna sapere dove si trovano", "I controlli sul regolamento li fa a mano chi riceve il foglio"] }}
+          right={{ icon: '🖥️', color: colors.success, title: 'Con il portale', points: ["Una pratica sola, con uno stato che dice a che punto è", "Ogni passaggio resta registrato con data e ora", "Il regolamento è controllato mentre si compila", "Genitori e agenzie rispondono da un link ricevuto per email, senza account"] }}
+        />
+      </div>
+    ),
+    notes: "Il portale sostituisce i moduli cartacei per uscite didattiche, visite guidate e viaggi d'istruzione. Non vendete il portale: chiedete alla sala come funzionava prima e dove si perdeva tempo. Raccogliete due o tre risposte a voce, vi serviranno nel momento 'cosa cambiereste'."
+  },
+  {
+    block: 'Perché una procedura digitale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Perché una procedura digitale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Cosa cambia per ciascuno</h2>
+        <CardGrid cards={[
+          { icon: '👩‍🏫', color: colors.info, title: 'Docente referente', desc: 'Compila una procedura guidata in quattro passi e vede subito gli errori del regolamento.' },
+          { icon: '🗂️', color: colors.warn, title: 'Segreteria', desc: 'Avvia la raccolta firme e fa il controllo formale dalla stessa pratica.' },
+          { icon: '🏛️', color: colors.purple, title: 'Commissione e Dirigente', desc: 'Leggono la pratica e danno il visto, oppure la rimandano con una motivazione.' },
+          { icon: '🧾', color: colors.success, title: 'Ufficio Patrimonio', desc: 'Chiede i preventivi alle agenzie e confronta le offerte affiancate.' },
+          { icon: '🎒', color: colors.accentAlt, title: 'Studenti', desc: 'Rispondono "Sì, aderisco" o "No" dalla pagina delle loro attività.' },
+          { icon: '👪', color: colors.info, title: 'Genitori', desc: 'Firmano da un link personale e da un codice ricevuto per email.' },
+          { icon: '🚌', color: colors.warn, title: 'Agenzie', desc: 'Caricano l\'offerta da un link monouso.' }
+        ]} />
+      </div>
+    ),
+    notes: "Una frase per ruolo, senza entrare nei dettagli: li vedrete tutti all'opera. Sottolineate che il genitore e l'agenzia non hanno un account: ricevono una email con un link. È la ragione per cui oggi alcune email partono davvero."
+  },
+  {
+    block: 'Perché una procedura digitale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Perché una procedura digitale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Il percorso di una pratica</h2>
+        <FlowChain minItemWidth="140px" steps={[
+          { icon: '✏️', label: 'Bozza', sub: 'Docente', color: colors.info },
+          { icon: '📤', label: 'Presentata', sub: 'Docente', color: colors.info },
+          { icon: '✍️', label: 'Raccolta firme', sub: 'Studenti e genitori', color: colors.accentAlt },
+          { icon: '🗂️', label: 'Controllo formale', sub: 'Segreteria', color: colors.warn },
+          { icon: '🏛️', label: 'Commissione', sub: 'Visto', color: colors.purple },
+          { icon: '🖊️', label: 'Visto DS', sub: 'Dirigente', color: colors.danger },
+          { icon: '🧾', label: 'Preventivi', sub: 'Patrimonio e agenzie', color: colors.success },
+          { icon: '✅', label: 'Confermata', sub: 'Patrimonio', color: colors.success }
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px', textAlign: 'center' }}>Poi: circolare, attività effettuata, relazione finale, archivio. Oggi arriviamo a «Confermata».</p>
+      </div>
+    ),
+    notes: "Mostrate il percorso intero e dite che oggi ci fermiamo a Confermata. Dopo, il portale prevede la circolare, la data dell'attività, la relazione finale del referente e l'archiviazione. Se la pratica non convince qualcuno, torna indietro al referente con una motivazione: è la variante 'In revisione' che proveremo nel secondo giro."
+  },
+
+  /* --- blocco 2: come funziona il laboratorio --- */
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Un anno di prova con dati inventati</h2>
+        <Box type="info" title="Cosa trovate nel portale">
+          Un anno scolastico chiamato «2026/2027 LAB», due classi di prova (4A LAB e 4B LAB), sette studenti per classe con nomi inventati.
+        </Box>
+        <Box type="warn" title="Il portale è quello vero">
+          Entrate dallo stesso accesso che userà la scuola. Quello che inserite oggi resta nel portale fino alla pulizia, quindi i dati sono tutti inventati.
+        </Box>
+        <Box type="success" title="Alla fine si cancella tutto">
+          Pratiche, firme, studenti e account di prova vengono cancellati a fine corso, prima dell'uso vero.
+        </Box>
+      </div>
+    ),
+    notes: "Spiegate la differenza tra 'vero' e 'inventato'. Il portale è quello di produzione, ma in questa fase contiene solo dati di prova. A fine corso Thomas lancia uno strumento di pulizia che cancella i dati del laboratorio. Nessun dato reale di studenti, famiglie o personale entra mai nelle esercitazioni."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Le email sono vere</h2>
+        <CompareTwo
+          left={{ icon: '✉️', color: colors.success, title: 'Arrivano davvero', points: ["Il link per firmare, e il codice, arrivano a chi fa il genitore", "La richiesta di preventivo arriva a chi fa l'agenzia", "L'esito del visto arriva al docente referente", "Sull'indirizzo della scuola di ciascuno: guardate anche la posta indesiderata"] }}
+          right={{ icon: '📭', color: colors.textMuted, title: 'Falliscono senza conseguenze', points: ["I genitori degli altri studenti hanno indirizzi inventati (@demo.invalid)", "Le email partono e tornano indietro: ignoratele", "Nessuna persona reale riceve nulla"] }}
+        />
+      </div>
+    ),
+    notes: "Nel portale il genitore e l'agenzia non hanno un account: ricevono email vere. In laboratorio le email vere arrivano alle caselle della scuola di chi interpreta quel ruolo, per tutta la lezione: gli indirizzi sono fissati prima. Il codice per il genitore vale dieci minuti. Se un messaggio non arriva, il primo controllo è la posta indesiderata."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Due gruppi, due giri</h2>
+        <CompareTwo
+          left={{ icon: '🅰️', color: colors.info, title: 'Gruppo A, classe 4A LAB', points: ["Giro 1: visita guidata con mezzo a pagamento, fino a «Confermata»", "Giro 2: la Dirigente chiede una revisione e la pratica torna al referente"] }}
+          right={{ icon: '🅱️', color: colors.purple, title: 'Gruppo B, classe 4B LAB', points: ["Giro 1: visita guidata con mezzo a pagamento, fino a «Confermata»", "Giro 2: uscita didattica senza mezzo a pagamento, con genitori separati"] }}
+        />
+        <Box type="tip">A metà ruotano i ruoli interni; genitore e agenzia restano alla stessa persona per tutta la lezione. Il foglio «Ruoli e rotazione» dice chi fa cosa.</Box>
+        <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
+      </div>
+    ),
+    notes: "Due gruppi da cinque o sei persone. I due gruppi fanno lo stesso percorso in parallelo, ognuno sulla propria pratica. Nel secondo giro cambia il ruolo di ciascuno e cambia il caso: il gruppo A prova la richiesta di revisione, il gruppo B l'uscita didattica con i genitori separati. I ruoli sono assegnati per nome qualche giorno prima, perché servono gli indirizzi per la configurazione: scriveteli alla lavagna."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quattro regole per lavorare bene</h2>
+        <Box type="warn" title="1. Il nome del gruppo nel titolo">Il titolo della pratica inizia sempre con «Gruppo A - » o «Gruppo B - ».</Box>
+        <Box type="info" title="2. Solo la vostra pratica">I ruoli valgono per tutto il portale: la Segreteria del gruppo A vede anche le pratiche del B. Toccate solo le vostre.</Box>
+        <Box type="danger" title="3. «Ricordami» spento, «Esci» a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
+        <Box type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono alla parte finale.</Box>
+      </div>
+    ),
+    notes: "Le regole sono quattro e vanno dette ad alta voce. La più importante nella pratica è la seconda: poiché i ruoli sono globali, un utente con il ruolo Segreteria vede tutte le pratiche. Il titolo con il nome del gruppo serve proprio a riconoscere la propria."
+  },
+
+  /* --- blocco 3: accesso e ruoli --- */
+  shot('Accesso', '01-accesso-login.png', 'Tutti', 'Accesso con l\'account della scuola',
+    'Un solo bottone: «Accedi con Google», con l\'account della scuola. Lasciate spenta la casella «Ricordami per 30 giorni».',
+    "Attività di accesso, circa dieci minuti. Ogni partecipante entra con il proprio account della scuola; chi interpreta lo studente entra con l'account di prova che gli è stato consegnato. Se qualcuno entra ma vede solo 'Dashboard' nel menu, il ruolo non è ancora stato assegnato: lo sistema Thomas. Controllate che 'Ricordami' sia spento su ogni PC.",
+    { duration: '10 minuti, tutti insieme', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
+  {
+    block: 'Accesso',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Accesso</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>I ruoli e cosa vede ciascuno</h2>
+        <CardGrid cards={[
+          { icon: '👩‍🏫', color: colors.info, title: 'Docente referente', desc: 'Crea e presenta la pratica.', menu: 'Dashboard, Pratiche, Gruppi uscita' },
+          { icon: '🗂️', color: colors.warn, title: 'Segreteria', desc: 'Raccolta firme e controllo formale.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi, Import studenti' },
+          { icon: '🏛️', color: colors.purple, title: 'Commissione viaggi', desc: 'Visto della commissione.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi, Gruppi uscita' },
+          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastica', desc: 'Visto: approva, chiede revisione, nega.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi' },
+          { icon: '🧾', color: colors.success, title: 'Ufficio Patrimonio', desc: 'Gara tra le agenzie e conferma.', menu: 'Dashboard, Pratiche' },
+          { icon: '🎒', color: colors.accentAlt, title: 'Studente', desc: 'Risponde alle attività della classe.', menu: 'Dashboard, Le mie attività' },
+          { icon: '👪', color: colors.info, title: 'Genitore (esterno)', desc: 'Firma da link e codice per email.', menu: 'Nessun account' },
+          { icon: '🚌', color: colors.warn, title: 'Agenzia (esterna)', desc: 'Carica l\'offerta da un link monouso.', menu: 'Nessun account' }
+        ]} />
+      </div>
+    ),
+    notes: "Il menu a sinistra cambia con il ruolo. Chi vede meno voci di quelle indicate qui probabilmente non ha ancora il ruolo giusto. Il genitore e l'agenzia sono esterni: non entrano da nessuna parte, usano solo i link delle email."
+  },
+
+  /* --- giro 1, tappa 1 --- */
+  tappa('Giro 1 · tappa 1', 'Giro 1 · tappa 1', 'Il docente crea la pratica', '15 minuti, i due gruppi in parallelo',
+    [
+      ['Docente referente', 'Compila i quattro passi, controlla gli errori e presenta la pratica.'],
+      ['Segreteria', 'Legge la propria scheda; appena la pratica è presentata, la trova in dashboard.'],
+      ['Commissione viaggi', 'Con Dirigente e Ufficio Patrimonio: legge la propria scheda e prepara il proprio passaggio.'],
+      ['Studente', 'Con il genitore: legge la scheda, aspetta la raccolta firme e controlla la casella email.']
+    ],
+    COPIONI,
+    "Il docente referente di ogni gruppo compila la pratica seguendo il copione del proprio gruppo, con i dati inventati. Gli altri non restano fermi: leggono la scheda del proprio ruolo e anticipano cosa faranno. Passate tra i tavoli: il punto in cui si inciampa di più è il passo 3 (docenti), perché il regolamento chiede un accompagnatore.",
+    'Mentre il docente compila, gli altri leggono la scheda del proprio ruolo.'),
+  shot('Giro 1 · tappa 1', '02-referente-dashboard.png', 'Docente referente', 'Dashboard: da qui si parte',
+    'Dopo l\'accesso la dashboard è vuota. Si parte da «+ Nuova pratica».',
+    "Prima schermata del docente. Nel menu ci sono Dashboard, Pratiche e Gruppi uscita. La dashboard è vuota perché il laboratorio parte da zero."),
+  shot('Giro 1 · tappa 1', '03-referente-nuova-pratica-1-tipo.png', 'Docente referente', 'Passo 1: tipo e classe',
+    'Scegliete «Visita guidata», scrivete il titolo con il nome del gruppo e selezionate la vostra classe.',
+    "Nel passo 1 si sceglie il tipo di attività: uscita didattica, visita guidata, viaggio d'istruzione. Per il laboratorio la visita guidata, perché attraversa anche la fase dei preventivi. Insistete sul titolo con il nome del gruppo."),
+  shot('Giro 1 · tappa 1', '04-referente-nuova-pratica-2-date.png', 'Docente referente', 'Passo 2: date, mezzo e costi',
+    'Una giornata a marzo 2027, mezzo Pullman, partenza e rientro. La spunta «Serve un mezzo a pagamento» attiva la fase dei preventivi.',
+    "Data lontana, a primavera 2027 e non dopo il 30 aprile: una data troppo vicina richiederebbe la presentazione tardiva, che può diventare un esercizio a parte. La spunta del mezzo a pagamento decide se la pratica passa dai preventivi."),
+  shot('Giro 1 · tappa 1', '06-referente-nuova-pratica-5-accompagnatore.png', 'Docente referente', 'Passo 3: docenti',
+    'Il regolamento chiede un accompagnatore ogni 15 alunni e almeno uno per classe: aggiungetene uno dal menu.',
+    "Il passo 3 elenca le regole in alto. Il docente referente è già indicato; si aggiunge almeno un accompagnatore. Il docente di riserva manca: è solo un avviso, non blocca."),
+  shot('Giro 1 · tappa 1', '05-referente-nuova-pratica-4-errori.png', 'Docente referente', 'Se manca l\'accompagnatore',
+    'Nel riquadro «Verifiche del regolamento» gli errori sono in rosso e il bottone «Presenta la pratica» resta bloccato finché ce ne sono.',
+    "Qui l'immagine mostra cosa succede se si arriva al riepilogo senza accompagnatore. Il portale non lascia presentare: l'errore dice cosa manca. È un controllo del regolamento fatto in automatico."),
+  shot('Giro 1 · tappa 1', '07-referente-nuova-pratica-6-verifiche-ok.png', 'Docente referente', 'Verifiche superate',
+    'Restano solo avvisi gialli. «Presenta la pratica» è attivo; «Salva bozza» lascia la pratica modificabile.',
+    "Fino a quando è una bozza la pratica si può modificare ed eliminare. Dopo la presentazione cambia lo stato e il percorso parte."),
+  shot('Giro 1 · tappa 1', '08-referente-presenta-avvisi.png', 'Docente referente', 'Gli avvisi vanno confermati',
+    'Gli avvisi gialli non bloccano, ma vanno confermati con «Confermo nonostante gli avvisi». Qui sono due: il quorum e il docente di riserva.',
+    "Il quorum è abbassato per il laboratorio e a questo punto il portale avvisa che le adesioni sono ancora zero. Chiedete alla sala perché secondo loro un avviso si conferma e un errore no."),
+  shot('Giro 1 · tappa 1', '09-referente-pratica-presentata.png', 'Docente referente', 'Pratica presentata',
+    'Lo stato in alto a destra è «Presentata». Le schede (Riepilogo, Adesioni, Autorizzazioni, Docenti, Timeline) mostrano ciascuna un pezzo della pratica.',
+    "Fine della prima tappa. La pratica passa nelle mani della Segreteria. Il docente la ritroverà durante la raccolta firme."),
+
+  /* --- giro 1, tappa 2 --- */
+  tappa('Giro 1 · tappa 2', 'Giro 1 · tappa 2', 'Raccolta firme: Segreteria, studente, genitore', '15 minuti, i due gruppi in parallelo',
+    [
+      ['Segreteria', 'Apre la pratica presentata e avvia la raccolta firme.'],
+      ['Studente', 'Apre «Le mie attività» e risponde «Sì, aderisco».'],
+      ['Genitore', 'Apre il link ricevuto per email, chiede il codice e firma.'],
+      ['Docente referente', 'Controlla le schede Adesioni e Autorizzazioni e prova il promemoria.'],
+      ['Segreteria', 'Chiude la raccolta e passa al controllo formale.']
+    ],
+    COPIONI,
+    "Tappa con più passaggi tra persone diverse: è il cuore del laboratorio. La Segreteria avvia la raccolta, poi studente e genitore lavorano in parallelo, il docente guarda cosa succede. Il genitore deve controllare la casella: se il link non arriva, vedere il piano B nel copione. La Segreteria chiude la raccolta solo quando studente e genitore hanno finito."),
+  shot('Giro 1 · tappa 2', '11-segreteria-avvia-raccolta.png', 'Segreteria', 'La Segreteria avvia la raccolta firme',
+    'Aprite la pratica presentata e premete «Avvia raccolta firme». Accanto c\'è «Annulla pratica» in rosso: non premetelo.',
+    "Il portale crea una riga di adesione per ogni studente e manda una email a ogni genitore con un link personale. Anche il docente referente vede il bottone 'Avvia raccolta firme'. Nota: la segreteria ha anche il bottone rosso per annullare, non va premuto."),
+  shot('Giro 1 · tappa 2', '13-studente-attivita-da-rispondere.png', 'Studente', 'Lo studente risponde',
+    'Dalla pagina «Le mie attività» si apre la scheda con data, partenza, mezzo e costo. Poi la domanda «Parteciperai?».',
+    "Con 'No' bisogna scrivere il motivo. Nel laboratorio risponde solo chi ha un account di prova: per questo il quorum è stato abbassato."),
+  shot('Giro 1 · tappa 2', '15-genitore-link-personale.png', 'Genitore', 'Il genitore apre il link',
+    'Il link ricevuto per email si apre senza accesso. Compaiono i figli e le attività «Da firmare»: si apre la riga.',
+    "Mostrate che qui non c'è nessun login. Chi interpreta il genitore ha ricevuto una email per ogni figlio o gruppo di figli. Il link è personale: non va condiviso."),
+  shot('Giro 1 · tappa 2', '16-genitore-richiedi-codice.png', 'Genitore', 'Il codice via email',
+    'Prima della scheda serve un codice: «Richiedi il codice via email». Il codice ha sei cifre e vale dieci minuti.',
+    "Il codice serve a confermare l'identità. Se non arriva entro un minuto, guardare la posta indesiderata. Il portale accetta una richiesta al minuto: non insistere premendo più volte."),
+  shot('Giro 1 · tappa 2', '17-genitore-inserisci-codice.png', 'Genitore', 'Si digita il codice',
+    'Il codice di sei cifre si scrive nel campo e si preme «Conferma il codice».',
+    "Nella schermata il codice mostrato è di un ambiente di prova locale: in laboratorio arriva per email."),
+  shot('Giro 1 · tappa 2', '19-genitore-firma.png', 'Genitore', 'La firma',
+    'In fondo alla scheda: «AUTORIZZO la partecipazione» oppure «NON autorizzo». Le segnalazioni sanitarie sono facoltative. Poi «FIRMA».',
+    "Il genitore legge prima la scheda completa (dettagli, programma, docenti, costi). La firma registra data, indirizzo di rete e impronta del documento. Le note sanitarie sono cifrate."),
+  shot('Giro 1 · tappa 2', '20-genitore-firma-registrata.png', 'Genitore', 'Firma registrata',
+    '«Firma registrata correttamente»: si può scaricare la ricevuta in PDF.',
+    "Chiedete al genitore di scaricare la ricevuta: è la prova per la famiglia."),
+  shot('Giro 1 · tappa 2', '14-referente-adesioni.png', 'Docente referente', 'Il docente controlla le adesioni',
+    'La scheda «Adesioni» mostra la barra del quorum e gli studenti. «Invia promemoria ai mancanti» scrive agli studenti che non hanno risposto.',
+    "Uno studente ha risposto, gli altri sono in attesa. Il quorum del regolamento sono i due terzi; in laboratorio è abbassato al dieci per cento."),
+  shot('Giro 1 · tappa 2', '21-referente-autorizzazioni.png', 'Docente referente', 'E le firme dei genitori',
+    'La scheda «Autorizzazioni» elenca le firme: una raccolta, le altre mancano. «Sollecita firme mancanti» scrive ai genitori. Con i genitori separati serve la doppia firma.',
+    "Le firme dei genitori con indirizzo inventato non arriveranno mai: è voluto. Introducete la doppia firma, che il gruppo proverà nel secondo giro."),
+
+  /* --- giro 1, tappa 3 --- */
+  tappa('Giro 1 · tappa 3', 'Giro 1 · tappa 3', 'Controllo formale e visti', '10 minuti, i due gruppi in parallelo',
+    [
+      ['Segreteria', 'Chiude la raccolta, fa il controllo formale e conferma gli avvisi.'],
+      ['Commissione viaggi', 'Legge la pratica e appone il visto.'],
+      ['Dirigente Scolastica', 'Registra il visto: si approva.'],
+      ['Docente referente', 'Controlla l\'email con l\'esito del visto.']
+    ],
+    COPIONI,
+    "Tre passaggi in fila, ognuno con un ruolo diverso: la pratica passa di mano e ogni persona vede solo ciò che le serve. Fate notare l'ordine: nessuno può saltare un passaggio. Cronometrate: è la tappa dove i gruppi più rapidi finiscono prima."),
+  shot('Giro 1 · tappa 3', '22-segreteria-controllo-formale-avvisi.png', 'Segreteria', 'Controllo formale',
+    'Al controllo formale resta un solo avviso, il docente di riserva: va confermato con «Confermo nonostante gli avvisi».',
+    "Il quorum, con una adesione su sette, qui passa. Dal controllo formale in poi il quorum diventa vincolante: se non fosse raggiunto il portale bloccherebbe."),
+  shot('Giro 1 · tappa 3', '24-commissione-visto.png', 'Commissione viaggi', 'Visto della Commissione',
+    '«Visto commissione → alla DS» manda la pratica alla Dirigente. «Rimanda al referente» la restituisce con una motivazione.',
+    "La Commissione può anche pubblicare la circolare e gestire i gruppi uscita, ma oggi si limita al visto."),
+  shot('Giro 1 · tappa 3', '27-dirigente-visto-modale.png', 'Dirigente Scolastica', 'Visto della Dirigente',
+    'Tre scelte: «VISTO: si approva», «Richiesta di revisione», «Diniego». Le ultime due chiedono la motivazione. Si conferma con «Registra il visto».',
+    "Nel primo giro si approva. Con 'VISTO: si approva' la pratica passa direttamente a Preventivi, perché c'è il mezzo a pagamento. La richiesta di revisione si prova nel secondo giro."),
+
+  /* --- giro 1, tappa 4 --- */
+  tappa('Giro 1 · tappa 4', 'Giro 1 · tappa 4', 'La gara: Ufficio Patrimonio e agenzia', '10 minuti, i due gruppi in parallelo',
+    [
+      ['Ufficio Patrimonio', 'Richiede il preventivo scrivendo nome ed email dell\'agenzia.'],
+      ['Agenzia', 'Apre il link ricevuto per email e carica l\'offerta.'],
+      ['Ufficio Patrimonio', 'Confronta le offerte, seleziona quella scelta con una motivazione, conferma la pratica.'],
+      ['Tutti', 'Guardano la Timeline: tutti i passaggi con data e ora.']
+    ],
+    COPIONI,
+    "Ultima tappa del primo giro. L'agenzia è un ruolo esterno: riceve una email con un link monouso, non può usarlo due volte. Alla fine il Patrimonio conferma la pratica e tutti guardano la Timeline: ogni passaggio è lì, con data e ora. Tenete a mente cosa non dice, vi servirà dopo."),
+  shot('Giro 1 · tappa 4', '29-patrimonio-richiesta-preventivo.png', 'Ufficio Patrimonio', 'La richiesta di preventivo',
+    'Nome ed email dell\'agenzia, scadenza e servizi richiesti (già proposti). «Invia richiesta» manda l\'email con un link monouso.',
+    "Il portale non ha un elenco di agenzie: l'Ufficio Patrimonio scrive nome ed email a mano. Nel laboratorio il nome e l'indirizzo da usare sono scritti nel copione del gruppo."),
+  shot('Giro 1 · tappa 4', '30-agenzia-pagina-offerta.png', 'Agenzia', 'L\'agenzia carica l\'offerta',
+    'La pagina si apre dal link ricevuto per email. Importo totale, quota per studente, dettagli e PDF facoltativo. «Invia l\'offerta».',
+    "Il campo del PDF può mostrare la scritta in inglese, perché dipende dalla lingua del browser. La pagina non riepiloga i servizi richiesti: è una delle osservazioni che potreste raccogliere nella parte finale."),
+  shot('Giro 1 · tappa 4', '32-patrimonio-confronto-offerte.png', 'Ufficio Patrimonio', 'Il confronto tra le offerte',
+    'Le offerte arrivate sono affiancate: importo, quota per studente, dettagli. «Seleziona» sulla riga scelta.',
+    "Se qualche agenzia non risponde (indirizzo inventato), la gara va avanti con le offerte arrivate."),
+  shot('Giro 1 · tappa 4', '33-patrimonio-seleziona-offerta.png', 'Ufficio Patrimonio', 'La scelta si motiva',
+    'La motivazione è obbligatoria. «Conferma selezione».',
+    "Obbligo di motivazione: resta agli atti. Chiedete alla sala perché è utile che resti scritta."),
+  shot('Giro 1 · tappa 4', '34-patrimonio-offerta-selezionata.png', 'Ufficio Patrimonio', 'Conferma della pratica',
+    'La riga mostra «Selezionata». In alto si preme «Conferma pratica (offerta selezionata)». L\'alternativa è annullare.',
+    "Questo è il passaggio finale del primo giro."),
+  shot('Giro 1 · tappa 4', '35-pratica-confermata-timeline.png', 'Tutti', 'Confermata: la Timeline',
+    'Stato «Confermata». La scheda Timeline elenca ogni passaggio con data e ora, ma non dice chi lo ha eseguito.',
+    "Fermatevi qui. Chiedete alla sala: cosa manca in questa Timeline? Molti risponderanno che manca il nome di chi ha agito. Segnatevelo: è una candidata per la modifica dal vivo."),
+
+  /* --- giro 2 --- */
+  {
+    block: 'Giro 2',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Giro 2</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Si cambia ruolo, si cambia caso</h2>
+        <DurationBadge>35 minuti, i due gruppi in parallelo</DurationBadge>
+        <Box type="info" title="Primo passo: scambio dei ruoli">Chi ha un ruolo interno ne prende uno che non ha ancora fatto, come indicato in «Ruoli e rotazione». Cambiano anche gli accessi: si esce e si rientra con i nuovi ruoli. Genitore e agenzia restano alla stessa persona.</Box>
+        <Box type="tip" title="Secondo passo: un caso diverso">Ogni gruppo prova il proprio caso (vedi le slide seguenti), ripercorrendo solo i passaggi che cambiano: non serve rifare tutto il giro.</Box>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
+          {COPIONI.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+        </div>
+      </div>
+    ),
+    notes: "Lo scambio dei ruoli richiede un passaggio tecnico: i ruoli vengono assegnati da Thomas dal menu 'Utenti e ruoli', quindi serve qualche minuto. Nel frattempo i partecipanti possono leggere la scheda del nuovo ruolo. Chi cambia ruolo deve uscire e rientrare per vedere il nuovo menu. Ricordate a tutti di premere Esci. Genitore e agenzia non cambiano mai persona: le email arrivano agli indirizzi fissati prima della lezione."
+  },
+  {
+    block: 'Giro 2',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Giro 2 · gruppo A</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Caso A: la Dirigente chiede una revisione</h2>
+        <FlowChain steps={[
+          { icon: '🖊️', label: 'Visto DS', sub: 'Richiesta di revisione, con motivo', color: colors.danger },
+          { icon: '🟧', label: 'In revisione', sub: 'Riquadro arancione col motivo', color: colors.warn },
+          { icon: '✏️', label: 'Docente corregge', sub: 'Modifica', color: colors.info },
+          { icon: '📤', label: 'Ripresenta la pratica', sub: 'Il giro riparte', color: colors.info }
+        ]} />
+        <Box type="info">La pratica torna a «Presentata» e passa di nuovo da Segreteria, Commissione e Dirigente.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Controllate cosa succede in Timeline: ogni giro lascia una riga.</p>
+      </div>
+    ),
+    notes: "Caso del gruppo A. Quando la Dirigente sceglie 'Richiesta di revisione' deve scrivere la motivazione. Il referente riceve una email e trova in cima alla pratica un riquadro arancione con il motivo; corregge e preme 'Ripresenta la pratica'. Attenzione: questo percorso non è nelle schermate di prima, quindi guidate voi il gruppo a voce."
+  },
+  shot('Giro 2', '27-dirigente-visto-modale.png', 'Dirigente Scolastica', 'Il punto in cui il caso A cambia strada',
+    'Gruppo A: la Dirigente sceglie «Richiesta di revisione» (2) e scrive il motivo. Gruppo B: «VISTO: si approva» (1), come nel primo giro.',
+    "La stessa finestra del primo giro, usata in modo diverso: due strade a partire dalla stessa schermata.",
+    {}),
+  {
+    block: 'Giro 2',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Giro 2 · gruppo B</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Caso B: uscita didattica e genitori separati</h2>
+        <CompareTwo
+          left={{ icon: '🚌', color: colors.info, title: 'Visita guidata con mezzo a pagamento', points: ["Dopo il visto passa da Preventivi", "Serve la gara tra le agenzie", "Poi: Confermata"] }}
+          right={{ icon: '🚶', color: colors.success, title: 'Uscita didattica, niente mezzo a pagamento', points: ["Dopo il visto passa direttamente a Confermata", "Non c'è la fase dei preventivi", "Il quorum è solo un avviso"] }}
+        />
+        <Box type="warn" title="Genitori separati">Per lo studente con i genitori separati servono due firme: il genitore del gruppo riceve due link e firma due volte.</Box>
+      </div>
+    ),
+    notes: "Caso del gruppo B. Lo scopo è mostrare che i tipi di attività seguono percorsi diversi. Per l'uscita didattica non spuntare 'Serve un mezzo a pagamento': la pratica salta i preventivi. La seconda novità è la doppia firma: chi fa il genitore riceve due email e firma due volte, ciascuna con il proprio link e il proprio codice."
+  },
+  shot('Giro 2', '21-referente-autorizzazioni.png', 'Docente referente', 'Doppia firma: come si riconosce',
+    'Per lo studente con i genitori separati compare l\'etichetta «doppia firma richiesta». Servono le firme di entrambi i genitori.',
+    "La stessa schermata di prima: ora fate notare la riga della studentessa con i genitori separati.",
+    {}),
+  {
+    block: 'Giro 2',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Giro 2 · se avanza tempo</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Tre tipi di attività, regole diverse</h2>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+            <thead>
+              <tr style={{ textAlign: 'left', color: colors.accent }}>
+                <th style={{ padding: '8px 10px', borderBottom: `1px solid ${colors.border}` }}>Tipo</th>
+                <th style={{ padding: '8px 10px', borderBottom: `1px solid ${colors.border}` }}>Durata</th>
+                <th style={{ padding: '8px 10px', borderBottom: `1px solid ${colors.border}` }}>Chi partecipa</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Uscita didattica', 'Una mattinata, forse il primo pomeriggio', 'L\'intera classe'],
+                ['Visita guidata', 'Una giornata intera', 'Almeno 2/3 della classe'],
+                ['Viaggio d\'istruzione', 'Più giorni', 'Almeno 2/3 della classe; non per le classi prime']
+              ].map((r, i) => (
+                <tr key={i}>{r.map((c, j) => <td key={j} style={{ padding: '8px 10px', borderBottom: `1px solid ${colors.border}` }}>{c}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Box type="tip">Chi ha finito prima: provate a creare un viaggio d'istruzione e guardate quali errori compaiono (spesa massima, durata, contratto dei docenti).</Box>
+      </div>
+    ),
+    notes: "Slide di riserva, per i gruppi che finiscono prima. I tre tipi di attività hanno regole diverse; per il viaggio il portale controlla spesa massima, durata e il tipo di contratto degli accompagnatori. Non è obbligatorio: se il tempo è poco, saltatela."
+  },
+
+  /* --- cosa cambiereste --- */
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa cambiereste?</h2>
+        <DurationBadge>15 minuti, individuale e poi alla lavagna</DurationBadge>
+        <Box type="info" title="Tre domande, sul foglio «Cosa cambierei»">
+          Cosa non era chiaro? Cosa mancava? Cosa proporreste di cambiare, e per chi?
+        </Box>
+        <Box type="tip">Una richiesta ben fatta dice chi ha il problema, in quale schermata e cosa vorrebbe vedere. Esempio: «Nella Timeline voglio vedere il nome di chi ha dato il visto».</Box>
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+      </div>
+    ),
+    notes: "Lasciate cinque minuti di scrittura individuale, poi raccogliete alla lavagna. Aiutate chi scrive in modo vago a precisare: in quale schermata, per quale ruolo, cosa vorrebbe vedere. Poi votate: ognuno indica la richiesta che gli sembra più utile. Quella più votata, se realizzabile in pochi minuti, è la candidata per la modifica dal vivo."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Come lavora un agente su una modifica</h2>
+        <FlowChain minItemWidth="140px" steps={[
+          { icon: '✍️', label: 'Richiesta', sub: 'In parole semplici', color: colors.info },
+          { icon: '🧭', label: 'Piano', sub: 'Cosa tocca, cosa no', color: colors.info },
+          { icon: '🛠️', label: 'Modifica', sub: 'Su una copia di lavoro', color: colors.warn },
+          { icon: '🧪', label: 'Prova', sub: 'Controlli automatici e a vista', color: colors.warn },
+          { icon: '🔍', label: 'Revisione', sub: 'Un secondo agente rilegge', color: colors.purple },
+          { icon: '🚀', label: 'Installazione', sub: 'Solo dopo il via di Thomas', color: colors.success }
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px', textAlign: 'center' }}>Ogni passaggio lascia una traccia che si può leggere. L'ultima parola sull'installazione resta a una persona.</p>
+      </div>
+    ),
+    notes: "Spiegate la catena prima di farla vedere. Richiesta: la scrivete voi in parole semplici. Piano: l'agente descrive cosa intende fare e quali parti del portale tocca, e voi leggete prima che parta. Modifica e prova: l'agente scrive il cambiamento e lancia i controlli. Revisione: un secondo agente rilegge il lavoro con occhi nuovi. Installazione: la decide una persona, mai l'agente da solo. È lo stesso schema visto negli incontri sugli agenti."
+  },
+  shot('Cosa cambiereste', '35-pratica-confermata-timeline.png', 'Tutti', 'Una richiesta realistica: chi ha agito?',
+    'La Timeline elenca i passaggi con data e ora, ma non dice chi li ha eseguiti. Richiesta possibile: «Accanto a ogni passaggio, il nome di chi ha agito».',
+    "Prima candidata per la modifica dal vivo. Vantaggi: è una richiesta chiara, tocca una sola schermata, si verifica a occhio rifacendo un passaggio.",
+    {}),
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Altre richieste possibili</h2>
+        <Box type="info" title="Agenzia">La pagina del link non riepiloga i servizi richiesti dalla scuola: l'agenzia vede solo titolo, date e scadenza.</Box>
+        <Box type="info" title="Controllo formale">Le firme mancanti dei genitori non compaiono tra gli avvisi: la Segreteria potrebbe voler sapere quante ne mancano.</Box>
+        <Box type="info" title="Finestre di conferma">I bottoni delle finestre hanno nomi diversi («Conferma», «Presenta», «Conferma selezione», «Confermo nonostante gli avvisi»): nomi più chiari, scelti caso per caso, eviterebbero errori.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Sono osservazioni nate durante la preparazione del laboratorio: le vostre possono essere diverse e più utili.</p>
+      </div>
+    ),
+    notes: "Tenete queste come riserva se la sala non produce richieste adatte. Sono osservazioni emerse preparando le schermate. Attenzione: non tutte le richieste sono sensate da realizzare. Alcune cose che sembrano mancare (per esempio un avviso sulle firme) potrebbero essere scelte volute dal regolamento: è un buon momento per dirlo."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal vivo: la modifica con Claude Code</h2>
+        <DurationBadge>25 minuti, la fa Thomas davanti a voi</DurationBadge>
+        <TerminalMock
+          folder="copia di lavoro del portale"
+          request="Nella cronologia della pratica, accanto a ogni passaggio, mostra il nome di chi lo ha eseguito."
+          actions={[
+            '▸ legge la pagina della cronologia e dove vengono salvati i passaggi',
+            '▸ propone un piano e aspetta il via',
+            '▸ modifica i file indicati nel piano',
+            '▸ lancia i controlli automatici',
+            '▸ un secondo agente rilegge la modifica',
+            '▸ la prova viene ripetuta sul portale di prova'
+          ]}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '12px', textAlign: 'center' }}>Schema indicativo: dal vivo i passaggi e i nomi possono essere diversi.</p>
+      </div>
+    ),
+    notes: "Qui Thomas lavora davanti alla sala con la richiesta scelta. Guardate e ditelo a voce: leggete il piano ad alta voce prima di dare il via; fate notare quando l'agente chiede un permesso e perché; dopo la modifica, ripetete a mano il passaggio sul portale di prova e controllate che il risultato sia quello chiesto. Se qualcosa non funziona, spiegate cosa avete visto e come si corregge la richiesta: è altrettanto istruttivo. Non installate in produzione durante la lezione se la prova non è passata."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa avete visto</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>La richiesta era una frase, il lavoro è andato per passaggi.</li>
+          <li>Il piano si leggeva prima che l'agente toccasse qualcosa.</li>
+          <li>La prova e la revisione sono venute prima dell'installazione.</li>
+          <li>Le richieste che non sono entrate restano nel foglio: si possono fare in un secondo momento.</li>
+        </ul>
+        <Box type="tip">Chi chiede una modifica non deve saper programmare: deve saper dire cosa non va e cosa si aspetta di vedere.</Box>
+      </div>
+    ),
+    notes: "Chiusura della parte sull'agente. Chiedete alla sala cosa ha notato: i punti elencati sono quelli da far emergere. Raccogliete i fogli con le richieste restanti: servono per decidere cosa fare dopo il corso."
+  },
+
+  /* --- chiusura --- */
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa resta di oggi</h2>
+        <CardGrid cards={[
+          { icon: '🧭', color: colors.info, title: 'La procedura', desc: 'Sapete cosa fa ciascun ruolo e in quale ordine passa una pratica.' },
+          { icon: '📝', color: colors.warn, title: 'Le vostre richieste', desc: 'I fogli «Cosa cambierei» restano a Thomas: sono la lista delle cose da migliorare.' },
+          { icon: '📄', color: colors.success, title: 'I materiali', desc: 'Le schede dei ruoli restano consultabili, anche per i colleghi che non c\'erano.' }
+        ]} />
+      </div>
+    ),
+    notes: "Tre cose restano: la conoscenza della procedura, la lista di richieste di modifica e le schede dei ruoli, utili anche per chi non ha partecipato."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La pulizia dei dati</h2>
+        <Box type="success" title="Cosa viene cancellato">Le pratiche, le firme, gli studenti e i genitori di prova, i preventivi, i documenti caricati e gli account studente di prova.</Box>
+        <Box type="info" title="Cosa resta">Gli account del personale e le impostazioni. I ruoli assegnati per il laboratorio vengono tolti.</Box>
+        <Box type="warn" title="Le vostre caselle">Le email già arrivate restano nelle vostre caselle: potete cancellarle.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Prima di uscire: premete «Esci» dal portale su ogni PC.</p>
+      </div>
+    ),
+    notes: "Dite chiaramente che i dati inseriti oggi spariscono: nessuno deve preoccuparsi di quello che ha scritto. Prima della pulizia viene fatta una copia di sicurezza. Ricordate di premere Esci su ogni PC e, se serve, di cancellare le email del laboratorio dalla propria casella."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa ne pensate</h2>
+        <DurationBadge>5 minuti</DurationBadge>
+        <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
+        <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
+      </div>
+    ),
+    notes: "Chiusura del laboratorio: ringraziate, ricordate il questionario di valutazione e dite come potranno far arrivare nuove idee. Se il questionario ha già un indirizzo, scrivetelo alla lavagna."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🏁</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Grazie</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Le schede dei ruoli e dei copioni restano disponibili a questo indirizzo.
+        </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          Materiali del laboratorio:{' '}
+          <a href="../materiali/laboratorio-viaggi/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            {MATERIALI_URL}
+          </a>
+        </p>
+      </div>
+    ),
+    notes: "Ultima slide. Ricordate dove restano i materiali. Ringraziate e chiudete."
+  }
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `Laboratorio Viaggi — ${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
+        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

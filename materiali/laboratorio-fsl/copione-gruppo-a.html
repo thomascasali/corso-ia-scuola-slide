@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copione della pratica, gruppo A — Materiali Laboratorio FSL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali del Laboratorio FSL</a>
+  <a class="dl-btn" href="copione-gruppo-a.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="copione-della-pratica-gruppo-a">Copione della pratica, gruppo A</h1>
+<p>Classe di prova: <strong>4LA</strong>. Studente: <strong>Aurora Benedetti</strong>. Azienda: <strong>Officine Digitali Esempio S.r.l.</strong>. Tutor aziendale: Elisa Bartolini. Legale rappresentante: Franco Montanari. Tutti i dati sono inventati: copiali così come sono scritti.</p>
+<p>La pratica va dall'inizio a «Completata». Non compilare le date del periodo: lasciale vuote, il portale usa quelle della classe.</p>
+<h2 id="dati-da-inserire">Dati da inserire</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Dove</th>
+<th>Cosa scrivere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nuova pratica, Studente</td>
+<td>Benedetti Aurora</td>
+</tr>
+<tr>
+<td>Nuova pratica, Azienda</td>
+<td>Officine Digitali Esempio S.r.l.</td>
+</tr>
+<tr>
+<td>Sede e tutor aziendale</td>
+<td>Quelli già proposti dal portale</td>
+</tr>
+<tr>
+<td>Mansione / attività prevista</td>
+<td>Affiancamento al team di sviluppo di un'applicazione web: lettura dei requisiti, test, correzione di difetti.</td>
+</tr>
+<tr>
+<td>Scheda rischi, dove si svolgerà lo stage</td>
+<td>Uffici dell'azienda a Rimini.</td>
+</tr>
+<tr>
+<td>Scheda rischi, che cosa farà lo studente</td>
+<td>Affiancamento al team di sviluppo: test e correzione di difetti.</td>
+</tr>
+<tr>
+<td>Scheda rischi, macchine</td>
+<td>Computer e postazione di lavoro.</td>
+</tr>
+<tr>
+<td>Scheda rischi, sostanze</td>
+<td>Nessuna.</td>
+</tr>
+<tr>
+<td>Scheda rischi, dispositivi di protezione</td>
+<td>Non necessari.</td>
+</tr>
+<tr>
+<td>Scheda rischi, spostamenti fuori sede</td>
+<td>Nessuno.</td>
+</tr>
+<tr>
+<td>Scheda rischi, otto dichiarazioni</td>
+<td>Sì a tutte e otto</td>
+</tr>
+<tr>
+<td>Scheda di progettazione, Attività previste in azienda</td>
+<td>Lettura dei requisiti di una funzione, prove su una nuova versione dell'applicazione, correzione di due difetti insieme al tutor aziendale, documentazione dei test.</td>
+</tr>
+<tr>
+<td>Convenzione, studenti coperti</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Comunicazioni agli enti, data di invio</td>
+<td>La data di oggi</td>
+</tr>
+<tr>
+<td>Comunicazioni agli enti, protocollo INAIL / DPL</td>
+<td>LAB-A-001 / LAB-A-002</td>
+</tr>
+<tr>
+<td>Registro presenze</td>
+<td>Quattro giornate: due nella prima settimana dello stage e due nella seconda, 08:30-12:30 e 13:30-17:30</td>
+</tr>
+<tr>
+<td>Diario, settimana 1, attività svolte</td>
+<td>Settimana 1: test di una nuova funzione, lettura dei requisiti, due difetti corretti insieme al tutor.</td>
+</tr>
+<tr>
+<td>Diario, settimana 1, riflessioni</td>
+<td>Ho imparato a leggere un requisito e a riprodurre un difetto prima di correggerlo.</td>
+</tr>
+<tr>
+<td>Diario, settimana 2, attività svolte</td>
+<td>Settimana 2: nuove prove sul modulo di accesso, documentazione dei difetti trovati.</td>
+</tr>
+<tr>
+<td>Diario, settimana 2, riflessioni</td>
+<td>Ho capito quanto conta descrivere bene un difetto a chi deve correggerlo.</td>
+</tr>
+<tr>
+<td>Valutazione aziendale</td>
+<td>Cinque competenze a scelta, livelli 3 o 4, giudizio: «Studente puntuale e curioso: ha lavorato con autonomia crescente sui test e sulle correzioni.»</td>
+</tr>
+<tr>
+<td>Relazione finale</td>
+<td>Cinque righe sul lavoro svolto, scritte da chi fa lo studente</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="chi-fa-cosa-in-ordine">Chi fa cosa, in ordine</h2>
+<h3 id="tappa-1-la-pratica-e-lazienda">Tappa 1: la pratica e l'azienda</h3>
+<ol>
+<li><strong>Tutor interno</strong>: da <strong>Pratiche FSL</strong> preme <strong>+ Nuova pratica</strong>, sceglie studente, azienda, sede e tutor aziendale, scrive la mansione e preme <strong>Crea la bozza</strong>. Poi <strong>Invia in validazione azienda</strong>.</li>
+<li><strong>Tutor interno</strong>: prova a premere <strong>Azienda idonea → progettazione</strong>. Il portale si ferma e dice perché: leggete insieme il motivo.</li>
+<li><strong>Tutor interno</strong>: da <strong>Aziende</strong>, apre l'azienda, nel riquadro delle schede rischi preme <strong>+ Invia scheda rischi</strong> e poi <strong>Invia il link</strong>.</li>
+<li><strong>Legale rappresentante</strong>: apre il link ricevuto, chiede il codice, lo scrive. Compila la scheda. La prima volta lascia senza risposta la domanda 8 e preme <strong>Salva e firma</strong>: leggete il messaggio. Poi risponde e firma.</li>
+<li><strong>Responsabile FSL</strong>: da <strong>Aziende</strong> apre l'azienda, preme <strong>Registra esito</strong>, sceglie <strong>Idoneo</strong>, <strong>Registra l'esito</strong>.</li>
+<li><strong>Responsabile FSL</strong> o <strong>Tutor interno</strong>: <strong>Azienda idonea → progettazione</strong>.</li>
+</ol>
+<h3 id="tappa-2-progettazione-e-convenzione">Tappa 2: progettazione e convenzione</h3>
+<ol start="7">
+<li><strong>Tutor interno</strong>: preme <strong>Avvia la firma della convenzione</strong> senza aver preparato nulla. Leggete l'elenco di cosa manca.</li>
+<li><strong>Tutor interno</strong>: scheda <strong>Progettazione</strong>, compila «Attività previste in azienda», <strong>Salva la scheda</strong>.</li>
+<li><strong>Segreteria</strong>: dalla scheda dello studente, riquadro <strong>Attestati sicurezza</strong>, <strong>Segna gli attestati come inviati all'azienda</strong> e poi <strong>Segna come inviati</strong>.</li>
+<li><strong>Tutor interno</strong>: scheda <strong>Firme e convenzione</strong>, <strong>Genera la convenzione</strong> e conferma nella finestra. Poi <strong>Avvia la firma della convenzione</strong>.</li>
+<li><strong>Tutor interno</strong>: <strong>Invia i link di firma</strong>, <strong>Invia i link</strong>: parte il secondo link per il legale rappresentante.</li>
+<li><strong>Dirigente Scolastico</strong>: apre la pratica, scheda <strong>Firme e convenzione</strong>, <strong>Firma la convenzione</strong>, spunta <strong>Ho letto il documento e lo firmo</strong>, <strong>FIRMA</strong>.</li>
+<li><strong>Legale rappresentante</strong>: apre il secondo link, codice, legge, <strong>FIRMA</strong>. Quando firma anche lui la pratica passa da sola a «Patto in firma».</li>
+</ol>
+<h3 id="tappa-3-patto-formativo-e-firme">Tappa 3: patto formativo e firme</h3>
+<ol start="14">
+<li><strong>Tutor interno</strong>: <strong>Invia i link di firma</strong>: partono i link ai genitori e al tutor aziendale.</li>
+<li><strong>Studente</strong>: dal menu <strong>Il mio percorso</strong>, riquadro <strong>Documenti da firmare</strong>, <strong>Leggi e firma</strong> sul patto formativo e poi sulla scheda di progettazione.</li>
+<li><strong>Genitore 1 e Genitore 2</strong>: ciascuno dal proprio link, codice, firma i due documenti. Dopo la prima firma il portale dice che manca quella dell'altro genitore.</li>
+<li><strong>Tutor aziendale</strong>: dal proprio link, codice, firma la scheda di progettazione.</li>
+<li><strong>Tutor interno</strong>: scheda <strong>Firme e convenzione</strong>, <strong>Firma la scheda di progettazione</strong>. Guardate l'elenco <strong>Firme raccolte</strong>. Con l'ultima firma la pratica passa da sola a «Comunicazioni enti».</li>
+</ol>
+<h3 id="tappa-4-comunicazioni-agli-enti-e-avvio">Tappa 4: comunicazioni agli enti e avvio</h3>
+<ol start="19">
+<li><strong>Tutor interno</strong>: dal menu <strong>Comunicazioni enti</strong>, sceglie la classe e preme <strong>Genera batch</strong> (il bottone che prepara in un colpo solo il gruppo di comunicazioni agli enti). Compaiono due righe: INAIL e DPL.</li>
+<li><strong>Dirigente Scolastico</strong>: apre il PDF di una riga e dice «firmato»: il modulo si firma fuori dal portale.</li>
+<li><strong>Segreteria</strong>: per ogni riga <strong>Segna come inviata</strong>, data, protocollo, <strong>Conferma invio</strong>. Poi, dalla pratica, <strong>Comunicazioni inviate → pronta</strong>.</li>
+<li><strong>Tutor interno</strong>: <strong>Avvia il percorso</strong>.</li>
+</ol>
+<h3 id="tappa-5-presenze-diario-e-valutazione">Tappa 5: presenze, diario e valutazione</h3>
+<ol start="23">
+<li><strong>Studente</strong>: <strong>Il mio percorso</strong>, scheda <strong>Presenze</strong>, <strong>Aggiungi giornata</strong> per quattro giornate. Poi scheda <strong>Diario</strong>: scrive e salva le due settimane.</li>
+<li><strong>Tutor aziendale</strong>: dal proprio link apre il registro presenze e preme <strong>Conferma settimana</strong> per ciascuna settimana.</li>
+<li><strong>Tutor interno</strong>: <strong>Chiudi il periodo → valutazione</strong>.</li>
+<li><strong>Tutor aziendale</strong>: compila la valutazione e preme <strong>Salva e firma la valutazione</strong>. Poi firma il registro presenze dal suo elenco di documenti.</li>
+<li><strong>Tutor interno</strong>: scheda <strong>Presenze</strong>, riquadro <strong>Chiusura del registro</strong>, <strong>Chiudi e firma il registro</strong>.</li>
+<li><strong>Studente</strong>: scheda <strong>Autovalutazione</strong>, <strong>Consegna autovalutazione</strong>; scheda <strong>Relazione finale</strong>, scrive e consegna.</li>
+</ol>
+<h3 id="tappa-6-completare-la-pratica">Tappa 6: completare la pratica</h3>
+<ol start="29">
+<li><strong>Tutor interno</strong>: preme <strong>Completa la pratica</strong>. Il portale si ferma: leggete il motivo.</li>
+<li><strong>Tutti</strong>: dal foglio «Cosa cambierei» scrivete la richiesta che risolve il problema. Thomas ne porta una a Claude Code e la modifica si prova dal vivo.</li>
+<li><strong>Studente</strong> e <strong>Tutor interno</strong>: con la modifica installata si riprova. Compare un avviso sulle ore: si conferma con <strong>Confermo nonostante gli avvisi</strong>. La pratica diventa «Completata».</li>
+</ol>
+<h2 id="cosa-controllare-alla-fine">Cosa controllare alla fine</h2>
+<ul>
+<li>Dopo ogni passaggio lo stato in alto a destra è quello atteso.</li>
+<li>Nell'elenco <strong>Firme raccolte</strong> ogni firma ha documento, firmatario, data e stato «Valida».</li>
+<li>Nella scheda <strong>Timeline</strong> compaiono tutti i passaggi, con data e ora.</li>
+<li>Hai premuto <strong>Esci</strong>.</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

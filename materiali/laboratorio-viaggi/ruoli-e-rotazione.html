@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruoli e rotazione — Materiali Laboratorio Viaggi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali del Laboratorio Viaggi</a>
+  <a class="dl-btn" href="ruoli-e-rotazione.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="ruoli-e-rotazione">Ruoli e rotazione</h1>
+<p>Ogni gruppo (A o B) è formato da 5 o 6 persone. Nel portale ci sono otto ruoli: cinque sono del personale (docente referente, segreteria, commissione viaggi, dirigente, ufficio patrimonio), uno è lo studente, che entra con un account di prova, e due sono esterni (genitore e agenzia), che ricevono email e non hanno un account. I posti si assegnano per nome qualche giorno prima della lezione. Chi ha meno colleghi del gruppo copre due ruoli, scelti in modo che non debba fare due cose nello stesso momento.</p>
+<h2 id="giro-1-la-visita-guidata-fino-a-confermata">Giro 1: la visita guidata fino a «Confermata»</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Posto</th>
+<th>Gruppo da 6</th>
+<th>Gruppo da 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Docente referente</td>
+<td>Docente referente</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Segreteria</td>
+<td>Segreteria e Commissione viaggi</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Commissione viaggi e Dirigente Scolastica</td>
+<td>Dirigente Scolastica e Ufficio Patrimonio</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Ufficio Patrimonio</td>
+<td>Studente e Agenzia</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Studente e Agenzia</td>
+<td>Genitore</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Genitore</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="giro-2-ruoli-scambiati-caso-diverso">Giro 2: ruoli scambiati, caso diverso</h2>
+<p>Ruotano solo i ruoli interni (personale e studente): ognuno prende il ruolo interno del collega successivo, così nessuno fa due volte lo stesso ruolo interno. Genitore e agenzia non ruotano: restano alla stessa persona per tutta la lezione, perché le email arrivano a indirizzi fissati prima.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Posto</th>
+<th>Gruppo da 6</th>
+<th>Gruppo da 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Segreteria</td>
+<td>Segreteria e Commissione viaggi</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Commissione viaggi e Dirigente Scolastica</td>
+<td>Dirigente Scolastica e Ufficio Patrimonio</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Ufficio Patrimonio</td>
+<td>Studente</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Studente</td>
+<td>Docente referente e Agenzia</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Docente referente e Agenzia</td>
+<td>Genitore</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Genitore</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Dopo lo scambio, Thomas aggiorna i ruoli nel portale: esci con <strong>Esci</strong>, aspetta il suo via e rientra con <strong>Accedi con Google</strong>.</p>
+<h2 id="casi-del-giro-2">Casi del Giro 2</h2>
+<ul>
+<li><strong>Gruppo A</strong>: la Dirigente chiede una revisione, il docente referente corregge e ripresenta la pratica.</li>
+<li><strong>Gruppo B</strong>: uscita didattica senza mezzo a pagamento, con genitori separati (due firme).</li>
+</ul>
+<h2 id="regole-comuni">Regole comuni</h2>
+<ul>
+<li>Il titolo della pratica inizia con «Gruppo A - » o «Gruppo B - ».</li>
+<li>Lavora solo sulla tua pratica: il portale mostra a ogni ruolo le pratiche di tutti i gruppi.</li>
+<li>Studente, genitore e agenzia ricevono email vere sul loro indirizzo della scuola.</li>
+</ul>
+<h2 id="cosa-controllare">Cosa controllare</h2>
+<ul>
+<li>Hai scritto il tuo posto e il tuo ruolo del Giro 1 e del Giro 2 qui sotto.</li>
+<li>Sai chi, nel tuo gruppo, agisce subito prima e subito dopo di te.</li>
+</ul>
+<p>Il mio posto: ______ &nbsp;&nbsp; Ruolo Giro 1: ______________ &nbsp;&nbsp; Ruolo Giro 2: ______________</p>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

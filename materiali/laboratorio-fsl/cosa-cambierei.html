@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosa cambierei — Materiali Laboratorio FSL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali del Laboratorio FSL</a>
+  <a class="dl-btn" href="cosa-cambierei.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="cosa-cambierei">Cosa cambierei</h1>
+<p>Tempo indicativo: 10 minuti. Usa questo foglio durante tutto il laboratorio e compilalo quando il portale si ferma sull'ultimo passo. Una richiesta diventa una modifica fatta dal vivo da Thomas con Claude Code.</p>
+<h2 id="come-scrivere-una-richiesta-che-si-puo-realizzare">Come scrivere una richiesta che si può realizzare</h2>
+<p>Una richiesta utile dice tre cose: <strong>chi</strong> ha il problema (quale ruolo), <strong>dove</strong> (in quale schermata) e <strong>cosa vorrebbe vedere</strong>.</p>
+<p>Esempio, su un altro punto del percorso: «Come Responsabile FSL, nella pagina dell'azienda vorrei vedere subito che la scheda dei rischi è stata firmata e aspetta la mia valutazione».</p>
+<p>Evita richieste troppo ampie («rendere tutto più semplice»): non sono verificabili.</p>
+<h2 id="la-richiesta-sul-blocco-finale">La richiesta sul blocco finale</h2>
+<p>Quando il Tutor interno preme <strong>Completa la pratica</strong> il portale si ferma. Scrivi qui il problema come richiesta.</p>
+<ul>
+<li>Chi ha il problema: _______________________________________________</li>
+<li>In quale schermata: _______________________________________________</li>
+<li>Cosa vorrebbe vedere: _____________________________________________</li>
+</ul>
+<h2 id="le-mie-altre-segnalazioni">Le mie altre segnalazioni</h2>
+<p>Una riga per ogni segnalazione. Se non sai come classificarla, scrivila comunque.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Il mio ruolo</th>
+<th>Schermata o passaggio</th>
+<th>Cosa non è chiaro, o cosa manca</th>
+<th>La mia proposta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="tre-domande-per-aiutarti">Tre domande per aiutarti</h2>
+<ol>
+<li>Dove ho esitato, o ho dovuto chiedere a un collega?</li>
+<li>Cosa avrei voluto sapere prima di premere un bottone?</li>
+<li>Cosa farebbe risparmiare tempo a chi usa il portale ogni giorno?</li>
+</ol>
+<h2 id="cosa-controllare-prima-di-consegnare">Cosa controllare prima di consegnare</h2>
+<ul>
+<li>Ogni riga dice chi, dove e cosa.</li>
+<li>Hai separato quello che non era chiaro (una difficoltà tua) da quello che manca (una funzione).</li>
+<li>Non hai scritto nomi di persone né indirizzi: solo i ruoli e le schermate.</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio FSL · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  .shot-grid { grid-template-columns: minmax(0, 1fr) 330px; }
+  @media (max-width: 900px) { .shot-grid { grid-template-columns: 1fr !important; } }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stesso impianto dell'incontro 1) ---------- */
+/* Nota: duplicati apposta in questo file, come già fatto tra incontro-1/slide.html e
+   incontro-1/simulazione-agente.html, perché Babel standalone non carica script esterni
+   via XHR quando il file si apre da file://. */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+const DurationBadge = ({ children }) => (
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
+    <span aria-hidden="true">⏱</span><span>{children}</span>
+  </div>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px', fontSize: 'var(--fs-sm)' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* Riquadri dei bottoni sugli screenshot (x, y, larghezza, altezza in pixel su immagini 1366x768). */
+const BOXES = {"01-accesso-login.png": [{"x": 492, "y": 461, "w": 382, "h": 48, "name": "Accedi con Google"}, {"x": 540, "y": 372, "w": 150, "h": 19, "name": "Ricordami per 30 giorni (da lasciare spento)"}], "02-tutor-dashboard.png": [{"x": 12, "y": 137, "w": 232, "h": 40, "name": "Pratiche FSL (menu)"}], "03-tutor-nuova-pratica.png": [{"x": 301, "y": 224, "w": 630, "h": 39, "name": "Studente"}, {"x": 301, "y": 303, "w": 630, "h": 39, "name": "Azienda"}, {"x": 301, "y": 609, "w": 630, "h": 38, "name": "Mansione / attività prevista"}, {"x": 815, "y": 671, "w": 116, "h": 38, "name": "Crea la bozza"}], "04-tutor-blocco-scheda-rischi.png": [{"x": 464, "y": 381, "w": 438, "h": 40, "name": "Elenco dei motivi del blocco"}], "05-tutor-azienda-invia-scheda-rischi.png": [{"x": 1185, "y": 180, "w": 136, "h": 30, "name": "+ Invia scheda rischi"}, {"x": 819, "y": 519, "w": 100, "h": 38, "name": "Invia il link"}], "06-legale-inserisci-codice.png": [{"x": 393, "y": 391, "w": 580, "h": 58, "name": "Codice ricevuto (6 cifre)"}, {"x": 393, "y": 465, "w": 580, "h": 48, "name": "Conferma il codice"}], "07-legale-modulo-scheda-rischi.png": [{"x": 392, "y": 262, "w": 582, "h": 28, "name": "Scheda di valutazione dei rischi (titolo)"}, {"x": 392, "y": 406, "w": 582, "h": 24, "name": "Descrizione dell'attività (sezione)"}], "08-legale-modulo-dichiarazioni.png": [{"x": 392, "y": 382, "w": 582, "h": 24, "name": "Dichiarazioni (sezione)"}], "09-legale-errore-risposta-mancante.png": [{"x": 409, "y": 511, "w": 373, "h": 20, "name": "Messaggio \"Manca una risposta\""}, {"x": 392, "y": 357, "w": 582, "h": 117, "name": "Domanda 8 in rosso"}, {"x": 392, "y": 637, "w": 582, "h": 56, "name": "Salva e firma"}], "10-legale-scheda-firmata-ricevuta.png": [{"x": 580, "y": 423, "w": 206, "h": 48, "name": "Scarica la ricevuta (PDF)"}], "11-responsabile-dashboard.png": [{"x": 12, "y": 313, "w": 232, "h": 40, "name": "Aziende (menu)"}], "12-responsabile-registra-esito.png": [{"x": 332, "y": 132, "w": 702, "h": 16, "name": "Dichiarazioni del legale rappresentante"}, {"x": 319, "y": 449, "w": 16, "h": 16, "name": "Esito: Idoneo"}, {"x": 923, "y": 672, "w": 124, "h": 38, "name": "Registra l'esito"}]};
+
+/* ---------- componenti nuovi per il Laboratorio FSL ---------- */
+
+const MATERIALI_URL = 'thomascasali.github.io/corso-ia-scuola-slide/materiali/laboratorio-fsl/';
+const MAT = '../materiali/laboratorio-fsl/';
+
+const roleColor = {
+  'Tutor interno': colors.info,
+  'Responsabile FSL': colors.warn,
+  'Segreteria': colors.purple,
+  'Dirigente Scolastico': colors.danger,
+  'Studente': colors.accentAlt,
+  'Genitore': colors.info,
+  'Tutor aziendale': colors.success,
+  'Legale rappresentante': colors.warn,
+  'Tutti': colors.textMuted
+};
+
+function Shot({ file, role, title, text, duration, badges }) {
+  const W = 1366, H = 768;
+  const boxes = BOXES[file] || [];
+  const c = roleColor[role] || colors.accent;
+  return (
+    <div className="shot-grid" style={{ display: 'grid', gap: '22px', alignItems: 'start', padding: '6px 8px' }}>
+      <div style={{ position: 'relative', width: 'min(100%, calc((100vh - 170px) * 1.7786))', aspectRatio: '1366 / 768', border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.bgCard }}>
+        <img src={'img/' + file} alt={title + ' (' + role + ')'} style={{ width: '100%', height: '100%', display: 'block', borderRadius: '8px' }} />
+        {boxes.map((b, i) => (
+          <div key={i} aria-hidden="true" style={{ position: 'absolute', left: ((b.x - 4) / W * 100) + '%', top: ((b.y - 4) / H * 100) + '%', width: ((b.w + 8) / W * 100) + '%', height: ((b.h + 8) / H * 100) + '%', border: `3px solid ${colors.warn}`, borderRadius: '5px', boxShadow: '0 0 0 2px rgba(0,0,0,0.45)', background: 'rgba(217,164,65,0.10)' }}>
+            <span style={{ position: 'absolute', left: '-12px', top: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: colors.warn, color: colors.bg, fontWeight: 800, fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>{i + 1}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ display: 'inline-block', alignSelf: 'flex-start', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: c, border: `1px solid ${c}80`, borderRadius: '20px', padding: '3px 12px', textTransform: 'uppercase', letterSpacing: '1px' }}>{role}</div>
+        <h3 style={{ color: colors.text, fontSize: 'var(--fs-lead)' }}>{title}</h3>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.45 }}>{text}</p>
+        {boxes.length > 0 && (
+          <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '2px' }}>
+            {boxes.map((b, i) => (
+              <li key={i} style={{ display: 'flex', gap: '8px', alignItems: 'baseline', fontSize: 'var(--fs-xs)', lineHeight: 1.35, color: colors.textDim }}>
+                <span style={{ flex: '0 0 auto', width: '20px', height: '20px', borderRadius: '50%', background: colors.warn, color: colors.bg, fontWeight: 800, fontSize: '12px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+                <span style={{ fontSize: 'var(--fs-xs)' }}>{b.name}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+        {duration && <div><DurationBadge>{duration}</DurationBadge></div>}
+        {badges && badges.map((b, i) => <div key={i}><ActivityBadge href={MAT + b.href} label={b.label} /></div>)}
+      </div>
+    </div>
+  );
+}
+
+function CardGrid({ cards }) {
+  return (
+    <div className="role-grid" style={{ display: 'grid', gap: '14px', width: '100%' }}>
+      {cards.map((r, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ fontSize: '26px' }}>{r.icon}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{r.desc}</div>
+          {r.menu && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.4 }}>{r.menu}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TerminalMock({ folder, request, actions = [] }) {
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', overflow: 'hidden', maxWidth: '720px', margin: '0 auto' }}>
+      <div style={{ background: colors.bgLight, padding: '8px 14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, borderBottom: `1px solid ${colors.border}` }}>{folder}</div>
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {request && (
+          <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '8px 12px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+            <strong style={{ color: colors.text }}>Richiesta:</strong> {request}
+          </div>
+        )}
+        {actions.map((a, i) => (
+          <div key={i} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, paddingLeft: '6px' }}>{a}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const shot = (block, file, role, title, text, notes, extra = {}) => ({
+  block,
+  content: () => <Shot file={file} role={role} title={title} text={text} {...extra} />,
+  notes
+});
+
+const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
+  block,
+  content: () => (
+    <div style={{ padding: '14px 30px' }}>
+      <BlockTag>{tag}</BlockTag>
+      <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
+      <DurationBadge>{duration}</DurationBadge>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '6px 0 4px' }}>
+        {rows.map((r, i) => (
+          <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${roleColor[r[0]] || colors.accent}`, borderRadius: '6px', padding: '8px 14px' }}>
+            <span style={{ flex: '0 1 190px', minWidth: 0, overflowWrap: 'anywhere', color: roleColor[r[0]] || colors.accent, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r[0]}</span>
+            <span style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.4 }}>{r[1]}</span>
+          </div>
+        ))}
+      </div>
+      {tip && <Box type="tip">{tip}</Box>}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+      </div>
+    </div>
+  ),
+  notes
+});
+
+
+/* ---------- slide ---------- */
+
+const COPIONI = [
+  { href: 'copione-gruppo-a.html', label: 'Copione della pratica, gruppo A' },
+  { href: 'copione-gruppo-b.html', label: 'Copione della pratica, gruppo B' }
+];
+const RUOLO = {
+  tutor: { href: 'ruolo-tutor-interno.html', label: 'Scheda: Tutor interno' },
+  resp: { href: 'ruolo-responsabile.html', label: 'Scheda: Responsabile FSL' },
+  segr: { href: 'ruolo-segreteria.html', label: 'Scheda: Segreteria' },
+  ds: { href: 'ruolo-dirigente.html', label: 'Scheda: Dirigente Scolastico' },
+  stud: { href: 'ruolo-studente.html', label: 'Scheda: Studente' },
+  gen: { href: 'ruolo-genitore.html', label: 'Scheda: Genitore' },
+  ta: { href: 'ruolo-tutor-aziendale.html', label: 'Scheda: Tutor aziendale' },
+  lr: { href: 'ruolo-legale-rappresentante.html', label: 'Scheda: Legale rappresentante' }
+};
+
+const slides = [
+  /* --- apertura --- */
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🏭</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Laboratorio FSL
+        </h1>
+        <p style={{ color: colors.textDim, maxWidth: '760px' }}>
+          Una lezione a parte, in laboratorio informatico: due gruppi, una pratica di Formazione Scuola Lavoro per gruppo, dalla bozza a «Completata».
+        </p>
+      </div>
+    ),
+    notes: "Apertura. Dite subito tre cose: si lavora sul portale vero della scuola, nell'anno scolastico in corso, con classi di laboratorio e dati inventati; tutto quello che inserite oggi verrà cancellato a fine corso; nessuno può rompere nulla di importante. Controllate che ogni PC abbia il browser aperto sulla pagina del portale (l'indirizzo lo scrivete alla lavagna) e la casella di posta della scuola aperta in un'altra scheda."
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Apertura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Che cosa facciamo oggi</h2>
+        <CompareTwo
+          left={{ icon: '🧭', color: colors.info, title: 'Portiamo una pratica fino in fondo', points: ["Una pratica per gruppo, dalla bozza a «Completata»", "Ruolo per ruolo: ognuno vede il portale dalla parte di chi lo usa", "Alcune persone firmano da fuori, con un link ricevuto per email"] }}
+          right={{ icon: '🤖', color: colors.accent, title: 'Cambiamo il portale dal vivo', points: ["Verso la fine la pratica si ferma: manca un pezzo", "Lo descrivete voi come richiesta di modifica", "Thomas la affida a Claude Code e si riprova"] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Obiettivo: sapere cosa deve fare ciascuno nella procedura dematerializzata della Formazione Scuola Lavoro e vedere come nasce una modifica.</p>
+      </div>
+    ),
+    notes: "Due obiettivi. Il primo è formare: alla fine ognuno deve sapere cosa tocca a lui e cosa fanno gli altri prima e dopo di lui. Il secondo è mostrare cosa significa, in pratica, chiedere una modifica a un agente: non una dimostrazione astratta, ma un problema che incontrate voi, con i vostri occhi, un'ora prima. Non anticipate quale sarà il problema."
+  },
+
+  /* --- blocco 1: perché digitale --- */
+  {
+    block: 'Perché una procedura digitale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Perché una procedura digitale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dalla carta al portale</h2>
+        <CompareTwo
+          left={{ icon: '📄', color: colors.danger, title: 'Con i moduli cartacei', points: ["Convenzione, patto formativo, scheda dei rischi, scheda di progettazione, registro, valutazione: tanti fogli per ogni studente", "Le firme si rincorrono tra scuola, famiglia e azienda", "Per sapere a che punto è una pratica si chiede in segreteria"] }}
+          right={{ icon: '🖥️', color: colors.success, title: 'Con il portale', points: ["Una pratica per studente, con uno stato che dice a che punto è", "Il portale non fa avanzare finché manca qualcosa e dice cosa", "Ogni firma ha data, ora e impronta del documento", "Famiglie e aziende firmano da un link per email, senza account"] }}
+        />
+      </div>
+    ),
+    notes: "FSL vuol dire Formazione Scuola Lavoro, in passato PCTO: il periodo che lo studente passa in azienda, con i documenti che lo accompagnano. Non vendete il portale: chiedete alla sala come funziona oggi la carta e dove si perde tempo. Raccogliete due o tre risposte a voce, vi serviranno nel momento 'cosa cambiereste'."
+  },
+  {
+    block: 'Perché una procedura digitale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Perché una procedura digitale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Cosa cambia per ciascuno</h2>
+        <CardGrid cards={[
+          { icon: '👩‍🏫', color: colors.info, title: 'Tutor interno', desc: 'È il docente che crea e conduce la pratica.' },
+          { icon: '📋', color: colors.warn, title: 'Responsabile FSL', desc: 'Valuta se l\'azienda è idonea.' },
+          { icon: '🗂️', color: colors.purple, title: 'Segreteria', desc: 'Registra attestati e comunicazioni agli enti.' },
+          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastico', desc: 'Firma la convenzione dal portale.' },
+          { icon: '🎒', color: colors.accentAlt, title: 'Studente', desc: 'Firma, registra presenze, scrive diario e relazione.' },
+          { icon: '👪', color: colors.info, title: 'Genitori', desc: 'Firmano da link e codice per email.' },
+          { icon: '🏢', color: colors.success, title: 'Tutor aziendale', desc: 'Segue lo studente, conferma le settimane, valuta.' },
+          { icon: '⚖️', color: colors.warn, title: 'Legale rappresentante', desc: 'Compila la scheda dei rischi e firma la convenzione.' }
+        ]} />
+      </div>
+    ),
+    notes: "Una frase per ruolo, senza entrare nei dettagli: li vedrete tutti all'opera. I primi cinque entrano nel portale con un account; genitori, tutor aziendale e legale rappresentante no: ricevono una email con un link. Per questo oggi alcune persone della sala interpretano un ruolo esterno e ricevono email vere sul proprio indirizzo della scuola."
+  },
+  {
+    block: 'Perché una procedura digitale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Perché una procedura digitale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Il percorso di una pratica</h2>
+        <FlowChain minItemWidth="118px" steps={[
+          { icon: '✏️', label: 'Bozza', sub: 'Tutor interno', color: colors.info },
+          { icon: '🏢', label: 'Azienda da validare', sub: 'Scheda rischi', color: colors.warn },
+          { icon: '🧩', label: 'Progettazione', sub: 'Scheda, attestati', color: colors.info },
+          { icon: '📜', label: 'Convenzione in firma', sub: 'DS e legale', color: colors.danger },
+          { icon: '🤝', label: 'Patto in firma', sub: 'Studente, famiglia', color: colors.accentAlt },
+          { icon: '📨', label: 'Comunicazioni enti', sub: 'INAIL e DPL', color: colors.purple },
+          { icon: '🟢', label: 'Pronta', sub: 'Segreteria', color: colors.success },
+          { icon: '🛠️', label: 'In corso', sub: 'Presenze, diario', color: colors.info },
+          { icon: '📝', label: 'Valutazione', sub: 'Tutor aziendale', color: colors.warn },
+          { icon: '✅', label: 'Completata', sub: 'Tutor interno', color: colors.success }
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px', textAlign: 'center' }}>Da qualsiasi stato la pratica si può anche annullare, con una motivazione. Oggi la portiamo fino a «Completata».</p>
+      </div>
+    ),
+    notes: "Mostrate il percorso intero: dieci stati. Il portale passa da uno stato al successivo solo se sono rispettate le condizioni; se manca qualcosa, spiega cosa. Gli errori bloccano, gli avvisi si possono accettare. In due punti la pratica avanza da sola, dopo l'ultima firma. INAIL è l'istituto che assicura contro gli infortuni sul lavoro; DPL è la Direzione Provinciale del Lavoro."
+  },
+
+  /* --- blocco 2: come funziona il laboratorio --- */
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Classi di laboratorio e dati inventati</h2>
+        <Box type="info" title="Cosa trovate nel portale">
+          Nell'anno scolastico attivo, 2026/2027, due classi di laboratorio, 4LA e 4LB, sette studenti per classe con nomi inventati, e per ogni classe un'azienda inventata già censita con il suo legale rappresentante e il suo tutor.
+        </Box>
+        <Box type="warn" title="Il portale è quello vero">
+          Entrate dallo stesso accesso che userà la scuola. Quello che inserite oggi resta nel portale fino alla pulizia, quindi i dati sono tutti inventati.
+        </Box>
+        <Box type="success" title="Alla fine si cancella tutto">
+          Pratiche, firme, studenti e account di prova vengono cancellati a fine corso, prima dell'uso vero.
+        </Box>
+      </div>
+    ),
+    notes: "Spiegate la differenza tra 'vero' e 'inventato'. Il portale è quello di produzione, ma in questa fase contiene solo dati di prova. A fine corso Thomas lancia uno strumento di pulizia che cancella i dati del laboratorio. Nessun dato reale di studenti, famiglie o personale entra mai nelle esercitazioni."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Le email sono vere</h2>
+        <CompareTwo
+          left={{ icon: '✉️', color: colors.success, title: 'Arrivano davvero', points: ["Il link e il codice di firma arrivano a chi fa il genitore, il tutor aziendale, il legale rappresentante", "Il codice ha sei cifre e vale dieci minuti", "Sull'indirizzo della scuola di ciascuno: guardate anche la posta indesiderata"] }}
+          right={{ icon: '📭', color: colors.textMuted, title: 'Gli altri studenti sono finti', points: ["Le famiglie degli altri studenti hanno indirizzi inventati che non ricevono posta", "Nessuna persona reale riceve nulla", "Lavorerete solo sullo studente della vostra pratica"] }}
+        />
+      </div>
+    ),
+    notes: "Nel portale genitori, tutor aziendale e legale rappresentante non hanno un account: ricevono email vere. In laboratorio le email arrivano alle caselle della scuola di chi interpreta quel ruolo. Il codice vale dieci minuti e se ne può chiedere uno nuovo una volta al minuto. Se un messaggio non arriva, il primo controllo è la posta indesiderata."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Due gruppi, una pratica ciascuno</h2>
+        <CompareTwo
+          left={{ icon: '🅰️', color: colors.info, title: 'Gruppo A, classe 4LA', points: ["Studente: Aurora Benedetti", "Azienda: Officine Digitali Esempio, sviluppo software", "Dalla bozza a «Completata»"] }}
+          right={{ icon: '🅱️', color: colors.purple, title: 'Gruppo B, classe 4LB', points: ["Studente: Emma Gabellini", "Azienda: Reti e Servizi Esempio, assistenza sistemistica", "Dalla bozza a «Completata»"] }}
+        />
+        <Box type="tip">I due gruppi fanno lo stesso percorso in parallelo. I ruoli non ruotano a metà lezione: le firme sono legate alle persone. Il foglio «Ruoli e rotazione» dice chi fa cosa e quando.</Box>
+        <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
+      </div>
+    ),
+    notes: "Due gruppi da cinque o sei persone. Ogni gruppo ha la propria classe, il proprio studente e la propria azienda, tutti inventati. I ruoli sono assegnati per nome qualche giorno prima, perché servono gli indirizzi per la configurazione: scriveteli alla lavagna. Il Tutor interno e lo Studente sono i ruoli con più lavoro; chi ha due cappelli sa già quando passare dall'uno all'altro."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Chi interpreta cosa</h2>
+        <CompareTwo
+          left={{ icon: '👥', color: colors.info, title: 'Gruppo da 6', points: ["1: Dirigente Scolastico e Genitore 1", "2: Responsabile FSL", "3: Segreteria e Genitore 2", "4: Tutor interno", "5: Studente", "6: Tutor aziendale e Legale rappresentante"] }}
+          right={{ icon: '👥', color: colors.purple, title: 'Gruppo da 5', points: ["1: Dirigente Scolastico e Genitore 1", "2: Responsabile FSL e Genitore 2", "3: Segreteria, Legale rappresentante e Tutor aziendale", "4: Tutor interno", "5: Studente"] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>I genitori sono due e firmano tutti e due. Genitori, tutor aziendale e legale rappresentante restano alla stessa persona per tutta la lezione. Chi ha un ruolo interno e uno esterno usa due strade: il portale e il link ricevuto per email.</p>
+      </div>
+    ),
+    notes: "Rispettate una regola: la stessa persona non firma lo stesso documento da due parti. Per esempio chi fa lo studente non fa anche il genitore, e chi fa il Tutor interno non fa anche il tutor aziendale, perché entrambi firmano la scheda di progettazione. La distribuzione della slide è una proposta: potete cambiarla se la sala è diversa."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quattro regole per lavorare bene</h2>
+        <Box type="warn" title="1. Solo la vostra pratica">I ruoli del personale valgono per tutto il portale e vedono anche la pratica dell'altro gruppo. Toccate solo quella della vostra classe.</Box>
+        <Box type="info" title="2. Chi aspetta, legge">Quando non tocca a voi, leggete la scheda del ruolo che agisce subito dopo di voi.</Box>
+        <Box type="danger" title="3. «Ricordami» spento, «Esci» a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
+        <Box type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono nella parte finale.</Box>
+      </div>
+    ),
+    notes: "Le regole sono quattro e vanno dette ad alta voce. La più importante nella pratica è la prima: i ruoli sono globali, quindi chi ha il ruolo Segreteria vede le pratiche di tutte le classi. Il nome della classe nel titolo della pratica e nelle schermate serve a riconoscere la propria."
+  },
+
+  /* --- blocco 3: accesso --- */
+  shot('Accesso', '01-accesso-login.png', 'Tutti', 'Accesso con l\'account della scuola',
+    'Un solo bottone: «Accedi con Google», con l\'account della scuola. Lasciate spenta la casella «Ricordami per 30 giorni».',
+    "Attività di accesso, circa dieci minuti. Chi ha un ruolo del personale entra con il proprio account della scuola; chi interpreta lo studente entra con l'account di prova che gli è stato consegnato. Chi ha un ruolo esterno non entra da qui: userà i link nelle email. Se qualcuno entra ma vede solo 'Dashboard' nel menu, il ruolo non è ancora assegnato: lo sistema Thomas. Controllate che 'Ricordami' sia spento su ogni PC.",
+    { duration: '10 minuti, tutti insieme', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
+  {
+    block: 'Accesso',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Accesso</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>I ruoli e cosa vede ciascuno</h2>
+        <CardGrid cards={[
+          { icon: '👩‍🏫', color: colors.info, title: 'Tutor interno', desc: 'Vede solo gli studenti e le pratiche che segue.', menu: 'Dashboard, Pratiche FSL, Studenti, Classi, Aziende, Comunicazioni enti' },
+          { icon: '📋', color: colors.warn, title: 'Responsabile FSL', desc: 'Vede tutte le pratiche e valuta le aziende.', menu: 'Come il Tutor, più Anni scolastici e Impostazioni' },
+          { icon: '🗂️', color: colors.purple, title: 'Segreteria', desc: 'Attestati e comunicazioni agli enti.', menu: 'Il menu dipende dal ruolo: confrontatelo con la scheda' },
+          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastico', desc: 'Firma la convenzione.', menu: 'Il menu dipende dal ruolo: confrontatelo con la scheda' },
+          { icon: '🎒', color: colors.accentAlt, title: 'Studente', desc: 'Solo il proprio fascicolo.', menu: 'Dashboard, Offerte di stage, Il mio percorso' },
+          { icon: '👪', color: colors.info, title: 'Genitore (esterno)', desc: 'Firma da link e codice per email.', menu: 'Nessun account' },
+          { icon: '🏢', color: colors.success, title: 'Tutor aziendale (esterno)', desc: 'Un solo link per firma, presenze e valutazione.', menu: 'Nessun account' },
+          { icon: '⚖️', color: colors.warn, title: 'Legale rappresentante (esterno)', desc: 'Due link: scheda dei rischi e convenzione.', menu: 'Nessun account' }
+        ]} />
+      </div>
+    ),
+    notes: "Il menu a sinistra cambia con il ruolo. Chi vede meno voci di quelle indicate qui probabilmente non ha ancora il ruolo giusto. Il Tutor interno deve anche essere indicato come tutor della classe, altrimenti non vede studenti: se qualcuno lamenta di non vedere gli studenti, è questo. Genitore, tutor aziendale e legale rappresentante sono esterni: non entrano da nessuna parte, usano i link delle email."
+  },
+
+  /* --- tappa 1 --- */
+  tappa('Tappa 1 · la pratica e l\'azienda', 'Tappa 1', 'La pratica nasce e l\'azienda si valida', '20 minuti, i due gruppi in parallelo',
+    [
+      ['Tutor interno', 'Crea la bozza, la invia in validazione e manda la scheda dei rischi al legale rappresentante.'],
+      ['Legale rappresentante', 'Apre il link, scrive il codice, compila le otto dichiarazioni e firma.'],
+      ['Responsabile FSL', 'Legge le dichiarazioni e registra l\'esito: idoneo.'],
+      ['Tutor interno', 'Porta la pratica a «Progettazione».'],
+      ['Tutti', 'Gli altri leggono la scheda del proprio ruolo e controllano la posta.']
+    ],
+    [...COPIONI, RUOLO.tutor, RUOLO.lr],
+    "Il Tutor interno di ogni gruppo crea la pratica seguendo il copione del proprio gruppo. La scheda dei rischi è una per azienda e per anno: la prima pratica la prepara, le altre la trovano pronta. Il punto dove si inciampa di più è il codice: il legale rappresentante deve avere la casella aperta. Passate tra i tavoli."),
+  shot('Tappa 1 · la pratica e l\'azienda', '02-tutor-dashboard.png', 'Tutor interno', 'Il punto di partenza',
+    'Il Tutor interno entra e non ha ancora nessuna pratica. Si parte dal menu «Pratiche FSL».',
+    "Il menu del Tutor interno ha Pratiche FSL, Studenti, Classi, Aziende e Comunicazioni enti. La dashboard è vuota perché il laboratorio parte da zero."),
+  shot('Tappa 1 · la pratica e l\'azienda', '03-tutor-nuova-pratica.png', 'Tutor interno', 'Nuova pratica: studente, azienda, mansione',
+    'Si sceglie lo studente e l\'azienda, si scrive la mansione e si preme «Crea la bozza». Il periodo si lascia vuoto: lo prende dalla classe.',
+    "Sede e tutor aziendale sono già proposti dal portale. Le date restano vuote: il portale usa quelle della classe. Fino a che è una bozza la pratica si può ancora modificare; poi si preme 'Invia in validazione azienda'."),
+  shot('Tappa 1 · la pratica e l\'azienda', '04-tutor-blocco-scheda-rischi.png', 'Tutor interno', 'Il primo blocco: manca la scheda dei rischi',
+    'Provando a passare a «Progettazione», il portale non avanza e scrive il motivo: serve la scheda di valutazione dei rischi firmata dal legale rappresentante.',
+    "Primo esempio di blocco: non è un errore del portale, è una regola. Fate leggere il messaggio ad alta voce e chiedete chi deve intervenire. È un modo di lavorare che ritroverete: leggere il motivo prima di provare a forzare."),
+  shot('Tappa 1 · la pratica e l\'azienda', '05-tutor-azienda-invia-scheda-rischi.png', 'Tutor interno', 'Si manda la scheda dei rischi',
+    'Dalla pagina dell\'azienda: «+ Invia scheda rischi» e poi «Invia il link». Il legale rappresentante riceve una email.',
+    "Il portale non ha un elenco di legali rappresentanti da scegliere: il link va al referente indicato nell'anagrafica dell'azienda. Dopo l'invio il legale rappresentante deve controllare la casella."),
+  shot('Tappa 1 · la pratica e l\'azienda', '06-legale-inserisci-codice.png', 'Legale rappresentante', 'Il codice di conferma',
+    'Il link si apre senza accesso. Si preme «Richiedi il codice via email», poi si scrive il codice di sei cifre e «Conferma il codice».',
+    "Il codice serve a confermare l'identità. Vale dieci minuti. Se non arriva entro un minuto, posta indesiderata; se ne può chiedere un altro una volta al minuto. Nella schermata il codice è di un ambiente di prova locale: in laboratorio arriva per email."),
+  shot('Tappa 1 · la pratica e l\'azienda', '07-legale-modulo-scheda-rischi.png', 'Legale rappresentante', 'La scheda dei rischi',
+    'In alto sette descrizioni facoltative: dove si svolge lo stage, che cosa farà lo studente, macchine, sostanze, dispositivi, spostamenti.',
+    "Le descrizioni sono facoltative ma aiutano a preparare lo stage in sicurezza. I dati da scrivere sono nel copione del gruppo."),
+  shot('Tappa 1 · la pratica e l\'azienda', '08-legale-modulo-dichiarazioni.png', 'Legale rappresentante', 'Otto dichiarazioni Sì/No',
+    'Sono tutte obbligatorie. La sesta chiede se le attività dello studente NON sono ad alto rischio: Sì vuol dire che non lo sono.',
+    "Attenzione al verso della sesta domanda: la risposta Sì è quella che permette alla scuola di avviare lo stage. Chiedete alla sala perché una domanda è scritta al negativo."),
+  shot('Tappa 1 · la pratica e l\'azienda', '09-legale-errore-risposta-mancante.png', 'Legale rappresentante', 'Se manca una risposta',
+    '«Salva e firma» con una risposta mancante: il portale non invia nulla, segna in rosso la domanda e dice che ne manca una.',
+    "Il copione chiede di provarlo apposta, lasciando vuota l'ottava. Un controllo fatto mentre si compila evita di scoprire l'errore dopo, quando la pratica è già in giro."),
+  shot('Tappa 1 · la pratica e l\'azienda', '10-legale-scheda-firmata-ricevuta.png', 'Legale rappresentante', 'Scheda firmata',
+    '«Scheda compilata e firmata», con l\'impronta del documento e la ricevuta da scaricare in PDF.',
+    "La firma registra data, ora e un'impronta digitale del documento: se qualcuno modificasse il testo, l'impronta non corrisponderebbe più. Chiedete al legale rappresentante di scaricare la ricevuta."),
+  shot('Tappa 1 · la pratica e l\'azienda', '12-responsabile-registra-esito.png', 'Responsabile FSL', 'La scuola valuta',
+    'Il Responsabile FSL legge le otto dichiarazioni, sceglie «Idoneo» e preme «Registra l\'esito».',
+    "La scheda resta 'In compilazione' nella pagina dell'azienda finché la scuola non registra l'esito. L'esito si può ripetere: il precedente viene sovrascritto e ne resta traccia nel registro delle attività. Dopo l'esito il Tutor interno o il Responsabile premono 'Azienda idonea → progettazione'."),
+  shot('Tappa 1 · la pratica e l\'azienda', '13-legale-scheda-sola-lettura.png', 'Legale rappresentante', 'Dopo l\'esito la scheda non si cambia',
+    'Riaprendo il link il legale rappresentante trova la scheda in sola lettura: «Valutata dalla scuola». Per modificarla deve contattare la scuola.',
+    "Mostrate che una scheda già valutata non può essere modificata dall'esterno: la scuola è sicura di aver valutato quello che è scritto."),
+  shot('Tappa 1 · la pratica e l\'azienda', '14-tutor-pratica-progettazione.png', 'Tutor interno', 'Stato «Progettazione»',
+    'La pratica è in «Progettazione». Ora si compila la scheda, si preparano gli attestati e la convenzione, poi si preme «Avvia la firma della convenzione».',
+    "Fine della prima tappa. Il pulsante 'Avvia la firma della convenzione' è in alto; le schede della pratica si chiamano Dati, Progettazione, Firme e convenzione, Presenze, Diario, Valutazioni, Timeline, Documenti."),
+
+  /* --- tappa 2 --- */
+  tappa('Tappa 2 · progettazione e convenzione', 'Tappa 2', 'Scheda, attestati e convenzione', '25 minuti, i due gruppi in parallelo',
+    [
+      ['Tutor interno', 'Prova ad avviare la firma, legge cosa manca, poi compila la scheda di progettazione.'],
+      ['Segreteria', 'Segna gli attestati di sicurezza come inviati all\'azienda.'],
+      ['Tutor interno', 'Genera la convenzione e avvia la firma.'],
+      ['Dirigente Scolastico', 'Firma la convenzione dal portale.'],
+      ['Legale rappresentante', 'Apre il secondo link e firma la convenzione.']
+    ],
+    [...COPIONI, RUOLO.segr, RUOLO.ds],
+    "Seconda tappa, con il secondo blocco: prima si prova ad avviare e si legge l'elenco di ciò che manca, poi si prepara. Il legale rappresentante riceve un secondo link, diverso dal primo. Quando firma anche lui la pratica passa da sola a 'Patto in firma'."),
+  shot('Tappa 2 · progettazione e convenzione', '15-tutor-blocco-convenzione.png', 'Tutor interno', 'Cosa manca per la convenzione',
+    'Provando ad avviare la firma subito, il portale elenca tre cose: la scheda di progettazione, gli attestati non ancora inviati all\'azienda, la convenzione non generata.',
+    "Un blocco con più motivi: il portale li mostra tutti insieme, non uno alla volta. Chiedete alla sala di assegnare a ogni motivo un ruolo: scheda al Tutor interno, attestati alla Segreteria, convenzione ancora al Tutor interno."),
+  shot('Tappa 2 · progettazione e convenzione', '16-tutor-scheda-progettazione.png', 'Tutor interno', 'La scheda di progettazione',
+    'La scheda è divisa in gruppi di campi. Quello obbligatorio è «Attività previste in azienda». Poi «Salva la scheda».',
+    "È la scheda congiunta scuola-azienda: la firmeranno studente, genitori, tutor aziendale e Tutor interno, nella terza tappa. Il testo da scrivere è nel copione."),
+  shot('Tappa 2 · progettazione e convenzione', '18-segreteria-attestati.png', 'Segreteria', 'Gli attestati di sicurezza',
+    'Dalla scheda dello studente: i due attestati, formazione generale e specifica, sono «Da inviare». Il bottone li segna come messi a disposizione dell\'azienda.',
+    "Il portale registra solo la data. Nella realtà 'inviare' vuol dire mandare davvero gli attestati all'azienda: chi tiene la lezione può far notare la differenza tra l'atto e la traccia. L'azione vale per tutti gli attestati dello studente."),
+  shot('Tappa 2 · progettazione e convenzione', '19-tutor-genera-convenzione.png', 'Tutor interno', 'Generare la convenzione',
+    'Nella scheda «Firme e convenzione»: si indica quanti studenti copre e il legale rappresentante firmatario, poi «Genera la convenzione».',
+    "Ogni pratica genera la propria convenzione. Dopo la generazione si preme 'Avvia la firma della convenzione' e poi 'Invia i link di firma': parte il secondo link per il legale rappresentante."),
+  shot('Tappa 2 · progettazione e convenzione', '21-dirigente-firma-convenzione.png', 'Dirigente Scolastico', 'Il Dirigente firma dal portale',
+    'Il Dirigente legge, spunta «Ho letto il documento e lo firmo» e preme FIRMA. Non serve il codice: è un utente del portale.',
+    "Dopo la firma compare 'Firma registrata' con impronta e ricevuta. Le firme dentro il portale e quelle da fuori si registrano nello stesso elenco."),
+  shot('Tappa 2 · progettazione e convenzione', '22-legale-convenzione.png', 'Legale rappresentante', 'Il secondo link: la convenzione',
+    'Il legale rappresentante riceve un altro link, con un altro codice. Stesso schema: codice, lettura, FIRMA.',
+    "Fate notare che i due link del legale rappresentante sono distinti: uno per la scheda dei rischi, uno per la convenzione. All'ultima firma la pratica avanza da sola."),
+
+  /* --- tappa 3 --- */
+  tappa('Tappa 3 · patto formativo e firme', 'Tappa 3', 'Patto formativo e scheda di progettazione: le firme', '20 minuti, i due gruppi in parallelo',
+    [
+      ['Tutor interno', 'Invia i link di firma a genitori e tutor aziendale.'],
+      ['Studente', 'Dal proprio percorso firma il patto e la scheda di progettazione.'],
+      ['Genitore', 'Ognuno dal proprio link firma i due documenti.'],
+      ['Tutor aziendale', 'Dal proprio link firma la scheda di progettazione.'],
+      ['Tutor interno', 'Firma la scheda e guarda l\'elenco delle firme.']
+    ],
+    [...COPIONI, RUOLO.stud, RUOLO.gen, RUOLO.ta],
+    "La tappa con più persone da coordinare. Lo studente firma dentro il portale; i due genitori e il tutor aziendale da link e codice. Dopo la prima firma di un genitore il portale avvisa che manca l'altro. Con l'ultima firma la pratica passa da sola a 'Comunicazioni enti'."),
+  shot('Tappa 3 · patto formativo e firme', '24-studente-documenti-da-firmare.png', 'Studente', 'Lo studente firma',
+    'Da «Il mio percorso»: il riquadro «Documenti da firmare» ha il patto formativo e la scheda di progettazione, ognuno con «Leggi e firma».',
+    "Lo studente firma da dentro il portale, senza codice. Si legge il documento con la sua impronta, si spunta la presa visione, si firma e si scarica la ricevuta. Se i documenti non compaiono, il Tutor interno non ha ancora inviato i link."),
+  shot('Tappa 3 · patto formativo e firme', '25-genitore-documenti-da-firmare.png', 'Genitore', 'Il genitore firma da un link',
+    'Dopo il codice compaiono il patto formativo e la scheda di progettazione, ognuno con il riepilogo e il bottone FIRMA.',
+    "Qui non c'è nessun accesso: il link è personale e non va condiviso con l'altro genitore. Il genitore legge prima il riepilogo, poi firma. I genitori sono due e firmano entrambi."),
+  shot('Tappa 3 · patto formativo e firme', '26-genitore-firma-registrata.png', 'Genitore', 'Firma registrata',
+    '«Firma registrata correttamente» e la ricevuta in PDF. Se i genitori sono due compare l\'avviso che manca l\'altro.',
+    "Chiedete al genitore di scaricare la ricevuta: è la prova per la famiglia. Chiedete anche cosa succede se l'altro genitore non firma: la pratica non avanza."),
+  shot('Tappa 3 · patto formativo e firme', '27-tutor-aziendale-scheda-progettazione.png', 'Tutor aziendale', 'Il tutor aziendale firma la scheda',
+    'Il tutor aziendale usa un solo link per tutto il percorso: ora firma la scheda di progettazione. Più avanti la stessa pagina mostrerà le presenze e la valutazione.',
+    "Le firme sulla scheda di progettazione sono quattro, nell'ordine: studente, genitori, tutor aziendale, Tutor interno."),
+  shot('Tappa 3 · patto formativo e firme', '28-tutor-firme-raccolte.png', 'Tutor interno', 'L\'elenco delle firme',
+    'Nella scheda «Firme e convenzione»: documento, firmatario, data, impronta, stato «Valida» e ricevuta, per ogni firma.',
+    "Fate leggere una riga: chi, che cosa, quando. Poi il Tutor interno preme 'Firma la scheda di progettazione' e con l'ultima firma la pratica avanza da sola."),
+
+  /* --- tappa 4 --- */
+  tappa('Tappa 4 · comunicazioni agli enti', 'Tappa 4', 'Comunicazioni agli enti e avvio', '10 minuti, i due gruppi in parallelo',
+    [
+      ['Tutor interno', 'Sceglie la classe e prepara le comunicazioni dovute.'],
+      ['Dirigente Scolastico', 'Apre il modulo PDF: nella realtà lo firma su carta.'],
+      ['Segreteria', 'Registra l\'invio di ciascuna con data e protocollo e porta la pratica a «Pronta».'],
+      ['Tutor interno', 'Avvia il percorso.']
+    ],
+    [...COPIONI, RUOLO.segr],
+    "Tappa breve. Le comunicazioni dovute sono due: INAIL e DPL. Il portale prepara i moduli; il Dirigente li firma fuori dal portale; la Segreteria registra data e protocollo. Lo stato non cambia da solo: serve il bottone 'Comunicazioni inviate → pronta', che preme la Segreteria."),
+  shot('Tappa 4 · comunicazioni agli enti', '29-tutor-comunicazioni-enti.png', 'Tutor interno', 'Preparare le comunicazioni',
+    'Si sceglie la classe e si preme «Genera batch», il bottone che prepara in un colpo solo il gruppo di comunicazioni agli enti: compaiono quelle dovute, con il PDF di ciascuna.',
+    "Il bottone lo premono il Tutor interno e il Responsabile FSL; la Segreteria vede solo un testo che la rimanda a loro. Spiegate perché: preparare e registrare sono compiti separati."),
+  shot('Tappa 4 · comunicazioni agli enti', '30-segreteria-registra-invio.png', 'Segreteria', 'Registrare l\'invio',
+    'Dopo aver spedito il modulo firmato dal Dirigente, la Segreteria scrive la data di invio e il numero di protocollo e preme «Conferma invio».',
+    "Il portale registra la traccia dell'invio, non l'invio. Quando entrambe le comunicazioni sono registrate, dalla pratica si preme 'Comunicazioni inviate → pronta' e poi il Tutor interno 'Avvia il percorso'."),
+
+  /* --- tappa 5 --- */
+  tappa('Tappa 5 · presenze, diario, valutazione', 'Tappa 5', 'Presenze, diario e valutazione', '25 minuti, i due gruppi in parallelo',
+    [
+      ['Studente', 'Registra quattro giornate e scrive il diario delle due settimane.'],
+      ['Tutor aziendale', 'Conferma le settimane del registro.'],
+      ['Tutor interno', 'Chiude il periodo e passa a «Valutazione».'],
+      ['Tutor aziendale', 'Scrive la valutazione, la firma e firma il registro.'],
+      ['Tutor interno', 'Chiude e firma il registro presenze.'],
+      ['Studente', 'Consegna autovalutazione e relazione finale.']
+    ],
+    [...COPIONI, RUOLO.stud, RUOLO.ta],
+    "Tappa lunga: contenete i tempi. Lo studente compila presenze e diario; il tutor aziendale conferma le settimane. Dopo la conferma una giornata non si modifica più. Le ore registrate in laboratorio sono poche: più avanti comparirà un avviso sul monte ore, che si può accettare."),
+  shot('Tappa 5 · presenze, diario, valutazione', '31-studente-registro-presenze.png', 'Studente', 'Il registro presenze',
+    'Ogni giornata ha entrata e uscita di mattina e di pomeriggio. Le ore totali si calcolano da sole.',
+    "Nel laboratorio bastano quattro giornate. Il portale non è severo sul calendario: l'insegnamento è che il registro è dello studente e viene confermato dal tutor aziendale."),
+  shot('Tappa 5 · presenze, diario, valutazione', '32-studente-diario.png', 'Studente', 'Il diario di bordo',
+    'Una scheda per settimana: «Attività svolte» e «Riflessioni». Ogni settimana si salva con «Salva settimana».',
+    "Il diario si compila una settimana alla volta, come previsto dal modello. Tenete a mente questa pagina: ci tornerete tra poco, quando il portale si fermerà."),
+  shot('Tappa 5 · presenze, diario, valutazione', '33-tutor-aziendale-conferma-settimane.png', 'Tutor aziendale', 'Il tutor aziendale conferma le settimane',
+    'Dal suo link: le settimane registrate dallo studente, con «Conferma settimana». Dopo la conferma non si modificano più.',
+    "È lo stesso link già usato per firmare la scheda. Spiegate la regola: chi conferma assume la responsabilità, e dopo la conferma lo studente non può più cambiare le giornate."),
+  shot('Tappa 5 · presenze, diario, valutazione', '34-tutor-aziendale-valutazione.png', 'Tutor aziendale', 'La valutazione aziendale',
+    'Cinque competenze su nove, un livello da 1 a 4 per ciascuna, un giudizio complessivo. «Salva e firma la valutazione» in fondo.',
+    "Il portale calcola il voto in decimi e la firma è contestuale al salvataggio. Il tutor aziendale firma poi anche il registro presenze dal suo elenco di documenti."),
+  shot('Tappa 5 · presenze, diario, valutazione', '35-tutor-aziendale-valutazione-firmata.png', 'Tutor aziendale', 'Valutazione firmata',
+    'Il modulo è sostituito da «Valutazione già compilata e firmata. Grazie per il suo contributo.»',
+    "Dopo la firma la valutazione non si cambia. Il Tutor interno può ora chiudere il registro."),
+  shot('Tappa 5 · presenze, diario, valutazione', '36-tutor-chiusura-registro.png', 'Tutor interno', 'Chiusura del registro',
+    'Il riquadro mostra le ore e le conferme del tutor aziendale. «Chiudi e firma il registro» mette la firma del Tutor interno.',
+    "Prima della chiusura il Tutor interno controlla che le settimane siano confermate. Poi lo studente consegna l'autovalutazione e la relazione finale: restano da fare solo il diario e il completamento."),
+
+  /* --- tappa 6: il blocco --- */
+  tappa('Tappa 6 · completare la pratica', 'Tappa 6', 'Ultimo passo: completare la pratica', '5 minuti, i due gruppi in parallelo',
+    [
+      ['Tutor interno', 'Prova a premere «Completa la pratica».'],
+      ['Tutti', 'Leggono il messaggio del portale e cercano il motivo.'],
+      ['Studente', 'Controlla dove, nel proprio percorso, si consegna il diario.']
+    ],
+    [...COPIONI],
+    "Lasciate che il gruppo arrivi da solo al blocco. Non dite cosa manca: chiedete di leggere il messaggio in rosso e di cercare nel portale il punto dove risolverlo. Questo è il materiale per la modifica dal vivo.",
+    'Se il portale si ferma, leggete il messaggio prima di cliccare altrove.'),
+  shot('Tappa 6 · completare la pratica', '37-tutor-completa-bloccata.png', 'Tutor interno', 'Il portale si ferma',
+    'Il motivo che blocca è uno solo: «Diario di bordo non ancora completato/consegnato». Il giallo sulle ore è un avviso e non blocca.',
+    "Il rosso blocca, il giallo si può accettare. Qui il rosso è uno solo e riguarda il diario. Chiedete: chi dovrebbe consegnare il diario? Lo studente. Dove? Nella sua pagina del diario. Mandate lo studente a cercare il bottone.",
+    { duration: '5 minuti: leggere, cercare, riconoscere il problema' }),
+  shot('Tappa 6 · completare la pratica', '38-tutor-diario-senza-consegna.png', 'Tutor interno', 'Il Tutor interno non può consegnarlo',
+    'Il Tutor interno vede il diario compilato, ma in sola lettura e senza bottoni.',
+    "Il diario è compilato: il problema non è che manchi il contenuto, è che nessuno può dichiararlo consegnato. Il Tutor interno non può farlo, perché il diario è dello studente."),
+  shot('Tappa 6 · completare la pratica', '32-studente-diario.png', 'Studente', 'E dallo studente?',
+    'Lo studente ha solo «Salva settimana». Nessun bottone per consegnare il diario.',
+    "La pagina che avete già visto, guardata con occhi diversi. È l'unico punto dove potrebbe stare la consegna. Fate scrivere al gruppo cosa vorrebbe trovare qui: sarà la richiesta di modifica.",
+    {}),
+
+  /* --- cosa cambiereste --- */
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il problema diventa una richiesta</h2>
+        <DurationBadge>10 minuti, a gruppi poi alla lavagna</DurationBadge>
+        <Box type="info" title="Tre cose da dire">
+          Chi ha il problema (quale ruolo), dove (in quale schermata), cosa vorrebbe vedere.
+        </Box>
+        <Box type="tip" title="Un esempio, su un altro punto del percorso">
+          «Come Responsabile FSL, nella pagina dell'azienda vorrei vedere subito che la scheda dei rischi è stata firmata e aspetta la mia valutazione».
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Ogni gruppo scrive la propria richiesta sul blocco finale. Chi ha altre osservazioni le segna nel foglio.</p>
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+      </div>
+    ),
+    notes: "Lasciate cinque minuti di scrittura nei gruppi, poi raccogliete alla lavagna le richieste sul blocco. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come studente, nella scheda Diario del mio percorso, vorrei un bottone Consegna il diario che segni il diario come consegnato, così il tutor può completare la pratica'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Come lavora un agente su una modifica</h2>
+        <FlowChain minItemWidth="140px" steps={[
+          { icon: '✍️', label: 'Richiesta', sub: 'In parole semplici', color: colors.info },
+          { icon: '🧭', label: 'Piano', sub: 'Cosa tocca, cosa no', color: colors.info },
+          { icon: '🛠️', label: 'Modifica', sub: 'Su una copia di lavoro', color: colors.warn },
+          { icon: '🧪', label: 'Prova', sub: 'Controlli automatici e a vista', color: colors.warn },
+          { icon: '🔍', label: 'Revisione', sub: 'Un secondo agente rilegge', color: colors.purple },
+          { icon: '🚀', label: 'Installazione', sub: 'Solo dopo il via di Thomas', color: colors.success }
+        ]} />
+        <Box type="info" title="Nel nostro caso">Nel portale la consegna del diario esiste già: manca il punto dove premerla. La richiesta chiede di aggiungere quel punto, nel posto dove lo studente lo cerca.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px', textAlign: 'center' }}>Ogni passaggio lascia una traccia che si può leggere. L'ultima parola sull'installazione resta a una persona.</p>
+      </div>
+    ),
+    notes: "Spiegate la catena prima di farla vedere. Richiesta: la scrivete voi in parole semplici. Piano: l'agente descrive cosa intende fare e quali parti del portale tocca, e voi leggete prima che parta. Modifica e prova: l'agente scrive il cambiamento sulla copia di lavoro e lancia i controlli, poi si prova a mano. Revisione: un secondo agente rilegge con occhi nuovi. Installazione: la decide una persona, mai l'agente da solo. È lo stesso schema visto negli incontri sugli agenti."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal vivo: il bottone «Consegna il diario»</h2>
+        <DurationBadge>25 minuti, la fa Thomas davanti a voi</DurationBadge>
+        <TerminalMock
+          folder="copia di lavoro del portale"
+          request="Nella scheda Diario del percorso dello studente aggiungi il bottone «Consegna il diario». Compare solo quando la pratica è in corso o in valutazione e il diario ha almeno una settimana. Dopo la consegna mostra «Diario consegnato». Prima dimmi il piano. Non toccare altro."
+          actions={[
+            '▸ legge la pagina del diario e dove il portale registra la consegna',
+            '▸ propone un piano e aspetta il via',
+            '▸ aggiunge il bottone e il collegamento',
+            '▸ lancia i controlli automatici',
+            '▸ un secondo agente rilegge la modifica',
+            '▸ si prova sulla copia di prova: il diario risulta consegnato'
+          ]}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '12px', textAlign: 'center' }}>Schema indicativo: dal vivo i passaggi e le parole possono essere diverse.</p>
+      </div>
+    ),
+    notes: "Qui Thomas lavora davanti alla sala con la richiesta scelta, partendo da questa traccia: 'Nel Portale FSL, nella scheda Diario del percorso dello studente, aggiungi un bottone Consegna il diario. Deve usare la consegna che il server già prevede. Compare solo se la pratica è in corso o in valutazione e il diario ha almeno una settimana compilata; dopo la consegna mostra Diario consegnato e il tutor può completare la pratica. Prima di modificare dimmi il piano. Non toccare altro.' Leggete il piano ad alta voce prima di dare il via. Fate notare quando l'agente chiede un permesso. Dopo la modifica, ripetete a mano il passaggio sulla copia di prova. Se la modifica non riesce in tempo, Thomas usa una correzione preparata prima: il gruppo preme di nuovo Completa la pratica e la pratica si completa; la modifica resta da finire dopo la lezione. Dite alla sala che anche una modifica che non riesce è utile: si vede dove la richiesta era ambigua."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Altre richieste possibili</h2>
+        <Box type="info" title="Responsabile FSL">Dopo la firma del legale rappresentante la scheda dei rischi resta «In compilazione» finché la scuola non registra l'esito: un segnale «firmata, da valutare» aiuterebbe.</Box>
+        <Box type="info" title="Valutazione aziendale">Dopo «Salva e firma la valutazione» il modulo sparisce subito: una conferma visibile rassicurerebbe il tutor aziendale.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Sono osservazioni nate durante la preparazione: le vostre possono essere diverse e più utili.</p>
+      </div>
+    ),
+    notes: "Tenete queste come riserva se la sala non produce richieste adatte, o per quando la modifica dal vivo è finita. Non tutte le richieste sono sensate da realizzare: alcune cose che sembrano mancare potrebbero essere scelte volute dal regolamento. È un buon momento per dirlo. Le richieste restano nei fogli e servono per decidere cosa fare dopo il corso."
+  },
+  shot('Cosa cambiereste', '39-tutor-completa-avvisi.png', 'Tutor interno', 'Si riprova: resta solo un avviso',
+    'Con il diario consegnato, i motivi in rosso sono spariti. Resta l\'avviso sulle ore, che si accetta con «Confermo nonostante gli avvisi».',
+    "Fate ripetere a mano il passaggio sul portale dove la modifica è stata provata: lo studente consegna il diario, il Tutor interno ripreme 'Completa la pratica'. L'avviso sul monte ore è atteso: in laboratorio le ore registrate sono poche. Si accetta, sapendo perché."),
+  shot('Cosa cambiereste', '40-tutor-pratica-completata.png', 'Tutor interno', 'Completata',
+    'Lo stato in alto a destra è «Completata»: il fascicolo non si modifica più.',
+    "Fine del percorso: la pratica è passata da dieci stati, con firme, controlli e una modifica fatta durante la lezione. Se la modifica non fosse riuscita, il percorso si chiude comunque con il piano B."),
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa avete visto</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>Il problema l'avete trovato voi, usando il portale fino in fondo.</li>
+          <li>La richiesta era una frase: chi, dove, cosa.</li>
+          <li>Il piano si leggeva prima che l'agente toccasse qualcosa.</li>
+          <li>La prova e la revisione sono venute prima dell'installazione.</li>
+          <li>Le richieste che non sono entrate restano nel foglio.</li>
+        </ul>
+        <Box type="tip">Chi chiede una modifica non deve saper programmare: deve saper dire cosa non va e cosa si aspetta di vedere.</Box>
+      </div>
+    ),
+    notes: "Chiusura della parte sull'agente. Chiedete alla sala cosa ha notato: i punti elencati sono quelli da far emergere. Raccogliete i fogli con le richieste restanti: servono per decidere cosa fare dopo il corso."
+  },
+
+  /* --- chiusura --- */
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa resta di oggi</h2>
+        <CardGrid cards={[
+          { icon: '🧭', color: colors.info, title: 'La procedura', desc: 'Sapete cosa fa ciascun ruolo e in che ordine passa una pratica FSL.' },
+          { icon: '📝', color: colors.warn, title: 'Le vostre richieste', desc: 'I fogli «Cosa cambierei» restano a Thomas: sono la lista delle cose da migliorare.' },
+          { icon: '📄', color: colors.success, title: 'I materiali', desc: 'Le schede dei ruoli restano consultabili, anche per i colleghi che non c\'erano.' }
+        ]} />
+      </div>
+    ),
+    notes: "Tre cose restano: la conoscenza della procedura, la lista di richieste di modifica e le schede dei ruoli, utili anche per chi non ha partecipato."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La pulizia dei dati</h2>
+        <Box type="success" title="Cosa viene cancellato">Le pratiche, le firme, gli studenti, i genitori e le aziende di prova, i documenti generati e gli account studente di prova.</Box>
+        <Box type="info" title="Cosa resta">Gli account del personale e le impostazioni. I ruoli assegnati per il laboratorio vengono tolti.</Box>
+        <Box type="warn" title="Le vostre caselle">Le email già arrivate restano nelle vostre caselle: potete cancellarle.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Prima di uscire: premete «Esci» dal portale su ogni PC.</p>
+      </div>
+    ),
+    notes: "Dite chiaramente che i dati inseriti oggi spariscono: nessuno deve preoccuparsi di quello che ha scritto. Prima della pulizia viene fatta una copia di sicurezza. Ricordate di premere Esci su ogni PC e, se serve, di cancellare le email del laboratorio dalla propria casella."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa ne pensate</h2>
+        <DurationBadge>5 minuti</DurationBadge>
+        <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
+        <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
+      </div>
+    ),
+    notes: "Chiusura del laboratorio: ringraziate, ricordate il questionario di valutazione e dite come potranno far arrivare nuove idee. Se il questionario ha già un indirizzo, scrivetelo alla lavagna."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🏁</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Grazie</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Le schede dei ruoli e dei copioni restano disponibili a questo indirizzo.
+        </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          Materiali del laboratorio:{' '}
+          <a href="../materiali/laboratorio-fsl/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            {MATERIALI_URL}
+          </a>
+        </p>
+      </div>
+    ),
+    notes: "Ultima slide. Ricordate dove restano i materiali. Ringraziate e chiudete."
+  }
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `Laboratorio FSL — ${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
+        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
