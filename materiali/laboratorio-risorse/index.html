@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materiali del Laboratorio Risorse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #15120f; --bg-card: #1e1a15; --border: #3c332a;
+  --text: #f4eee3; --text-dim: #d2c8b8; --text-muted: #a89a83;
+  --accent: #d9a441; --accent-alt: #f0c169;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; min-height: 100vh; }
+.wrap { max-width: 820px; margin: 0 auto; padding: 48px 20px 80px; }
+a.back { color: var(--text-muted); text-decoration: none; font-size: 15px; display: inline-block; margin-bottom: 22px; min-height: 44px; }
+a.back:hover, a.back:focus-visible { color: var(--accent); }
+h1 { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(28px, 4vw, 40px); margin-bottom: 8px; }
+.subtitle { color: var(--text-muted); font-size: clamp(15px, 1.1vw, 18px); margin-bottom: 36px; max-width: 640px; }
+.cards { display: grid; gap: 16px; }
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px 20px;
+}
+.card h2 { font-size: 19px; margin-bottom: 6px; color: var(--text); }
+.card p { color: var(--text-dim); font-size: 15px; margin-bottom: 4px; line-height: 1.5; }
+.card .used-in { color: var(--text-muted); font-size: 14px; margin-bottom: 12px; }
+.card .links { display: flex; flex-wrap: wrap; gap: 10px; }
+.card a.link {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px;
+  color: var(--accent); text-decoration: none; border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 14px; font-size: 14.5px;
+}
+.card a.link:hover, .card a.link:focus-visible { border-color: var(--accent); }
+footer { color: var(--text-muted); font-size: 14px; margin-top: 44px; border-top: 1px solid var(--border); padding-top: 20px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../../index.html">&larr; Torna all'indice del corso</a>
+    <h1>Materiali del Laboratorio Risorse</h1>
+    <p class="subtitle">I fogli usati durante il Laboratorio Risorse: accesso all'ambiente di prova, ruoli e rotazione, copioni dei due gruppi, schede dei ruoli e foglio delle richieste di modifica. Tutti i dati sono inventati e l'ambiente di prova viene smontato a fine corso.</p>
+    <div class="cards">
+      <div class="card">
+        <h2>Guida all'accesso</h2>
+        <p>Come entrare nell'ambiente di prova con l'account della scuola, con la casella «Ricordami» spenta, e come aprire la casella finta delle email.</p>
+        <p class="used-in">Attività «Accesso».</p>
+        <div class="links">
+          <a class="link" href="guida-accesso.html">Apri la pagina &rarr;</a>
+          <a class="link" href="guida-accesso.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Ruoli e rotazione</h2>
+        <p>Chi fa quale ruolo nei gruppi da 5 o 6 persone e come i ruoli si scambiano durante la lezione.</p>
+        <p class="used-in">Prima dell'inizio e durante tutto il laboratorio.</p>
+        <div class="links">
+          <a class="link" href="ruoli-e-rotazione.html">Apri la pagina &rarr;</a>
+          <a class="link" href="ruoli-e-rotazione.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Copione del gruppo A</h2>
+        <p>I dati inventati da inserire e l'elenco di chi fa cosa, dalla prima prenotazione alla stampa della settimana.</p>
+        <p class="used-in">Tutto il laboratorio, gruppo A.</p>
+        <div class="links">
+          <a class="link" href="copione-gruppo-a.html">Apri la pagina &rarr;</a>
+          <a class="link" href="copione-gruppo-a.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Copione del gruppo B</h2>
+        <p>I dati inventati da inserire e l'elenco di chi fa cosa, dalla prima prenotazione alla stampa della settimana.</p>
+        <p class="used-in">Tutto il laboratorio, gruppo B.</p>
+        <div class="links">
+          <a class="link" href="copione-gruppo-b.html">Apri la pagina &rarr;</a>
+          <a class="link" href="copione-gruppo-b.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Scheda del ruolo: Docente</h2>
+        <p>Leggere il calendario, prenotare, annullare, seguire le richieste, la stampa della settimana.</p>
+        <p class="used-in">Tutte le tappe, ruolo Docente.</p>
+        <div class="links">
+          <a class="link" href="ruolo-utente.html">Apri la pagina &rarr;</a>
+          <a class="link" href="ruolo-utente.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Scheda del ruolo: Tecnico</h2>
+        <p>Cosa si vede dell'amministrazione in sola lettura.</p>
+        <p class="used-in">Tappa 4, ruolo Tecnico.</p>
+        <div class="links">
+          <a class="link" href="ruolo-tecnico.html">Apri la pagina &rarr;</a>
+          <a class="link" href="ruolo-tecnico.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Scheda del ruolo: Amministratore</h2>
+        <p>Approvare, rifiutare, revocare, prenotare per conto di, abilitare, cambiare i ruoli.</p>
+        <p class="used-in">Tappe 3-6, ruolo Amministratore.</p>
+        <div class="links">
+          <a class="link" href="ruolo-amministratore.html">Apri la pagina &rarr;</a>
+          <a class="link" href="ruolo-amministratore.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Scheda del ruolo: Destinatario delle notifiche</h2>
+        <p>Le richieste che arrivano per email, i pulsanti Approva e Rifiuta e come cambiare chi le riceve.</p>
+        <p class="used-in">Tappe 3, 4 e 6, ruolo Destinatario.</p>
+        <div class="links">
+          <a class="link" href="ruolo-destinatario.html">Apri la pagina &rarr;</a>
+          <a class="link" href="ruolo-destinatario.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Cosa cambierei</h2>
+        <p>Il foglio per scrivere la richiesta del gruppo e le altre segnalazioni.</p>
+        <p class="used-in">Momento «Cosa cambiereste» e per tutto il laboratorio.</p>
+        <div class="links">
+          <a class="link" href="cosa-cambierei.html">Apri la pagina &rarr;</a>
+          <a class="link" href="cosa-cambierei.pdf">Scarica il PDF &darr;</a>
+        </div>
+      </div>
+    </div>
+    <footer>Nessun dato reale di studenti, famiglie o personale della scuola.</footer>
+  </div>
+</body>
+</html>

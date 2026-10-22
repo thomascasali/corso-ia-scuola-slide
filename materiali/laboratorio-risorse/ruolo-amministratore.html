@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheda del ruolo: Amministratore — Materiali Laboratorio Risorse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali del Laboratorio Risorse</a>
+  <a class="dl-btn" href="ruolo-amministratore.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="scheda-del-ruolo-amministratore">Scheda del ruolo: Amministratore</h1>
+<h2 id="obiettivo">Obiettivo</h2>
+<p>L'Amministratore decide sulle richieste, toglie le prenotazioni quando serve, prenota per conto dei colleghi, abilita chi può usare le risorse riservate, cambia i ruoli e sceglie chi riceve le richieste. Ha accesso a tutta la copia di prova, quindi tocca solo la risorsa e le celle del proprio gruppo.</p>
+<h2 id="cosa-fare-passo-per-passo">Cosa fare, passo per passo</h2>
+<h3 id="decidere-sulle-richieste">Decidere sulle richieste</h3>
+<ol>
+<li>Apri <strong>Richieste da Approvare</strong>. In alto ci sono i contatori (In attesa, Approvate, Rifiutate, Revocate) e i filtri <strong>Stato</strong> e <strong>Tipo</strong>. <strong>Tutte le Prenotazioni</strong> è la stessa pagina, con il filtro su Tutti.</li>
+<li>Trova la richiesta del tuo gruppo: leggi risorsa, Docente, data, ora e note (1 nell'immagine).</li>
+<li><strong>Approva</strong> (2) apre una finestra che chiede «Approvare questa prenotazione?»: premi <strong>Approva</strong> (1 nella seconda immagine) per confermare, <strong>Annulla</strong> (2) per lasciare tutto com'è. Il Docente riceve un'email.</li>
+<li><strong>Rifiuta</strong> (3) apre la finestra «Rifiuta la prenotazione», che chiede il <strong>Motivo del rifiuto</strong> (1 nella terza immagine): è obbligatorio. Scrivi qualcosa di utile e premi <strong>Rifiuta</strong> (2); nel campo, <strong>Ctrl+Invio</strong> conferma. Il motivo finisce nell'email al Docente.</li>
+<li>Le prenotazioni periodiche arrivano in una scheda «Serie di N prenotazioni». <strong>Mostra tutte le N date</strong> (1 nella quarta immagine) apre l'elenco. <strong>Approva intera serie</strong> (2 nella quarta immagine) e <strong>Rifiuta intera serie</strong> (3) decidono su tutte le date insieme, con un solo motivo.</li>
+</ol>
+<p><img alt="Richieste da Approvare: Approva e Rifiuta" src="img/ev-16-richieste-da-approvare.png" /></p>
+<p><img alt="La finestra di conferma dell'approvazione" src="img/ev-36-approva-conferma-modale.png" /></p>
+<p><img alt="La finestra del rifiuto, con il motivo obbligatorio" src="img/ev-37-rifiuta-motivo-modale.png" /></p>
+<p><img alt="Una serie periodica in attesa" src="img/ev-17-richieste-serie-in-attesa.png" /></p>
+<h3 id="revocare-una-prenotazione">Revocare una prenotazione</h3>
+<ol start="6">
+<li>Sulle prenotazioni <strong>Approvate</strong> c'è <strong>Revoca</strong>, da <strong>Tutte le Prenotazioni</strong> o dal dettaglio nel calendario. Per le periodiche scegli cosa revocare: <strong>Solo questa</strong> (1), <strong>Questa e le successive</strong> (2) o <strong>Tutta la serie</strong> (3).</li>
+<li>Scrivi il <strong>Motivo della revoca</strong> (4 nella prima immagine, 1 nella seconda), obbligatorio e di almeno tre caratteri, e premi <strong>Conferma revoca</strong> (5 nella prima, 2 nella seconda). Dall'elenco la finestra si chiama «Revoca la prenotazione»; <strong>Annulla</strong> la chiude senza revocare. Il Docente vede l'etichetta <strong>Revocata</strong> con il motivo e riceve un'email. L'ora torna libera. Le richieste In attesa non si revocano: si rifiutano.</li>
+</ol>
+<p><img alt="La finestra di revoca dal dettaglio nel calendario" src="img/ev-19-revoca-motivo.png" /></p>
+<p><img alt="La finestra di revoca dall'elenco" src="img/ev-38-revoca-da-elenco-modale.png" /></p>
+<h3 id="prenotare-per-conto-di-un-docente">Prenotare per conto di un Docente</h3>
+<ol start="8">
+<li>Nella finestra <strong>Nuova prenotazione</strong> compare il riquadro <strong>Prenota per conto di</strong>: cerca il nome (1 nell'immagine) e scegli il <strong>Docente titolare della prenotazione</strong> (2). Di solito è «Me stesso».</li>
+<li>La prenotazione nasce già <strong>Approvata</strong>, intestata al Docente, e porta l'indicazione che l'ha creata l'amministrazione (1 nella seconda immagine). Il Docente riceve un'email.</li>
+</ol>
+<p><img alt="Prenota per conto di" src="img/ev-21-per-conto-di-finestra.png" /></p>
+<p><img alt="La prenotazione per conto di, in Tutte le Prenotazioni" src="img/ev-22-per-conto-di-in-elenco.png" /></p>
+<h3 id="abilitare-i-colleghi-a-una-risorsa-su-autorizzazione">Abilitare i colleghi a una risorsa su autorizzazione</h3>
+<ol start="10">
+<li>Da <strong>Configurazione</strong>, <strong>Gestione risorse</strong>, premi <strong>Permessi</strong> sul <strong>Laboratorio Chimica</strong> (il comando compare solo sulle risorse ad accesso ristretto). Si apre l'elenco dei Docenti autorizzati, con la ricerca (1 nell'immagine) e una spunta per ciascuno (2).</li>
+<li><strong>Salva permessi</strong> (3) sostituisce l'elenco intero, ed è uno solo per i due gruppi: salva prima il gruppo A, poi il gruppo B ricarica la pagina, spunta e salva. Non togliere le spunte degli altri.</li>
+</ol>
+<p><img alt="I permessi di una risorsa" src="img/ev-24-permessi-risorsa-elenco.png" /></p>
+<h3 id="cambiare-i-ruoli">Cambiare i ruoli</h3>
+<ol start="12">
+<li>Da <strong>Gestione Utenti</strong> cerca la persona (campo di ricerca in alto). La tendina <strong>Ruolo</strong> (1 nell'immagine) offre Docente, Tecnico, Amministratore. Si apre la finestra «Cambiare il ruolo?», che spiega cosa comporta il cambio: per esempio «Rendere questa persona Tecnico? Vedrà l'area di amministrazione in sola lettura.» Premi <strong>Conferma</strong> (1 nella seconda immagine) oppure <strong>Annulla</strong> (2).</li>
+<li>Nella tua riga c'è «Tu» e non c'è la tendina: non puoi cambiare il tuo ruolo né bloccarti da solo. <strong>Blocca</strong> (2) toglie l'accesso al portale: in laboratorio non serve, non usarlo.</li>
+<li>La persona interessata preme <strong>Logout</strong> e rientra: il ruolo cambia solo all'accesso.</li>
+</ol>
+<p><img alt="Gestione Utenti: la tendina Ruolo" src="img/ev-28-gestione-utenti-ruolo.png" /></p>
+<p><img alt="La finestra di conferma del cambio di ruolo" src="img/ev-40-gestione-utenti-cambio-ruolo-modale.png" /></p>
+<h3 id="scegliere-chi-riceve-le-richieste">Scegliere chi riceve le richieste</h3>
+<ol start="15">
+<li>In <strong>Configurazione</strong>, <strong>Gestione risorse</strong>, ogni risorsa mostra le etichette: <strong>Richiede approvazione</strong> (1 nell'immagine) e <strong>Richieste a</strong> (2). I comandi sono icone con la descrizione al passaggio del mouse: la matita, <strong>Modifica risorsa</strong> (3), apre un modulo dentro la pagina.</li>
+<li>Nella sezione <strong>Chi riceve le richieste via email</strong> (1 nella seconda immagine) spunti gli Amministratori che devono ricevere le email con Approva e Rifiuta. Senza spunte le richieste arrivano a tutti gli Amministratori. Salva solo per la risorsa del tuo gruppo.</li>
+</ol>
+<p><img alt="Le etichette di una risorsa" src="img/ev-32-configurazione-etichette-risorsa.png" /></p>
+<p><img alt="Chi riceve le richieste via email" src="img/ev-33-configurazione-destinatari-richieste.png" /></p>
+<h2 id="cosa-controllare">Cosa controllare</h2>
+<ul>
+<li>Ogni decisione è registrata a tuo nome e il Docente riceve un'email.</li>
+<li>Un rifiuto ha sempre un motivo; una revoca anche.</li>
+<li>Dopo <strong>Salva permessi</strong> il Docente abilitato vede <strong>Visualizza calendario</strong>.</li>
+<li>Dopo un cambio di ruolo la persona è rientrata con <strong>Logout</strong>.</li>
+<li>Hai toccato solo la risorsa e le celle del tuo gruppo.</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

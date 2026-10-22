@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio Risorse · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  .shot-grid { grid-template-columns: minmax(0, 1fr) 330px; }
+  @media (max-width: 900px) { .shot-grid { grid-template-columns: 1fr !important; } }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stesso impianto dell'incontro 1) ---------- */
+/* Nota: duplicati apposta in questo file, come già fatto tra incontro-1/slide.html e
+   incontro-1/simulazione-agente.html, perché Babel standalone non carica script esterni
+   via XHR quando il file si apre da file://. */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+const DurationBadge = ({ children }) => (
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
+    <span aria-hidden="true">⏱</span><span>{children}</span>
+  </div>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px', fontSize: 'var(--fs-sm)' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* Riquadri dei bottoni sugli screenshot (x, y, larghezza, altezza in pixel su immagini 1366x768), da img/elenco.json. */
+const BOXES = {"01-accesso-login-con-banner.png": [{"x": 482, "y": 7, "w": 149, "h": 20, "name": "Fascia AMBIENTE DI PROVA"}, {"x": 562, "y": 433, "w": 268, "h": 22, "name": "Accedi con Google"}, {"x": 536, "y": 320, "w": 158, "h": 17, "name": "Ricordami per 30 giorni (da lasciare spento)"}], "02-dashboard-risorse.png": [{"x": 482, "y": 7, "w": 149, "h": 20, "name": "Fascia AMBIENTE DI PROVA"}, {"x": 313, "y": 419, "w": 461, "h": 44, "name": "Carrello PC A - Visualizza calendario"}], "03-calendario-settimana-legenda.png": [{"x": 288, "y": 136, "w": 1046, "h": 228, "name": "Legenda dei colori"}, {"x": 632, "y": 242, "w": 44, "h": 44, "name": "Settimana successiva"}, {"x": 1061, "y": 242, "w": 64, "h": 44, "name": "Oggi"}, {"x": 1109, "y": 161, "w": 200, "h": 44, "name": "Stampa settimana"}], "04-calendario-celle-mattina.png": [{"x": 429, "y": 322, "w": 129, "h": 64, "name": "Lunedì 3ª ora (Disponibile)"}, {"x": 582, "y": 322, "w": 129, "h": 64, "name": "Martedì 3ª ora (Occupato)"}], "05-prenota-carrello-finestra.png": [{"x": 451, "y": 369, "w": 464, "h": 44, "name": "Dove porti la risorsa"}, {"x": 701, "y": 674, "w": 214, "h": 44, "name": "Conferma prenotazione"}], "06-prenotazione-confermata.png": [{"x": 459, "y": 252, "w": 448, "h": 289, "name": "Messaggio Prenotazione confermata"}, {"x": 483, "y": 473, "w": 400, "h": 44, "name": "Ho capito"}], "07-le-mie-prenotazioni-approvata.png": [{"x": 316, "y": 507, "w": 83, "h": 27, "name": "Stato Approvata"}, {"x": 1203, "y": 475, "w": 106, "h": 44, "name": "Annulla"}], "08-annulla-conferma.png": [{"x": 687, "y": 438, "w": 195, "h": 61, "name": "Conferma annullamento"}], "09-periodica-finestra.png": [{"x": 473, "y": 419, "w": 442, "h": 44, "name": "Per quante settimane"}, {"x": 473, "y": 471, "w": 442, "h": 116, "name": "Date che verranno prenotate"}], "10-periodica-esito-parziale.png": [{"x": 459, "y": 137, "w": 448, "h": 519, "name": "Messaggio di esito"}], "11-annulla-periodica-scelte.png": [], "12-conflitto-cella-occupata.png": [{"x": 427, "y": 97, "w": 512, "h": 599, "name": "Dettagli prenotazione"}], "13-conflitto-risorsa-gia-prenotata.png": [{"x": 497, "y": 148, "w": 240, "h": 20, "name": "Messaggio Prenotazione non registrata"}], "14-richiesta-finestra-approvazione.png": [{"x": 766, "y": 660, "w": 149, "h": 44, "name": "Invia richiesta"}], "15-richiesta-inviata.png": [{"x": 459, "y": 233, "w": 448, "h": 327, "name": "Messaggio di esito"}], "16-richieste-da-approvare.png": [{"x": 316, "y": 110, "w": 993, "h": 207, "name": "Richiesta del partecipante"}, {"x": 1197, "y": 166, "w": 112, "h": 44, "name": "Approva"}, {"x": 1197, "y": 218, "w": 112, "h": 44, "name": "Rifiuta"}], "36-approva-conferma-modale.png": [{"x": 687, "y": 403, "w": 196, "h": 44, "name": "Approva"}, {"x": 483, "y": 403, "w": 196, "h": 44, "name": "Annulla"}], "37-rifiuta-motivo-modale.png": [{"x": 483, "y": 345, "w": 400, "h": 78, "name": "Motivo del rifiuto"}, {"x": 687, "y": 459, "w": 196, "h": 44, "name": "Rifiuta"}], "17-richieste-serie-in-attesa.png": [{"x": 316, "y": 317, "w": 143, "h": 44, "name": "Mostra tutte le 4 date"}, {"x": 316, "y": 534, "w": 493, "h": 44, "name": "Approva intera serie"}, {"x": 817, "y": 534, "w": 493, "h": 44, "name": "Rifiuta intera serie"}], "38-revoca-da-elenco-modale.png": [{"x": 483, "y": 353, "w": 400, "h": 78, "name": "Motivo della revoca"}, {"x": 687, "y": 487, "w": 196, "h": 44, "name": "Conferma revoca"}], "18-le-mie-prenotazioni-esiti.png": [], "39-le-mie-prenotazioni-rifiutata-senza-motivo.png": [{"x": 316, "y": 110, "w": 993, "h": 195, "name": "Riga rifiutata"}, {"x": 316, "y": 142, "w": 72, "h": 27, "name": "Etichetta Rifiutata"}], "19-revoca-motivo.png": [{"x": 528, "y": 277, "w": 218, "h": 20, "name": "Solo questa"}, {"x": 528, "y": 347, "w": 154, "h": 20, "name": "Questa e le successive"}, {"x": 528, "y": 417, "w": 180, "h": 20, "name": "Tutta la serie"}, {"x": 483, "y": 510, "w": 400, "h": 78, "name": "Motivo della revoca"}, {"x": 687, "y": 624, "w": 196, "h": 44, "name": "Conferma revoca"}], "20-le-mie-prenotazioni-revocata.png": [], "21-per-conto-di-finestra.png": [{"x": 464, "y": 270, "w": 438, "h": 44, "name": "Filtra per nome o email"}, {"x": 464, "y": 322, "w": 438, "h": 44, "name": "Docente titolare della prenotazione"}], "22-per-conto-di-in-elenco.png": [{"x": 316, "y": 110, "w": 993, "h": 207, "name": "Prenotazione per conto di Elena Neri"}], "23-su-autorizzazione-non-prenotabile.png": [{"x": 502, "y": 337, "w": 107, "h": 22, "name": "Non prenotabile"}, {"x": 313, "y": 379, "w": 461, "h": 16, "name": "Su autorizzazione"}], "24-permessi-risorsa-elenco.png": [{"x": 400, "y": 311, "w": 594, "h": 40, "name": "Ricerca"}, {"x": 372, "y": 403, "w": 622, "h": 62, "name": "Partecipante Prova (spunta)"}, {"x": 836, "y": 514, "w": 158, "h": 44, "name": "Salva permessi"}], "25-su-autorizzazione-abilitato.png": [{"x": 313, "y": 327, "w": 461, "h": 44, "name": "Visualizza calendario"}], "26-tecnico-richieste-sola-lettura.png": [{"x": 1085, "y": 242, "w": 250, "h": 86, "name": "Contatori"}], "27-tecnico-calendario-nomi.png": [{"x": 429, "y": 322, "w": 129, "h": 64, "name": "Lunedì 3ª ora (nome e aula)"}], "28-gestione-utenti-ruolo.png": [{"x": 1072, "y": 473, "w": 147, "h": 44, "name": "Ruolo (tendina)"}, {"x": 1227, "y": 473, "w": 90, "h": 44, "name": "Blocca"}], "40-gestione-utenti-cambio-ruolo-modale.png": [{"x": 687, "y": 431, "w": 196, "h": 44, "name": "Conferma"}, {"x": 483, "y": 431, "w": 196, "h": 44, "name": "Annulla"}], "29-posta-finta-elenco.png": [], "30-posta-richiesta-per-amministratore.png": [{"x": 33, "y": 540, "w": 247, "h": 34, "name": "Oggetto"}, {"x": 705, "y": 318, "w": 138, "h": 54, "name": "Approva"}, {"x": 863, "y": 318, "w": 123, "h": 54, "name": "Rifiuta"}], "31-posta-esito-per-utente.png": [{"x": 33, "y": 351, "w": 236, "h": 34, "name": "Oggetto"}], "32-configurazione-etichette-risorsa.png": [{"x": 366, "y": 189, "w": 171, "h": 27, "name": "Richiede approvazione"}, {"x": 545, "y": 189, "w": 234, "h": 27, "name": "Richieste a"}, {"x": 1144, "y": 141, "w": 44, "h": 44, "name": "Modifica risorsa"}], "33-configurazione-destinatari-richieste.png": [{"x": 330, "y": 553, "w": 962, "h": 179, "name": "Chi riceve le richieste via email"}], "34-stampa-menu.png": [{"x": 1109, "y": 161, "w": 200, "h": 44, "name": "Stampa settimana"}, {"x": 1069, "y": 213, "w": 240, "h": 122, "name": "Questa risorsa / Tutta la sede"}], "35-stampa-foglio-settimanale.png": [{"x": 1123, "y": 65, "w": 107, "h": 44, "name": "Stampa"}, {"x": 1238, "y": 65, "w": 99, "h": 44, "name": "Torna al calendario / Chiudi"}]};
+
+/* ---------- componenti nuovi per il Laboratorio Risorse ---------- */
+
+const MATERIALI_URL = 'thomascasali.github.io/corso-ia-scuola-slide/materiali/laboratorio-risorse/';
+const MAT = '../materiali/laboratorio-risorse/';
+
+const roleColor = {
+  'Docente': colors.info,
+  'Tecnico': colors.purple,
+  'Amministratore': colors.warn,
+  'Destinatario': colors.danger,
+  'Tutti': colors.textMuted
+};
+const rc = (k) => roleColor[k] || roleColor[k.split(' ')[0]] || colors.accent;
+
+function Shot({ file, role, title, text, duration, badges }) {
+  const W = 1366, H = 768;
+  const boxes = BOXES[file] || [];
+  const c = rc(role);
+  return (
+    <div className="shot-grid" style={{ display: 'grid', gap: '22px', alignItems: 'start', padding: '6px 8px' }}>
+      <div style={{ position: 'relative', width: 'min(100%, calc((100vh - 170px) * 1.7786))', aspectRatio: '1366 / 768', border: `1px solid ${colors.border}`, borderRadius: '8px', background: colors.bgCard }}>
+        <img src={'img/' + file} alt={title + ' (' + role + ')'} style={{ width: '100%', height: '100%', display: 'block', borderRadius: '8px' }} />
+        {boxes.map((b, i) => (
+          <div key={i} aria-hidden="true" style={{ position: 'absolute', left: ((b.x - 4) / W * 100) + '%', top: ((b.y - 4) / H * 100) + '%', width: ((b.w + 8) / W * 100) + '%', height: ((b.h + 8) / H * 100) + '%', border: `3px solid ${colors.warn}`, borderRadius: '5px', boxShadow: '0 0 0 2px rgba(0,0,0,0.45)', background: 'rgba(217,164,65,0.10)' }}>
+            <span style={{ position: 'absolute', left: '-12px', top: '-12px', width: '24px', height: '24px', borderRadius: '50%', background: colors.warn, color: colors.bg, fontWeight: 800, fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>{i + 1}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ display: 'inline-block', alignSelf: 'flex-start', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: c, border: `1px solid ${c}80`, borderRadius: '20px', padding: '3px 12px', textTransform: 'uppercase', letterSpacing: '1px' }}>{role}</div>
+        <h3 style={{ color: colors.text, fontSize: 'var(--fs-lead)' }}>{title}</h3>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.45 }}>{text}</p>
+        {boxes.length > 0 && (
+          <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '2px' }}>
+            {boxes.map((b, i) => (
+              <li key={i} style={{ display: 'flex', gap: '8px', alignItems: 'baseline', fontSize: 'var(--fs-xs)', lineHeight: 1.35, color: colors.textDim }}>
+                <span style={{ flex: '0 0 auto', width: '20px', height: '20px', borderRadius: '50%', background: colors.warn, color: colors.bg, fontWeight: 800, fontSize: '12px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>
+                <span style={{ fontSize: 'var(--fs-xs)' }}>{b.name}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+        {duration && <div><DurationBadge>{duration}</DurationBadge></div>}
+        {badges && badges.map((b, i) => <div key={i}><ActivityBadge href={MAT + b.href} label={b.label} /></div>)}
+      </div>
+    </div>
+  );
+}
+
+function CardGrid({ cards }) {
+  return (
+    <div className="role-grid" style={{ display: 'grid', gap: '14px', width: '100%' }}>
+      {cards.map((r, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ fontSize: '26px' }}>{r.icon}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{r.desc}</div>
+          {r.menu && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.4 }}>{r.menu}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TerminalMock({ folder, request, actions = [] }) {
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', overflow: 'hidden', maxWidth: '720px', margin: '0 auto' }}>
+      <div style={{ background: colors.bgLight, padding: '8px 14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, borderBottom: `1px solid ${colors.border}` }}>{folder}</div>
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {request && (
+          <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '8px 12px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+            <strong style={{ color: colors.text }}>Richiesta:</strong> {request}
+          </div>
+        )}
+        {actions.map((a, i) => (
+          <div key={i} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, paddingLeft: '6px' }}>{a}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const shot = (block, file, role, title, text, notes, extra = {}) => ({
+  block,
+  content: () => <Shot file={file} role={role} title={title} text={text} {...extra} />,
+  notes
+});
+
+const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
+  block,
+  content: () => (
+    <div style={{ padding: '14px 30px' }}>
+      <BlockTag>{tag}</BlockTag>
+      <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
+      <DurationBadge>{duration}</DurationBadge>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '6px 0 4px' }}>
+        {rows.map((r, i) => (
+          <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${rc(r[0])}`, borderRadius: '6px', padding: '8px 14px' }}>
+            <span style={{ flex: '0 1 190px', minWidth: 0, overflowWrap: 'anywhere', color: rc(r[0]), fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r[0]}</span>
+            <span style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.4 }}>{r[1]}</span>
+          </div>
+        ))}
+      </div>
+      {tip && <Box type="tip">{tip}</Box>}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+      </div>
+    </div>
+  ),
+  notes
+});
+
+/* ---------- slide ---------- */
+
+const COPIONI = [
+  { href: 'copione-gruppo-a.html', label: 'Copione del gruppo A' },
+  { href: 'copione-gruppo-b.html', label: 'Copione del gruppo B' }
+];
+const RUOLO = {
+  doc: { href: 'ruolo-utente.html', label: 'Scheda: Docente' },
+  tec: { href: 'ruolo-tecnico.html', label: 'Scheda: Tecnico' },
+  adm: { href: 'ruolo-amministratore.html', label: 'Scheda: Amministratore' },
+  dest: { href: 'ruolo-destinatario.html', label: 'Scheda: Destinatario delle notifiche' }
+};
+
+const T1 = 'Tappa 1 · calendario e prenotazione';
+const T2 = 'Tappa 2 · periodica e conflitti';
+const T3 = 'Tappa 3 · risorsa con approvazione';
+const T4 = 'Tappa 4 · ruoli e destinatari';
+const T5 = 'Tappa 5 · revoca e prenota per conto';
+const T6 = 'Tappa 6 · su autorizzazione';
+const T7 = 'Tappa 7 · stampa della settimana';
+
+const slides = [
+  /* --- apertura --- */
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>📅</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Laboratorio Risorse
+        </h1>
+        <p style={{ color: colors.textDim, maxWidth: '760px' }}>
+          Una lezione a parte, in laboratorio informatico: due gruppi su una copia di prova di Prenota Risorse, il portale della scuola già in uso.
+        </p>
+      </div>
+    ),
+    notes: "Apertura. Dite subito tre cose: Prenota Risorse è già in uso a scuola, ma oggi non lavorate sul portale vero, lavorate su una copia di prova; tutto quello che inserite oggi sparisce a fine corso e non tocca nessuna prenotazione vera; nessuna email esce davvero. Controllate che ogni PC abbia il browser aperto sull'indirizzo dell'ambiente di prova, scritto alla lavagna, e che in alto si veda la fascia gialla."
+  },
+  {
+    block: 'Apertura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Apertura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Che cosa facciamo oggi</h2>
+        <DurationBadge>10 minuti: apertura e introduzione, tutti insieme</DurationBadge>
+        <CompareTwo
+          left={{ icon: '🧭', color: colors.info, title: 'Proviamo il portale che userete', points: ["Calendario, prenotazioni, conflitti di orario, richieste e revoche", "Ruolo per ruolo: Docente, Tecnico, Amministratore", "Le email arrivano in una casella finta"] }}
+          right={{ icon: '🤖', color: colors.accent, title: 'Cambiamo il portale dal vivo', points: ["A un certo punto vi accorgerete che manca qualcosa", "Lo descrivete voi come richiesta di modifica", "Thomas la affida a Claude Code e si riprova"] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Obiettivo: sapere cosa può fare ciascun ruolo in Prenota Risorse e vedere come nasce una modifica.</p>
+      </div>
+    ),
+    notes: "Due obiettivi. Il primo è formare: alla fine ognuno deve sapere cosa può fare con il suo ruolo e cosa fanno gli altri. Il secondo è mostrare cosa significa chiedere una modifica a un agente: non una dimostrazione astratta, ma un problema che trovate voi, un'ora prima, usando il portale. Non anticipate quale sarà il problema."
+  },
+
+  /* --- il portale --- */
+  {
+    block: 'Il portale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Il portale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Che cosa fa Prenota Risorse</h2>
+        <CardGrid cards={[
+          { icon: '📅', color: colors.info, title: 'Vedere', desc: 'Un calendario settimanale per ogni risorsa: ore in riga, giorni in colonna.' },
+          { icon: '✅', color: colors.success, title: 'Prenotare', desc: 'Conferma subito oppure richiesta da approvare, secondo la risorsa.' },
+          { icon: '🗂️', color: colors.warn, title: 'Gestire', desc: 'Approvare, rifiutare, revocare, prenotare per conto di un collega.' },
+          { icon: '✉️', color: colors.purple, title: 'Avvisare', desc: 'Email a chi chiede e a chi deve decidere.' }
+        ]} />
+      </div>
+    ),
+    notes: "Il portale è già in uso a scuola: carrelli, aule, laboratori e attrezzature, in due sedi. Non lo presentate come novità. Chiedete alla sala come si prenota oggi un carrello o un'aula e dove si perde tempo: raccogliete due o tre risposte a voce, vi serviranno nel momento 'cosa cambiereste'."
+  },
+  {
+    block: 'Il portale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Il portale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Tre modi di prenotare</h2>
+        <CardGrid cards={[
+          { icon: '⚡', color: colors.success, title: 'Conferma subito', desc: 'Il Carrello PC A: la cella diventa rossa e l\'ora è vostra.' },
+          { icon: '⏳', color: colors.warn, title: 'Con approvazione', desc: 'La richiesta resta in attesa, la cella è gialla per tutti. Decide un Amministratore.' },
+          { icon: '🔑', color: colors.info, title: 'Su autorizzazione', desc: 'La risorsa è riservata a un elenco di docenti abilitati: il bottone dice Non prenotabile.' }
+        ]} />
+        <div style={{ marginTop: '16px' }}>
+          <ChipRow items={['Carrelli PC', 'Aule', 'Laboratori', 'Attrezzature', 'Sede Centrale', 'Sede Succursale']} />
+        </div>
+      </div>
+    ),
+    notes: "Come si prenota dipende dalla risorsa, non da chi siete. Nella copia di prova ci sono undici risorse di fantasia, in due sedi, delle quattro famiglie. Oggi useremo tutte e tre le strade: il Carrello PC A per la conferma immediata, il Laboratorio Informatica 1 e l'Aula Conferenze per l'approvazione, il Laboratorio Chimica per l'autorizzazione."
+  },
+  {
+    block: 'Il portale',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Il portale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Il percorso di una prenotazione</h2>
+        <FlowChain minItemWidth="150px" steps={[
+          { icon: '✏️', label: 'Prenotazione', sub: 'Il Docente', color: colors.info },
+          { icon: '⏳', label: 'In attesa', sub: 'Solo con approvazione', color: colors.warn },
+          { icon: '✅', label: 'Approvata o Rifiutata', sub: 'L\'Amministratore', color: colors.success },
+          { icon: '🚫', label: 'Revocata', sub: 'Dopo l\'approvazione', color: colors.danger }
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px', textAlign: 'center' }}>Una risorsa senza approvazione salta l'attesa ed è subito Approvata. Il Docente può sempre annullare una prenotazione futura: lo stato diventa Annullata.</p>
+      </div>
+    ),
+    notes: "Mostrate i cinque stati: In attesa, Approvata, Rifiutata, Revocata, Annullata. Rifiuto, revoca e annullamento sono tre cose diverse: il rifiuto arriva prima dell'approvazione, la revoca la fa l'amministrazione dopo, l'annullamento lo fa il Docente. In tutte le tappe di oggi vedrete almeno uno di questi passaggi."
+  },
+
+  /* --- come funziona il laboratorio --- */
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Un ambiente di prova, non il portale in uso</h2>
+        <Box type="info" title="Come lo riconoscete">
+          Una fascia gialla «AMBIENTE DI PROVA» in alto in ogni pagina e il prefisso [PROVA] nel titolo della scheda del browser.
+        </Box>
+        <Box type="warn" title="Il portale vero non si tocca">
+          Indirizzo, dati e prenotazioni sono separati: quello che fate oggi non cambia nessuna prenotazione vera.
+        </Box>
+        <Box type="success" title="Dati inventati, a fine corso si smonta">
+          Colleghi, aule e prenotazioni sono di fantasia. L'intero ambiente viene smontato alla fine del corso.
+        </Box>
+      </div>
+    ),
+    notes: "Spiegate bene la differenza con il portale in uso. Qui si lavora su una copia con il suo indirizzo, il suo database e i suoi utenti: le prenotazioni dei colleghi veri non si vedono e non si possono toccare. Dite che nessuno deve preoccuparsi di aver 'rotto' qualcosa: l'ambiente si può rimettere a posto. Se qualcuno non vede la fascia gialla, è nel posto sbagliato: fermatelo."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Le email vanno in una casella finta</h2>
+        <CompareTwo
+          left={{ icon: '✉️', color: colors.textMuted, title: 'Nel portale in uso', points: ["Richieste, esiti e revoche arrivano per email ai colleghi", "Le email partono dalla posta della scuola"] }}
+          right={{ icon: '📭', color: colors.success, title: 'Qui, nell\'ambiente di prova', points: ["Nessuna email esce", "Le notifiche finiscono in una casella finta, proiettata in aula", "Si può aprire anche dal proprio PC: ci trovate le email di tutti i partecipanti"] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Per ritrovare le vostre, cercate il nome della risorsa nel campo di ricerca in alto.</p>
+      </div>
+    ),
+    notes: "Le email servono: la richiesta per chi deve decidere, l'esito per chi ha chiesto. Qui non partono verso l'esterno, finiscono in una casella finta. Indirizzo, utente e password li scrivete alla lavagna. La casella è in inglese: Inbox è la posta in arrivo. Ci sono le email di tutti i partecipanti, quindi per ritrovare le proprie si cerca il nome della risorsa."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>I ruoli del portale</h2>
+        <CardGrid cards={[
+          { icon: '👩‍🏫', color: colors.info, title: 'Docente', desc: 'Prenota, annulla, segue le proprie richieste. Tutti nascono così.', menu: 'Dashboard, Le Mie Prenotazioni' },
+          { icon: '🔧', color: colors.purple, title: 'Tecnico', desc: 'Vede l\'amministrazione in sola lettura.', menu: 'In più: Richieste da Approvare, Tutte le Prenotazioni, Gestione Utenti, Configurazione' },
+          { icon: '🗝️', color: colors.warn, title: 'Amministratore', desc: 'Approva, rifiuta, revoca, prenota per conto di, abilita, cambia i ruoli.', menu: 'Le stesse voci del Tecnico' },
+          { icon: '📬', color: colors.danger, title: 'Destinatario delle notifiche', desc: 'Un Amministratore che riceve per email le richieste di una risorsa.', menu: 'Email con Approva e Rifiuta' }
+        ]} />
+      </div>
+    ),
+    notes: "Il portale ha tre ruoli. Il quarto, il Destinatario delle notifiche, non è un ruolo ma un compito: per ogni risorsa si sceglie chi riceve le richieste per email. Ogni account nasce Docente; il ruolo lo cambia un Amministratore da Gestione Utenti. Nell'ambiente di prova i responsabili indicati da Thomas partono già Amministratori."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Due gruppi, due risorse</h2>
+        <CompareTwo
+          left={{ icon: '🅰️', color: colors.info, title: 'Gruppo A', points: ["Carrello PC A, il lunedì", "Laboratorio Informatica 1, con approvazione", "Dalla prima prenotazione alla stampa"] }}
+          right={{ icon: '🅱️', color: colors.purple, title: 'Gruppo B', points: ["Carrello PC A, il giovedì", "Aula Conferenze della Sede Succursale, con approvazione", "Dalla prima prenotazione alla stampa"] }}
+        />
+        <Box type="tip">La copia di prova è la stessa per i due gruppi: ognuno usa le proprie celle e decide solo le richieste del proprio gruppo. Il foglio «Ruoli e rotazione» dice chi fa cosa.</Box>
+        <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
+      </div>
+    ),
+    notes: "Due gruppi da cinque o sei persone, ognuno con le proprie celle e la propria risorsa, così non vi pestate i piedi. I ruoli di partenza sono assegnati per nome qualche giorno prima: servono gli indirizzi dei due Amministratori di ogni gruppo. Scrivete alla lavagna i posti e i numeri delle persone."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Chi interpreta cosa, e come ruota</h2>
+        <CompareTwo
+          left={{ icon: '👥', color: colors.info, title: 'Gruppo da 6', points: ["1 e 2: Amministratori e Destinatari", "3 e 4: Docenti, poi Amministratori", "5: Docente, poi Tecnico", "6: Docente"] }}
+          right={{ icon: '👥', color: colors.purple, title: 'Gruppo da 5', points: ["1 e 2: Amministratori e Destinatari", "3 e 4: Docenti, poi Amministratori", "5: Docente, poi Tecnico", "Il Docente in più è la persona 1, dopo la tappa 4"] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>I ruoli ruotano nella tappa 4: Amministratori e Docenti si scambiano dal portale, da Gestione Utenti. Dopo ogni cambio, Logout e nuovo accesso.</p>
+      </div>
+    ),
+    notes: "La rotazione è libera. Negli altri laboratori i ruoli esterni ricevono le email su un indirizzo preciso e per questo restano alla stessa persona; qui le email finiscono tutte nella casella finta, quindi nessun ruolo è legato a una persona e i ruoli si possono scambiare a metà lezione, dal portale stesso. Un Amministratore non può togliersi da solo i privilegi: serve un collega. Il cambio di ruolo vale solo dopo un nuovo accesso: ricordatelo a ogni cambio. La distribuzione è una proposta: cambiatela se la sala è diversa."
+  },
+  {
+    block: 'Come funziona il laboratorio',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Come funziona il laboratorio</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quattro regole per lavorare bene</h2>
+        <Box type="warn" title="1. Solo il vostro gruppo">Stessa copia di prova per tutti: usate le celle e la risorsa del copione e decidete solo le richieste del vostro gruppo.</Box>
+        <Box type="info" title="2. Chi aspetta, legge">Quando non tocca a voi, leggete la scheda del ruolo che agisce subito dopo di voi.</Box>
+        <Box type="danger" title="3. «Ricordami» spento, Logout a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
+        <Box type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono nella parte finale.</Box>
+      </div>
+    ),
+    notes: "Le regole sono quattro e vanno dette ad alta voce. La più importante è la prima: il portale di prova è condiviso, quindi chi ha il ruolo di Amministratore vede e può decidere anche le richieste dell'altro gruppo. Il nome del Docente e la risorsa, nella richiesta, servono a riconoscere le proprie."
+  },
+
+  /* --- accesso --- */
+  shot('Accesso', '01-accesso-login-con-banner.png', 'Tutti', 'Accesso con l\'account della scuola',
+    'La fascia gialla dice che siete nell\'ambiente di prova. Un solo bottone: «Accedi con Google». Lasciate spenta la casella «Ricordami per 30 giorni».',
+    "Attività di accesso, circa dieci minuti per questa slide e le due successive. Tutti entrano con il proprio account della scuola: un indirizzo personale viene rifiutato. Non c'è registrazione: al primo accesso il portale vi riconosce e vi dà il ruolo Docente; i responsabili indicati da Thomas entrano già come Amministratori. Controllate che 'Ricordami' sia spento su ogni PC.",
+    { duration: '10 minuti, tutti insieme (con le due slide successive)', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
+  {
+    block: 'Accesso',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Accesso</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Cosa vedete dopo l'accesso</h2>
+        <CardGrid cards={[
+          { icon: '👩‍🏫', color: colors.info, title: 'Docente', desc: 'Due voci nel menu.', menu: 'Dashboard, Le Mie Prenotazioni' },
+          { icon: '🗝️', color: colors.warn, title: 'Tecnico e Amministratore', desc: 'Quattro voci in più per l\'amministrazione.', menu: 'Richieste da Approvare, Tutte le Prenotazioni, Gestione Utenti, Configurazione' },
+          { icon: '🏷️', color: colors.purple, title: 'Il vostro ruolo', desc: 'È scritto sotto il vostro nome, in basso a sinistra, sopra il bottone Logout.' }
+        ]} />
+      </div>
+    ),
+    notes: "Il menu a sinistra cambia con il ruolo. Chi vede meno voci di quelle previste dal suo ruolo di partenza probabilmente non ha ancora il ruolo giusto: lo sistema Thomas. Dopo ogni cambio di ruolo bisogna premere Logout e rientrare: il portale rilegge il ruolo solo all'accesso."
+  },
+  shot('Accesso', '29-posta-finta-elenco.png', 'Tutti', 'La casella finta',
+    'Ogni notifica del portale finisce qui. Il mittente è «PROVA Prenota Risorse»: cercate il nome della risorsa per ritrovare le vostre.',
+    "Verificate che ognuno riesca ad aprire la casella in un'altra scheda del browser, con l'indirizzo, l'utente e la password scritti alla lavagna. L'interfaccia è in inglese, ma servono solo l'elenco, il campo di ricerca e l'apertura di un messaggio. Nell'elenco ci sono le email di tutti: le righe cambiano man mano che il laboratorio procede."),
+
+  /* --- tappa 1 --- */
+  tappa(T1, 'Tappa 1', 'Leggere il calendario e prenotare un carrello', '15 minuti, i due gruppi in parallelo',
+    [
+      ['Tutti', 'Leggono la Dashboard, aprono il calendario del Carrello PC A e la legenda dei colori.'],
+      ['Docente', 'Persona 3: prenota una cella verde, con la destinazione, e legge il messaggio.'],
+      ['Docente', 'Persona 3: guarda la riga in Le Mie Prenotazioni.'],
+      ['Docente', 'Persona 3: annulla la prenotazione e la cella torna verde.']
+    ],
+    [...COPIONI, RUOLO.doc],
+    "Prima tappa: tutti leggono, una sola persona prenota. Chi non scrive nulla guarda il proprio calendario: deve vedere la cella diventare rossa quando la persona 3 conferma. Poi si annulla, perché la stessa cella servirà per la prenotazione periodica."),
+  shot(T1, '02-dashboard-risorse.png', 'Docente', 'Il punto di partenza',
+    'La Dashboard raccoglie le risorse per famiglia. L\'etichetta Disponibile o In uso racconta questo momento, non la giornata.',
+    "Fate notare le due cose in alto: la fascia gialla e, nel menu, solo due voci per chi è Docente. L'etichetta In uso dice che c'è una prenotazione in corso adesso; per sapere com'è la settimana serve il calendario. Si entra nel calendario con Visualizza calendario."),
+  shot(T1, '03-calendario-settimana-legenda.png', 'Docente', 'Il calendario e la legenda',
+    'Frecce per cambiare settimana, Oggi, il campo della data e la legenda: Disponibile, Occupato, In approvazione, Passata, Periodica.',
+    "Lasciate un minuto a tutti per provare le frecce e il bottone Oggi. La legenda è la chiave della lezione: verde libero, rosso occupato, giallo in attesa di approvazione. Il bottone Stampa settimana lo useremo nell'ultima tappa."),
+  shot(T1, '04-calendario-celle-mattina.png', 'Docente', 'Le ore del mattino',
+    'Le ore sono in riga, i giorni in colonna. In questa schermata il lunedì alla 3ª ora è verde e il martedì alla 3ª ora è rosso.',
+    "Il pomeriggio è un blocco a parte, richiudibile: si apre da solo quando nella settimana c'è almeno una prenotazione pomeridiana. Per il gruppo B la cella da cercare è quella del giovedì, indicata nel copione."),
+  shot(T1, '05-prenota-carrello-finestra.png', 'Docente', 'Nuova prenotazione',
+    'Giornaliera, destinazione obbligatoria, nota facoltativa. Il riquadro verde dice che la conferma è immediata.',
+    "La destinazione serve a chi deve ritrovare il carrello: è obbligatoria per le risorse che si spostano. Il testo da scrivere è nel copione. Chiedete: come sa il portale che questa risorsa non richiede approvazione? Dalla configurazione della risorsa, non da chi prenota."),
+  shot(T1, '06-prenotazione-confermata.png', 'Docente', 'Prenotazione confermata',
+    'Il messaggio conferma e la cella diventa rossa per tutti, anche per i colleghi che guardano lo stesso calendario.',
+    "Fate controllare ai colleghi del gruppo che la cella sia rossa anche sul loro schermo, dopo aver ricaricato la pagina. È la prima prova che il calendario è unico."),
+  shot(T1, '07-le-mie-prenotazioni-approvata.png', 'Docente', 'Le Mie Prenotazioni',
+    'Stato Approvata, tipo Giornaliera, destinazione e note. Annulla compare finché la data è futura.',
+    "In alto i contatori e i tre gruppi di filtri: Mostra, Stato e Tipo. Le prenotazioni di oggi e quelle passate non hanno il bottone Annulla: per disdirle bisogna scrivere al responsabile."),
+  shot(T1, '08-annulla-conferma.png', 'Docente', 'Annullare',
+    'Una finestra chiede conferma. Poi lo stato diventa Annullata e l\'ora torna libera.',
+    "Dopo l'annullamento la cella torna verde. Questo passaggio prepara la tappa 2: la prenotazione periodica parte dalla stessa cella."),
+
+  /* --- tappa 2 --- */
+  tappa(T2, 'Tappa 2', 'Prenotazione periodica e conflitti', '15 minuti, i due gruppi in parallelo',
+    [
+      ['Docente', 'Persona 3: prenota la stessa ora per quattro settimane, dopo aver letto le date.'],
+      ['Docente', 'Persona 3: legge l\'esito, poi guarda le tre scelte di Annulla senza confermare.'],
+      ['Tutti', 'Gli altri aprono una cella rossa e leggono il dettaglio: si può prenotare?'],
+      ['Docente', 'Persone 4 e 5: puntano la stessa cella libera, la seconda legge il messaggio.']
+    ],
+    [...COPIONI, RUOLO.doc],
+    "Seconda tappa: la periodica ripete la stessa ora per più settimane e il portale registra le date una per una. Una delle date è già occupata, quindi l'esito è parziale: è il punto della tappa. Poi il conflitto vero, tra due persone che scelgono la stessa ora quasi insieme.",
+    'Prima di inviare, leggete l\'elenco delle date: dice già cosa succederà.'),
+  shot(T2, '09-periodica-finestra.png', 'Docente', 'Periodica: le settimane e le date',
+    'Si sceglie per quante settimane e si leggono le date che verranno prenotate: una di queste è già occupata.',
+    "Lasciate che il gruppo arrivi da solo a capire quale data darà problema: nella finestra non c'è un avviso, c'è solo l'elenco. Poi invia. Il gruppo A parte dal lunedì, il gruppo B dal giovedì."),
+  shot(T2, '10-periodica-esito-parziale.png', 'Docente', 'Una data non si è registrata',
+    'La finestra si intitola «Prenotazione confermata»: sotto, le date registrate e un riquadro rosso con la data non registrata e il motivo.',
+    "Fate leggere la finestra ad alta voce: il titolo dice «Prenotazione confermata», ma una data non è stata registrata, e il riquadro rosso sta più sotto. Le date saltate restano da rifare, magari su un'altra ora. Il portale non annulla tutta la serie per una data occupata: lavora una data alla volta."),
+  shot(T2, '11-annulla-periodica-scelte.png', 'Docente', 'Annullare una serie',
+    'Su una prenotazione periodica Annulla chiede cosa annullare: solo questa, questa e le successive, tutta la serie.',
+    "Si guardano le tre scelte e si preme Chiudi: non confermate, la serie serve nelle tappe successive. Accanto a ogni scelta il portale scrive quante prenotazioni vengono toccate."),
+  shot(T2, '12-conflitto-cella-occupata.png', 'Docente', 'Una cella rossa',
+    'Un clic apre Dettagli prenotazione: chi, dove, note. Non si può prenotare.',
+    "Chiedete alla sala cosa si può fare: scegliere un'altra ora o parlare con chi ha prenotato. Nel calendario il Docente legge solo Occupato: il nome compare aprendo il dettaglio."),
+  shot(T2, '13-conflitto-risorsa-gia-prenotata.png', 'Docente', 'Due richieste sulla stessa ora',
+    'Chi conferma per secondo trova «Prenotazione non registrata»: ricaricate il calendario e scegliete un\'altra ora.',
+    "Le persone 4 e 5 aprono la stessa cella; la 4 conferma, poi la 5. La seconda finestra era rimasta aperta su un calendario ormai vecchio: è il motivo per cui il controllo avviene al momento della conferma e non quando si apre la finestra."),
+
+  /* --- tappa 3 --- */
+  tappa(T3, 'Tappa 3', 'Una risorsa con approvazione', '25 minuti, i due gruppi in parallelo',
+    [
+      ['Docente', 'Persona 5: invia due richieste per lo stesso giorno, una alla 3ª ora e una alla 4ª.'],
+      ['Destinatario', 'Persone 1 e 2: ricevono le email e trovano le richieste in Richieste da Approvare.'],
+      ['Amministratore', 'Persona 1 approva la prima. Persona 2 rifiuta la seconda e scrive il motivo.'],
+      ['Docente', 'Persona 5: legge l\'esito e cerca il motivo del rifiuto.'],
+      ['Tutti', 'Guardano le email nella casella finta.']
+    ],
+    [...COPIONI, RUOLO.dest],
+    "Terza tappa, la più lunga. La persona 5 invia due richieste; le persone 1 e 2 le decidono da Richieste da Approvare, una approvata e una rifiutata con un motivo. Poi la persona 5 guarda l'esito: lasciate che trovi da sola dove leggere il motivo del rifiuto. Non dite cosa trova o cosa manca. Se il gruppo chiede 'dov'è?', rispondete di cercare."),
+  shot(T3, '14-richiesta-finestra-approvazione.png', 'Docente', 'Una risorsa con approvazione',
+    'Riquadro giallo e bottone Invia richiesta al posto di Conferma prenotazione. L\'ora resta in attesa per tutti.',
+    "Il Gruppo A usa il Laboratorio Informatica 1, il gruppo B l'Aula Conferenze: il testo delle note è nel copione. La cella diventa gialla: nessun altro può prendere quell'ora, ma non è ancora confermata."),
+  shot(T3, '15-richiesta-inviata.png', 'Docente', 'Richiesta inviata',
+    'Il messaggio dice che la richiesta è in valutazione e che arriverà un\'email.',
+    "Guardate subito la casella finta: la persona 5 riceve una email di ricezione e le persone 1 e 2 una email con la richiesta. Le email arrivano nel giro di qualche secondo."),
+  shot(T3, '16-richieste-da-approvare.png', 'Amministratore', 'Richieste da Approvare',
+    'Contatori, filtri Stato e Tipo e, su ogni richiesta, Approva e Rifiuta. Tutte le Prenotazioni è la stessa pagina.',
+    "Ricordate la regola: si decidono solo le richieste del proprio gruppo. Ogni richiesta mostra risorsa, Docente, data, ora e note. Nella pagina ci sono anche richieste già presenti, di fantasia: non toccatele."),
+  shot(T3, '36-approva-conferma-modale.png', 'Amministratore', 'Approva: una conferma',
+    'La finestra chiede «Approvare questa prenotazione?». Approva conferma, Annulla lascia la richiesta in attesa.',
+    "Per Approva il portale chiede solo una conferma. Dopo la conferma il Docente riceve un'email e la cella diventa rossa. Se ci si ripensa, Annulla non cambia nulla."),
+  shot(T3, '37-rifiuta-motivo-modale.png', 'Amministratore', 'Rifiuta: il motivo è obbligatorio',
+    'La finestra «Rifiuta la prenotazione» chiede il motivo del rifiuto. Senza motivo non si procede; Ctrl+Invio nel campo conferma.',
+    "Il motivo è obbligatorio: il testo da scrivere è nel copione. Nel campo, Ctrl+Invio conferma senza usare il mouse. Dite alla sala che quel motivo sarà letto da un collega: conviene che sia utile e non un semplice no. Le stesse due azioni sono disponibili anche dai pulsanti dell'email, ma lì il rifiuto non chiede il motivo."),
+  shot(T3, '17-richieste-serie-in-attesa.png', 'Amministratore', 'Una serie in attesa',
+    'Una scheda per tutta la serie: si apre l\'elenco delle date e si decide in blocco, con un solo motivo.',
+    "È una richiesta già presente, di fantasia: la persona 1 la apre per leggerla, ma non decide. Se si vuole accettare solo alcune date non c'è una via di mezzo: si rifiuta la serie spiegando quali date sono libere e si chiede di riprenotare."),
+  shot(T3, '18-le-mie-prenotazioni-esiti.png', 'Docente', 'L\'esito delle richieste',
+    'Una richiesta approvata, una rifiutata. L\'Amministratore ha scritto un motivo per il rifiuto: dove lo leggete?',
+    "Lasciate che la persona 5 cerchi con calma, nella pagina e nei filtri. Non dite cosa trova. Quando ha finito, fatele aprire la casella finta. Chiedete cosa si aspettava di trovare e dove: la sua risposta è il materiale della parte finale."),
+  shot(T3, '31-posta-esito-per-utente.png', 'Tutti', 'L\'email di esito',
+    'Ogni decisione genera un\'email al Docente. Cercate quella del rifiuto e leggetela.',
+    "Una email per ogni esito: approvazione, rifiuto, revoca. Le email arrivano quando decide l'Amministratore, non quando il Docente apre il portale. Chiedete alla sala: se non guardate la posta, come vi accorgete di un esito?"),
+  {
+    block: T3,
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Tappa 3</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Segnatelo sul foglio</h2>
+        <Box type="info" title="Due domande">
+          Dove avete trovato il motivo del rifiuto? E dove vi aspettavate di trovarlo?
+        </Box>
+        <Box type="tip" title="Scrivetelo ora">
+          Annotate la risposta sul foglio «Cosa cambierei»: ci torniamo dopo l'ultima tappa.
+        </Box>
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+      </div>
+    ),
+    notes: "Due minuti per scrivere. Non dite ancora che questa sarà la modifica dal vivo e non commentate le risposte: raccoglietele a voce, a campione, e passate alla tappa 4. Se un gruppo non ha trovato il problema, vuol dire che non ha cercato il motivo: ripetete la domanda."
+  },
+
+  /* --- tappa 4 --- */
+  tappa(T4, 'Tappa 4', 'Ruoli e destinatari', '20 minuti, i due gruppi in parallelo',
+    [
+      ['Amministratore', 'Persona 1 rende Tecnico la persona 5. La persona 5 esce, rientra e guarda cosa cambia.'],
+      ['Tecnico', 'Persona 5: legge le richieste senza poter decidere e nel calendario vede nome e aula.'],
+      ['Amministratore', 'Persone 1 e 2 rendono Amministratori le persone 3 e 4, che riportano Docenti le persone 1 e 2.'],
+      ['Destinatario', 'Persona 3: sceglie chi riceve le richieste della risorsa del gruppo.'],
+      ['Tutti', 'Dopo ogni cambio di ruolo: Logout e nuovo accesso.']
+    ],
+    [...COPIONI, RUOLO.tec, RUOLO.adm, RUOLO.dest],
+    "Quarta tappa: è qui che i ruoli ruotano. Il cambio si fa dal portale e ha una regola: un Amministratore non può togliersi i privilegi, serve un collega. Per questo prima le persone 1 e 2 promuovono le 3 e 4, poi queste riportano Docenti le 1 e 2. Ricordate a tutti il Logout dopo ogni cambio: senza, il menu non cambia."),
+  shot(T4, '28-gestione-utenti-ruolo.png', 'Amministratore', 'Gestione Utenti',
+    "Si cerca la persona e si cambia il ruolo con la tendina. Nella propria riga c'è «Tu», senza tendina.",
+    "I contatori in alto contano Admin, Tecnici, Docenti, Attivi e Bloccati. Il bottone Blocca toglie l'accesso al portale: oggi non serve, non usatelo. Il portale vi protegge da due autogol: non potete cambiare il vostro ruolo e l'ultimo Amministratore non può essere declassato.",
+    { duration: 'Il cambio di ruolo vale dal nuovo accesso' }),
+  shot(T4, '40-gestione-utenti-cambio-ruolo-modale.png', 'Amministratore', 'Cambiare il ruolo',
+    "La finestra «Cambiare il ruolo?» spiega cosa comporta: per esempio «Rendere questa persona Tecnico? Vedrà l'area di amministrazione in sola lettura.» Poi Conferma o Annulla.",
+    "Il portale spiega sempre cosa comporta il cambio, prima di farlo. Leggete la frase ad alta voce. Chi è stato promosso o declassato deve rientrare con Logout e nuovo accesso, altrimenti il portale continua a trattarlo con il ruolo di prima. Nella propria riga si legge «Tu» e non c'è la tendina: nessuno cambia il proprio ruolo."),
+  shot(T4, '26-tecnico-richieste-sola-lettura.png', 'Tecnico', 'Il Tecnico legge, non decide',
+    'Una fascia azzurra dice che si consulta in sola lettura. Si vedono richieste e contatori, ma non ci sono Approva e Rifiuta.',
+    "Chiedete alla persona 5 di confrontare questa pagina con quella vista dall'Amministratore: stessa lista, nessun bottone di decisione. Il Tecnico può anche leggere Gestione Utenti e Configurazione, ma non salvare nulla."),
+  shot(T4, '27-tecnico-calendario-nomi.png', 'Tecnico', 'Il calendario del Tecnico',
+    'Nelle celle occupate si legge il nome abbreviato e l\'aula. Il Docente legge solo Occupato.',
+    "È la differenza più utile per chi prepara un laboratorio: sapere chi ha prenotato e dove si trova la risorsa. Il Docente legge solo Occupato: il nome compare aprendo il dettaglio."),
+  shot(T4, '32-configurazione-etichette-risorsa.png', 'Amministratore', 'Le etichette di una risorsa',
+    'Richiede approvazione, Richieste a, Chiede la destinazione: si leggono da Configurazione. I comandi sono icone: la matita apre Modifica.',
+    "Le etichette dicono come si comporta la risorsa: con approvazione o no, a chi arrivano le richieste, se chiede la destinazione. Modifica risorsa apre il modulo con tutte le impostazioni."),
+  shot(T4, '33-configurazione-destinatari-richieste.png', 'Destinatario', 'Chi riceve le richieste',
+    'La sezione «Chi riceve le richieste via email»: senza spunte le richieste vanno a tutti gli Amministratori.',
+    "Dopo la promozione, la persona 3 sceglie sé stessa e la persona 4 come destinatarie della risorsa del gruppo e salva. Se un destinatario non è più Amministratore viene saltato; se non resta nessuno, le richieste tornano a tutti gli Amministratori. Salvate solo la risorsa del vostro gruppo."),
+
+  /* --- tappa 5 --- */
+  tappa(T5, 'Tappa 5', 'Revoca e prenotazione per conto di', '15 minuti, i due gruppi in parallelo',
+    [
+      ['Amministratore', 'Persona 4: revoca una data della prenotazione periodica, solo questa, scrivendo il motivo.'],
+      ['Docente', 'Persona 3: legge la riga revocata in Le Mie Prenotazioni e cerca l\'email.'],
+      ['Amministratore', 'Persona 3: prenota per conto di un collega.'],
+      ['Amministratore', 'Persona 4: ritrova la prenotazione in Tutte le Prenotazioni.']
+    ],
+    [...COPIONI, RUOLO.adm],
+    "Quinta tappa, con i ruoli del giro due. La revoca riguarda una prenotazione già approvata: è una cosa diversa dal rifiuto. Notate il confronto con la tappa 3: qui il Docente trova il motivo nel portale, in un riquadro rosso. Non anticipate il confronto: se serve, lo fanno loro."),
+  shot(T5, '19-revoca-motivo.png', 'Amministratore', 'La revoca dal calendario',
+    'Aprendo la cella occupata, Revoca chiede cosa revocare (per le periodiche) e il motivo, obbligatorio. Come il rifiuto, arriva al Docente.',
+    "Si sceglie Solo questa, si scrive il motivo, almeno tre caratteri, e si preme Conferma revoca. Le richieste In attesa non si revocano, si rifiutano. La revoca è possibile solo su prenotazioni già approvate."),
+  shot(T5, '38-revoca-da-elenco-modale.png', 'Amministratore', "La revoca dall'elenco",
+    'Da Richieste o da Tutte le Prenotazioni la finestra «Revoca la prenotazione» chiede il motivo, di almeno 3 caratteri. Conferma revoca chiude.',
+    "Stessa azione, altra strada: dall'elenco invece che dal dettaglio nel calendario. La finestra ricorda che il Docente riceve il motivo via email e che lo slot torna libero. Per le periodiche c'è anche la scelta tra Solo questa, Questa e le successive, Tutta la serie. Annulla chiude senza revocare."),
+  shot(T5, '20-le-mie-prenotazioni-revocata.png', 'Docente', 'Cosa vede il Docente',
+    'L\'etichetta Revocata e un riquadro con chi, quando e perché. L\'ora torna libera per tutti.',
+    "Fate guardare anche il calendario: la cella è tornata verde. E la casella finta: è arrivata l'email di revoca. Il Docente può riprenotare, se gli serve ancora."),
+  shot(T5, '21-per-conto-di-finestra.png', 'Amministratore', 'Prenota per conto di',
+    'Si cerca il collega e si sceglie il titolare della prenotazione. Di solito è «Me stesso».',
+    "Serve quando l'amministrazione prenota al posto di qualcuno. La prenotazione nasce già approvata, anche su una risorsa che richiede approvazione, e vale pure per le periodiche. La responsabilità della scelta è di chi prenota."),
+  shot(T5, '22-per-conto-di-in-elenco.png', 'Amministratore', 'In Tutte le Prenotazioni',
+    'La prenotazione è intestata al collega, già Approvata, con l\'indicazione che l\'ha creata l\'amministrazione.',
+    "Nella casella finta è arrivata l'email «Prenotazione creata per te», indirizzata al collega. Chiedete: perché è utile avvisarlo?"),
+
+  /* --- tappa 6 --- */
+  tappa(T6, 'Tappa 6', 'Una risorsa su autorizzazione', '10 minuti, i due gruppi in parallelo',
+    [
+      ['Docente', 'Persona 6: guarda il Laboratorio Chimica: il bottone dice Non prenotabile.'],
+      ['Amministratore', 'Persona 3: abilita la persona 6 da Permessi e salva. Prima salva il gruppo A, poi il gruppo B.'],
+      ['Docente', 'Persona 6: ricarica la Dashboard e invia una richiesta per il laboratorio.'],
+      ['Destinatario', 'Persona 4: approva dall\'email, con la conferma sulla pagina di riepilogo.']
+    ],
+    [...COPIONI, RUOLO.dest],
+    "Sesta tappa. La risorsa è visibile a tutti ma prenotabile solo da chi è abilitato. Il salvataggio dei permessi sostituisce l'elenco intero e l'elenco è uno solo per i due gruppi, quindi l'ordine è fisso: prima salva il gruppo A, poi il gruppo B ricarica la pagina, spunta e salva. Non togliete le spunte degli altri. A fine tappa controlla tu l'elenco: devono esserci entrambe le persone. Nel gruppo da 5 la persona 6 è la persona 1.",
+    "Un solo elenco dei permessi per i due gruppi: salva prima il gruppo A, poi il gruppo B ricarica la pagina e salva."),
+  shot(T6, '23-su-autorizzazione-non-prenotabile.png', 'Docente', 'Non prenotabile',
+    'La risorsa è riservata: il bottone è grigio e la riga sotto dice di chiedere all\'Amministratore di abilitarvi.',
+    "Non è un errore e non è un blocco temporaneo: la risorsa ha un elenco di docenti abilitati e voi non ci siete. Si chiede a un Amministratore o al responsabile del laboratorio."),
+  shot(T6, '24-permessi-risorsa-elenco.png', 'Amministratore', 'I permessi',
+    'Ricerca, spunte e Salva permessi. Il salvataggio sostituisce l\'elenco intero.',
+    "Gli Amministratori possono prenotare qualsiasi risorsa senza comparire nell'elenco. Se si toglie l'accesso a un collega, le prenotazioni che aveva già fatto restano valide: cambia solo la possibilità di farne di nuove."),
+  shot(T6, '25-su-autorizzazione-abilitato.png', 'Docente', 'Dopo l\'abilitazione',
+    'La scheda torna a offrire Visualizza calendario: ora la persona abilitata può prenotare.',
+    "Il Laboratorio Chimica richiede anche l'approvazione: la richiesta della persona 6 genera un'email per gli Amministratori. Le richieste di questa risorsa non hanno destinatari scelti, quindi arrivano a tutti gli Amministratori: ognuno approva solo quella del proprio gruppo."),
+  shot(T6, '30-posta-richiesta-per-amministratore.png', 'Destinatario', 'Approvare dall\'email',
+    'Approva e Rifiuta aprono una pagina di riepilogo: si decide solo dopo la conferma.',
+    "Il passaggio di conferma non è una formalità: i programmi che controllano la posta aprono da soli i link delle email, e senza conferma la richiesta risulterebbe decisa senza che nessuno l'abbia letta. Decide il primo che conferma. Il rifiuto dall'email non chiede il motivo.",
+    { badges: [RUOLO.dest] }),
+
+  /* --- tappa 7 --- */
+  shot(T7, '34-stampa-menu.png', 'Tutti', 'Stampare la settimana',
+    'Sopra il calendario, Stampa settimana offre due scelte, con la risorsa e la sede accanto: Questa risorsa o Tutta la sede.',
+    "Ultima tappa, cinque minuti, tutti. Scegliete Tutta la sede: un foglio per ogni risorsa, pensato per essere appeso in aula o in laboratorio. Il foglio mostra sempre i nomi dei docenti, anche a chi nel calendario legge solo Occupato.",
+    { duration: '5 minuti, tutti' }),
+  shot(T7, '35-stampa-foglio-settimanale.png', 'Tutti', 'Il foglio settimanale',
+    'A4 in orizzontale: docente e aula in ogni cella, P per le periodiche, corsivo per le richieste in attesa. Stampa apre la stampa, Chiudi richiude il foglio.',
+    "Le prenotazioni revocate o annullate non compaiono. La fascia gialla non si stampa. Stampa apre la finestra di stampa del browser, da dove si può anche salvare in PDF. Chiudi richiude il foglio."),
+
+  /* --- cosa cambiereste --- */
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il problema diventa una richiesta</h2>
+        <DurationBadge>10 minuti, a gruppi poi alla lavagna</DurationBadge>
+        <Box type="info" title="Tre cose da dire">
+          Chi ha il problema (quale ruolo), dove (in quale schermata), cosa vorrebbe vedere.
+        </Box>
+        <Box type="tip" title="Un esempio, su un altro punto del percorso">
+          «Come Amministratore, nella pagina Richieste da Approvare vorrei poter filtrare le richieste per risorsa».
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Ogni gruppo scrive la propria richiesta sul foglio. Chi ha altre osservazioni le segna.</p>
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+      </div>
+    ),
+    notes: "Lasciate cinque minuti di scrittura nei gruppi, poi raccogliete alla lavagna le richieste. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come Docente, in Le Mie Prenotazioni, sulla riga di una richiesta rifiutata, vorrei leggere il motivo scritto dall'Amministratore, come già vedo per le prenotazioni revocate'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa, e ripartite dalla tappa 3. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Come lavora un agente su una modifica</h2>
+        <FlowChain minItemWidth="140px" steps={[
+          { icon: '✍️', label: 'Richiesta', sub: 'In parole semplici', color: colors.info },
+          { icon: '🧭', label: 'Piano', sub: 'Cosa tocca, cosa no', color: colors.info },
+          { icon: '🛠️', label: 'Modifica', sub: 'Su una copia di lavoro', color: colors.warn },
+          { icon: '🧪', label: 'Prova', sub: 'Controlli automatici e a vista', color: colors.warn },
+          { icon: '🔍', label: 'Revisione', sub: 'Un secondo agente rilegge', color: colors.purple },
+          { icon: '🚀', label: 'Installazione', sub: 'Sull\'ambiente di prova, con il via di Thomas', color: colors.success }
+        ]} />
+        <Box type="info" title="Nel nostro caso">La modifica si installa solo sull'ambiente di prova: il portale in uso non viene toccato.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px', textAlign: 'center' }}>Ogni passaggio lascia una traccia che si può leggere. L'ultima parola sull'installazione resta a una persona.</p>
+      </div>
+    ),
+    notes: "Spiegate la catena prima di farla vedere. Richiesta: la scrivete voi in parole semplici. Piano: l'agente descrive cosa intende fare e quali parti del portale tocca, e voi leggete prima che parta. Modifica e prova: l'agente scrive il cambiamento su una copia di lavoro e lancia i controlli, poi si prova a mano. Revisione: un secondo agente rilegge con occhi nuovi. Installazione: la decide una persona, mai l'agente da solo; qui avviene solo sull'ambiente di prova. È lo stesso schema visto negli incontri sugli agenti."
+  },
+  shot('Cosa cambiereste', '39-le-mie-prenotazioni-rifiutata-senza-motivo.png', 'Docente', 'Da dove partiamo',
+    "La riga della richiesta rifiutata in Le Mie Prenotazioni: c'è l'etichetta Rifiutata. Il motivo che l'Amministratore ha scritto è solo nell'email.",
+    "Questa è la schermata da cui parte la modifica: la riga della richiesta rifiutata, con l'etichetta e senza il motivo. Confrontatela con la riga di una prenotazione revocata, dove un riquadro rosso mostra chi, quando e perché. Qui Thomas apre Claude Code e dà la richiesta scelta dal gruppo.",
+    { duration: 'Il punto di partenza della modifica' }),
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal vivo: la richiesta scelta dal gruppo</h2>
+        <DurationBadge>25 minuti, la fa Thomas davanti a voi</DurationBadge>
+        <TerminalMock
+          folder="copia di lavoro del portale"
+          request="In Le Mie Prenotazioni, sulle richieste rifiutate, mostra il motivo scritto dall'Amministratore, nello stesso modo in cui oggi si vede il motivo delle revoche. Non cambiare le email né altre pagine. Prima dimmi il piano."
+          actions={[
+            '▸ legge la pagina Le Mie Prenotazioni e dove il portale conserva il motivo',
+            '▸ propone un piano e aspetta il via',
+            '▸ aggiunge il motivo sulla riga della richiesta rifiutata',
+            '▸ lancia i controlli automatici',
+            '▸ un secondo agente rilegge la modifica',
+            '▸ si installa sull\'ambiente di prova e si riprova'
+          ]}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '12px', textAlign: 'center' }}>Schema indicativo: dal vivo la richiesta è quella scelta in aula e i passaggi possono essere diversi.</p>
+      </div>
+    ),
+    notes: "Qui Thomas lavora davanti alla sala con la richiesta scelta, partendo da questa traccia: 'In Prenota Risorse, nella pagina Le Mie Prenotazioni, sulle prenotazioni rifiutate mostra il motivo scritto dall'Amministratore, nello stesso modo in cui oggi si vede il motivo delle revoche. Non cambiare le email né le altre pagine. Prima di modificare dimmi il piano.' Leggete il piano ad alta voce prima di dare il via. Fate notare quando l'agente chiede un permesso. L'installazione sull'ambiente di prova richiede qualche minuto e per un attimo l'ambiente non risponde: avvisate la sala e usate l'attesa per far compilare il foglio. Se la modifica non riesce in tempo, Thomas passa al piano B preparato prima; la modifica resta da finire dopo la lezione. Dite alla sala che anche una modifica che non riesce è utile: si vede dove la richiesta era ambigua."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Altre richieste possibili</h2>
+        <Box type="info" title="Rifiuto dall'email">Il pulsante Rifiuta dell'email non chiede il motivo: chi lo usa manda al Docente un rifiuto senza spiegazione.</Box>
+        <Box type="info" title="Numeri sull'uso">Non c'è una pagina di numeri: per sapere quale risorsa è più richiesta, e in quali ore, serve chiedere un'estrazione.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Sono osservazioni nate durante la preparazione: le vostre possono essere diverse e più utili.</p>
+      </div>
+    ),
+    notes: "Tenete queste come riserva, se la sala non produce richieste adatte o per quando la modifica dal vivo è finita. Non tutte le richieste sono sensate da realizzare: alcune cose che sembrano mancare potrebbero essere scelte volute, come il fatto che decide il primo che conferma. È un buon momento per dirlo. Le richieste restano nei fogli e servono per decidere cosa fare dopo il corso."
+  },
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Altre idee da discutere</h2>
+        <CardGrid cards={[
+          { icon: '✅', color: colors.info, title: "Il titolo dell'esito", desc: 'Con una data saltata la finestra si intitola ancora «Prenotazione confermata»; il riquadro rosso sta sotto. Un titolo diverso aiuterebbe?' },
+          { icon: '🏷️', color: colors.purple, title: "L'etichetta Disponibile", desc: 'Sulla risorsa su autorizzazione compare «Disponibile» accanto a «Non prenotabile». Come si legge?' },
+          { icon: '✉️', color: colors.warn, title: 'Le conferme immediate', desc: 'Per una prenotazione confermata subito non parte nessuna email. Serve, o basta il messaggio a schermo?' },
+          { icon: '👥', color: colors.success, title: 'Prenota per conto di', desc: "L'elenco comprende anche Amministratori e Tecnici, non solo Docenti. È voluto?" }
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>Sono idee da discutere, non difetti: alcune potrebbero essere scelte volute.</p>
+      </div>
+    ),
+    notes: "Quattro osservazioni raccolte provando il portale. Presentatele come spunti di discussione, non come errori: non sappiamo se siano scelte volute. Il titolo dell'esito della periodica dice «Prenotazione confermata» anche se una data è saltata; l'etichetta Disponibile compare anche su una risorsa che si prenota solo con autorizzazione; per le prenotazioni confermate subito non parte nessuna email; l'elenco di Prenota per conto di comprende anche Amministratori e Tecnici. Chiedete alla sala cosa ne pensa e annotate le opinioni nel foglio: non tutte meritano una modifica."
+  },
+  tappa('Cosa cambiereste', 'Si riprova', 'Si riprova il rifiuto', '5 minuti, i due gruppi in parallelo',
+    [
+      ['Tecnico', 'Persona 5: apre in Le Mie Prenotazioni la richiesta rifiutata di prima, la sua. Cosa legge ora?'],
+      ['Tecnico', 'Persona 5: invia una nuova richiesta, con i dati del copione.'],
+      ['Amministratore', 'Persona 3: rifiuta la richiesta dal portale, con un nuovo motivo.'],
+      ['Tecnico', 'Persona 5: guarda cosa legge, dove e quando.']
+    ],
+    [...COPIONI],
+    "Si ripete la prova a mano, sull'ambiente di prova dove la modifica è stata installata. Prima la richiesta rifiutata già presente, poi una nuova richiesta con un nuovo rifiuto, così si vede che la modifica funziona anche per le richieste future. Se la modifica non è stata installata, si usa il piano B: si spiega cosa sarebbe cambiato e si passa alla chiusura."),
+  {
+    block: 'Cosa cambiereste',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Cosa cambiereste</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa avete visto</h2>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li>Il problema l'avete trovato voi, usando il portale fino in fondo.</li>
+          <li>La richiesta era una frase: chi, dove, cosa.</li>
+          <li>Il piano si leggeva prima che l'agente toccasse qualcosa.</li>
+          <li>La prova e la revisione sono venute prima dell'installazione.</li>
+          <li>Le richieste che non sono entrate restano nel foglio.</li>
+        </ul>
+        <Box type="tip">Chi chiede una modifica non deve saper programmare: deve saper dire cosa non va e cosa si aspetta di vedere.</Box>
+      </div>
+    ),
+    notes: "Chiusura della parte sull'agente. Chiedete alla sala cosa ha notato: i punti elencati sono quelli da far emergere. Raccogliete i fogli con le richieste restanti: servono per decidere cosa fare dopo il corso."
+  },
+
+  /* --- chiusura --- */
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa resta di oggi</h2>
+        <CardGrid cards={[
+          { icon: '🧭', color: colors.info, title: 'Il portale', desc: 'Sapete cosa può fare ciascun ruolo in Prenota Risorse e come si legge un calendario.' },
+          { icon: '📝', color: colors.warn, title: 'Le vostre richieste', desc: 'I fogli «Cosa cambierei» restano a Thomas: sono la lista delle cose da migliorare.' },
+          { icon: '📄', color: colors.success, title: 'I materiali', desc: 'Le schede dei ruoli restano consultabili, anche per i colleghi che non c\'erano.' }
+        ]} />
+      </div>
+    ),
+    notes: "Tre cose restano: la conoscenza del portale già in uso, la lista di richieste di modifica e le schede dei ruoli, utili anche per chi non ha partecipato."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Lo smontaggio dell'ambiente di prova</h2>
+        <Box type="success" title="Cosa succede">A fine corso l'intero ambiente di prova viene smontato: risorse inventate, prenotazioni, utenti di prova e casella finta spariscono con lui.</Box>
+        <Box type="info" title="Il portale in uso">Non è mai stato toccato: le prenotazioni vere sono al loro posto.</Box>
+        <Box type="warn" title="Le vostre caselle">Le email del laboratorio sono rimaste nella casella finta: nella posta della scuola non c'è nulla da cancellare.</Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Prima di uscire: premete «Logout» su ogni PC.</p>
+      </div>
+    ),
+    notes: "Dite chiaramente che quello che avete inserito oggi sparisce: nessuno deve preoccuparsi di quello che ha scritto. L'ambiente di prova viene smontato per intero a fine corso, con i suoi dati. Ricordate di premere Logout su ogni PC."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa ne pensate</h2>
+        <DurationBadge>5 minuti</DurationBadge>
+        <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
+        <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
+      </div>
+    ),
+    notes: "Chiusura del laboratorio: ringraziate, ricordate il questionario di valutazione e dite come potranno far arrivare nuove idee. Se il questionario ha già un indirizzo, scrivetelo alla lavagna."
+  },
+  {
+    block: 'Chiusura',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🏁</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Grazie</h2>
+        <p style={{ color: colors.textDim, maxWidth: '700px' }}>
+          Le schede dei ruoli e dei copioni restano disponibili a questo indirizzo.
+        </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
+          Materiali del laboratorio:{' '}
+          <a href="../materiali/laboratorio-risorse/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            {MATERIALI_URL}
+          </a>
+        </p>
+      </div>
+    ),
+    notes: "Ultima slide. Ricordate dove restano i materiali. Ringraziate e chiudete."
+  }
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `Laboratorio Risorse — ${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
+        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
