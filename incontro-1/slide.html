@@ -381,17 +381,14 @@ function ChipRow({ items }) {
 }
 
 function SourceCheckMock() {
+  const chip = { display: 'inline-block', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '999px', padding: '1px 9px', fontSize: 'var(--fs-xs)', color: colors.textMuted, marginLeft: '6px' };
   return (
-    <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '16px 20px', maxWidth: '520px', margin: '0 auto' }}>
+    <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '16px 20px', maxWidth: '560px', margin: '0 auto' }}>
       <p style={{ fontSize: 'var(--fs-sm)', color: colors.textDim, margin: 0 }}>
-        <span style={{ background: colors.success + '35', borderRadius: '4px', padding: '1px 4px' }}>Il modulo di richiesta va firmato dal dirigente scolastico.</span>{' '}
-        <span style={{ background: colors.warn + '35', borderRadius: '4px', padding: '1px 4px' }}>La domanda va presentata con largo anticipo.</span>
+        La nuova legge entra in vigore dal prossimo anno scolastico.<span style={chip}>sito-notizie.it</span>{' '}
+        Le scuole avranno tempo fino a giugno.<span style={chip}>ministero.it</span>
       </p>
-      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '12px', fontSize: 'var(--fs-xs)', color: colors.textMuted }}>
-        <span>🟢 contenuto simile trovato online</span>
-        <span>🟠 diverso o non trovato</span>
-      </div>
-      <div style={{ marginTop: '12px', display: 'inline-block', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '5px 12px', fontSize: 'var(--fs-xs)', color: colors.info }}>📎 Fonti</div>
+      <div style={{ marginTop: '8px', display: 'inline-block', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '4px 12px', fontSize: 'var(--fs-xs)', color: colors.info }}>⋯ → Visualizza fonti</div>
     </div>
   );
 }
@@ -1131,17 +1128,17 @@ const slides = [
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.info, marginBottom: '6px' }}>1. Ricerca sul web e fonti</h2>
-        <p style={{ color: colors.textDim, marginBottom: 0 }}>Se la risposta usa informazioni online, compare il pulsante <strong style={{ color: colors.text }}>Fonti</strong>. Nel menu sotto la risposta, <strong style={{ color: colors.text }}>"Verifica la risposta"</strong> confronta il testo con una ricerca e colora le frasi.</p>
+        <p style={{ color: colors.textDim, marginBottom: 0 }}>Accanto alle frasi prese dal web compare il nome del sito: cliccandolo si apre la pagina. Dal menu ⋯ sotto la risposta, <strong style={{ color: colors.text }}>"Visualizza fonti"</strong> le elenca tutte.</p>
         <div style={{ margin: '10px 0' }}>
           <SourceCheckMock />
         </div>
         <Box type="warn" title="Attenzione">
-          I link trovati da "Verifica la risposta" non sono per forza le fonti usate per scrivere la risposta: vanno aperti e letti, non solo guardati.
+          Un nome di sito accanto a una frase non garantisce che la pagina dica proprio quella cosa: le fonti vanno aperte e lette, non solo guardate.
         </Box>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px' }}>Esempio: la segreteria chiede una sintesi di una norma trovata online prima di incollarla in una circolare, e controlla il colore delle frasi.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px' }}>Esempio: la segreteria chiede una sintesi di una norma trovata online prima di incollarla in una circolare, e apre le fonti per controllare che dicano davvero quella cosa.</p>
       </div>
     ),
-    notes: 'Fate notare che il verde non è una garanzia assoluta, è un indizio in più. Se avete tempo, fate cercare a qualcuno in sala una domanda reale su un argomento pubblico e guardate insieme dal vivo il pulsante Fonti e "Verifica la risposta".'
+    notes: 'Fate notare che un\'etichetta con il nome di un sito non è una garanzia: è un indizio in più, e va aperta. Google cambia spesso questo menu: in alcune versioni compariva anche "Verifica la risposta", che ricontrollava il testo con una ricerca; con l\'account della scuola oggi c\'è "Visualizza fonti". Se avete tempo, fate cercare a qualcuno in sala una notizia recente su un argomento pubblico e aprite insieme le fonti.'
   },
   {
     block: "Blocco 5 — Cosa sa fare un chatbot oggi",
