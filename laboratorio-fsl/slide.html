@@ -138,11 +138,11 @@ const BlockTag = ({ children }) => (
   </div>
 );
 
-const ActivityBadge = ({ href, label }) => (
+const ActivityBadge = ({ href, label, compact }) => (
   <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
      className="activity-badge"
-     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+     style={{ display: 'inline-flex', alignItems: 'center', gap: compact ? '6px' : '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: compact ? '12px' : 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: compact ? '2px 8px' : '8px 14px', marginTop: compact ? '4px' : '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    {!compact && <span aria-hidden="true">📄</span>}<span>{label}</span><span aria-hidden="true">↗</span>
   </a>
 );
 
@@ -279,7 +279,7 @@ function CardGrid({ cards }) {
       {cards.map((r, i) => (
         <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div style={{ fontSize: '26px' }}>{r.icon}</div>
-          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.href ? <a href={MAT + r.href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()} style={{ color: r.color, textDecoration: 'underline', textUnderlineOffset: '3px' }}>{r.title} ↗</a> : r.title}</div>
           <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{r.desc}</div>
           {r.menu && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.4 }}>{r.menu}</div>}
         </div>
@@ -328,8 +328,8 @@ const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
         ))}
       </div>
       {tip && <Box type="tip">{tip}</Box>}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} compact />)}
       </div>
     </div>
   ),
@@ -344,15 +344,19 @@ const COPIONI = [
   { href: 'copione-gruppo-b.html', label: 'Copione della pratica, gruppo B' }
 ];
 const RUOLO = {
-  tutor: { href: 'ruolo-tutor-interno.html', label: 'Scheda: Tutor interno' },
-  resp: { href: 'ruolo-responsabile.html', label: 'Scheda: Responsabile FSL' },
-  segr: { href: 'ruolo-segreteria.html', label: 'Scheda: Segreteria' },
-  ds: { href: 'ruolo-dirigente.html', label: 'Scheda: Dirigente Scolastico' },
-  stud: { href: 'ruolo-studente.html', label: 'Scheda: Studente' },
-  gen: { href: 'ruolo-genitore.html', label: 'Scheda: Genitore' },
-  ta: { href: 'ruolo-tutor-aziendale.html', label: 'Scheda: Tutor aziendale' },
-  lr: { href: 'ruolo-legale-rappresentante.html', label: 'Scheda: Legale rappresentante' }
+  tutor: { href: 'ruolo-tutor-interno.html', label: 'Scheda del ruolo: Tutor interno' },
+  resp: { href: 'ruolo-responsabile.html', label: 'Scheda del ruolo: Responsabile FSL' },
+  segr: { href: 'ruolo-segreteria.html', label: 'Scheda del ruolo: Segreteria' },
+  ds: { href: 'ruolo-dirigente.html', label: 'Scheda del ruolo: Dirigente Scolastico' },
+  stud: { href: 'ruolo-studente.html', label: 'Scheda del ruolo: Studente' },
+  gen: { href: 'ruolo-genitore.html', label: 'Scheda del ruolo: Genitore' },
+  ta: { href: 'ruolo-tutor-aziendale.html', label: 'Scheda del ruolo: Tutor aziendale' },
+  lr: { href: 'ruolo-legale-rappresentante.html', label: 'Scheda del ruolo: Legale rappresentante' }
 };
+
+const TUTTI_RUOLI = [RUOLO.tutor, RUOLO.resp, RUOLO.segr, RUOLO.ds, RUOLO.stud, RUOLO.gen, RUOLO.ta, RUOLO.lr];
+const BADGES_RUOLI = [{ href: 'ruoli-e-rotazione.html', label: 'Ruoli e rotazione' }, ...TUTTI_RUOLI];
+const COSA_CAMBIEREI = { href: 'cosa-cambierei.html', label: 'Cosa cambierei' };
 
 const slides = [
   /* --- apertura --- */
@@ -513,6 +517,7 @@ const slides = [
           right={{ icon: '👥', color: colors.purple, title: 'Gruppo da 5', points: ["1: Dirigente Scolastico e Genitore 1", "2: Responsabile FSL e Genitore 2", "3: Segreteria, Legale rappresentante e Tutor aziendale", "4: Tutor interno", "5: Studente"] }}
         />
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>I genitori sono due e firmano tutti e due. Genitori, tutor aziendale e legale rappresentante restano alla stessa persona per tutta la lezione. Chi ha un ruolo interno e uno esterno usa due strade: il portale e il link ricevuto per email.</p>
+        <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
       </div>
     ),
     notes: "Rispettate una regola: la stessa persona non firma lo stesso documento da due parti. Per esempio chi fa lo studente non fa anche il genitore, e chi fa il Tutor interno non fa anche il tutor aziendale, perché entrambi firmano la scheda di progettazione. La distribuzione della slide è una proposta: potete cambiarla se la sala è diversa."
@@ -527,6 +532,7 @@ const slides = [
         <Box type="info" title="2. Chi aspetta, legge">Quando non tocca a voi, leggete la scheda del ruolo che agisce subito dopo di voi.</Box>
         <Box type="danger" title="3. «Ricordami» spento, «Esci» a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
         <Box type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono nella parte finale.</Box>
+        <ActivityBadge href={MAT + COSA_CAMBIEREI.href} label={COSA_CAMBIEREI.label} compact />
       </div>
     ),
     notes: "Le regole sono quattro e vanno dette ad alta voce. La più importante nella pratica è la prima: i ruoli sono globali, quindi chi ha il ruolo Segreteria vede le pratiche di tutte le classi. Il nome della classe nel titolo della pratica e nelle schermate serve a riconoscere la propria."
@@ -540,19 +546,23 @@ const slides = [
   {
     block: 'Accesso',
     content: () => (
-      <div style={{ padding: '14px 30px' }}>
+      <div style={{ padding: '6px 30px' }}>
         <BlockTag>Accesso</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>I ruoli e cosa vede ciascuno</h2>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>I ruoli e cosa vede ciascuno</h2>
         <CardGrid cards={[
-          { icon: '👩‍🏫', color: colors.info, title: 'Tutor interno', desc: 'Vede solo gli studenti e le pratiche che segue.', menu: 'Dashboard, Pratiche FSL, Studenti, Classi, Aziende, Comunicazioni enti' },
-          { icon: '📋', color: colors.warn, title: 'Responsabile FSL', desc: 'Vede tutte le pratiche e valuta le aziende.', menu: 'Come il Tutor, più Anni scolastici e Impostazioni' },
-          { icon: '🗂️', color: colors.purple, title: 'Segreteria', desc: 'Attestati e comunicazioni agli enti.', menu: 'Il menu dipende dal ruolo: confrontatelo con la scheda' },
-          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastico', desc: 'Firma la convenzione.', menu: 'Il menu dipende dal ruolo: confrontatelo con la scheda' },
-          { icon: '🎒', color: colors.accentAlt, title: 'Studente', desc: 'Solo il proprio fascicolo.', menu: 'Dashboard, Offerte di stage, Il mio percorso' },
-          { icon: '👪', color: colors.info, title: 'Genitore (esterno)', desc: 'Firma da link e codice per email.', menu: 'Nessun account' },
-          { icon: '🏢', color: colors.success, title: 'Tutor aziendale (esterno)', desc: 'Un solo link per firma, presenze e valutazione.', menu: 'Nessun account' },
-          { icon: '⚖️', color: colors.warn, title: 'Legale rappresentante (esterno)', desc: 'Due link: scheda dei rischi e convenzione.', menu: 'Nessun account' }
+          { icon: '👩‍🏫', color: colors.info, title: 'Tutor interno', href: 'ruolo-tutor-interno.html', desc: 'Vede solo gli studenti e le pratiche che segue.', menu: 'Dashboard, Pratiche FSL, Studenti, Classi, Aziende, Comunicazioni enti' },
+          { icon: '📋', color: colors.warn, title: 'Responsabile FSL', href: 'ruolo-responsabile.html', desc: 'Vede tutte le pratiche e valuta le aziende.', menu: 'Come il Tutor, più Anni scolastici e Impostazioni' },
+          { icon: '🗂️', color: colors.purple, title: 'Segreteria', href: 'ruolo-segreteria.html', desc: 'Attestati e comunicazioni agli enti.', menu: 'Il menu dipende dal ruolo: confrontatelo con la scheda' },
+          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastico', href: 'ruolo-dirigente.html', desc: 'Firma la convenzione.', menu: 'Il menu dipende dal ruolo: confrontatelo con la scheda' },
+          { icon: '🎒', color: colors.accentAlt, title: 'Studente', href: 'ruolo-studente.html', desc: 'Solo il proprio fascicolo.', menu: 'Dashboard, Offerte di stage, Il mio percorso' },
+          { icon: '👪', color: colors.info, title: 'Genitore (esterno)', href: 'ruolo-genitore.html', desc: 'Firma da link e codice per email.', menu: 'Nessun account' },
+          { icon: '🏢', color: colors.success, title: 'Tutor aziendale (esterno)', href: 'ruolo-tutor-aziendale.html', desc: 'Un solo link per firma, presenze e valutazione.', menu: 'Nessun account' },
+          { icon: '⚖️', color: colors.warn, title: 'Legale rappresentante (esterno)', href: 'ruolo-legale-rappresentante.html', desc: 'Due link: scheda dei rischi e convenzione.', menu: 'Nessun account' }
         ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0 14px' }}>
+          <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" compact />
+          <span style={{ marginTop: '4px', color: colors.textMuted, fontSize: '12px' }}>Il titolo di ogni ruolo apre la sua scheda (↗).</span>
+        </div>
       </div>
     ),
     notes: "Il menu a sinistra cambia con il ruolo. Chi vede meno voci di quelle indicate qui probabilmente non ha ancora il ruolo giusto. Il Tutor interno deve anche essere indicato come tutor della classe, altrimenti non vede studenti: se qualcuno lamenta di non vedere gli studenti, è questo. Genitore, tutor aziendale e legale rappresentante sono esterni: non entrano da nessuna parte, usano i link delle email."
@@ -567,7 +577,7 @@ const slides = [
       ['Tutor interno', 'Porta la pratica a «Progettazione».'],
       ['Tutti', 'Gli altri leggono la scheda del proprio ruolo e controllano la posta.']
     ],
-    [...COPIONI, RUOLO.tutor, RUOLO.lr],
+    [...COPIONI, RUOLO.tutor, RUOLO.lr, RUOLO.resp],
     "Il Tutor interno di ogni gruppo crea la pratica seguendo il copione del proprio gruppo. La scheda dei rischi è una per azienda e per anno: la prima pratica la prepara, le altre la trovano pronta. Il punto dove si inciampa di più è il codice: il legale rappresentante deve avere la casella aperta. Passate tra i tavoli."),
   shot('Tappa 1 · la pratica e l\'azienda', '02-tutor-dashboard.png', 'Tutor interno', 'Il punto di partenza',
     'Il Tutor interno entra e non ha ancora nessuna pratica. Si parte dal menu «Pratiche FSL».',
@@ -615,7 +625,7 @@ const slides = [
       ['Dirigente Scolastico', 'Firma la convenzione dal portale.'],
       ['Legale rappresentante', 'Apre il secondo link e firma la convenzione.']
     ],
-    [...COPIONI, RUOLO.segr, RUOLO.ds],
+    [...COPIONI, RUOLO.tutor, RUOLO.segr, RUOLO.ds, RUOLO.lr],
     "Seconda tappa, con il secondo blocco: prima si prova ad avviare e si legge l'elenco di ciò che manca, poi si prepara. Il legale rappresentante riceve un secondo link, diverso dal primo. Quando firma anche lui la pratica passa da sola a 'Patto in firma'."),
   shot('Tappa 2 · progettazione e convenzione', '15-tutor-blocco-convenzione.png', 'Tutor interno', 'Cosa manca per la convenzione',
     'Provando ad avviare la firma subito, il portale elenca tre cose: la scheda di progettazione, gli attestati non ancora inviati all\'azienda, la convenzione non generata.',
@@ -645,7 +655,7 @@ const slides = [
       ['Tutor aziendale', 'Dal proprio link firma la scheda di progettazione.'],
       ['Tutor interno', 'Firma la scheda e guarda l\'elenco delle firme.']
     ],
-    [...COPIONI, RUOLO.stud, RUOLO.gen, RUOLO.ta],
+    [...COPIONI, RUOLO.tutor, RUOLO.stud, RUOLO.gen, RUOLO.ta],
     "La tappa con più persone da coordinare. Lo studente firma dentro il portale; i due genitori e il tutor aziendale da link e codice. Dopo la prima firma di un genitore il portale avvisa che manca l'altro. Con l'ultima firma la pratica passa da sola a 'Comunicazioni enti'."),
   shot('Tappa 3 · patto formativo e firme', '24-studente-documenti-da-firmare.png', 'Studente', 'Lo studente firma',
     'Da «Il mio percorso»: il riquadro «Documenti da firmare» ha il patto formativo e la scheda di progettazione, ognuno con «Leggi e firma».',
@@ -671,7 +681,7 @@ const slides = [
       ['Segreteria', 'Registra l\'invio di ciascuna con data e protocollo e porta la pratica a «Pronta».'],
       ['Tutor interno', 'Avvia il percorso.']
     ],
-    [...COPIONI, RUOLO.segr],
+    [...COPIONI, RUOLO.tutor, RUOLO.ds, RUOLO.segr],
     "Tappa breve. Le comunicazioni dovute sono due: INAIL e DPL. Il portale prepara i moduli; il Dirigente li firma fuori dal portale; la Segreteria registra data e protocollo. Lo stato non cambia da solo: serve il bottone 'Comunicazioni inviate → pronta', che preme la Segreteria."),
   shot('Tappa 4 · comunicazioni agli enti', '29-tutor-comunicazioni-enti.png', 'Tutor interno', 'Preparare le comunicazioni',
     'Si sceglie la classe e si preme «Genera batch», il bottone che prepara in un colpo solo il gruppo di comunicazioni agli enti: compaiono quelle dovute, con il PDF di ciascuna.',
@@ -690,7 +700,7 @@ const slides = [
       ['Tutor interno', 'Chiude e firma il registro presenze.'],
       ['Studente', 'Consegna autovalutazione e relazione finale.']
     ],
-    [...COPIONI, RUOLO.stud, RUOLO.ta],
+    [...COPIONI, RUOLO.tutor, RUOLO.stud, RUOLO.ta],
     "Tappa lunga: contenete i tempi. Lo studente compila presenze e diario; il tutor aziendale conferma le settimane. Dopo la conferma una giornata non si modifica più. Le ore registrate in laboratorio sono poche: più avanti comparirà un avviso sul monte ore, che si può accettare."),
   shot('Tappa 5 · presenze, diario, valutazione', '31-studente-registro-presenze.png', 'Studente', 'Il registro presenze',
     'Ogni giornata ha entrata e uscita di mattina e di pomeriggio. Le ore totali si calcolano da sole.',
@@ -718,7 +728,7 @@ const slides = [
       ['Tutti', 'Leggono il messaggio del portale e cercano il motivo.'],
       ['Studente', 'Controlla dove, nel proprio percorso, si consegna il diario.']
     ],
-    [...COPIONI],
+    [...COPIONI, RUOLO.tutor, RUOLO.stud],
     "Lasciate che il gruppo arrivi da solo al blocco. Non dite cosa manca: chiedete di leggere il messaggio in rosso e di cercare nel portale il punto dove risolverlo. Questo è il materiale per la modifica dal vivo.",
     'Se il portale si ferma, leggete il messaggio prima di cliccare altrove.'),
   shot('Tappa 6 · completare la pratica', '37-tutor-completa-bloccata.png', 'Tutor interno', 'Il portale si ferma',
@@ -748,7 +758,7 @@ const slides = [
           «Come Responsabile FSL, nella pagina dell'azienda vorrei vedere subito che la scheda dei rischi è stata firmata e aspetta la mia valutazione».
         </Box>
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Ogni gruppo scrive la propria richiesta sul blocco finale. Chi ha altre osservazioni le segna nel foglio.</p>
-        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
     notes: "Lasciate cinque minuti di scrittura nei gruppi, poi raccogliete alla lavagna le richieste sul blocco. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come studente, nella scheda Diario del mio percorso, vorrei un bottone Consegna il diario che segni il diario come consegnato, così il tutor può completare la pratica'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
@@ -874,6 +884,7 @@ const slides = [
         <DurationBadge>5 minuti</DurationBadge>
         <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
         <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
+        <ActivityBadge href={MAT + COSA_CAMBIEREI.href} label={COSA_CAMBIEREI.label} />
       </div>
     ),
     notes: "Chiusura del laboratorio: ringraziate, ricordate il questionario di valutazione e dite come potranno far arrivare nuove idee. Se il questionario ha già un indirizzo, scrivetelo alla lavagna."

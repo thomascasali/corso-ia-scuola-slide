@@ -556,10 +556,10 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Le quattro carte</h2>
         <RoleGrid roles={[
-          { icon: '👤', title: 'Capo progetto', color: colors.accent, desc: 'Legge la busta, divide il compito, assegna, raccoglie i risultati.', href: '../materiali/incontro-3/gioco-ruolo-capoprogetto.html', label: 'Carta: Capo progetto' },
-          { icon: '🗺️', title: 'Specialista del percorso', color: colors.info, desc: 'Costruisce il percorso nei laboratori, con gli orari e i docenti.', href: '../materiali/incontro-3/gioco-ruolo-specialista-percorso.html', label: 'Carta: Specialista percorso' },
-          { icon: '✉️', title: 'Specialista della comunicazione', color: colors.warn, desc: "Scrive l'avviso per le famiglie, con tono accogliente.", href: '../materiali/incontro-3/gioco-ruolo-specialista-comunicazione.html', label: 'Carta: Specialista comunicazione' },
-          { icon: '🔍', title: 'Revisore', color: colors.danger, desc: 'Controlla il pacchetto finale contro la busta, e decide se è pronto.', href: '../materiali/incontro-3/gioco-ruolo-revisore.html', label: 'Carta: Revisore' },
+          { icon: '👤', title: 'Capo progetto', color: colors.accent, desc: 'Legge la busta, divide il compito, assegna, raccoglie i risultati.', href: '../materiali/incontro-3/gioco-ruolo-capoprogetto.html', label: 'Gioco di ruolo — Carta: Capo progetto' },
+          { icon: '🗺️', title: 'Specialista del percorso', color: colors.info, desc: 'Costruisce il percorso nei laboratori, con gli orari e i docenti.', href: '../materiali/incontro-3/gioco-ruolo-specialista-percorso.html', label: 'Gioco di ruolo — Carta: Specialista del percorso' },
+          { icon: '✉️', title: 'Specialista della comunicazione', color: colors.warn, desc: "Scrive l'avviso per le famiglie, con tono accogliente.", href: '../materiali/incontro-3/gioco-ruolo-specialista-comunicazione.html', label: 'Gioco di ruolo — Carta: Specialista della comunicazione' },
+          { icon: '🔍', title: 'Revisore', color: colors.danger, desc: 'Controlla il pacchetto finale contro la busta, e decide se è pronto.', href: '../materiali/incontro-3/gioco-ruolo-revisore.html', label: 'Gioco di ruolo — Carta: Revisore' },
         ]} />
       </div>
     ),
@@ -573,7 +573,7 @@ const slides = [
         <p style={{ color: colors.textDim }}>
           Un evento inventato dell'Istituto Tecnico Dimostrativo: laboratori da aprire a turno, docenti con disponibilità diverse, un avviso da scrivere per le famiglie delle scuole medie. Tutti i dati sono nella busta.
         </p>
-        <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-busta-open-day.html" label="Busta del compito: Open Day" />
+        <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-busta-open-day.html" label="Gioco di ruolo — Busta del compito" />
       </div>
     ),
     notes: "Non anticipate nulla di quello che c'è scritto nella busta: la trovano leggendola con attenzione, o no (i dettagli a cui fare attenzione sono nelle vostre note private del docente). Nessun problema se un gruppo non risolve tutto: l'obiettivo è vivere i ruoli, non vincere il rompicapo."
@@ -587,6 +587,13 @@ const slides = [
         <p style={{ color: colors.textDim, maxWidth: '640px' }}>
           Leggete solo la vostra carta. Usate solo quello che c'è nella busta. Alla fine il revisore dà un giudizio netto: approvato, oppure da correggere.
         </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 12px', justifyContent: 'center' }}>
+          <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-busta-open-day.html" label="Gioco di ruolo — Busta del compito" />
+          <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-capoprogetto.html" label="Gioco di ruolo — Carta: Capo progetto" />
+          <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-specialista-percorso.html" label="Gioco di ruolo — Carta: Specialista del percorso" />
+          <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-specialista-comunicazione.html" label="Gioco di ruolo — Carta: Specialista della comunicazione" />
+          <ActivityBadge href="../materiali/incontro-3/gioco-ruolo-revisore.html" label="Gioco di ruolo — Carta: Revisore" />
+        </div>
       </div>
     ),
     notes: "Attività principale del blocco. Fate partire un timer visibile. Girate tra i gruppi senza intervenire nel merito: osservate se il capo progetto assegna compiti chiari, se il revisore controlla davvero o approva a naso. Intervenite solo se un gruppo è completamente bloccato."
@@ -650,7 +657,7 @@ const slides = [
         <Box type="tip">
           Prima di ogni richiesta, scrivete cosa vi aspettate. Solo dopo, quando l'agente ha finito, scrivete cosa è successo davvero.
         </Box>
-        <ActivityBadge href="../materiali/incontro-3/taccuino-demo.html" label="Foglio: Taccuino della demo" />
+        <ActivityBadge href="../materiali/incontro-3/taccuino-demo.html" label="Taccuino della demo" />
       </div>
     ),
     notes: "Distribuite il taccuino adesso, se non l'avete già fatto. Ricordate: si scrive la previsione PRIMA di vedere il risultato, altrimenti perde senso."
@@ -871,7 +878,10 @@ const slides = [
             «Cosa c'è in questa cartella? Spiegamelo in poche righe, senza modificare niente.»
           </p>
         </Glow>
-        <ActivityBadge href="../materiali/incontro-3/prima-richiesta.html" label="Foglio: Prima richiesta a Claude Code" />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 12px' }}>
+          <ActivityBadge href="../materiali/incontro-3/prima-richiesta.html" label="Prima richiesta a Claude Code" />
+          <ActivityBadge href="../materiali/incontro-3/cartella-di-prova.zip" label="Cartella di prova (scaricabile)" />
+        </div>
       </div>
     ),
     notes: "Attività al PC. Girate tra i banchi: le domande più comuni sono 'non trovo l'icona' (verificare con l'ufficio tecnico) e 'non succede niente' (aspettare 30-40 secondi, poi controllare la rete di quel PC). Fate leggere ad alta voce due o tre risposte."
@@ -922,7 +932,10 @@ const slides = [
           { icon: '🔍', label: '4. Chiedi una revisione', color: colors.danger },
           { icon: '✅', label: '5. Correggi', color: colors.success },
         ]} />
-        <ActivityBadge href="../materiali/incontro-3/esercitazione-passo-passo.html" label="Foglio: i quattro passaggi da incollare" />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 12px' }}>
+          <ActivityBadge href="../materiali/incontro-3/esercitazione-passo-passo.html" label="Esercitazione a coppie: il calendario dei laboratori" />
+          <ActivityBadge href="../materiali/incontro-3/cartella-di-prova.zip" label="Cartella di prova (scaricabile)" />
+        </div>
       </div>
     ),
     notes: "Il foglio ha già scritte le quattro richieste da incollare (1, 2, 4, 5): la sala non deve inventarsele. Il passaggio 3 non si incolla: si apre il file HTML con doppio clic, dalla stessa cartella di prova, e lo si guarda insieme. Ricordate: un passaggio alla volta, aspettando la risposta prima di incollare il successivo. Attività di 35-40 minuti a coppie."
@@ -937,6 +950,10 @@ const slides = [
         <p style={{ color: colors.textDim, maxWidth: '650px' }}>
           Se qualcosa non torna, chiamate il docente invece di insistere da soli: a volte basta riscrivere la richiesta con un dettaglio in più.
         </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 12px', justifyContent: 'center' }}>
+          <ActivityBadge href="../materiali/incontro-3/esercitazione-passo-passo.html" label="Esercitazione a coppie: il calendario dei laboratori" />
+          <ActivityBadge href="../materiali/incontro-3/cartella-di-prova.zip" label="Cartella di prova (scaricabile)" />
+        </div>
       </div>
     ),
     notes: "Attività principale del blocco. Girate tra i banchi. Osservate soprattutto la richiesta 4 (la revisione) e la richiesta 5 (la correzione, o la conferma che va già bene): è il punto in cui si vede se la coppia ha capito il senso del controllo indipendente."

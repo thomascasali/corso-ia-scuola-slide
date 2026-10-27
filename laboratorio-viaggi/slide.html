@@ -138,11 +138,11 @@ const BlockTag = ({ children }) => (
   </div>
 );
 
-const ActivityBadge = ({ href, label }) => (
+const ActivityBadge = ({ href, label, compact }) => (
   <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
      className="activity-badge"
-     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+     style={{ display: 'inline-flex', alignItems: 'center', gap: compact ? '6px' : '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: compact ? '12px' : 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: compact ? '2px 8px' : '8px 14px', marginTop: compact ? '4px' : '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    {!compact && <span aria-hidden="true">📄</span>}<span>{label}</span><span aria-hidden="true">↗</span>
   </a>
 );
 
@@ -279,7 +279,7 @@ function CardGrid({ cards }) {
       {cards.map((r, i) => (
         <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div style={{ fontSize: '26px' }}>{r.icon}</div>
-          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.href ? <a href={MAT + r.href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()} style={{ color: r.color, textDecoration: 'underline', textUnderlineOffset: '3px' }}>{r.title} ↗</a> : r.title}</div>
           <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{r.desc}</div>
           {r.menu && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.4 }}>{r.menu}</div>}
         </div>
@@ -328,8 +328,8 @@ const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
         ))}
       </div>
       {tip && <Box type="tip">{tip}</Box>}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} compact />)}
       </div>
     </div>
   ),
@@ -342,6 +342,20 @@ const COPIONI = [
   { href: 'copione-pratica-gruppo-a.html', label: 'Copione della pratica, gruppo A' },
   { href: 'copione-pratica-gruppo-b.html', label: 'Copione della pratica, gruppo B' }
 ];
+
+const RUOLO = {
+  ref: { href: 'ruolo-referente.html', label: 'Scheda del ruolo: Docente referente' },
+  segr: { href: 'ruolo-segreteria.html', label: 'Scheda del ruolo: Segreteria' },
+  comm: { href: 'ruolo-commissione.html', label: 'Scheda del ruolo: Commissione viaggi' },
+  ds: { href: 'ruolo-dirigente.html', label: 'Scheda del ruolo: Dirigente Scolastica' },
+  pat: { href: 'ruolo-patrimonio.html', label: 'Scheda del ruolo: Ufficio Patrimonio' },
+  stud: { href: 'ruolo-studente.html', label: 'Scheda del ruolo: Studente' },
+  gen: { href: 'ruolo-genitore.html', label: 'Scheda del ruolo: Genitore' },
+  ag: { href: 'ruolo-agenzia.html', label: 'Scheda del ruolo: Agenzia' }
+};
+const TUTTI_RUOLI = [RUOLO.ref, RUOLO.segr, RUOLO.comm, RUOLO.ds, RUOLO.pat, RUOLO.stud, RUOLO.gen, RUOLO.ag];
+const BADGES_RUOLI = [{ href: 'ruoli-e-rotazione.html', label: 'Ruoli e rotazione' }, ...TUTTI_RUOLI];
+const COSA_CAMBIEREI = { href: 'cosa-cambierei.html', label: 'Cosa cambierei' };
 
 const slides = [
   /* --- apertura --- */
@@ -498,6 +512,7 @@ const slides = [
         <Box type="info" title="2. Solo la vostra pratica">I ruoli valgono per tutto il portale: la Segreteria del gruppo A vede anche le pratiche del B. Toccate solo le vostre.</Box>
         <Box type="danger" title="3. «Ricordami» spento, «Esci» a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
         <Box type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono alla parte finale.</Box>
+        <ActivityBadge href={MAT + COSA_CAMBIEREI.href} label={COSA_CAMBIEREI.label} compact />
       </div>
     ),
     notes: "Le regole sono quattro e vanno dette ad alta voce. La più importante nella pratica è la seconda: poiché i ruoli sono globali, un utente con il ruolo Segreteria vede tutte le pratiche. Il titolo con il nome del gruppo serve proprio a riconoscere la propria."
@@ -515,15 +530,19 @@ const slides = [
         <BlockTag>Accesso</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '14px' }}>I ruoli e cosa vede ciascuno</h2>
         <CardGrid cards={[
-          { icon: '👩‍🏫', color: colors.info, title: 'Docente referente', desc: 'Crea e presenta la pratica.', menu: 'Dashboard, Pratiche, Gruppi uscita' },
-          { icon: '🗂️', color: colors.warn, title: 'Segreteria', desc: 'Raccolta firme e controllo formale.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi, Import studenti' },
-          { icon: '🏛️', color: colors.purple, title: 'Commissione viaggi', desc: 'Visto della commissione.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi, Gruppi uscita' },
-          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastica', desc: 'Visto: approva, chiede revisione, nega.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi' },
-          { icon: '🧾', color: colors.success, title: 'Ufficio Patrimonio', desc: 'Gara tra le agenzie e conferma.', menu: 'Dashboard, Pratiche' },
-          { icon: '🎒', color: colors.accentAlt, title: 'Studente', desc: 'Risponde alle attività della classe.', menu: 'Dashboard, Le mie attività' },
-          { icon: '👪', color: colors.info, title: 'Genitore (esterno)', desc: 'Firma da link e codice per email.', menu: 'Nessun account' },
-          { icon: '🚌', color: colors.warn, title: 'Agenzia (esterna)', desc: 'Carica l\'offerta da un link monouso.', menu: 'Nessun account' }
+          { icon: '👩‍🏫', color: colors.info, title: 'Docente referente', href: 'ruolo-referente.html', desc: 'Crea e presenta la pratica.', menu: 'Dashboard, Pratiche, Gruppi uscita' },
+          { icon: '🗂️', color: colors.warn, title: 'Segreteria', href: 'ruolo-segreteria.html', desc: 'Raccolta firme e controllo formale.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi, Import studenti' },
+          { icon: '🏛️', color: colors.purple, title: 'Commissione viaggi', href: 'ruolo-commissione.html', desc: 'Visto della commissione.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi, Gruppi uscita' },
+          { icon: '🖊️', color: colors.danger, title: 'Dirigente Scolastica', href: 'ruolo-dirigente.html', desc: 'Visto: approva, chiede revisione, nega.', menu: 'Dashboard, Pratiche, Contributi, Rimborsi' },
+          { icon: '🧾', color: colors.success, title: 'Ufficio Patrimonio', href: 'ruolo-patrimonio.html', desc: 'Gara tra le agenzie e conferma.', menu: 'Dashboard, Pratiche' },
+          { icon: '🎒', color: colors.accentAlt, title: 'Studente', href: 'ruolo-studente.html', desc: 'Risponde alle attività della classe.', menu: 'Dashboard, Le mie attività' },
+          { icon: '👪', color: colors.info, title: 'Genitore (esterno)', href: 'ruolo-genitore.html', desc: 'Firma da link e codice per email.', menu: 'Nessun account' },
+          { icon: '🚌', color: colors.warn, title: 'Agenzia (esterna)', href: 'ruolo-agenzia.html', desc: 'Carica l\'offerta da un link monouso.', menu: 'Nessun account' }
         ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0 14px' }}>
+          <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" compact />
+          <span style={{ marginTop: '4px', color: colors.textMuted, fontSize: '12px' }}>Il titolo di ogni ruolo apre la sua scheda (↗).</span>
+        </div>
       </div>
     ),
     notes: "Il menu a sinistra cambia con il ruolo. Chi vede meno voci di quelle indicate qui probabilmente non ha ancora il ruolo giusto. Il genitore e l'agenzia sono esterni: non entrano da nessuna parte, usano solo i link delle email."
@@ -537,7 +556,7 @@ const slides = [
       ['Commissione viaggi', 'Con Dirigente e Ufficio Patrimonio: legge la propria scheda e prepara il proprio passaggio.'],
       ['Studente', 'Con il genitore: legge la scheda, aspetta la raccolta firme e controlla la casella email.']
     ],
-    COPIONI,
+    [...COPIONI, RUOLO.ref, RUOLO.segr, RUOLO.comm, RUOLO.ds, RUOLO.pat, RUOLO.stud, RUOLO.gen],
     "Il docente referente di ogni gruppo compila la pratica seguendo il copione del proprio gruppo, con i dati inventati. Gli altri non restano fermi: leggono la scheda del proprio ruolo e anticipano cosa faranno. Passate tra i tavoli: il punto in cui si inciampa di più è il passo 3 (docenti), perché il regolamento chiede un accompagnatore.",
     'Mentre il docente compila, gli altri leggono la scheda del proprio ruolo.'),
   shot('Giro 1 · tappa 1', '02-referente-dashboard.png', 'Docente referente', 'Dashboard: da qui si parte',
@@ -574,7 +593,7 @@ const slides = [
       ['Docente referente', 'Controlla le schede Adesioni e Autorizzazioni e prova il promemoria.'],
       ['Segreteria', 'Chiude la raccolta e passa al controllo formale.']
     ],
-    COPIONI,
+    [...COPIONI, RUOLO.segr, RUOLO.stud, RUOLO.gen, RUOLO.ref],
     "Tappa con più passaggi tra persone diverse: è il cuore del laboratorio. La Segreteria avvia la raccolta, poi studente e genitore lavorano in parallelo, il docente guarda cosa succede. Il genitore deve controllare la casella: se il link non arriva, vedere il piano B nel copione. La Segreteria chiude la raccolta solo quando studente e genitore hanno finito."),
   shot('Giro 1 · tappa 2', '11-segreteria-avvia-raccolta.png', 'Segreteria', 'La Segreteria avvia la raccolta firme',
     'Aprite la pratica presentata e premete «Avvia raccolta firme». Accanto c\'è «Annulla pratica» in rosso: non premetelo.',
@@ -612,7 +631,7 @@ const slides = [
       ['Dirigente Scolastica', 'Registra il visto: si approva.'],
       ['Docente referente', 'Controlla l\'email con l\'esito del visto.']
     ],
-    COPIONI,
+    [...COPIONI, RUOLO.segr, RUOLO.comm, RUOLO.ds, RUOLO.ref],
     "Tre passaggi in fila, ognuno con un ruolo diverso: la pratica passa di mano e ogni persona vede solo ciò che le serve. Fate notare l'ordine: nessuno può saltare un passaggio. Cronometrate: è la tappa dove i gruppi più rapidi finiscono prima."),
   shot('Giro 1 · tappa 3', '22-segreteria-controllo-formale-avvisi.png', 'Segreteria', 'Controllo formale',
     'Al controllo formale resta un solo avviso, il docente di riserva: va confermato con «Confermo nonostante gli avvisi».',
@@ -632,7 +651,7 @@ const slides = [
       ['Ufficio Patrimonio', 'Confronta le offerte, seleziona quella scelta con una motivazione, conferma la pratica.'],
       ['Tutti', 'Guardano la Timeline: tutti i passaggi con data e ora.']
     ],
-    COPIONI,
+    [...COPIONI, RUOLO.pat, RUOLO.ag],
     "Ultima tappa del primo giro. L'agenzia è un ruolo esterno: riceve una email con un link monouso, non può usarlo due volte. Alla fine il Patrimonio conferma la pratica e tutti guardano la Timeline: ogni passaggio è lì, con data e ora. Tenete a mente cosa non dice, vi servirà dopo."),
   shot('Giro 1 · tappa 4', '29-patrimonio-richiesta-preventivo.png', 'Ufficio Patrimonio', 'La richiesta di preventivo',
     'Nome ed email dell\'agenzia, scadenza e servizi richiesti (già proposti). «Invia richiesta» manda l\'email con un link monouso.',
@@ -657,15 +676,15 @@ const slides = [
   {
     block: 'Giro 2',
     content: () => (
-      <div style={{ padding: '14px 30px' }}>
+      <div style={{ padding: '6px 30px' }}>
         <BlockTag>Giro 2</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Si cambia ruolo, si cambia caso</h2>
+        <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Si cambia ruolo, si cambia caso</h2>
         <DurationBadge>35 minuti, i due gruppi in parallelo</DurationBadge>
         <Box type="info" title="Primo passo: scambio dei ruoli">Chi ha un ruolo interno ne prende uno che non ha ancora fatto, come indicato in «Ruoli e rotazione». Cambiano anche gli accessi: si esce e si rientra con i nuovi ruoli. Genitore e agenzia restano alla stessa persona.</Box>
         <Box type="tip" title="Secondo passo: un caso diverso">Ogni gruppo prova il proprio caso (vedi le slide seguenti), ripercorrendo solo i passaggi che cambiano: non serve rifare tutto il giro.</Box>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
-          {COPIONI.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+          <ActivityBadge href={MAT + 'guida-accesso.html'} label="Guida all'accesso" compact />
+          {[...BADGES_RUOLI, ...COPIONI].map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} compact />)}
         </div>
       </div>
     ),
@@ -756,7 +775,7 @@ const slides = [
           Cosa non era chiaro? Cosa mancava? Cosa proporreste di cambiare, e per chi?
         </Box>
         <Box type="tip">Una richiesta ben fatta dice chi ha il problema, in quale schermata e cosa vorrebbe vedere. Esempio: «Nella Timeline voglio vedere il nome di chi ha dato il visto».</Box>
-        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
     notes: "Lasciate cinque minuti di scrittura individuale, poi raccogliete alla lavagna. Aiutate chi scrive in modo vago a precisare: in quale schermata, per quale ruolo, cosa vorrebbe vedere. Poi votate: ognuno indica la richiesta che gli sembra più utile. Quella più votata, se realizzabile in pochi minuti, è la candidata per la modifica dal vivo."
@@ -879,6 +898,7 @@ const slides = [
         <DurationBadge>5 minuti</DurationBadge>
         <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
         <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
+        <ActivityBadge href={MAT + COSA_CAMBIEREI.href} label={COSA_CAMBIEREI.label} />
       </div>
     ),
     notes: "Chiusura del laboratorio: ringraziate, ricordate il questionario di valutazione e dite come potranno far arrivare nuove idee. Se il questionario ha già un indirizzo, scrivetelo alla lavagna."

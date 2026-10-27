@@ -121,11 +121,11 @@ const Glow = ({ children }) => (
   </div>
 );
 
-const Box = ({ type = 'info', title, children }) => {
+const Box = ({ type = 'info', title, children, compact }) => {
   const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
   const c = cfg[type];
   return (
-    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: compact ? '10px 20px' : '14px 20px', margin: compact ? '8px 0' : '14px 0' }}>
       {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
       <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
     </div>
@@ -138,11 +138,11 @@ const BlockTag = ({ children }) => (
   </div>
 );
 
-const ActivityBadge = ({ href, label }) => (
+const ActivityBadge = ({ href, label, compact }) => (
   <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
      className="activity-badge"
-     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+     style={{ display: 'inline-flex', alignItems: 'center', gap: compact ? '6px' : '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: compact ? '12px' : 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: compact ? '2px 8px' : '8px 14px', marginTop: compact ? '4px' : '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    {!compact && <span aria-hidden="true">📄</span>}<span>{label}</span><span aria-hidden="true">↗</span>
   </a>
 );
 
@@ -316,17 +316,17 @@ const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
       <BlockTag>{tag}</BlockTag>
       <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
       <DurationBadge>{duration}</DurationBadge>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '6px 0 4px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', margin: '4px 0 2px' }}>
         {rows.map((r, i) => (
-          <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${rc(r[0])}`, borderRadius: '6px', padding: '8px 14px' }}>
+          <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${rc(r[0])}`, borderRadius: '6px', padding: '6px 14px' }}>
             <span style={{ flex: '0 1 190px', minWidth: 0, overflowWrap: 'anywhere', color: rc(r[0]), fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r[0]}</span>
             <span style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.4 }}>{r[1]}</span>
           </div>
         ))}
       </div>
       {tip && <Box type="tip">{tip}</Box>}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+        {badges.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} compact />)}
       </div>
     </div>
   ),
@@ -340,11 +340,15 @@ const COPIONI = [
   { href: 'copione-gruppo-b.html', label: 'Copione del gruppo B' }
 ];
 const RUOLO = {
-  doc: { href: 'ruolo-utente.html', label: 'Scheda: Docente' },
-  tec: { href: 'ruolo-tecnico.html', label: 'Scheda: Tecnico' },
-  adm: { href: 'ruolo-amministratore.html', label: 'Scheda: Amministratore' },
-  dest: { href: 'ruolo-destinatario.html', label: 'Scheda: Destinatario delle notifiche' }
+  doc: { href: 'ruolo-utente.html', label: 'Scheda del ruolo: Docente' },
+  tec: { href: 'ruolo-tecnico.html', label: 'Scheda del ruolo: Tecnico' },
+  adm: { href: 'ruolo-amministratore.html', label: 'Scheda del ruolo: Amministratore' },
+  dest: { href: 'ruolo-destinatario.html', label: 'Scheda del ruolo: Destinatario delle notifiche' }
 };
+
+const RUOLI = [RUOLO.doc, RUOLO.tec, RUOLO.adm, RUOLO.dest];
+const ROTAZIONE = { href: 'ruoli-e-rotazione.html', label: 'Ruoli e rotazione' };
+const COSA = { href: 'cosa-cambierei.html', label: 'Cosa cambierei' };
 
 const T1 = 'Tappa 1 · calendario e prenotazione';
 const T2 = 'Tappa 2 · periodica e conflitti';
@@ -509,7 +513,10 @@ const slides = [
           right={{ icon: '🅱️', color: colors.purple, title: 'Gruppo B', points: ["Carrello PC A, il giovedì", "Aula Conferenze della Sede Succursale, con approvazione", "Dalla prima prenotazione alla stampa"] }}
         />
         <Box type="tip">La copia di prova è la stessa per i due gruppi: ognuno usa le proprie celle e decide solo le richieste del proprio gruppo. Il foglio «Ruoli e rotazione» dice chi fa cosa.</Box>
-        <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          <ActivityBadge href={MAT + 'ruoli-e-rotazione.html'} label="Ruoli e rotazione" />
+          <ActivityBadge href={MAT} label="Tutti i materiali del laboratorio" />
+        </div>
       </div>
     ),
     notes: "Due gruppi da cinque o sei persone, ognuno con le proprie celle e la propria risorsa, così non vi pestate i piedi. I ruoli di partenza sono assegnati per nome qualche giorno prima: servono gli indirizzi dei due Amministratori di ogni gruppo. Scrivete alla lavagna i posti e i numeri delle persone."
@@ -525,6 +532,10 @@ const slides = [
           right={{ icon: '👥', color: colors.purple, title: 'Gruppo da 5', points: ["1 e 2: Amministratori e Destinatari", "3 e 4: Docenti, poi Amministratori", "5: Docente, poi Tecnico", "Il Docente in più è la persona 1, dopo la tappa 4"] }}
         />
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>I ruoli ruotano nella tappa 4: Amministratori e Docenti si scambiano dal portale, da Gestione Utenti. Dopo ogni cambio, Logout e nuovo accesso.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          <ActivityBadge href={MAT + ROTAZIONE.href} label={ROTAZIONE.label} />
+          {RUOLI.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+        </div>
       </div>
     ),
     notes: "La rotazione è libera. Negli altri laboratori i ruoli esterni ricevono le email su un indirizzo preciso e per questo restano alla stessa persona; qui le email finiscono tutte nella casella finta, quindi nessun ruolo è legato a una persona e i ruoli si possono scambiare a metà lezione, dal portale stesso. Un Amministratore non può togliersi da solo i privilegi: serve un collega. Il cambio di ruolo vale solo dopo un nuovo accesso: ricordatelo a ogni cambio. La distribuzione è una proposta: cambiatela se la sala è diversa."
@@ -535,10 +546,13 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Come funziona il laboratorio</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quattro regole per lavorare bene</h2>
-        <Box type="warn" title="1. Solo il vostro gruppo">Stessa copia di prova per tutti: usate le celle e la risorsa del copione e decidete solo le richieste del vostro gruppo.</Box>
-        <Box type="info" title="2. Chi aspetta, legge">Quando non tocca a voi, leggete la scheda del ruolo che agisce subito dopo di voi.</Box>
-        <Box type="danger" title="3. «Ricordami» spento, Logout a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
-        <Box type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono nella parte finale.</Box>
+        <Box compact type="warn" title="1. Solo il vostro gruppo">Stessa copia di prova per tutti: usate le celle e la risorsa del copione e decidete solo le richieste del vostro gruppo.</Box>
+        <Box compact type="info" title="2. Chi aspetta, legge">Quando non tocca a voi, leggete la scheda del ruolo che agisce subito dopo di voi.</Box>
+        <Box compact type="danger" title="3. «Ricordami» spento, Logout a fine lavoro">Sui PC del laboratorio ci si siede a turno.</Box>
+        <Box compact type="tip" title="4. Annotate quello che non torna">Dubbi e difficoltà vanno sul foglio «Cosa cambierei»: servono nella parte finale.</Box>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          <ActivityBadge href={MAT + COSA.href} label={COSA.label} />
+        </div>
       </div>
     ),
     notes: "Le regole sono quattro e vanno dette ad alta voce. La più importante è la prima: il portale di prova è condiviso, quindi chi ha il ruolo di Amministratore vede e può decidere anche le richieste dell'altro gruppo. Il nome del Docente e la risorsa, nella richiesta, servono a riconoscere le proprie."
@@ -560,13 +574,17 @@ const slides = [
           { icon: '🗝️', color: colors.warn, title: 'Tecnico e Amministratore', desc: 'Quattro voci in più per l\'amministrazione.', menu: 'Richieste da Approvare, Tutte le Prenotazioni, Gestione Utenti, Configurazione' },
           { icon: '🏷️', color: colors.purple, title: 'Il vostro ruolo', desc: 'È scritto sotto il vostro nome, in basso a sinistra, sopra il bottone Logout.' }
         ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          {RUOLI.map((b, i) => <ActivityBadge key={i} href={MAT + b.href} label={b.label} />)}
+        </div>
       </div>
     ),
     notes: "Il menu a sinistra cambia con il ruolo. Chi vede meno voci di quelle previste dal suo ruolo di partenza probabilmente non ha ancora il ruolo giusto: lo sistema Thomas. Dopo ogni cambio di ruolo bisogna premere Logout e rientrare: il portale rilegge il ruolo solo all'accesso."
   },
   shot('Accesso', '29-posta-finta-elenco.png', 'Tutti', 'La casella finta',
     'Ogni notifica del portale finisce qui. Il mittente è «PROVA Prenota Risorse»: cercate il nome della risorsa per ritrovare le vostre.',
-    "Verificate che ognuno riesca ad aprire la casella in un'altra scheda del browser, con l'indirizzo, l'utente e la password scritti alla lavagna. L'interfaccia è in inglese, ma servono solo l'elenco, il campo di ricerca e l'apertura di un messaggio. Nell'elenco ci sono le email di tutti: le righe cambiano man mano che il laboratorio procede."),
+    "Verificate che ognuno riesca ad aprire la casella in un'altra scheda del browser, con l'indirizzo, l'utente e la password scritti alla lavagna. L'interfaccia è in inglese, ma servono solo l'elenco, il campo di ricerca e l'apertura di un messaggio. Nell'elenco ci sono le email di tutti: le righe cambiano man mano che il laboratorio procede.",
+    { badges: [{ href: "guida-accesso.html", label: "Guida all'accesso" }] }),
 
   /* --- tappa 1 --- */
   tappa(T1, 'Tappa 1', 'Leggere il calendario e prenotare un carrello', '15 minuti, i due gruppi in parallelo',
@@ -576,7 +594,7 @@ const slides = [
       ['Docente', 'Persona 3: guarda la riga in Le Mie Prenotazioni.'],
       ['Docente', 'Persona 3: annulla la prenotazione e la cella torna verde.']
     ],
-    [...COPIONI, RUOLO.doc],
+    [...COPIONI, ...RUOLI],
     "Prima tappa: tutti leggono, una sola persona prenota. Chi non scrive nulla guarda il proprio calendario: deve vedere la cella diventare rossa quando la persona 3 conferma. Poi si annulla, perché la stessa cella servirà per la prenotazione periodica."),
   shot(T1, '02-dashboard-risorse.png', 'Docente', 'Il punto di partenza',
     'La Dashboard raccoglie le risorse per famiglia. L\'etichetta Disponibile o In uso racconta questo momento, non la giornata.',
@@ -608,7 +626,7 @@ const slides = [
       ['Tutti', 'Gli altri aprono una cella rossa e leggono il dettaglio: si può prenotare?'],
       ['Docente', 'Persone 4 e 5: puntano la stessa cella libera, la seconda legge il messaggio.']
     ],
-    [...COPIONI, RUOLO.doc],
+    [...COPIONI, ...RUOLI],
     "Seconda tappa: la periodica ripete la stessa ora per più settimane e il portale registra le date una per una. Una delle date è già occupata, quindi l'esito è parziale: è il punto della tappa. Poi il conflitto vero, tra due persone che scelgono la stessa ora quasi insieme.",
     'Prima di inviare, leggete l\'elenco delle date: dice già cosa succederà.'),
   shot(T2, '09-periodica-finestra.png', 'Docente', 'Periodica: le settimane e le date',
@@ -636,7 +654,7 @@ const slides = [
       ['Docente', 'Persona 5: legge l\'esito e cerca il motivo del rifiuto.'],
       ['Tutti', 'Guardano le email nella casella finta.']
     ],
-    [...COPIONI, RUOLO.dest],
+    [...COPIONI, ...RUOLI],
     "Terza tappa, la più lunga. La persona 5 invia due richieste; le persone 1 e 2 le decidono da Richieste da Approvare, una approvata e una rifiutata con un motivo. Poi la persona 5 guarda l'esito: lasciate che trovi da sola dove leggere il motivo del rifiuto. Non dite cosa trova o cosa manca. Se il gruppo chiede 'dov'è?', rispondete di cercare."),
   shot(T3, '14-richiesta-finestra-approvazione.png', 'Docente', 'Una risorsa con approvazione',
     'Riquadro giallo e bottone Invia richiesta al posto di Conferma prenotazione. L\'ora resta in attesa per tutti.',
@@ -674,7 +692,7 @@ const slides = [
         <Box type="tip" title="Scrivetelo ora">
           Annotate la risposta sul foglio «Cosa cambierei»: ci torniamo dopo l'ultima tappa.
         </Box>
-        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
     notes: "Due minuti per scrivere. Non dite ancora che questa sarà la modifica dal vivo e non commentate le risposte: raccoglietele a voce, a campione, e passate alla tappa 4. Se un gruppo non ha trovato il problema, vuol dire che non ha cercato il motivo: ripetete la domanda."
@@ -689,7 +707,7 @@ const slides = [
       ['Destinatario', 'Persona 3: sceglie chi riceve le richieste della risorsa del gruppo.'],
       ['Tutti', 'Dopo ogni cambio di ruolo: Logout e nuovo accesso.']
     ],
-    [...COPIONI, RUOLO.tec, RUOLO.adm, RUOLO.dest],
+    [...COPIONI, ...RUOLI, ROTAZIONE],
     "Quarta tappa: è qui che i ruoli ruotano. Il cambio si fa dal portale e ha una regola: un Amministratore non può togliersi i privilegi, serve un collega. Per questo prima le persone 1 e 2 promuovono le 3 e 4, poi queste riportano Docenti le 1 e 2. Ricordate a tutti il Logout dopo ogni cambio: senza, il menu non cambia."),
   shot(T4, '28-gestione-utenti-ruolo.png', 'Amministratore', 'Gestione Utenti',
     "Si cerca la persona e si cambia il ruolo con la tendina. Nella propria riga c'è «Tu», senza tendina.",
@@ -719,7 +737,7 @@ const slides = [
       ['Amministratore', 'Persona 3: prenota per conto di un collega.'],
       ['Amministratore', 'Persona 4: ritrova la prenotazione in Tutte le Prenotazioni.']
     ],
-    [...COPIONI, RUOLO.adm],
+    [...COPIONI, ...RUOLI],
     "Quinta tappa, con i ruoli del giro due. La revoca riguarda una prenotazione già approvata: è una cosa diversa dal rifiuto. Notate il confronto con la tappa 3: qui il Docente trova il motivo nel portale, in un riquadro rosso. Non anticipate il confronto: se serve, lo fanno loro."),
   shot(T5, '19-revoca-motivo.png', 'Amministratore', 'La revoca dal calendario',
     'Aprendo la cella occupata, Revoca chiede cosa revocare (per le periodiche) e il motivo, obbligatorio. Come il rifiuto, arriva al Docente.',
@@ -745,7 +763,7 @@ const slides = [
       ['Docente', 'Persona 6: ricarica la Dashboard e invia una richiesta per il laboratorio.'],
       ['Destinatario', 'Persona 4: approva dall\'email, con la conferma sulla pagina di riepilogo.']
     ],
-    [...COPIONI, RUOLO.dest],
+    [...COPIONI, ...RUOLI],
     "Sesta tappa. La risorsa è visibile a tutti ma prenotabile solo da chi è abilitato. Il salvataggio dei permessi sostituisce l'elenco intero e l'elenco è uno solo per i due gruppi, quindi l'ordine è fisso: prima salva il gruppo A, poi il gruppo B ricarica la pagina, spunta e salva. Non togliete le spunte degli altri. A fine tappa controlla tu l'elenco: devono esserci entrambe le persone. Nel gruppo da 5 la persona 6 è la persona 1.",
     "Un solo elenco dei permessi per i due gruppi: salva prima il gruppo A, poi il gruppo B ricarica la pagina e salva."),
   shot(T6, '23-su-autorizzazione-non-prenotabile.png', 'Docente', 'Non prenotabile',
@@ -786,7 +804,7 @@ const slides = [
           «Come Amministratore, nella pagina Richieste da Approvare vorrei poter filtrare le richieste per risorsa».
         </Box>
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Ogni gruppo scrive la propria richiesta sul foglio. Chi ha altre osservazioni le segna.</p>
-        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Foglio «Cosa cambierei»" />
+        <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
     notes: "Lasciate cinque minuti di scrittura nei gruppi, poi raccogliete alla lavagna le richieste. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come Docente, in Le Mie Prenotazioni, sulla riga di una richiesta rifiutata, vorrei leggere il motivo scritto dall'Amministratore, come già vedo per le prenotazioni revocate'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa, e ripartite dalla tappa 3. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
@@ -876,7 +894,7 @@ const slides = [
       ['Amministratore', 'Persona 3: rifiuta la richiesta dal portale, con un nuovo motivo.'],
       ['Tecnico', 'Persona 5: guarda cosa legge, dove e quando.']
     ],
-    [...COPIONI],
+    [...COPIONI, ...RUOLI],
     "Si ripete la prova a mano, sull'ambiente di prova dove la modifica è stata installata. Prima la richiesta rifiutata già presente, poi una nuova richiesta con un nuovo rifiuto, così si vede che la modifica funziona anche per le richieste future. Se la modifica non è stata installata, si usa il piano B: si spiega cosa sarebbe cambiato e si passa alla chiusura."),
   {
     block: 'Cosa cambiereste',
@@ -936,6 +954,7 @@ const slides = [
         <DurationBadge>5 minuti</DurationBadge>
         <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
         <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
+        <ActivityBadge href={MAT + COSA.href} label={COSA.label} />
       </div>
     ),
     notes: "Chiusura del laboratorio: ringraziate, ricordate il questionario di valutazione e dite come potranno far arrivare nuove idee. Se il questionario ha già un indirizzo, scrivetelo alla lavagna."
