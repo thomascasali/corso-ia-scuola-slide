@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pratiche delle uscite (demo) — Materiali incontro 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'incontro 1</a>
+  <a class="dl-btn" href="demo-pratiche-uscite.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="pratiche-delle-uscite-20252026-file-della-demo">Pratiche delle uscite 2025/2026 (file della demo)</h1>
+<p><em>File di prova usato dall'agente nella demo dal vivo. Tutti i dati sono inventati: nessuna pratica, classe o persona reale.</em></p>
+<p>Il file <code>pratiche-uscite-2025-26.csv</code> che l'agente apre all'inizio della demo. Ogni riga è una pratica; le date sono scritte giorno/mese/anno.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Pratica</th>
+<th>Partenza</th>
+<th>Rientro</th>
+<th>Classe</th>
+<th>Destinazione</th>
+<th>Tipo</th>
+<th>Studenti</th>
+<th>Accompagnatori</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P01</td>
+<td>08/10/2025</td>
+<td>08/10/2025</td>
+<td>1A</td>
+<td>Mercato settimanale del paese</td>
+<td>uscita didattica</td>
+<td>25</td>
+<td>prof. Acero; prof. Olmo</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P02</td>
+<td>13/10/2025</td>
+<td>15/10/2025</td>
+<td>5A</td>
+<td>Firenze</td>
+<td>viaggio d'istruzione</td>
+<td>22</td>
+<td>prof. Gelso; prof. Pioppo</td>
+<td>docente di riserva: prof. Salice</td>
+</tr>
+<tr>
+<td>P03</td>
+<td>17/10/2025</td>
+<td>17/10/2025</td>
+<td>3C</td>
+<td>Museo della scienza e della tecnica, Milano</td>
+<td>visita guidata</td>
+<td>24</td>
+<td>prof.ssa Dalia; prof.ssa Edera</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P04</td>
+<td>20/10/2025</td>
+<td>23/10/2025</td>
+<td>5C</td>
+<td>Napoli e Pompei</td>
+<td>viaggio d'istruzione</td>
+<td>25</td>
+<td>prof. Gelso; prof.ssa Viola</td>
+<td>docente di riserva: prof. Tiglio</td>
+</tr>
+<tr>
+<td>P05</td>
+<td>22/10/2025</td>
+<td>22/10/2025</td>
+<td>2C</td>
+<td>Orto botanico comunale</td>
+<td>uscita didattica</td>
+<td>20</td>
+<td>prof.ssa Betulla; prof. Cedro</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P06</td>
+<td>29/10/2025</td>
+<td>29/10/2025</td>
+<td>4B</td>
+<td>Fiera dell'elettronica, Bologna</td>
+<td>visita guidata</td>
+<td>19</td>
+<td>prof. Frassino; prof. Larice</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P07</td>
+<td>04/11/2025</td>
+<td>04/11/2025</td>
+<td>2A</td>
+<td>Museo civico</td>
+<td>uscita didattica</td>
+<td>24</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P08</td>
+<td>07/11/2025</td>
+<td>07/11/2025</td>
+<td>3B</td>
+<td>Azienda agricola didattica</td>
+<td>visita guidata</td>
+<td>22</td>
+<td>-</td>
+<td>in attesa della delibera del consiglio di classe</td>
+</tr>
+<tr>
+<td>P09</td>
+<td>12/11/2025</td>
+<td>12/11/2025</td>
+<td>4A</td>
+<td>Teatro in lingua inglese</td>
+<td>uscita didattica</td>
+<td>23</td>
+<td>-</td>
+<td>accompagnano prof.ssa Viola e prof. Olmo, confermato a voce il 03/11</td>
+</tr>
+<tr>
+<td>P10</td>
+<td>14/11/2025</td>
+<td>14/11/2025</td>
+<td>5B</td>
+<td>Ravenna, mosaici</td>
+<td>visita guidata</td>
+<td>27</td>
+<td>prof. Acero; prof.ssa Betulla</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P11</td>
+<td>19/11/2025</td>
+<td>19/11/2025</td>
+<td>1C</td>
+<td>Parco del Delta del Po</td>
+<td>visita guidata</td>
+<td>11</td>
+<td>prof. Cedro</td>
+<td>classe di 15 iscritti</td>
+</tr>
+<tr>
+<td>P12</td>
+<td>21/11/2025</td>
+<td>21/11/2025</td>
+<td>3A</td>
+<td>Biblioteca comunale</td>
+<td>uscita didattica</td>
+<td>26</td>
+<td>prof.ssa Dalia; prof. Frassino</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P13</td>
+<td>24/11/2025</td>
+<td>27/11/2025</td>
+<td>4C</td>
+<td>Torino, Museo Egizio e Museo dell'Automobile</td>
+<td>viaggio d'istruzione</td>
+<td>20</td>
+<td>prof. Gelso; prof. Larice</td>
+<td>docente di riserva: prof. Mirto</td>
+</tr>
+<tr>
+<td>P14</td>
+<td>26/11/2025</td>
+<td>26/11/2025</td>
+<td>5A</td>
+<td>Università di Bologna, giornata di orientamento</td>
+<td>visita guidata</td>
+<td>18</td>
+<td>prof. Pioppo; prof. Salice</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P15</td>
+<td>28/11/2025</td>
+<td>28/11/2025</td>
+<td>2B</td>
+<td>Mostra al palazzo comunale</td>
+<td>uscita didattica</td>
+<td>21</td>
+<td>prof. Tiglio; prof. Ginepro</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P16</td>
+<td>03/12/2025</td>
+<td>03/12/2025</td>
+<td>1B</td>
+<td>Mostra fotografica in centro</td>
+<td>uscita didattica</td>
+<td>23</td>
+<td>prof. Mirto; prof. Olmo</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P17</td>
+<td>05/12/2025</td>
+<td>05/12/2025</td>
+<td>3A</td>
+<td>Museo del Risorgimento</td>
+<td>visita guidata</td>
+<td>26</td>
+<td>prof. Acero; prof. Tiglio</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P18</td>
+<td>10/12/2025</td>
+<td>10/12/2025</td>
+<td>2A</td>
+<td>Mercatino solidale in piazza</td>
+<td>uscita didattica</td>
+<td>24</td>
+<td>prof.ssa Edera; prof.ssa Viola</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P19</td>
+<td>12/12/2025</td>
+<td>12/12/2025</td>
+<td>5B</td>
+<td>Planetario</td>
+<td>visita guidata</td>
+<td>25</td>
+<td>prof. Cedro; prof.ssa Dalia</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P20</td>
+<td>16/12/2025</td>
+<td>16/12/2025</td>
+<td>4A</td>
+<td>Prove del coro in cattedrale</td>
+<td>uscita didattica</td>
+<td>22</td>
+<td>prof. Salice; prof. Ginepro</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P21</td>
+<td>19/12/2025</td>
+<td>19/12/2025</td>
+<td>1C</td>
+<td>Cinema in lingua originale</td>
+<td>uscita didattica</td>
+<td>15</td>
+<td>prof. Ginepro; prof. Frassino</td>
+<td>-</td>
+</tr>
+<tr>
+<td>P22</td>
+<td>28/01/2026</td>
+<td>28/01/2026</td>
+<td>5B</td>
+<td>Mostra "Arte e macchine", Bologna</td>
+<td>visita guidata</td>
+<td>24</td>
+<td>prof. Pioppo; prof. Larice</td>
+<td>data proposta dall'ente organizzatore</td>
+</tr>
+</tbody>
+</table></div>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

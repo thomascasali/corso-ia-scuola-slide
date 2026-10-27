@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
 <style>
   :root {
     --bg: #15120f;
@@ -108,7 +108,7 @@ const colors = {
   success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
 };
 
-/* ---------- simulazione chatbot/agente (codice condiviso con simulazione-agente.html) ---------- */
+/* ---------- simulazione chatbot/agente (uscite di novembre; simulazione-agente.html ha un compito diverso) ---------- */
 /* Nota: per garantire il funzionamento aprendo il file da file:// (Babel standalone non può
    caricare script esterni via XHR da file locali in molti browser), il componente è duplicato
    in modo controllato in incontro-1/slide.html e incontro-1/simulazione-agente.html. */
@@ -1338,7 +1338,7 @@ const slides = [
         {AgentSimulation ? <AgentSimulation compact={true} /> : <p style={{ color: colors.danger }}>Componente della simulazione non caricato.</p>}
       </div>
     ),
-    notes: 'Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Fate notare il registro delle azioni nella colonna di destra: è lo stesso linguaggio semplice che i partecipanti troveranno nella pagina che apriranno sul proprio PC. Alla fine confrontate con la colonna chatbot: il chatbot si è fermato al testo, l\'agente ha anche verificato e corretto un proprio errore di conteggio.'
+    notes: 'Questa simulazione si gioca tutta insieme, al proiettore: nessuno la apre sul proprio PC in questo momento. Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Dite ad alta voce quante previsioni ha azzeccato la sala. Fate notare il registro delle azioni nella colonna di destra: nella slide successiva i partecipanti ritroveranno lo stesso linguaggio semplice, ma su un compito diverso e più lungo. Alla fine confrontate con la colonna chatbot: il chatbot si è fermato al testo, l\'agente ha anche verificato e corretto un proprio errore di conteggio.'
   },
   {
     block: "Blocco 6 — Chatbot e agente",
@@ -1347,12 +1347,12 @@ const slides = [
         <BlockTag>Attività</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Provatela voi</h2>
         <p style={{ color: colors.textDim }}>
-          Aprite sul vostro PC la stessa simulazione e provate a indovinare ogni mossa dell'agente prima che avvenga. 5-8 minuti.
+          Aprite sul vostro PC un'altra simulazione, con un compito diverso e più complesso: l'agente controlla sei pratiche di dicembre rispetto al regolamento e prepara le bozze dei messaggi ai referenti. Questa volta l'agente si ferma a farvi una domanda e chiede un permesso prima di scrivere. Indovinate ogni mossa prima che avvenga. Durata indicativa: 10-12 minuti.
         </p>
         <ActivityBadge href="simulazione-agente.html" label="Simulazione: chatbot o agente?" />
       </div>
     ),
-    notes: 'Fate aprire la simulazione dal link sulla slide. Lasciate 5-8 minuti per giocare fino in fondo, poi chiedete a mano alzata quanti hanno indovinato tutte le mosse.'
+    notes: 'Fate aprire la simulazione dal link sulla slide: non è quella appena giocata insieme, il compito è diverso e più complesso (nove passi da indovinare dopo il piano). Lasciate 10-12 minuti per giocare da soli fino in fondo, con il foglio previsioni della scheda 6. Passando tra i banchi, fate notare i tre momenti nuovi: l\'agente che si ferma e chiede alla persona, la richiesta di permesso prima di scrivere i file, l\'errore di arrotondamento che l\'agente corregge da solo. Poi chiedete a mano alzata quanti hanno indovinato tutte le mosse e perché è giusto che le mail restino bozze.'
   },
 
   /* --- blocco 7: demo dal vivo --- */
@@ -1362,9 +1362,9 @@ const slides = [
       <div style={{ padding: '24px 30px' }}>
         <BlockTag>Blocco 7</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Ora dal vero</h2>
-        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Lo stesso compito della simulazione — l'elenco delle uscite di novembre, gli accompagnatori mancanti, il nome nascosto nella colonna "note" — ma questa volta non ci sono bottoni: Thomas lo fa davvero, con Claude Code, sugli stessi file di prova.</p>
-        <p style={{ color: colors.textDim, marginBottom: '20px' }}>Guardate cosa succede, non solo il risultato finale. Durata indicativa: 15-20 minuti.</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Lo stesso compito della simulazione giocata insieme (le uscite di novembre), ma senza bottoni: il docente lo fa davvero, con Claude Code, sugli stessi file di prova.</p>
+        <p style={{ color: colors.textDim, marginBottom: '10px' }}>Guardate cosa succede, non solo il risultato finale. Durata indicativa: 15-20 minuti. Sotto, i file che l'agente apre.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px' }}>
           {[
             { q: 'Quali strumenti usa?', c: colors.info },
             { q: 'Quando chiede il permesso?', c: colors.warn },
@@ -1372,14 +1372,21 @@ const slides = [
             { q: 'Come si controlla con il regolamento?', c: colors.success },
             { q: 'Chi decide, alla fine?', c: colors.accent },
           ].map((x, i) => (
-            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `4px solid ${x.c}`, borderRadius: '0 8px 8px 0', padding: '12px 16px' }}>
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `4px solid ${x.c}`, borderRadius: '0 8px 8px 0', padding: '8px 12px' }}>
               <p style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600, margin: 0 }}>{x.q}</p>
             </div>
           ))}
         </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px', marginTop: '4px' }}>
+          <ActivityBadge href="../materiali/incontro-1/demo-pratiche-uscite.html" label="Pratiche delle uscite (demo)" />
+          <ActivityBadge href="../materiali/incontro-1/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
+          <ActivityBadge href="../materiali/incontro-1/demo-docenti-disponibili.html" label="Docenti disponibili (demo)" />
+          <ActivityBadge href="../materiali/incontro-1/demo-procedura-controllo-uscite.html" label="Procedura controllo-uscite (demo)" />
+          <ActivityBadge href="../materiali/incontro-1/demo-istruzioni-cartella.html" label="Istruzioni della cartella (demo)" />
+        </div>
       </div>
     ),
-    notes: 'Seguite il copione della demo (15-20 minuti indicativi). Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non pratiche reali.'
+    notes: 'Seguite il copione della demo (15-20 minuti indicativi). Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non pratiche reali. I cinque fogli sulla slide sono i file che l\'agente apre: i partecipanti possono consultarli mentre guardate, per vedere da dove nasce ogni mossa.'
   },
   {
     block: "Blocco 7 — Demo dal vivo",
