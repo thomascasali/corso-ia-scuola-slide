@@ -51,7 +51,7 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   @media (max-width: 768px) {
-    .slide-content { padding: 16px !important; }
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
     .top-bar { padding: 0 10px !important; }
     .top-bar span { font-size: var(--fs-xs) !important; }
     .top-bar > div:first-child { gap: 8px !important; }
@@ -129,11 +129,11 @@ const BlockTag = ({ children }) => (
   </div>
 );
 
-const ActivityBadge = ({ href, label }) => (
+const ActivityBadge = ({ href, label, icon = '📄' }) => (
   <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
      className="activity-badge"
      style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+    <span aria-hidden="true">{icon}</span><span>{label}</span><span aria-hidden="true">↗</span>
   </a>
 );
 
@@ -215,48 +215,113 @@ const MaterialsLink = () => (
   </a>
 );
 
-/* slide di attività: titolo, durata indicativa, passi, foglio o simulazione */
-function ActivityCard({ title, minutes, steps, href, label, after }) {
+
+/* argomenti della Parte 1 (spiegazione) e attività della Parte 2 (al PC): la mappa e i link «Riprende» le usano */
+const TOPICS = [
+  { n: 1, id: 't1', icon: '📏', title: 'Regole o esempi?' },
+  { n: 2, id: 't2', icon: '🎛️', title: 'Il neurone e la rete' },
+  { n: 3, id: 't3', icon: '🔢', title: 'Dalle parole ai numeri' },
+  { n: 4, id: 't4', icon: '🏗️', title: 'Come nasce un chatbot' },
+  { n: 5, id: 't5', icon: '🎲', title: 'Probabilità e temperatura' },
+  { n: 6, id: 't6', icon: '🧩', title: 'Catena di pensiero' },
+  { n: 7, id: 't7', icon: '⚠️', title: 'I limiti' },
+];
+
+const ACTIVITIES = [
+  { n: 1, id: 'a1', icon: '✉️', title: 'Richieste in segreteria', minutes: 25 },
+  { n: 2, id: 'a2', icon: '🎛️', title: 'Il neurone giocattolo', minutes: 15 },
+  { n: 3, id: 'a3', icon: '🔢', title: 'Token e parole vicine', minutes: 15 },
+  { n: 4, id: 'a4', icon: '👍', title: 'Votate le risposte', minutes: 15 },
+  { n: 5, id: 'a5', icon: '🎲', title: 'La prossima parola', minutes: 15 },
+  { n: 6, id: 'a6', icon: '🧩', title: 'Veloce o che ragiona?', minutes: 20 },
+  { n: 7, id: 'a7', icon: '📖', title: 'Glossario e quiz', minutes: 20 },
+];
+
+/* salto a una slide dato il suo id */
+const jumpToId = (goTo, id) => {
+  const idx = slides.findIndex(s => s.id === id);
+  if (idx >= 0 && goTo) goTo(idx);
+};
+
+/* riga «Riprende: …» di ogni attività: porta alla slide teorica corrispondente */
+function Riprende({ goTo, topic, label }) {
+  const name = label || TOPICS.find(x => x.id === topic).title;
+  return (
+    <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>
+      Riprende:{' '}
+      <button type="button" onClick={() => jumpToId(goTo, topic)} className="text-link riprende-link"
+        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', fontWeight: 600, textAlign: 'left' }}>
+        {name}
+      </button>
+      {' '}(torna alla spiegazione)
+    </p>
+  );
+}
+
+/* slide di attività: titolo, durata indicativa, passi, foglio o simulazione, argomento ripreso */
+function ActivityCard({ title, minutes, steps, href, label, after, topic, goTo }) {
   return (
     <div style={{ padding: '18px 30px' }}>
-      <BlockTag>Attività al PC</BlockTag>
+      <BlockTag>Parte 2 · Attività al PC</BlockTag>
       <h2 style={{ color: colors.accent, marginBottom: '6px' }}>{title}</h2>
       <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Circa {minutes} minuti.</p>
       <ol style={{ paddingLeft: '30px', color: colors.textDim }}>
         {steps.map((s, i) => <li key={i} style={{ marginBottom: '6px', fontSize: 'var(--fs-sm)' }}>{s}</li>)}
       </ol>
       {after && <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px' }}>{after}</p>}
+      <Riprende goTo={goTo} topic={topic} />
       <ActivityBadge href={href} label={label} />
     </div>
   );
 }
 
-/* mappa della lezione: un clic porta all'apertura del blocco */
-const MAP_BLOCKS = [
-  { n: 1, icon: '📏', title: 'Regole o esempi?', sub: 'Programmi scritti a mano e sistemi che imparano' },
-  { n: 2, icon: '🎛️', title: 'Il neurone e la rete', sub: 'Una somma pesata, tante manopole' },
-  { n: 3, icon: '🔢', title: 'Dalle parole ai numeri', sub: 'Token e parole vicine' },
-  { n: 4, icon: '🏗️', title: 'Come nasce un chatbot', sub: 'Tre fasi di addestramento' },
-  { n: 5, icon: '🎲', title: 'Probabilità e temperatura', sub: 'Perché le risposte cambiano' },
-  { n: 6, icon: '🧩', title: 'Catena di pensiero', sub: 'Scrivere i passaggi aiuta' },
-  { n: 7, icon: '⚠️', title: 'Limiti e parole chiave', sub: 'Cosa aspettarsi, cosa controllare' },
+/* mappa della lezione: un clic porta alla slide, sia sugli argomenti sia sulle attività */
+function LessonMap({ goTo }) {
+  const col = c => ({ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${c}`, borderRadius: '8px', padding: '12px 14px' });
+  const row = { display: 'flex', alignItems: 'center', gap: '10px', width: '100%', minHeight: '40px', textAlign: 'left', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '5px 10px', marginBottom: '6px', cursor: 'pointer', color: colors.text, fontSize: 'var(--fs-sm)' };
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px' }}>
+      <div style={col(colors.accent)}>
+        <div style={{ fontWeight: 700, color: colors.accent, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Parte 1 · Come funziona</div>
+        {TOPICS.map(t => (
+          <button key={t.id} onClick={() => jumpToId(goTo, t.id)} className="activity-link map-topic" style={row}>
+            <span aria-hidden="true">{t.icon}</span>
+            <span style={{ fontWeight: 600 }}>{t.n} · {t.title}</span>
+          </button>
+        ))}
+      </div>
+      <div style={col(colors.info)}>
+        <div style={{ fontWeight: 700, color: colors.info, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Parte 2 · Proviamo</div>
+        {ACTIVITIES.map(a => (
+          <button key={a.id} onClick={() => jumpToId(goTo, a.id)} className="activity-link map-activity" style={row}>
+            <span aria-hidden="true">{a.icon}</span>
+            <span style={{ fontWeight: 600, flex: '1 1 auto' }}>{a.n} · {a.title}</span>
+            <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.textMuted, fontSize: 'var(--fs-xs)', whiteSpace: 'nowrap' }}>{a.minutes} min</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* riepilogo della Parte 1: un'idea per argomento, ogni riquadro porta alla spiegazione */
+const RECAP = [
+  'Un\'IA di oggi ricava il comportamento da tanti esempi, non da regole scritte a mano.',
+  'Un neurone fa una somma pesata e guarda una soglia. Imparare vuol dire girare i pesi.',
+  'Il testo si taglia in token e ogni token diventa numeri. Parole simili, numeri vicini.',
+  'Tre fasi: leggere moltissimo testo, imparare a rispondere, ricevere il voto delle persone.',
+  'Il modello sceglie una parola alla volta tra le candidate. La temperatura regola il rischio.',
+  'Le parole già scritte diventano contesto: i passaggi aiutano, e alcuni modelli li scrivono da soli.',
+  'Inventa con tono sicuro, non sa il dopo, ha una scrivania di misura fissa, non impara dalle chat.',
 ];
 
-function LessonMap({ goTo }) {
-  const jump = n => {
-    const idx = slides.findIndex(s => s.block.indexOf('Blocco ' + n + ' ') === 0);
-    if (idx >= 0 && goTo) goTo(idx);
-  };
+function RecapGrid({ goTo }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-      {MAP_BLOCKS.map(b => (
-        <button key={b.n} onClick={() => jump(b.n)} className="activity-link" style={{ textAlign: 'left', background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.accent}`, borderRadius: '8px', padding: '12px 14px', cursor: 'pointer', color: colors.text }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '22px' }} aria-hidden="true">{b.icon}</span>
-            <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, fontSize: 'var(--fs-xs)' }}>Blocco {b.n}</span>
-          </div>
-          <div style={{ fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{b.title}</div>
-          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '2px' }}>{b.sub}</div>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
+      {TOPICS.map((t, i) => (
+        <button key={t.id} onClick={() => jumpToId(goTo, t.id)} className="activity-link recap-card" style={{ textAlign: 'left', background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.accent}`, borderRadius: '8px', padding: '8px 12px', cursor: 'pointer', color: colors.text }}>
+          <div style={{ fontWeight: 700, fontSize: 'var(--fs-sm)', color: colors.accent }}><span aria-hidden="true">{t.icon}</span> {t.n} · {t.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', marginTop: '2px', lineHeight: 1.4 }}>{RECAP[i]}</div>
         </button>
       ))}
     </div>
@@ -438,10 +503,11 @@ function Quiz() {
   );
 }
 
-/* apertura di blocco */
+
+/* apertura di argomento della Parte 1 */
 const BlockOpen = ({ n, title, children }) => (
   <div style={{ padding: '30px' }}>
-    <BlockTag>Blocco {n}</BlockTag>
+    <BlockTag>Parte 1 · Argomento {n} di 7</BlockTag>
     <h2 style={{ color: colors.accent, marginBottom: '20px' }}>{title}</h2>
     {children}
   </div>
@@ -451,21 +517,24 @@ const Dim = ({ children, style }) => <p style={{ color: colors.textMuted, fontSi
 const T = ({ children }) => <strong style={{ color: colors.text }}>{children}</strong>;
 
 /* ---------- dati delle slide ---------- */
-/* ogni voce: { block, content, notes }; block solo per barra e note, senza minutaggio */
+/* ogni voce: { id?, block, content, notes }; block solo per barra e note, senza minutaggio.
+   Parte 1 = teoria in sette argomenti, poi riepilogo; Parte 2 = attività al PC nello stesso ordine. */
 
-const B1 = 'Blocco 1 — Regole o esempi?';
-const B2 = 'Blocco 2 — Il neurone e la rete';
-const B3 = 'Blocco 3 — Dalle parole ai numeri';
-const B4 = 'Blocco 4 — Come nasce un chatbot';
-const B5 = 'Blocco 5 — Probabilità e temperatura';
-const B6 = 'Blocco 6 — Catena di pensiero';
-const B7 = 'Blocco 7 — Limiti e parole chiave';
+const P1 = 'Parte 1 — Come funziona';
+const P2 = 'Parte 2 — Proviamo';
+const T1 = P1 + ' · Regole o esempi?';
+const T2 = P1 + ' · Il neurone e la rete';
+const T3 = P1 + ' · Dalle parole ai numeri';
+const T4 = P1 + ' · Come nasce un chatbot';
+const T5 = P1 + ' · Probabilità e temperatura';
+const T6 = P1 + ' · Catena di pensiero';
+const T7 = P1 + ' · I limiti';
 
 const slides = [
   {
     block: 'Apertura',
     content: () => (
-      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🧠</div>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
           AI Tools per l'Organizzazione scolastica
@@ -480,24 +549,27 @@ const slides = [
         <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '30px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
       </div>
     ),
-    notes: "Lezione di richiamo alle basi: si usa quando serve, anche solo un blocco. Non presuppone gli incontri del corso e non serve averla fatta per seguirli. Aspettate che tutti abbiano il PC acceso e il browser aperto: quasi ogni blocco finisce con un'attività al PC."
+    notes: "Lezione di richiamo alle basi, in due parti: prima si spiega come funziona (Parte 1, sette argomenti), poi si prova al PC (Parte 2, un'attività per argomento). Si usa quando serve, anche solo una parte o solo alcuni argomenti. Non presuppone gli incontri del corso e non serve averla fatta per seguirli. Prima della Parte 2 controllate che tutti abbiano il PC acceso e il browser aperto."
   },
   {
     block: 'Apertura',
     content: ({ goTo }) => (
       <div style={{ padding: '14px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Mappa della lezione</h2>
-        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Sette blocchi. Ognuno si regge da solo e finisce con un'attività al PC: si sceglie quelli che servono, nell'ordine che serve.</p>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Due parti. Prima si spiega come funziona, in sette argomenti; poi si prova al PC, con un'attività per argomento. Un clic porta alla slide.</p>
         <LessonMap goTo={goTo} />
         <Dim>Materiali della lezione: <MaterialsLink /></Dim>
       </div>
     ),
-    notes: "Questa slide serve a scegliere. Cliccando un riquadro si salta all'apertura di quel blocco. Se il gruppo ha già un'idea di come funziona un chatbot, i blocchi 5, 6 e 7 bastano; se parte da zero, conviene il percorso completo. Chiedete alla sala: «Che cosa vi incuriosisce, o vi preoccupa, di più?» e partite da lì. Leggete a voce alta l'indirizzo dei materiali."
+    notes: "Questa slide serve a scegliere. Cliccando un riquadro si salta alla slide: a sinistra gli argomenti della spiegazione, a destra le attività al PC. Ogni attività ha un link «Riprende» che torna alla spiegazione del suo argomento, quindi chi fa solo la Parte 2 può ripassare al volo. Se il gruppo ha già un'idea di come funziona un chatbot, gli argomenti 5, 6 e 7 bastano; se parte da zero, conviene il percorso completo. Chiedete alla sala: «Che cosa vi incuriosisce, o vi preoccupa, di più?» e partite da lì. Leggete a voce alta l'indirizzo dei materiali."
   },
 
-  /* --- blocco 1 --- */
+  /* --- Parte 1: teoria --- */
+
+  /* argomento 1 */
   {
-    block: B1,
+    id: 't1',
+    block: T1,
     content: () => (
       <BlockOpen n={1} title="Regole o esempi?">
         <Glow>
@@ -506,23 +578,23 @@ const slides = [
         <Dim>Le intelligenze artificiali di cui parliamo nel corso, Gemini compreso, appartengono al secondo tipo.</Dim>
       </BlockOpen>
     ),
-    notes: "Apertura del blocco. Partite da una domanda: «Come fa il filtro della posta a capire che una mail è spazzatura? Qualcuno ha scritto tutte le regole?» Raccogliete due o tre risposte senza correggerle. Il punto da far arrivare: un programma tradizionale esegue regole scritte da una persona; un sistema che impara parte dagli esempi. I filtri antispam moderni, per inciso, usano tutti e due i metodi."
+    notes: "Apertura dell'argomento. Partite da una domanda: «Come fa il filtro della posta a capire che una mail è spazzatura? Qualcuno ha scritto tutte le regole?» Raccogliete due o tre risposte senza correggerle. Il punto da far arrivare: un programma tradizionale esegue regole scritte da una persona; un sistema che impara parte dagli esempi. I filtri antispam moderni, per inciso, usano tutti e due i metodi."
   },
   {
-    block: B1,
+    block: T1,
     content: () => (
       <div style={{ padding: '18px 30px' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Smistare le mail della segreteria</h2>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Un esempio: smistare le mail della segreteria</h2>
         <CompareTwo
           left={{ icon: '📏', title: 'Regole scritte', color: colors.info, points: ['«Se la mail contiene "certificato", va alla didattica»', 'Si sa sempre perché ha deciso così', 'Davanti a un caso che nessuno aveva previsto, sbaglia o si blocca'] }}
           right={{ icon: '📚', title: 'Imparare dagli esempi', color: colors.success, points: ['Gli si mostrano migliaia di mail già smistate da una persona', 'Trova da solo le somiglianze tra le richieste', 'Se la cava meglio con i casi nuovi, ma può sbagliare e non sa spiegare il perché'] }}
         />
       </div>
     ),
-    notes: "Leggete i due riquadri con un esempio a testa. Regole: chi le scrive deve immaginare in anticipo ogni modo in cui una famiglia può chiedere una cosa. Esempi: nessuno scrive le regole, ma servono tanti esempi corretti, e se gli esempi contengono errori o pregiudizi il sistema li impara. Domanda alla sala: «Nel vostro ufficio, quali decisioni seguono regole scritte e quali si imparano con l'esperienza?»"
+    notes: "Esempio raccontato dal docente, senza attività: la parte pratica è nella Parte 2. Leggete i due riquadri con un esempio a testa. Regole: chi le scrive deve immaginare in anticipo ogni modo in cui una famiglia può chiedere una cosa. Esempi: nessuno scrive le regole, ma servono tanti esempi corretti, e se gli esempi contengono errori o pregiudizi il sistema li impara. Domanda alla sala: «Nel vostro ufficio, quali decisioni seguono regole scritte e quali si imparano con l'esperienza?»"
   },
   {
-    block: B1,
+    block: T1,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '14px' }}>Dove le regole non bastano</h2>
@@ -543,28 +615,11 @@ const slides = [
     ),
     notes: "Due richieste inventate, costruite per far cadere la regola della slide precedente. Chiedete: «Dove finirebbero con la regola sulla parola certificato?» La prima andrebbe nell'ufficio sbagliato, la seconda pure. Una persona esperta le smista bene senza pensarci, perché ha visto tante richieste simili: è la stessa idea su cui si basa l'apprendimento dagli esempi. Attenzione: non presentate gli esempi come la soluzione perfetta. Anche un sistema addestrato sbaglia, solo in modo meno prevedibile."
   },
-  {
-    block: B1,
-    content: () => (
-      <ActivityCard
-        title="Richieste in segreteria"
-        minutes="25"
-        steps={[
-          'Leggete i sedici messaggi del foglio. Sono tutti inventati.',
-          'Scrivete 3 o 4 regole del tipo «se il messaggio parla di… allora il tipo è…».',
-          'Applicate le regole a tutti i messaggi, compilate la tabella e segnate con un asterisco quelli in cui le regole non bastano.',
-          'Ora leggete i cinque esempi già etichettati e classificate di nuovo i messaggi per somiglianza. Dove cambia il risultato?',
-        ]}
-        href="../materiali/incontro-0/richieste-segreteria.html"
-        label="Richieste in segreteria"
-      />
-    ),
-    notes: "Lasciate lavorare le coppie senza aiutarle sulle regole: è utile che qualcuna si inceppi. Alla fine della prima fase chiedete a due persone quanti messaggi hanno messo in difficoltà le loro regole e quale le ha messe più in difficoltà. Nella discussione finale fate notare che il secondo metodo, a occhio dagli esempi, è più vicino a come impara un'intelligenza artificiale: nessuno vi ha dato una regola, avete riconosciuto somiglianze."
-  },
 
-  /* --- blocco 2 --- */
+  /* argomento 2 */
   {
-    block: B2,
+    id: 't2',
+    block: T2,
     content: () => (
       <BlockOpen n={2} title="Il neurone e la rete">
         <Glow>
@@ -575,10 +630,10 @@ const slides = [
         </Box>
       </BlockOpen>
     ),
-    notes: "Apertura del blocco. Insistete sull'analogia: i primi ricercatori si sono ispirati al cervello, ma oggi i neuroni artificiali sono formule, e quello che sappiamo dei neuroni veri è molto più complicato. Se qualcuno chiede «allora pensa?», rispondete che in questa lezione vediamo come è costruito: le domande filosofiche restano aperte anche tra gli esperti."
+    notes: "Apertura dell'argomento. Insistete sull'analogia: i primi ricercatori si sono ispirati al cervello, ma oggi i neuroni artificiali sono formule, e quello che sappiamo dei neuroni veri è molto più complicato. Se qualcuno chiede «allora pensa?», rispondete che in questa lezione vediamo come è costruito: le domande filosofiche restano aperte anche tra gli esperti."
   },
   {
-    block: B2,
+    block: T2,
     content: () => (
       <div style={{ padding: '16px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Un neurone decide su un'uscita didattica</h2>
@@ -590,7 +645,7 @@ const slides = [
     notes: "Fate il conto a voce: 1 per 3, più 1 per 3, più 0 per 2, fa 6. La soglia è 7, quindi la pratica non passa. Chiedete: «Se la scuola volesse approvare anche le richieste in ritardo, quale manopola girereste?» Le risposte possibili sono due: abbassare la soglia a 6, oppure dare meno peso al preavviso e più agli altri. Semplificazione dichiarata: nei modelli veri gli ingressi non sono solo 0 e 1 e al posto della soglia secca c'è una curva più morbida, ma l'idea è la stessa."
   },
   {
-    block: B2,
+    block: T2,
     content: () => (
       <div style={{ padding: '22px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Imparare vuol dire girare le manopole</h2>
@@ -602,12 +657,15 @@ const slides = [
           { icon: '🔧', label: 'Piccola correzione', sub: 'dei pesi, verso la risposta giusta', color: colors.success },
         ]} />
         <Dim style={{ textAlign: 'center' }}>↺ Si ripete su migliaia di esempi, finché gli errori diventano rari.</Dim>
+        <div style={{ textAlign: 'center' }}>
+          <ActivityBadge href="simulazione-neurone.html" label="Dimostrazione del docente: il neurone giocattolo" icon="🖥️" />
+        </div>
       </div>
     ),
-    notes: "Raccontate il ciclo come farebbe una persona nuova in segreteria: prova, la collega le dice se ha sbagliato, la volta dopo aggiusta. La differenza è che qui la correzione è un calcolo automatico, piccolo e ripetuto moltissime volte. Domanda alla sala: «Se gli esempi di partenza fossero sbagliati, cosa imparerebbe?» Risposta: imparerebbe gli errori, con la stessa precisione."
+    notes: "Dimostrazione al proiettore: aprite la simulazione del neurone dal link in fondo alla slide (si apre in una nuova scheda). Mostrate le manopole dei pesi e della soglia, poi premete «Addestra un passo» un paio di volte leggendo a voce cosa cambia. I partecipanti non la aprono ora: la provano da soli nella Parte 2. Raccontate il ciclo come farebbe una persona nuova in segreteria: prova, la collega le dice se ha sbagliato, la volta dopo aggiusta. La differenza è che qui la correzione è un calcolo automatico, piccolo e ripetuto moltissime volte. Domanda alla sala: «Se gli esempi di partenza fossero sbagliati, cosa imparerebbe?» Risposta: imparerebbe gli errori, con la stessa precisione."
   },
   {
-    block: B2,
+    block: T2,
     content: () => (
       <div style={{ padding: '16px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Tanti neuroni: la rete neurale</h2>
@@ -620,30 +678,11 @@ const slides = [
     ),
     notes: "Lo schema ha pochi neuroni per stare nella slide: nei modelli veri gli strati sono decine e i neuroni moltissimi. Non date numeri precisi sui modelli commerciali: i produttori spesso non li pubblicano. Basta l'ordine di grandezza: miliardi di pesi. Fate notare la conseguenza pratica: con miliardi di manopole regolate in automatico, chiedere alla rete «perché hai deciso così» non ha una risposta semplice da leggere nei pesi."
   },
-  {
-    block: B2,
-    content: () => (
-      <ActivityCard
-        title="Il neurone giocattolo"
-        minutes="15"
-        steps={[
-          'Aprite la simulazione: un neurone decide se un\'uscita didattica è approvabile.',
-          'Girate le manopole dei pesi e la soglia finché il neurone non sbaglia più nessun esempio.',
-          'Confrontate con il vicino: avete trovato gli stessi pesi?',
-          'Nella vostra soluzione, quale ingresso conta di più?',
-          'Premete «Ricomincia» e lasciate lavorare il neurone con «Addestra un passo»: cosa cambia a ogni passo?',
-        ]}
-        after="Di solito le soluzioni giuste sono più d'una."
-        href="simulazione-neurone.html"
-        label="Simulazione: il neurone giocattolo"
-      />
-    ),
-    notes: "Lasciate provare liberamente. Quando le prime coppie hanno finito, chiedete a due di leggere i propri pesi: di solito sono diversi e funzionano tutti e due. È un buon momento per dire che anche le reti vere, addestrate due volte, finiscono con pesi diversi. Chi finisce presto può provare a far sbagliare apposta il neurone su un solo esempio."
-  },
 
-  /* --- blocco 3 --- */
+  /* argomento 3 */
   {
-    block: B3,
+    id: 't3',
+    block: T3,
     content: () => (
       <BlockOpen n={3} title="Dalle parole ai numeri">
         <Glow>
@@ -652,10 +691,10 @@ const slides = [
         <Dim>Due passaggi: il testo si taglia a pezzi, e ogni pezzo diventa una lista di numeri.</Dim>
       </BlockOpen>
     ),
-    notes: "Apertura del blocco. Collegate a un'esperienza comune: anche il registro elettronico salva gli studenti con un codice numerico, non con il nome. Qui succede qualcosa di simile, ma i numeri devono conservare anche il significato delle parole."
+    notes: "Apertura dell'argomento. Collegate a un'esperienza comune: anche il registro elettronico salva gli studenti con un codice numerico, non con il nome. Qui succede qualcosa di simile, ma i numeri devono conservare anche il significato delle parole."
   },
   {
-    block: B3,
+    block: T3,
     content: () => (
       <div style={{ padding: '22px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Pezzi di parola: i token</h2>
@@ -670,7 +709,7 @@ const slides = [
     notes: "Il taglio mostrato è inventato ma realistico: «convocato» e «giovedì» in due pezzi, le parole brevi intere. Lo spazio di solito viaggia attaccato alla parola che segue. Se qualcuno chiede quanti token fa una pagina: dipende dal modello e dalla lingua, come ordine di grandezza da qualche centinaio a circa mille. Molti modelli usano più token per l'italiano che per l'inglese, perché sono stati addestrati soprattutto su testi inglesi."
   },
   {
-    block: B3,
+    block: T3,
     content: () => (
       <div style={{ padding: '14px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Parole vicine, numeri vicini</h2>
@@ -681,28 +720,11 @@ const slides = [
     ),
     notes: "Indicate i tre gruppi: persone, luoghi della scuola, uscite. «Stampante» sta lontana da tutto. Nessuno ha messo le parole su questa mappa a mano: le posizioni le trova l'addestramento, perché parole come docente e insegnante compaiono negli stessi tipi di frase. Embedding vuol dire più o meno «incorporamento»: basta ricordare «la posizione della parola sulla mappa». Attenzione a una domanda frequente: «classe» della 3ª A e «classe energetica» partono dalla stessa posizione, poi il modello la aggiusta guardando le parole intorno."
   },
-  {
-    block: B3,
-    content: () => (
-      <ActivityCard
-        title="Token e parole vicine"
-        minutes="15"
-        steps={[
-          'Parte A: scrivete una frase della vostra giornata di lavoro e guardate come viene tagliata.',
-          'Quali parole si spezzano? Provate con una parola lunga, una sigla della scuola, un numero.',
-          'Parte B: sei domande. Cliccate la parola più vicina a quella evidenziata sulla mappa.',
-          'Sulla mappa c\'è una parola che avreste messo in un altro gruppo?',
-        ]}
-        href="simulazione-token.html"
-        label="Simulazione: token e parole vicine"
-      />
-    ),
-    notes: "La simulazione usa un taglio e una mappa semplificati, costruiti per la lezione: non sono quelli di Gemini. Ditelo prima che qualcuno confronti i risultati con altri strumenti. Se i partecipanti scrivono frasi vere, ricordate di non inserire nomi di studenti o colleghi."
-  },
 
-  /* --- blocco 4 --- */
+  /* argomento 4 */
   {
-    block: B4,
+    id: 't4',
+    block: T4,
     content: () => (
       <BlockOpen n={4} title="Come nasce un chatbot">
         <p style={{ color: colors.textDim, marginBottom: '18px' }}>Un assistente come Gemini passa per tre fasi di addestramento, una dopo l'altra.</p>
@@ -713,10 +735,10 @@ const slides = [
         ]} />
       </BlockOpen>
     ),
-    notes: "Apertura del blocco: lo schema anticipa le tre slide successive. Chiedete alla sala: «Secondo voi, qualcuno ha scritto a mano le risposte che Gemini vi dà?» No: ha visto esempi, e da quelli ha imparato a produrne di nuove. I dettagli di ogni fase cambiano da produttore a produttore e molti non sono pubblici; lo schema in tre fasi è quello descritto più spesso."
+    notes: "Apertura dell'argomento: lo schema anticipa le tre slide successive. Chiedete alla sala: «Secondo voi, qualcuno ha scritto a mano le risposte che Gemini vi dà?» No: ha visto esempi, e da quelli ha imparato a produrne di nuove. I dettagli di ogni fase cambiano da produttore a produttore e molti non sono pubblici; lo schema in tre fasi è quello descritto più spesso."
   },
   {
-    block: B4,
+    block: T4,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.info, marginBottom: '12px' }}>Fase 1: il pre-addestramento</h2>
@@ -731,7 +753,7 @@ const slides = [
     notes: "In inglese questa fase si chiama pre-training. I testi sono soprattutto pagine web, libri, articoli e codice; quali esattamente, dipende dal produttore e non sempre è dichiarato. Non dite che il modello «memorizza internet»: impara regolarità della lingua e molti fatti, ma non conserva una copia consultabile dei testi. Alla fine sa continuare un testo in modo plausibile, però non ha ancora imparato a rispondere come un assistente."
   },
   {
-    block: B4,
+    block: T4,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Fase 2: messa a punto con istruzioni</h2>
@@ -746,7 +768,7 @@ const slides = [
     notes: "In inglese si parla di instruction tuning, cioè addestramento sulle istruzioni. Gli esempi sono molti meno dei testi della fase 1, ma scritti con cura. Fate notare che qui entrano anche le regole di comportamento: per esempio rifiutare certe richieste. L'esempio sulla slide è inventato."
   },
   {
-    block: B4,
+    block: T4,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.success, marginBottom: '12px' }}>Fase 3: il feedback umano</h2>
@@ -760,28 +782,11 @@ const slides = [
     ),
     notes: "Nella letteratura si chiama RLHF, sigla inglese per «apprendimento per rinforzo dal feedback umano». Semplificando: le scelte delle persone addestrano un secondo modello che dà un voto alle risposte, e il chatbot viene regolato per prendere voti alti. Conseguenza interessante da discutere: se chi vota premia le risposte gentili e accomodanti, il modello tende a dare ragione all'utente anche quando non dovrebbe. Domanda alla sala: «Voi quale avreste scelto, e perché?»"
   },
-  {
-    block: B4,
-    content: () => (
-      <ActivityCard
-        title="Votate le risposte"
-        minutes="15"
-        steps={[
-          'Per ogni coppia del foglio scegliete A o B, da soli e senza parlare.',
-          'Accanto al voto scrivete il motivo in una riga.',
-          'Confrontate con il vicino: avete votato allo stesso modo? Con gli stessi motivi?',
-        ]}
-        after="Pensate a cosa imparerebbe un modello dai vostri voti."
-        href="../materiali/incontro-0/coppie-di-risposte.html"
-        label="Coppie di risposte da votare"
-      />
-    ),
-    notes: "Raccogliete i voti di ogni coppia per alzata di mano. Dove la sala si divide, chiedete i motivi: brevità, cortesia, completezza, correttezza. È la parte più utile dell'attività, perché mostra che anche le preferenze umane sono discordanti. Chiudete con la domanda del foglio: un modello addestrato sui voti di questa sala, che stile avrebbe?"
-  },
 
-  /* --- blocco 5 --- */
+  /* argomento 5 */
   {
-    block: B5,
+    id: 't5',
+    block: T5,
     content: () => (
       <BlockOpen n={5} title="Probabilità e temperatura">
         <Glow>
@@ -790,10 +795,10 @@ const slides = [
         <Dim>Da qui viene una cosa che avrete notato: la stessa domanda, fatta due volte, dà risposte diverse.</Dim>
       </BlockOpen>
     ),
-    notes: "Apertura del blocco. Se il gruppo non ha mai provato, fate scrivere a tutti la stessa richiesta in Gemini, per esempio un avviso di due righe per un'assemblea di classe, e confrontate due o tre risposte. Precisazione: il modello lavora in token, cioè pezzi di parola; qui diciamo «parola» per semplicità."
+    notes: "Apertura dell'argomento. Se il gruppo non ci ha mai fatto caso, fate la prova voi al proiettore: la stessa richiesta in Gemini due volte, per esempio un avviso di due righe per un'assemblea di classe, e confrontate le due risposte. Precisazione: il modello lavora in token, cioè pezzi di parola; qui diciamo «parola» per semplicità."
   },
   {
-    block: B5,
+    block: T5,
     content: () => (
       <div style={{ padding: '18px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Le candidate e le loro probabilità</h2>
@@ -807,7 +812,7 @@ const slides = [
     notes: "Leggete la frase e chiedete alla sala di completarla a voce: sentirete giovedì, lunedì, il 15... È quello che fa il modello, con numeri al posto delle intuizioni. Sottolineate che la parola scelta non è per forza la prima della lista: il modello pesca, e la parola con il 27% esce spesso. Le percentuali sono inventate per l'esempio."
   },
   {
-    block: B5,
+    block: T5,
     content: () => (
       <div style={{ padding: '22px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>La temperatura: quanto si rischia</h2>
@@ -821,28 +826,11 @@ const slides = [
     ),
     notes: "Il nome viene dalla fisica, ma qui è solo un numero che rende la scelta più prudente o più avventurosa. Anche a temperatura bassa le risposte possono cambiare un po' da una volta all'altra, per ragioni tecniche: non promettete risposte identiche. Nell'app Gemini che usiamo nel corso, per quanto ne sappiamo, non c'è un comando per la temperatura (da controllare a schermo prima della lezione); il comando esiste negli strumenti per sviluppatori. Domanda alla sala: «Per una comunicazione ufficiale alle famiglie, quale temperatura vorreste?»"
   },
-  {
-    block: B5,
-    content: () => (
-      <ActivityCard
-        title="La prossima parola"
-        minutes="15"
-        steps={[
-          'Scegliete una partenza e premete «Estrai la prossima parola» fino alla fine: guardate le probabilità di ogni candidata.',
-          'Mettete la temperatura al minimo e premete «Rigenera» tre volte.',
-          'Alzate la temperatura e rigenerate ancora: cosa cambia nelle frasi?',
-        ]}
-        after="Annotate la frase più strana che vi è uscita."
-        href="simulazione-prossima-parola.html"
-        label="Simulazione: la prossima parola"
-      />
-    ),
-    notes: "Alla fine raccogliete le frasi più strane: di solito vengono dalle temperature alte. Collegate al lavoro: una risposta inaspettata non è per forza sbagliata, ma ogni scelta casuale è un punto in cui il testo può prendere una strada diversa. Ricordate che la simulazione usa poche parole e percentuali inventate."
-  },
 
-  /* --- blocco 6 --- */
+  /* argomento 6 */
   {
-    block: B6,
+    id: 't6',
+    block: T6,
     content: () => (
       <BlockOpen n={6} title="Catena di pensiero">
         <Glow>
@@ -851,10 +839,10 @@ const slides = [
         <Dim>In inglese si dice <em>chain of thought</em>, catena di pensiero.</Dim>
       </BlockOpen>
     ),
-    notes: "Apertura del blocco. Paragone utile: un collega che fa un conto a mente sbaglia più spesso di uno che lo scrive su un foglio. Il modello non ha un foglio a parte: il suo foglio è il testo che sta scrivendo. Per questo i passaggi scritti contano."
+    notes: "Apertura dell'argomento. Paragone utile: un collega che fa un conto a mente sbaglia più spesso di uno che lo scrive su un foglio. Il modello non ha un foglio a parte: il suo foglio è il testo che sta scrivendo. Per questo i passaggi scritti contano."
   },
   {
-    block: B6,
+    block: T6,
     content: () => (
       <div style={{ padding: '16px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Lo stesso problema, due modi</h2>
@@ -870,7 +858,7 @@ const slides = [
     notes: "Problema inventato, numeri controllati: 51 studenti, 4 accompagnatori, 55 persone su 54 posti. Fatelo risolvere prima alla sala in 30 secondi: qualcuno cadrà nella risposta di getto, ed è il punto. La risposta di sinistra è un esempio di errore tipico, non la risposta registrata di un modello preciso. Senza i passaggi scritti il modello deve arrivare a «sì» o «no» in poche parole; con i passaggi, ogni numero calcolato è lì, sulla pagina, per il passo dopo."
   },
   {
-    block: B6,
+    block: T6,
     content: () => (
       <div style={{ padding: '20px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '6px' }}>I modelli che ragionano</h2>
@@ -884,7 +872,7 @@ const slides = [
     notes: "Aprite Gemini davanti a tutti e mostrate dove si sceglie il modello: leggete i nomi che compaiono oggi, senza fissarli sulle slide (nomi e posizione del selettore da controllare a schermo prima della lezione). Il ragionamento spesso si può aprire e leggere. Per chi chiede: quello che l'app mostra può essere un riassunto, e non è garantito che descriva parola per parola come il modello è arrivato alla risposta."
   },
   {
-    block: B6,
+    block: T6,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Con il modello veloce si può chiedere</h2>
@@ -898,30 +886,13 @@ const slides = [
     ),
     notes: "Questa richiesta funziona con qualunque chatbot. Il guadagno maggiore si ha nei problemi con più passaggi: conti, scadenze, regole da combinare. Per una mail di routine non serve. Ricordate alla sala che i passaggi scritti sono anche un aiuto per chi controlla: un errore si trova più facilmente a metà strada che nel risultato finale."
   },
-  {
-    block: B6,
-    content: () => (
-      <ActivityCard
-        title="Veloce o che ragiona?"
-        minutes="20"
-        steps={[
-          'Scegliete un problema del foglio e datelo a Gemini con il modello veloce. Annotate la risposta.',
-          'Aprite una nuova chat, scegliete il modello che ragiona e incollate lo stesso problema.',
-          'Aprite il ragionamento, se l\'app lo mostra: trovate il passaggio decisivo?',
-          'Tornate al modello veloce e chiedetegli di scrivere i passaggi. Cambia qualcosa?',
-        ]}
-        href="../materiali/incontro-0/problemi-di-logica.html"
-        label="Problemi da dare a Gemini"
-      />
-    ),
-    notes: "Non promettete che il modello veloce sbaglierà: con i modelli di oggi a volte risponde giusto anche di getto. Se succede, fatelo notare e passate a un problema più difficile del foglio. Raccogliete alla fine: in quanti casi le due risposte erano diverse, e quale era giusta? Controllate voi la soluzione prima di dichiararla."
-  },
 
-  /* --- blocco 7 --- */
+  /* argomento 7 */
   {
-    block: B7,
+    id: 't7',
+    block: T7,
     content: () => (
-      <BlockOpen n={7} title="Limiti e parole chiave">
+      <BlockOpen n={7} title="I limiti">
         <p style={{ color: colors.textDim, marginBottom: '16px' }}>Quattro limiti che vale la pena conoscere prima di affidare un lavoro a un chatbot.</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
           {[
@@ -939,10 +910,10 @@ const slides = [
         </div>
       </BlockOpen>
     ),
-    notes: "Apertura del blocco: una slide per ciascun limite, poi glossario e quiz. Chiedete prima alla sala quali problemi hanno già incontrato usando un chatbot e appendeteli ai quattro riquadri. Di solito escono date sbagliate, riferimenti di legge inventati, risposte che «dimenticano» un documento allegato."
+    notes: "Apertura dell'argomento: una slide per ciascun limite. Chiedete prima alla sala quali problemi hanno già incontrato usando un chatbot e appendeteli ai quattro riquadri. Di solito escono date sbagliate, riferimenti di legge inventati, risposte che «dimenticano» un documento allegato."
   },
   {
-    block: B7,
+    block: T7,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '12px' }}>Allucinazioni: perché inventa</h2>
@@ -957,7 +928,7 @@ const slides = [
     notes: "In inglese si chiamano hallucinations. Rimedi pratici: allegare i documenti e chiedere di rispondere solo in base a quelli, chiedere da dove viene ogni dato, controllare sempre numeri, date e riferimenti normativi. Se l'app cerca sul web legge pagine vere, ma la risposta la scrive con lo stesso meccanismo: va controllata anche lì. L'esempio della circolare è inventato."
   },
   {
-    block: B7,
+    block: T7,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '12px' }}>La data di fine addestramento</h2>
@@ -970,7 +941,7 @@ const slides = [
     notes: "In inglese si dice knowledge cutoff. La data cambia da modello a modello e non sempre il modello la conosce con precisione: non chiedetegliela come prova. Il rischio pratico è che risponda con una norma superata senza avvisare. Per le regole interne della scuola il problema non si pone nemmeno: non le ha mai lette, quindi vanno sempre allegate."
   },
   {
-    block: B7,
+    block: T7,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '12px' }}>La finestra di contesto: la scrivania</h2>
@@ -985,7 +956,7 @@ const slides = [
     notes: "In inglese context window. Le misure oggi sono grandi, spesso centinaia di pagine, ma cambiano da modello a modello: non date numeri. Consigli pratici: per un lavoro nuovo aprite una chat nuova, e se una conversazione è diventata lunga ripetete le informazioni importanti. Alcune app hanno funzioni di memoria tra una chat e l'altra: sono un meccanismo a parte e si gestiscono nelle impostazioni."
   },
   {
-    block: B7,
+    block: T7,
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.danger, marginBottom: '12px' }}>Non impara dalle vostre chat</h2>
@@ -997,10 +968,159 @@ const slides = [
     ),
     notes: "Molti credono che il chatbot «impari da noi» mentre parliamo. Non è così: domani, in una chat nuova, l'errore può ripresentarsi uguale. Tenete separate le due cose. La prima è tecnica: i pesi non cambiano durante la chat. La seconda riguarda i contratti: un produttore può usare le conversazioni per addestrare versioni successive, e questo dipende dall'account e dalle impostazioni, non dalla singola chat."
   },
+
+  /* --- chiusura della Parte 1 --- */
+
   {
-    block: B7,
-    content: () => (
+    id: 'riepilogo',
+    block: P1 + ' · Riepilogo',
+    content: ({ goTo }) => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Riepilogo della Parte 1</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Un'idea per argomento. Un clic porta alla spiegazione.</p>
+        <RecapGrid goTo={goTo} />
+      </div>
+    ),
+    notes: "Chiusura della parte teorica. Scorrete i sette punti a voce, uno per argomento, e chiedete alla sala quale vorrebbe riascoltare: cliccando un riquadro si torna alla spiegazione. Da qui in avanti si lavora al PC: la Parte 2 ha un'attività per ogni argomento. Se la Parte 2 si fa in un'altra occasione, questa slide serve da richiamo."
+  },
+
+  /* --- Parte 2: attività al PC, nello stesso ordine degli argomenti --- */
+
+  {
+    id: 'a1',
+    block: P2 + ' · Richieste in segreteria',
+    content: ({ goTo }) => (
       <ActivityCard
+        goTo={goTo}
+        topic="t1"
+        title="Richieste in segreteria"
+        minutes="25"
+        steps={[
+          'Leggete i sedici messaggi del foglio. Sono tutti inventati.',
+          'Scrivete 3 o 4 regole del tipo «se il messaggio parla di… allora il tipo è…».',
+          'Applicate le regole a tutti i messaggi, compilate la tabella e segnate con un asterisco quelli in cui le regole non bastano.',
+          'Ora leggete i cinque esempi già etichettati e classificate di nuovo i messaggi per somiglianza. Dove cambia il risultato?',
+        ]}
+        href="../materiali/incontro-0/richieste-segreteria.html"
+        label="Richieste in segreteria"
+      />
+    ),
+    notes: "Comincia la parte pratica: l'esempio dello smistamento, visto prima dal docente, ora lo fanno i partecipanti. Lasciate lavorare le coppie senza aiutarle sulle regole: è utile che qualcuna si inceppi. Alla fine della prima fase chiedete a due persone quanti messaggi hanno messo in difficoltà le loro regole e quale le ha messe più in difficoltà. Nella discussione finale fate notare che il secondo metodo, a occhio dagli esempi, è più vicino a come impara un'intelligenza artificiale: nessuno vi ha dato una regola, avete riconosciuto somiglianze."
+  },
+  {
+    id: 'a2',
+    block: P2 + ' · Il neurone giocattolo',
+    content: ({ goTo }) => (
+      <ActivityCard
+        goTo={goTo}
+        topic="t2"
+        title="Il neurone giocattolo"
+        minutes="15"
+        steps={[
+          'Aprite la simulazione: un neurone decide se un\'uscita didattica è approvabile.',
+          'Girate le manopole dei pesi e la soglia finché il neurone non sbaglia più nessun esempio.',
+          'Confrontate con il vicino: avete trovato gli stessi pesi?',
+          'Nella vostra soluzione, quale ingresso conta di più?',
+          'Premete «Ricomincia» e lasciate lavorare il neurone con «Addestra un passo»: cosa cambia a ogni passo?',
+        ]}
+        after="Di solito le soluzioni giuste sono più d'una."
+        href="simulazione-neurone.html"
+        label="Simulazione: il neurone giocattolo"
+      />
+    ),
+    notes: "Nella Parte 1 il docente ha fatto vedere la simulazione al proiettore: ora ognuno la prova da solo. Lasciate provare liberamente. Quando le prime coppie hanno finito, chiedete a due di leggere i propri pesi: di solito sono diversi e funzionano tutti e due. È un buon momento per dire che anche le reti vere, addestrate due volte, finiscono con pesi diversi. Chi finisce presto può provare a far sbagliare apposta il neurone su un solo esempio."
+  },
+  {
+    id: 'a3',
+    block: P2 + ' · Token e parole vicine',
+    content: ({ goTo }) => (
+      <ActivityCard
+        goTo={goTo}
+        topic="t3"
+        title="Token e parole vicine"
+        minutes="15"
+        steps={[
+          'Parte A: scrivete una frase della vostra giornata di lavoro e guardate come viene tagliata.',
+          'Quali parole si spezzano? Provate con una parola lunga, una sigla della scuola, un numero.',
+          'Parte B: sei domande. Cliccate la parola più vicina a quella evidenziata sulla mappa.',
+          'Sulla mappa c\'è una parola che avreste messo in un altro gruppo?',
+        ]}
+        href="simulazione-token.html"
+        label="Simulazione: token e parole vicine"
+      />
+    ),
+    notes: "La simulazione usa un taglio e una mappa semplificati, costruiti per la lezione: non sono quelli di Gemini. Ditelo prima che qualcuno confronti i risultati con altri strumenti. Se i partecipanti scrivono frasi vere, ricordate di non inserire nomi di studenti o colleghi."
+  },
+  {
+    id: 'a4',
+    block: P2 + ' · Votate le risposte',
+    content: ({ goTo }) => (
+      <ActivityCard
+        goTo={goTo}
+        topic="t4"
+        title="Votate le risposte"
+        minutes="15"
+        steps={[
+          'Per ogni coppia del foglio scegliete A o B, da soli e senza parlare.',
+          'Accanto al voto scrivete il motivo in una riga.',
+          'Confrontate con il vicino: avete votato allo stesso modo? Con gli stessi motivi?',
+        ]}
+        after="Pensate a cosa imparerebbe un modello dai vostri voti."
+        href="../materiali/incontro-0/coppie-di-risposte.html"
+        label="Coppie di risposte da votare"
+      />
+    ),
+    notes: "Raccogliete i voti di ogni coppia per alzata di mano. Dove la sala si divide, chiedete i motivi: brevità, cortesia, completezza, correttezza. È la parte più utile dell'attività, perché mostra che anche le preferenze umane sono discordanti. Chiudete con la domanda del foglio: un modello addestrato sui voti di questa sala, che stile avrebbe?"
+  },
+  {
+    id: 'a5',
+    block: P2 + ' · La prossima parola',
+    content: ({ goTo }) => (
+      <ActivityCard
+        goTo={goTo}
+        topic="t5"
+        title="La prossima parola"
+        minutes="15"
+        steps={[
+          'Scegliete una partenza e premete «Estrai la prossima parola» fino alla fine: guardate le probabilità di ogni candidata.',
+          'Mettete la temperatura al minimo e premete «Rigenera» tre volte.',
+          'Alzate la temperatura e rigenerate ancora: cosa cambia nelle frasi?',
+        ]}
+        after="Annotate la frase più strana che vi è uscita."
+        href="simulazione-prossima-parola.html"
+        label="Simulazione: la prossima parola"
+      />
+    ),
+    notes: "Alla fine raccogliete le frasi più strane: di solito vengono dalle temperature alte. Collegate al lavoro: una risposta inaspettata non è per forza sbagliata, ma ogni scelta casuale è un punto in cui il testo può prendere una strada diversa. Ricordate che la simulazione usa poche parole e percentuali inventate."
+  },
+  {
+    id: 'a6',
+    block: P2 + ' · Veloce o che ragiona?',
+    content: ({ goTo }) => (
+      <ActivityCard
+        goTo={goTo}
+        topic="t6"
+        title="Veloce o che ragiona?"
+        minutes="20"
+        steps={[
+          'Scegliete un problema del foglio e datelo a Gemini con il modello veloce. Annotate la risposta.',
+          'Aprite una nuova chat, scegliete il modello che ragiona e incollate lo stesso problema.',
+          'Aprite il ragionamento, se l\'app lo mostra: trovate il passaggio decisivo?',
+          'Tornate al modello veloce e chiedetegli di scrivere i passaggi. Cambia qualcosa?',
+        ]}
+        href="../materiali/incontro-0/problemi-di-logica.html"
+        label="Problemi da dare a Gemini"
+      />
+    ),
+    notes: "Non promettete che il modello veloce sbaglierà: con i modelli di oggi a volte risponde giusto anche di getto. Se succede, fatelo notare e passate a un problema più difficile del foglio. Raccogliete alla fine: in quanti casi le due risposte erano diverse, e quale era giusta? Controllate voi la soluzione prima di dichiararla."
+  },
+  {
+    id: 'a7',
+    block: P2 + ' · Glossario e quiz',
+    content: ({ goTo }) => (
+      <ActivityCard
+        goTo={goTo}
+        topic="t7"
         title="Il glossario"
         minutes="20"
         steps={[
@@ -1013,24 +1133,25 @@ const slides = [
         label="Glossario da completare"
       />
     ),
-    notes: "Se avete fatto solo alcuni blocchi, dite di abbinare le parole che conoscono e di lasciare le altre. Girate tra i banchi e cercate un abbinamento sbagliato ma plausibile: è un'ottima occasione per discuterlo con tutti, senza dire di chi è."
+    notes: "Se avete fatto solo alcuni argomenti della Parte 1, dite di abbinare le parole che conoscono e di lasciare le altre. Girate tra i banchi e cercate un abbinamento sbagliato ma plausibile: è un'ottima occasione per discuterlo con tutti, senza dire di chi è."
   },
   {
-    block: B7,
-    content: () => (
+    block: P2 + ' · Quiz',
+    content: ({ goTo }) => (
       <div style={{ padding: '18px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Quiz</h2>
         <Quiz />
+        <Riprende goTo={goTo} topic="riepilogo" label="Riepilogo della Parte 1" />
       </div>
     ),
-    notes: "Fate votare la sala per alzata di mano prima di cliccare la risposta. Dopo ogni domanda leggete la spiegazione. Cinque domande, una per argomento: allucinazioni, memoria, temperatura, catena di pensiero, token. Se un blocco non è stato fatto, saltate la domanda o usatela come anticipazione."
+    notes: "Fate votare la sala per alzata di mano prima di cliccare la risposta. Dopo ogni domanda leggete la spiegazione. Cinque domande su cinque dei sette argomenti: allucinazioni, memoria, temperatura, catena di pensiero, token. Se un argomento non è stato fatto, saltate la domanda o usatela come anticipazione. Il link «Riprende» porta al riepilogo della Parte 1."
   },
 
   /* --- chiusura --- */
   {
     block: 'Chiusura',
     content: () => (
-      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(55vh / var(--zoom, 1))' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>➡️</div>
         <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Dalle basi agli strumenti</h2>
         <p style={{ color: colors.textDim, maxWidth: '760px' }}>
@@ -1079,6 +1200,14 @@ const IconCollapse = () => (
 function App() {
   const [current, setCurrent] = useState(0);
   const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const total = slides.length;
   const slide = slides[current];
@@ -1151,8 +1280,8 @@ function App() {
         </div>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
-        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
           {slide.content({ goTo: setCurrent })}
         </div>
       </div>

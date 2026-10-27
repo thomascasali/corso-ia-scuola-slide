@@ -50,12 +50,12 @@
     opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
   @media (max-width: 900px) {
     .role-grid { grid-template-columns: 1fr !important; }
   }
   @media (max-width: 768px) {
-    .slide-content { padding: 16px !important; }
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
     .top-bar { padding: 0 10px !important; }
     .top-bar span { font-size: var(--fs-xs) !important; }
     .top-bar > div:first-child { gap: 8px !important; }
@@ -362,7 +362,7 @@ const slides = [
   {
     block: 'Apertura',
     content: () => (
-      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '65vh' }}>
+      <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '24px' }}>🚌</div>
         <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
           AI Tools per l'Organizzazione scolastica
@@ -906,7 +906,7 @@ const slides = [
   {
     block: 'Chiusura',
     content: () => (
-      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '55vh' }}>
+      <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(55vh / var(--zoom, 1))' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🏁</div>
         <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Grazie</h2>
         <p style={{ color: colors.textDim, maxWidth: '700px' }}>
@@ -959,6 +959,14 @@ const IconCollapse = () => (
 function App() {
   const [current, setCurrent] = useState(0);
   const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const total = slides.length;
   const slide = slides[current];
@@ -1031,8 +1039,8 @@ function App() {
         </div>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: 'calc(100vh - 140px)' }}>
-        <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
           {slide.content()}
         </div>
       </div>

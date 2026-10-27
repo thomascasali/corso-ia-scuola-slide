@@ -53,7 +53,7 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState } = React;
+const { useState, useEffect } = React;
 
 const colors = {
   bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
@@ -306,9 +306,17 @@ function ParteB() {
 }
 
 function App() {
+  // Scala per schermi grandi (PC, proiettore): sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
   return (
     <div style={{ minHeight: '100vh', padding: '24px 20px 60px' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', zoom }}>
         <a href="slide.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Torna alle slide</a>
 
         <h1 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', marginTop: '18px', marginBottom: '14px' }}>
