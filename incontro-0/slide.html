@@ -328,6 +328,49 @@ function RecapGrid({ goTo }) {
   );
 }
 
+/* blocco 2: lo schema classico del percettrone */
+function PerceptronDiagram() {
+  const font = 'Public Sans, sans-serif', mono = 'IBM Plex Mono, monospace';
+  const ins = [{ y: 70, l: 'x₁', w: 'w₁' }, { y: 175, l: 'x₂', w: 'w₂' }, { y: 280, l: 'x₃', w: 'w₃' }];
+  const S = { x: 430, y: 175 };
+  return (
+    <svg viewBox="0 0 900 350" style={{ width: '100%', maxWidth: '860px', display: 'block', margin: '0 auto' }} role="img" aria-label="Schema del percettrone: tre ingressi, ciascuno moltiplicato per un peso, entrano in un nodo che fa la somma; la somma passa da una soglia e produce un'uscita sì o no">
+      <defs>
+        <marker id="pfr" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill={colors.textMuted} />
+        </marker>
+      </defs>
+      <text x="80" y="22" textAnchor="middle" fill={colors.textMuted} fontSize="20" fontFamily={font}>ingressi</text>
+      {ins.map((d, i) => {
+        const mx = (80 + S.x) / 2, my = (d.y + S.y) / 2;
+        return (
+          <g key={i}>
+            <line x1="112" y1={d.y} x2={S.x - 62} y2={S.y + (d.y - S.y) * 0.18} stroke={colors.accent} strokeWidth="3" markerEnd="url(#pfr)" />
+            <circle cx="80" cy={d.y} r="32" fill={colors.info + '30'} stroke={colors.info} strokeWidth="2.5" />
+            <text x="80" y={d.y + 9} textAnchor="middle" fill={colors.text} fontSize="26" fontFamily={mono}>{d.l}</text>
+            <rect x={mx - 30} y={my - 34} width="60" height="30" rx="6" fill={colors.bg} />
+            <text x={mx} y={my - 11} textAnchor="middle" fill={colors.accent} fontSize="22" fontWeight="700" fontFamily={mono}>{d.w}</text>
+          </g>
+        );
+      })}
+      <text x="250" y="342" textAnchor="middle" fill={colors.accent} fontSize="20" fontFamily={font}>pesi (le manopole)</text>
+      <circle cx={S.x} cy={S.y} r="60" fill={colors.bgCard} stroke={colors.info} strokeWidth="3" />
+      <text x={S.x} y={S.y + 16} textAnchor="middle" fill={colors.text} fontSize="50" fontFamily={font}>Σ</text>
+      <text x={S.x} y={S.y + 92} textAnchor="middle" fill={colors.textMuted} fontSize="20" fontFamily={font}>somma pesata</text>
+      <line x1={S.x + 62} y1={S.y} x2="568" y2={S.y} stroke={colors.textMuted} strokeWidth="3" markerEnd="url(#pfr)" />
+      <rect x="572" y="115" width="130" height="120" rx="10" fill={colors.bgCard} stroke={colors.warn} strokeWidth="2.5" />
+      <line x1="590" y1="205" x2="637" y2="205" stroke={colors.warn} strokeWidth="4" />
+      <line x1="637" y1="205" x2="637" y2="145" stroke={colors.warn} strokeWidth="4" />
+      <line x1="637" y1="145" x2="685" y2="145" stroke={colors.warn} strokeWidth="4" />
+      <text x="637" y="267" textAnchor="middle" fill={colors.textMuted} fontSize="20" fontFamily={font}>soglia</text>
+      <line x1="704" y1={S.y} x2="768" y2={S.y} stroke={colors.textMuted} strokeWidth="3" markerEnd="url(#pfr)" />
+      <circle cx="818" cy={S.y} r="46" fill={colors.success + '30'} stroke={colors.success} strokeWidth="2.5" />
+      <text x="818" y={S.y + 8} textAnchor="middle" fill={colors.text} fontSize="24" fontFamily={mono}>1 / 0</text>
+      <text x="818" y={S.y + 78} textAnchor="middle" fill={colors.textMuted} fontSize="20" fontFamily={font}>uscita: sì o no</text>
+    </svg>
+  );
+}
+
 /* blocco 2: un neurone con numeri di esempio */
 const NEURON_INPUTS = [
   { label: 'Autorizzazioni delle famiglie complete', v: 1, w: 3 },
@@ -346,7 +389,7 @@ function NeuronDiagram() {
         {NEURON_INPUTS.map((x, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '8px 12px' }}>
             <span style={{ flex: '1 1 auto', fontSize: 'var(--fs-xs)', color: colors.textDim }}>{x.label}</span>
-            <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: x.v ? colors.success : colors.danger, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{x.v ? 'sì = 1' : 'no = 0'}</span>
+            <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: x.v ? colors.success : colors.danger, fontWeight: 700, fontSize: 'var(--fs-sm)', whiteSpace: 'nowrap' }}>{x.v ? 'sì = 1' : 'no = 0'}</span>
             <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, fontWeight: 700, fontSize: 'var(--fs-sm)', whiteSpace: 'nowrap' }}>× {x.w}</span>
           </div>
         ))}
@@ -631,6 +674,18 @@ const slides = [
       </BlockOpen>
     ),
     notes: "Apertura dell'argomento. Insistete sull'analogia: i primi ricercatori si sono ispirati al cervello, ma oggi i neuroni artificiali sono formule, e quello che sappiamo dei neuroni veri è molto più complicato. Se qualcuno chiede «allora pensa?», rispondete che in questa lezione vediamo come è costruito: le domande filosofiche restano aperte anche tra gli esperti."
+  },
+  {
+    block: T2,
+    content: () => (
+      <div style={{ padding: '16px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Il percettrone</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>È lo schema del neurone artificiale più semplice, proposto da Frank Rosenblatt nel 1958. Ogni ingresso viene moltiplicato per il suo <T>peso</T>, i risultati si sommano e la <T>soglia</T> decide: se la somma la raggiunge o la supera l'uscita è 1 (sì), altrimenti è 0 (no).</p>
+        <PerceptronDiagram />
+        <Dim style={{ textAlign: 'center' }}>Nella slide seguente gli stessi passaggi, con i numeri di un'uscita didattica.</Dim>
+      </div>
+    ),
+    notes: "Indicate lo schema da sinistra a destra: gli ingressi sono le informazioni (sì o no), le frecce portano ciascuna un peso, il cerchio con la lettera greca sigma fa la somma, il gradino è la soglia: finché la somma resta sotto, l'uscita è 0, appena la raggiunge salta a 1. Il nome «percettrone» viene dalla ricerca degli anni Cinquanta: era pensato per riconoscere forme semplici. Da solo sa fare poco, ma messo in tanti strati diventa la rete neurale che vediamo più avanti. La x e la w sono solo le etichette che si trovano nei libri: non serve ricordarle."
   },
   {
     block: T2,
