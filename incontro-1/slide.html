@@ -1386,7 +1386,31 @@ const slides = [
         </div>
       </div>
     ),
-    notes: 'Seguite il copione della demo (15-20 minuti indicativi). Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non pratiche reali. I cinque fogli sulla slide sono i file che l\'agente apre: i partecipanti possono consultarli mentre guardate, per vedere da dove nasce ogni mossa.'
+    notes: 'Seguite il copione della demo (15-20 minuti indicativi). Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non pratiche reali. I cinque fogli sulla slide sono i file che l\'agente apre: i partecipanti possono consultarli mentre guardate, per vedere da dove nasce ogni mossa. Le richieste da scrivere all\'agente sono nella slide seguente.'
+  },
+  {
+    block: "Blocco 7 — Demo dal vivo",
+    content: () => (
+      <div style={{ padding: '18px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Ora dal vero: le richieste</h2>
+        <p style={{ color: colors.textDim, marginBottom: '8px' }}>Le frasi che il docente scrive all'agente, in quest'ordine. Dopo ognuna guardate le righe sullo schermo: sono le sue azioni.</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {[
+            { t: 'Guardarsi intorno', p: "Cosa c'è in questa cartella? Spiegamelo in poche righe, senza modificare niente.", c: colors.info },
+            { t: 'Il compito', p: "Prepara l'elenco delle uscite di novembre con i docenti accompagnatori mancanti, partendo dal file delle pratiche.", c: colors.warn },
+            { t: 'Il controllo', p: "Riapri il regolamento e ricontrolla il riepilogo punto per punto: l'articolo citato dice davvero quello? Dimmi anche se hai dato per scontato qualcosa che nei file non c'è. Se trovi errori, correggi il riepilogo.", c: colors.success },
+            { t: 'Decide una persona', p: "Ecco le mie decisioni: [quelle prese insieme in aula]. Aggiorna il riepilogo con queste decisioni e prepara in un file a parte una bozza di messaggio per i docenti coinvolti. Non inviare niente.", c: colors.danger },
+            { t: 'Se resta tempo', p: "Guarda anche le pratiche degli altri mesi, senza scrivere file: c'è qualcosa che non va secondo il regolamento?", c: colors.purple },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `4px solid ${x.c}`, borderRadius: '0 8px 8px 0', padding: '6px 12px' }}>
+              <div style={{ color: x.c, fontWeight: 700, fontSize: 'var(--fs-xs)', marginBottom: '2px' }}>{i + 1}. {x.t}</div>
+              <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.text, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{x.p}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    notes: 'Le stesse richieste del copione, in chiaro per la sala: chi guarda sa cosa avete chiesto e può confrontare la frase con quello che fa l\'agente. La quarta ha uno spazio vuoto: le decisioni le prende la sala, pratica per pratica, prima che le scriviate. Il testo già pronto con le decisioni di esempio è nel copione. La quinta è facoltativa.'
   },
   {
     block: "Blocco 7 — Demo dal vivo",
