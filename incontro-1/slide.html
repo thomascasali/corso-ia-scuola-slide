@@ -1082,15 +1082,21 @@ const slides = [
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il tuo primo Gem</h2>
         <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>50 minuti: circa 20 per creare il Gem, 30 per interrogarlo e controllarlo.</p>
         <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
-          <li>Create un nuovo Gem con l'account Google della scuola.</li>
-          <li>Scrivete le istruzioni di base (chi è, a cosa serve).</li>
-          <li>Caricate i documenti di prova (regolamento viaggi, orario di prova).</li>
-          <li>Fate una domanda preparata e controllate la risposta.</li>
+          <li>Create un nuovo Gem con l'account della scuola e chiamatelo <strong style={{ color: colors.text }}>Assistente viaggi di prova</strong>.</li>
+          <li>Nelle istruzioni incollate il testo del foglio <strong style={{ color: colors.text }}>Istruzioni da incollare</strong>.</li>
+          <li>Caricate i due documenti: <strong style={{ color: colors.text }}>regolamento viaggi</strong> e <strong style={{ color: colors.text }}>orario di prova</strong>.</li>
+          <li>Fate le domande del foglio <strong style={{ color: colors.text }}>Domande da fare al Gem o al notebook</strong>, una alla volta, e per ognuna segnate: giusta o sbagliata, con o senza il punto del documento, con o senza aggiunte.</li>
         </ol>
-        <ActivityBadge href="../materiali/incontro-1/istruzioni-da-incollare.html" label="Istruzioni da incollare" />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px' }}>Chi non riesce a creare il Gem fa lo stesso con un notebook di Gemini Notebook.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/incontro-1/istruzioni-da-incollare.html" label="Istruzioni da incollare" />
+          <ActivityBadge href="../materiali/incontro-1/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
+          <ActivityBadge href="../materiali/incontro-1/orario-di-prova.html" label="Orario di prova" />
+          <ActivityBadge href="../materiali/incontro-1/domande-preparate.html" label="Domande da fare al Gem o al notebook" />
+        </div>
       </div>
     ),
-    notes: 'Il testo esatto delle istruzioni da far incollare è nel foglio "Istruzioni da incollare" dei materiali. Girate tra i banchi: la difficoltà più comune è trovare dove si caricano i documenti nell\'interfaccia del momento. Non serve che il Gem sia perfetto: serve che ognuno ne abbia creato uno.'
+    notes: 'Il testo esatto delle istruzioni da far incollare è nel foglio "Istruzioni da incollare" dei materiali; le domande sono nel foglio "Domande da fare al Gem o al notebook". Le domande 7, 8 e 9 non hanno risposta nei documenti: il Gem deve dire che non c\'è. Le 10, 11 e 12 combinano due regole. Girate tra i banchi: la difficoltà più comune è trovare dove si caricano i documenti nell\'interfaccia del momento. Non serve che il Gem sia perfetto: serve che ognuno ne abbia creato uno.'
   },
   {
     block: "Blocco 4 — I progetti nelle chat",
