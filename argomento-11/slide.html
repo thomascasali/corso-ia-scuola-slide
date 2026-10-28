@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argomento 11 · Dentro un agente: OmniRoute e OpenCode · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  @media (max-width: 900px) {
+    .criteria-grid { grid-template-columns: 1fr !important; }
+    .compare-grid { grid-template-columns: 1fr !important; }
+    .concept-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+  @media (max-width: 700px) { .flow-arrow { transform: rotate(90deg); } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti di supporto (stesso impianto dell'argomento 5) ---------- */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div className="flow-arrow" style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div className="compare-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- schemi nuovi di questo argomento ---------- */
+
+function Code({ children, small }) {
+  return (
+    <pre style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '10px 16px', fontFamily: "'IBM Plex Mono', monospace", fontSize: small ? 'var(--fs-xs)' : 'var(--fs-sm)', color: colors.textDim, lineHeight: 1.45, overflowX: 'auto', margin: '0 0 8px', whiteSpace: 'pre' }}>{children}</pre>
+  );
+}
+
+function CardGrid({ items, min = 230 }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`, gap: '14px' }}>
+      {items.map((it, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${it.color}60`, borderTop: `4px solid ${it.color}`, borderRadius: '8px', padding: '14px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '26px' }}>{it.icon}</span>
+            <span style={{ color: it.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{it.title}</span>
+          </div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{it.text}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TermGrid() {
+  const items = [
+    ['API', 'la porta con cui un programma chiede qualcosa a un altro programma'],
+    ['Chiave API', 'una password per programmi: dice chi sta chiedendo e a chi addebitare'],
+    ['localhost', 'significa «questo stesso computer»: nulla passa dalla rete'],
+    ['Porta', 'il numero (qui 20128) che distingue un servizio da un altro sullo stesso computer'],
+    ['JSON', 'un modo ordinato di scrivere dati e impostazioni in un file di testo'],
+    ['Header', 'le righe di informazioni che accompagnano una risposta, prima del contenuto'],
+    ['Variabile d’ambiente', 'un valore messo da parte nel computer, che i programmi possono leggere per nome'],
+    ['Combo', 'una lista ordinata di modelli: se il primo non risponde, si prova il secondo'],
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '10px' }}>
+      {items.map((it, i) => (
+        <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '8px 14px' }}>
+          <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, fontWeight: 600, fontSize: 'var(--fs-xs)' }}>{it[0]}</span>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.4 }}>{it[1]}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function LayerSteps() {
+  const items = [
+    { n: 1, t: 'Il pannello risponde?', d: 'apro http://localhost:20128 nel browser', c: colors.info },
+    { n: 2, t: 'Quali modelli ci sono?', d: 'GET /v1/models con la chiave: copio l’id esatto', c: colors.warn },
+    { n: 3, t: 'Una richiesta vera?', d: 'POST /v1/chat/completions con curl: leggo gli header', c: colors.success },
+    { n: 4, t: 'Solo ora l’agente', d: 'OpenCode, con /models per scegliere il modello', c: colors.purple },
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+      {items.map((it, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${it.c}60`, borderTop: `4px solid ${it.c}`, borderRadius: '8px', padding: '12px 14px' }}>
+          <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: it.c, fontSize: 'var(--fs-xs)' }}>strato {it.n}</div>
+          <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', margin: '2px 0 4px' }}>{it.t}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.4 }}>{it.d}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const TAG = 'Argomento 11 — Dentro un agente: OmniRoute e OpenCode';
+const MATERIALI_URL = 'thomascasali.github.io/corso-ia-scuola-slide/materiali/argomento-11/';
+const link = (href, label) => <a href={href} onClick={e => e.stopPropagation()} className="text-link">{label}</a>;
+
+const slides = [
+  {
+    block: `${TAG} · Apertura`,
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🔌</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Argomento 11
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '900px' }}>Dentro un agente: OmniRoute e OpenCode</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '22px', maxWidth: '760px' }}>
+          Prima di questo argomento conviene aver visto: {link('../argomento-5/slide.html', 'Argomento 5 — Chatbot e agente')}. Si abbina bene dopo l'{link('../argomento-9/slide.html', 'Argomento 9 — Agenti al lavoro con Claude Code')}.
+        </p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '26px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: 'Argomento tecnico: si apre il cofano di un agente e si installa tutto sul proprio PC Windows. Serve a chi ha già visto cosa fa un agente (argomento 5) e vuole capire come è fatto e come ci si mette le mani. Funziona anche come base per un corso di programmazione con agenti. Avvisate la sala che ogni termine nuovo viene spiegato.'
+  },
+  {
+    block: `${TAG} · Apertura`,
+    content: () => (
+      <div style={{ padding: '10px 30px 0' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Di cosa parliamo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Thomas Casali, docente dell'istituto</p>
+        <Glow>
+          <p>
+            Un agente come Claude Code o OpenCode è un programma che usa un modello linguistico per lavorare sul vostro computer. Qui vediamo come è fatto, perché conviene metterci in mezzo un «centralino» e come si installa tutto in locale.
+          </p>
+        </Glow>
+        <ul style={{ marginTop: '10px', paddingLeft: '28px', color: colors.textDim }}>
+          <li>Cosa c'è <strong style={{ color: colors.text }}>dentro un agente</strong>: modello, strumenti, ciclo, permessi.</li>
+          <li><strong style={{ color: colors.text }}>OmniRoute</strong>: il centralino tra agente e fornitori.</li>
+          <li><strong style={{ color: colors.text }}>OpenCode</strong>: l'agente e il suo file di configurazione.</li>
+          <li>L'<strong style={{ color: colors.text }}>installazione</strong> su un PC Windows, a strati.</li>
+          <li>Un caso reale: «non funzionava».</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>
+          I materiali di questo argomento sono su{' '}
+          <a href="../materiali/argomento-11/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">{MATERIALI_URL}</a>
+        </p>
+      </div>
+    ),
+    notes: 'Scorrete i cinque punti senza dettagli. Leggete a voce alta l\'indirizzo dei materiali: la guida di installazione si consegna più avanti, dopo l\'attività «trova l\'errore», perché ne contiene le risposte.'
+  },
+  {
+    block: `${TAG} · Apertura`,
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Otto parole che useremo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Se una non vi è chiara, fermate chi parla: è normale.</p>
+        <TermGrid />
+      </div>
+    ),
+    notes: 'Non leggete tutto: indicate le parole a mano a mano che tornano. Se qualcuno chiede «ma cos\'è un modello?», rimandate all\'argomento 0. Le parole che contano di più sono chiave API (una password per programmi, da trattare come una password) e localhost (resta tutto sul computer).'
+  },
+
+  /* --- dentro un agente --- */
+  {
+    block: `${TAG} · Dentro un agente`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <BlockTag>{TAG} · Dentro un agente</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Quattro pezzi</h2>
+        <CardGrid min={250} items={[
+          { icon: '🧠', title: 'Il modello', color: colors.info, text: 'Legge il testo e prevede cosa scrivere. Arriva da un fornitore, via internet.' },
+          { icon: '🧰', title: 'Gli strumenti', color: colors.warn, text: 'Leggere file, scrivere file, eseguire comandi, cercare nel codice.' },
+          { icon: '🔁', title: 'Il ciclo', color: colors.success, text: 'Pensa, agisce, guarda l’esito, riprova. Si ferma quando ritiene di aver finito.' },
+          { icon: '🖐️', title: 'I permessi', color: colors.danger, text: 'Cosa può fare da solo e cosa deve chiedere prima.' },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Il programma agente (Claude Code, OpenCode) è il «guscio» che tiene insieme i quattro pezzi.</p>
+      </div>
+    ),
+    notes: 'Richiamo dell\'argomento 5, in chiave più tecnica. Il modello da solo produce solo testo: per fare qualcosa servono gli strumenti, e il programma agente li offre e controlla. Chi ha fatto l\'argomento 9 ha già visto permessi e ciclo dal lato dell\'utente; qui li vediamo dal lato di chi costruisce.'
+  },
+  {
+    block: `${TAG} · Dentro un agente`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Il ciclo, passo per passo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Ogni giro manda al modello tutto quello che è successo finora.</p>
+        <FlowChain steps={[
+          { icon: '💬', label: 'Richiesta', sub: 'la scrivete voi', color: colors.info },
+          { icon: '🧠', label: 'Il modello decide', sub: '«devo leggere questo file»', color: colors.warn },
+          { icon: '🖐️', label: 'Il programma controlla', sub: 'permesso? sì, no, chiedi', color: colors.danger },
+          { icon: '🔧', label: 'Esegue lo strumento', sub: 'e raccoglie l’esito', color: colors.success },
+          { icon: '🔁', label: 'Torna al modello', sub: 'o conclude', color: colors.purple },
+        ]} />
+        <Box type="info">
+          Il modello non esegue nulla: chiede al programma di farlo. Per questo i permessi stanno nel programma, non nel modello.
+        </Box>
+      </div>
+    ),
+    notes: 'Punto da far passare: ogni giro del ciclo è una nuova richiesta al fornitore, con tutta la storia dentro. Per questo una sessione lunga costa di più e per questo conviene vedere cosa passa dal centralino. Il controllo dei permessi avviene nel programma sul vostro computer, prima di eseguire.'
+  },
+
+  /* --- il centralino --- */
+  {
+    block: `${TAG} · Il centralino`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <BlockTag>{TAG} · Il centralino</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Perché mettere un centralino in mezzo</h2>
+        <CompareTwo
+          left={{ icon: '🔗', title: 'Agente collegato direttamente', color: colors.warn, points: [
+            'Una chiave per ogni fornitore, in ogni programma',
+            'Se il fornitore è in blocco, l’agente si ferma',
+            'I consumi si vedono solo dal sito del fornitore',
+          ]}}
+          right={{ icon: '📞', title: 'Agente → OmniRoute → fornitori', color: colors.success, points: [
+            'Una chiave sola per l’agente; quelle dei fornitori restano nel centralino',
+            'Combo con riserve: si passa al modello successivo',
+            'Registri e costi in un pannello unico',
+          ]}}
+        />
+      </div>
+    ),
+    notes: 'OmniRoute è un programma open source che si installa sul proprio computer (o su un server) e si comporta come un fornitore unico: parla lo stesso linguaggio dei servizi di OpenAI, quindi qualunque agente che sa collegarsi a un servizio di quel tipo può usarlo. Dentro, smista verso i fornitori reali.'
+  },
+  {
+    block: `${TAG} · Il centralino`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Cosa dà il centralino</h2>
+        <CardGrid min={250} items={[
+          { icon: '🔑', title: 'Una chiave sola', color: colors.info, text: 'All’agente date una chiave del centralino. Le chiavi dei fornitori non escono dal centralino.' },
+          { icon: '🪜', title: 'Combo e riserve', color: colors.warn, text: 'Una lista ordinata di modelli: se uno non risponde, si passa al successivo.' },
+          { icon: '📊', title: 'Costi e registri', color: colors.success, text: 'Chi ha chiesto cosa, a quale fornitore, con che esito: tutto nel pannello.' },
+          { icon: '📜', title: 'Regole sui dati', color: colors.danger, text: 'Decidete voi quali fornitori collegare: quelli non collegati non vedranno mai i vostri testi.' },
+        ]} />
+      </div>
+    ),
+    notes: 'L\'ultima carta è quella che conta di più per una scuola: la scelta dei fornitori si fa in un posto solo, e l\'agente non può aggirarla perché non conosce le chiavi dei fornitori. La regola del corso è nella slide sui fornitori, più avanti.'
+  },
+  {
+    block: `${TAG} · Il centralino`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Come instrada una richiesta</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Esempio con la strategia a priorità.</p>
+        <FlowChain wrap steps={[
+          { icon: '🤖', label: 'Agente', sub: 'chiede la combo «X»', color: colors.info },
+          { icon: '🔑', label: 'OmniRoute', sub: 'controlla la chiave', color: colors.warn },
+          { icon: '1️⃣', label: 'Primo modello', sub: 'non risponde', color: colors.danger },
+          { icon: '2️⃣', label: 'Secondo modello', sub: 'risponde', color: colors.success },
+        ]} />
+        <Box type="info" title="Strategia a priorità">
+          Si prova sempre il primo; solo se fallisce si passa al secondo. Ne esistono altre (a rotazione, per costo…): per il corso basta questa.
+        </Box>
+      </div>
+    ),
+    notes: 'L\'agente chiede una combo per nome. OmniRoute non lo dice all\'agente, ma sa quali modelli ci sono dentro e in che ordine. Se il primo restituisce un errore, passa al secondo senza che l\'agente se ne accorga: ottimo per la continuità, ma significa che a rispondere potrebbe essere un modello diverso da quello che vi aspettate. Da qui la slide successiva.'
+  },
+  {
+    block: `${TAG} · Il centralino`,
+    content: () => (
+      <div style={{ padding: '16px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Chi ha risposto davvero?</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>La risposta di OmniRoute porta con sé alcune righe di informazioni, gli header.</p>
+        <Code small>{`HTTP/1.1 200 OK
+content-type: application/json
+x-omniroute-provider: <fornitore che ha risposto>
+x-omniroute-model: <modello che ha risposto>`}</Code>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ fontSize: 'var(--fs-sm)' }}><span className="kbd">x-omniroute-provider</span> il fornitore che ha risposto.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}><span className="kbd">x-omniroute-model</span> il modello che ha risposto.</li>
+        </ul>
+        <Box type="warn">
+          La combo può aver saltato il primo anello senza avvisare. Gli header sono il modo per accorgersene.
+        </Box>
+      </div>
+    ),
+    notes: 'Queste due righe le abbiamo osservate sulla versione 3.8.52. La documentazione di OmniRoute cita un\'intestazione simile, X-OmniRoute-Decision, quindi i nomi possono cambiare tra versioni: se non li vedete, cercate le righe che iniziano con x-omniroute-. Caso reale: nel nostro controllo la risposta di prova arrivava da un collegamento diverso da quello che si credeva. Senza leggere gli header non ce ne saremmo accorti.'
+  },
+  {
+    block: `${TAG} · Il centralino`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>La regola del corso sui fornitori</h2>
+        <CompareTwo
+          left={{ icon: '✅', title: 'Si collegano', color: colors.success, points: [
+            'Fornitori usati con una chiave API',
+            'Con condizioni d’uso che escludono l’addestramento sui nostri dati',
+            'Con un tetto di spesa mensile',
+          ]}}
+          right={{ icon: '🚫', title: 'Non si collegano', color: colors.danger, points: [
+            'Account personali gratuiti',
+            'Abbonamenti personali a un chatbot usati al posto delle API',
+            'Riserve a pagamento che nessuno ha deciso',
+          ]}}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>Le condizioni cambiano: si leggono sul sito del fornitore e si ricontrollano.</p>
+      </div>
+    ),
+    notes: 'Il motivo delle tre voci a destra: un account gratuito di solito permette al fornitore di usare i testi per migliorare il modello; un abbonamento personale è un altro prodotto, con altre regole d\'uso; una riserva a pagamento nella catena fa spendere senza che nessuno l\'abbia deciso. Per Anthropic le condizioni delle API escludono per ora l\'addestramento sulle richieste, ma vanno riverificate sul sito prima di dirlo come regola.'
+  },
+
+  /* --- OpenCode --- */
+  {
+    block: `${TAG} · OpenCode`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <BlockTag>{TAG} · OpenCode</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Come lavora OpenCode</h2>
+        <CardGrid min={250} items={[
+          { icon: '⚙️', title: 'Configurazione', color: colors.info, text: 'Un file opencode.json: nell’utente (vale ovunque) e nel progetto (vale lì).' },
+          { icon: '🎛️', title: 'Modalità', color: colors.warn, text: 'build: può modificare i file. plan: ragiona e propone, senza toccare nulla. Tab per passare dall’una all’altra.' },
+          { icon: '📘', title: 'Istruzioni del progetto', color: colors.success, text: 'Il file AGENTS.md: come si avvia, come si prova, quali regole seguire. Il comando /init lo crea.' },
+          { icon: '🖐️', title: 'Permessi', color: colors.danger, text: 'Per ogni azione: allow (fa), ask (chiede), deny (vieta).' },
+        ]} />
+      </div>
+    ),
+    notes: 'OpenCode è un agente a codice aperto, che si usa da terminale o come app. Le istruzioni del progetto sono lo stesso concetto del file CLAUDE.md di Claude Code (visto nell\'argomento 9): OpenCode usa AGENTS.md e, se manca, ripiega su CLAUDE.md. La modalità plan serve a far ragionare l\'agente senza correre rischi: una buona abitudine prima di un lavoro grosso.'
+  },
+  {
+    block: `${TAG} · OpenCode`,
+    content: () => (
+      <div style={{ padding: '12px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Il file opencode.json</h2>
+        <Code small>{`{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "omniroute": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OmniRoute",
+      "options": {
+        "baseURL": "http://localhost:20128/v1",
+        "apiKey": "{env:OMNIROUTE_API_KEY}"
+      },
+      "models": {
+        "Combo-Corso-Cascata": { "name": "Combo del corso" }
+      }
+    }
+  }
+}`}</Code>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>
+          <strong style={{ color: colors.text }}>npm</strong>: il componente che parla con il servizio · <strong style={{ color: colors.text }}>baseURL</strong>: dove sta OmniRoute · <strong style={{ color: colors.text }}>{'{env:…}'}</strong>: la chiave si legge dal computer, non sta scritta qui · <strong style={{ color: colors.text }}>models</strong>: nome identico a quello dell'elenco di OmniRoute.
+        </p>
+      </div>
+    ),
+    notes: 'Il file è il punto in cui si sbaglia di più, e un campo sbagliato spesso viene ignorato senza avvisi: ne parleremo nel caso reale. Tre cose da dire. Primo: nel file di un progetto la chiave non si scrive mai, si usa la forma {env:NOME}. Secondo: per un fornitore aggiunto a mano OpenCode non scopre i modelli da solo, li elenchiamo noi. Terzo: la riga models deve riportare lo stesso nome che OmniRoute dà nell\'elenco. Spiegazione riga per riga nella guida.'
+  },
+  {
+    block: `${TAG} · OpenCode`,
+    content: () => (
+      <div style={{ padding: '16px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Permessi: una regola per volta</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Di default quasi tutto è permesso senza chiedere. Conviene partire dal contrario.</p>
+        <Code small>{`"permission": {
+  "bash": {
+    "*": "ask",          ← di norma chiede
+    "git status": "allow", ← questo lo fa da solo
+    "rm *": "deny"       ← cancellare è vietato
+  }
+}`}</Code>
+        <Box type="tip">
+          Tra le regole che corrispondono vince l'ultima. Leggete sempre cosa chiede il permesso prima di rispondere sì.
+        </Box>
+      </div>
+    ),
+    notes: 'L\'esempio riguarda i comandi del terminale (bash), che sono la cosa più delicata: un comando può cancellare file. Le frecce nel riquadro sono commenti per voi: nel file vero non si scrivono perché il formato non li ammette. Rispondere «sempre» a una richiesta di permesso la estende a tutta la sessione: fatelo solo per azioni innocue.'
+  },
+
+  /* --- installazione --- */
+  {
+    block: `${TAG} · Installazione locale`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <BlockTag>{TAG} · Installazione locale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Lo schema, su un PC Windows</h2>
+        <FlowChain steps={[
+          { icon: '🟢', label: 'Node.js', sub: 'versione 22 o 24', color: colors.info },
+          { icon: '📞', label: 'OmniRoute', sub: 'npm install -g omniroute', color: colors.warn },
+          { icon: '🔑', label: 'Fornitore + combo + chiave', sub: 'nel pannello', color: colors.success },
+          { icon: '🤖', label: 'OpenCode', sub: 'npm install -g opencode-ai', color: colors.purple },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>
+          OpenCode → <span className="kbd">http://localhost:20128/v1</span> → OmniRoute → fornitore con chiave API.
+        </p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '8px' }}>Alternative per OmniRoute: Docker o codice sorgente. Per OpenCode: anche app desktop, Scoop, Chocolatey.</p>
+      </div>
+    ),
+    notes: 'I comandi esatti, con tutte le avvertenze, sono nella guida. Tre note per Windows: la documentazione di OpenCode consiglia WSL ma elenca anche le installazioni native; OmniRoute non è un servizio di Windows, quindi si spegne se chiudete la sua finestra; da PowerShell si scrive curl.exe e non curl. L\'app desktop di OpenCode va controllata a schermo: la documentazione letta non ne descrive l\'installazione.'
+  },
+  {
+    block: `${TAG} · Installazione locale`,
+    content: () => (
+      <div style={{ padding: '16px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Si prova a strati, dal basso</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Ogni strato si prova da solo. L'agente viene per ultimo.</p>
+        <LayerSteps />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '10px 0 4px' }}>Strato 2: in <span className="kbd">/v1/models</span> si cerca l'<strong style={{ color: colors.text }}>id</strong> da copiare tale e quale.</p>
+        <Code small>{`{ "object": "list", "data": [
+  { "id": "auto/coding", "object": "model" },
+  { "id": "auto/fast", "object": "model" },
+  { "id": "Combo-Corso-Cascata", "object": "model" } ] }`}</Code>
+      </div>
+    ),
+    notes: 'Il metodo che fa risparmiare ore: se l\'agente non risponde, non si guarda subito l\'agente. Si parte dal servizio, poi dai modelli, poi da una richiesta diretta. L\'estratto è un esempio abbreviato di quello che risponde OmniRoute; la forma completa può avere più campi. Nell\'elenco c\'è «auto/coding» ma non «auto»: guardate con attenzione, tornerà nel caso reale.'
+  },
+  {
+    block: `${TAG} · Installazione locale`,
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Prima di usarlo: tre impostazioni</h2>
+        <CardGrid min={250} items={[
+          { icon: '🔐', title: 'Password del pannello', color: colors.danger, text: 'Il valore di fabbrica, CHANGEME, lo conoscono tutti. Mettetene una vostra.' },
+          { icon: '🗝️', title: 'REQUIRE_API_KEY = true', color: colors.warn, text: 'Senza, chi raggiunge la porta può usare i vostri fornitori, a vostre spese.' },
+          { icon: '🏠', title: 'Ascolta solo su 127.0.0.1', color: colors.info, text: 'Di base ascolta su tutta la rete. Meglio chiuderlo dentro il PC.' },
+        ]} />
+        <Box type="warn" title="Le chiavi">
+          Mai in un repository, in una chat, in uno screenshot. Se ne esce una: si revoca e se ne crea un'altra.
+        </Box>
+      </div>
+    ),
+    notes: 'Sono impostazioni che non producono errori se sbagliate: tutto funziona, e il rischio resta. Per questo le mettiamo in una slide a parte. Nel file di configurazione di OpenCode dentro un progetto la chiave non si scrive; nel file globale dell\'utente, che non sta in nessun repository, è tollerato scriverla, ma {env:NOME} resta preferibile.'
+  },
+
+  /* --- caso reale --- */
+  {
+    block: `${TAG} · Il caso reale`,
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>{TAG} · Il caso reale</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>«Non funzionava»</h2>
+        <Glow>
+          <p>
+            Il 28 ottobre 2026 il docente ha sistemato il collegamento tra OpenCode e OmniRoute sul proprio PC. L'agente non rispondeva. In totale c'erano quattro errori, uno solo dei quali dava un messaggio chiaro.
+          </p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>Prima di vederli, provate a trovarli voi.</p>
+      </div>
+    ),
+    notes: 'Il caso è vero e recente. Presentatelo come è andato: si cercava il problema nel posto sbagliato (il file dell\'agente) mentre il primo guasto era più in basso. Non dite ancora quali sono i quattro errori.'
+  },
+  {
+    block: `${TAG} · Il caso reale`,
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Trova l'errore</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Da soli o a coppie, al proprio PC. Circa 20 minuti.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Aprite il foglio: un test da terminale, un estratto dell'elenco dei modelli, un file <span className="kbd">opencode.json</span>.</li>
+          <li>Partite dal basso: servizio, modelli, file.</li>
+          <li>Scrivete cosa non va e come lo correggereste.</li>
+          <li>Scrivete l'ordine dei controlli che fareste la prossima volta.</li>
+        </ol>
+        <ActivityBadge href="../materiali/argomento-11/trova-l-errore-agente.html" label="Trova l'errore: l'agente non risponde" />
+      </div>
+    ),
+    notes: 'Il foglio contiene quattro guasti: uno fuori dal file (il servizio spento) e tre nel file (un campo con il nome sbagliato, il componente sbagliato, un nome di modello che non esiste). Giro tra i banchi: chi parte dal file perde tempo, ricordate la regola «dal basso». Non distribuite ancora la guida di installazione, perché ne contiene le risposte.'
+  },
+  {
+    block: `${TAG} · Il caso reale`,
+    content: () => (
+      <div style={{ padding: '18px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>I quattro errori</h2>
+        <CardGrid min={250} items={[
+          { icon: '⛔', title: '1. OmniRoute spento', color: colors.danger, text: 'Avviato da una finestra, si era fermato. Sulla porta 20128 non rispondeva nessuno. I dati erano al sicuro nella cartella dell’utente.' },
+          { icon: '🤫', title: '2. «npmPackage»', color: colors.warn, text: 'Il campo giusto si chiama «npm». Quello sbagliato viene ignorato in silenzio.' },
+          { icon: '🧩', title: '3. @ai-sdk/openai', color: colors.info, text: 'Serve @ai-sdk/openai-compatible. L’altro è per chi offre /v1/responses.' },
+          { icon: '👻', title: '4. Modello «auto»', color: colors.purple, text: 'Nell’elenco c’era auto/coding, non auto. Il nome deve essere identico all’id.' },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>La verifica con curl ha poi dato 200, con gli header che dicevano chi aveva risposto davvero.</p>
+      </div>
+    ),
+    notes: 'Mettete in evidenza la lezione: l\'ordine dei controlli (servizio, modelli, richiesta, agente) avrebbe trovato il primo errore in dieci secondi. L\'errore 2 non dà nessun messaggio, ed è per questo il più insidioso. Durante lo stesso controllo sono emersi altri problemi, senza errori visibili: la risposta di prova arrivava da un collegamento con un account personale gratuito; un collegamento aveva il token scaduto e la cascata lo provava a vuoto; un altro non passava dalle API; la password del pannello era quella di fabbrica; OmniRoute ascoltava su tutta la rete senza obbligo di chiave. Funzionava, ma non come doveva.'
+  },
+
+  /* --- demo --- */
+  {
+    block: `${TAG} · Demo dal vivo`,
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{TAG} · Demo dal vivo</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Dimostrazione dal vivo del docente</h2>
+        <FlowChain steps={[
+          { icon: '📊', label: 'Il pannello', sub: 'fornitori e combo', color: colors.info },
+          { icon: '🧪', label: 'Una richiesta con curl', sub: 'e gli header', color: colors.warn },
+          { icon: '🤖', label: 'OpenCode al lavoro', sub: 'una piccola modifica', color: colors.success },
+          { icon: '🔌', label: 'Spengo OmniRoute', sub: 'e guardiamo l’errore', color: colors.danger },
+        ]} />
+        <Box type="info">Si guarda, non si copia: chi vuole provare ha la guida e l'attività di installazione.</Box>
+      </div>
+    ),
+    notes: 'Quattro momenti, circa dieci minuti in tutto. Si mostra il pannello senza far vedere chiavi (oscurate prima di proiettare). Si lancia la richiesta con curl e si leggono a voce gli header. Si apre OpenCode in una cartella di prova e gli si chiede una piccola modifica, facendo notare il permesso. Si spegne OmniRoute (Ctrl+C) e si rifà la richiesta: l\'errore di connessione è quello visto nel caso reale. Piano B se la rete o il fornitore non rispondono: schermate ripulite e una breve registrazione dello schermo, preparate il giorno prima, senza chiavi né indirizzi interni.'
+  },
+
+  /* --- installazione guidata --- */
+  {
+    block: `${TAG} · Installazione guidata`,
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività facoltativa</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Installazione guidata</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Da soli, sul proprio PC Windows, seguendo la guida. Circa 40 minuti. Serve una chiave API di un fornitore: chi non ce l'ha segue la guida fino allo strato 1.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Installate OmniRoute e proteggetelo (password, chiave obbligatoria).</li>
+          <li>Collegate un fornitore e create combo e chiave.</li>
+          <li>Provate i primi tre strati con curl.</li>
+          <li>Installate OpenCode, scrivete il file e fate la prima richiesta.</li>
+        </ol>
+        <ActivityBadge href="../materiali/argomento-11/guida-installazione.html" label="Guida all'installazione di OmniRoute e OpenCode" />
+      </div>
+    ),
+    notes: 'Attività facoltativa: dipende dal tempo e dal fatto che i partecipanti possano installare programmi sul proprio PC. In laboratorio, di norma, non si può: in quel caso la guida resta come lettura e come materiale per un corso di programmazione. Ricordate di non incollare mai una chiave in chat o su uno schermo proiettato.'
+  },
+
+  /* --- chiusura --- */
+  {
+    block: `${TAG} · Chiusura`,
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{TAG} · Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa portare a casa</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li>Un agente è <strong style={{ color: colors.text }}>modello, strumenti, ciclo e permessi</strong>: i permessi stanno nel programma.</li>
+          <li>Un <strong style={{ color: colors.text }}>centralino</strong> dà una chiave sola, riserve, registri e controllo sui fornitori.</li>
+          <li>La risposta dice <strong style={{ color: colors.text }}>chi ha risposto davvero</strong>: leggete gli header.</li>
+          <li>Si prova <strong style={{ color: colors.text }}>a strati, dal basso</strong>: servizio, modelli, richiesta, agente.</li>
+          <li>«Funziona» non basta: <strong style={{ color: colors.text }}>password, chiave obbligatoria, fornitori adatti</strong>.</li>
+        </ul>
+      </div>
+    ),
+    notes: 'Cinque punti, uno per concetto. Usateli come traccia per un riepilogo a braccio.'
+  },
+  {
+    block: `${TAG} · Chiusura`,
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dopo questo argomento</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gli argomenti che vengono bene subito dopo:</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>{link('../argomento-9/slide.html', 'Argomento 9 — Agenti al lavoro con Claude Code')}: un gruppo di agenti con un revisore, poi Claude Code sui PC del laboratorio.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>{link('../argomento-6/slide.html', 'Argomento 6 — Usare l’IA con giudizio')}: privacy, regole, verifica umana, fornitori e cosa non delegare.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>{link('../argomento-10/slide.html', 'Argomento 10 — Dalle idee al progetto')}: dalla scheda-idea a un prototipo costruito dall'agente.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>
+          I materiali di questo argomento restano su{' '}
+          <a href="../materiali/argomento-11/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">{MATERIALI_URL}</a>
+        </p>
+      </div>
+    ),
+    notes: 'Ultima slide dell\'argomento. Ricordate dove restano i materiali, compresa la guida di installazione da consegnare ora, a chi non l\'ha ancora avuta.'
+  },
+];
+
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" /></svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- slide ---------- */
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span title={slide.block} style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

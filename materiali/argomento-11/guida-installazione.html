@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida all'installazione di OmniRoute e OpenCode su Windows — Materiali argomento 11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 11</a>
+  <a class="dl-btn" href="guida-installazione.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="guida-omniroute-e-opencode-in-locale-su-un-pc-windows">Guida: OmniRoute e OpenCode in locale su un PC Windows</h1>
+<p>Questa guida porta da un PC Windows vuoto a un agente di programmazione che funziona: OpenCode (l'agente) collegato a OmniRoute (il centralino che sceglie il fornitore del modello). Si procede a strati: ogni strato si prova da solo prima di passare al successivo. Se qualcosa non va, si sa subito in quale strato guardare.</p>
+<p>Nomi, chiavi e percorsi nella guida sono segnaposto: <code>&lt;chiave&gt;</code> indica una chiave che generate voi, <code>%USERPROFILE%</code> è la vostra cartella utente.</p>
+<h2 id="prima-di-cominciare">Prima di cominciare</h2>
+<p><strong>Cosa serve</strong></p>
+<ul>
+<li>Windows 10 o 11, con PowerShell (è già installato).</li>
+<li>Node.js: OmniRoute richiede la versione 22.22.2 o successive della 22, oppure la 24 o successive. Si controlla con <code>node -v</code> in PowerShell. Se manca, si scarica la versione LTS da nodejs.org.</li>
+<li>Una chiave API di almeno un fornitore di modelli. In questa guida l'esempio è Anthropic; la chiave si crea nella console del fornitore e si paga a consumo.</li>
+<li>Circa mezz'ora la prima volta.</li>
+</ul>
+<p><strong>Come funziona, in due righe.</strong> OpenCode non parla direttamente con il fornitore del modello: parla con OmniRoute, che gira sul vostro stesso PC all'indirizzo <code>http://localhost:20128</code>. OmniRoute inoltra la richiesta al fornitore che avete configurato e riporta la risposta. L'indirizzo <code>localhost</code> significa "questo computer": nulla esce dal PC finché OmniRoute non contatta il fornitore.</p>
+<h2 id="parte-1-installare-omniroute">Parte 1. Installare OmniRoute</h2>
+<h3 id="metodo-consigliato-npm">Metodo consigliato: npm</h3>
+<p>In PowerShell:</p>
+<pre><code class="language-powershell">npm install -g omniroute
+</code></pre>
+<p><code>-g</code> installa il programma per tutto l'utente, non solo nella cartella corrente. A fine installazione il comando <code>omniroute</code> è disponibile in ogni terminale nuovo.</p>
+<p>Se compare un avviso sugli script di installazione bloccati (succede con npm 11 e successivi), OmniRoute ha bisogno che il suo script finale venga eseguito. In quel caso si rilancia l'installazione autorizzando i pacchetti che npm elenca nell'avviso. La forma indicata dalla documentazione di OmniRoute è:</p>
+<pre><code class="language-powershell">npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
+</code></pre>
+<p>Per controllare la versione installata: <code>npm ls -g omniroute</code>. Al 28 ottobre 2026 l'ultima versione pubblicata è la 3.8.52.</p>
+<h3 id="alternativa-docker">Alternativa: Docker</h3>
+<p>Serve Docker Desktop già installato e avviato. Il comando della documentazione è:</p>
+<pre><code class="language-powershell">docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+</code></pre>
+<p>Il pezzo <code>127.0.0.1:20128:20128</code> limita l'accesso a questo PC. I dati stanno nel volume <code>omniroute-data</code>. Con Docker le variabili d'ambiente (password, chiavi) si passano con l'opzione <code>-e NOME=valore</code>.</p>
+<h3 id="alternativa-dal-codice-sorgente">Alternativa: dal codice sorgente</h3>
+<p>Serve Git. Conviene solo se volete modificare il programma.</p>
+<pre><code class="language-powershell">git clone https://github.com/diegosouzapw/OmniRoute.git
+cd OmniRoute
+copy .env.example .env
+npm install
+$env:PORT = &quot;20128&quot;; npm run dev
+</code></pre>
+<p>Attenzione: <code>npm run dev</code> è la modalità di sviluppo. Funziona finché il terminale resta aperto; chiuso quello, OmniRoute si spegne. È il motivo per cui a molte persone "OmniRoute non risponde" (vedi gli errori frequenti).</p>
+<h2 id="parte-2-prima-accensione-e-sicurezza">Parte 2. Prima accensione e sicurezza</h2>
+<h3 id="la-password-del-pannello-e-lobbligo-della-chiave">La password del pannello e l'obbligo della chiave</h3>
+<p>Due impostazioni vanno decise prima del primo avvio:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Variabile</th>
+<th>Cosa fa</th>
+<th>Cosa mettere</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INITIAL_PASSWORD</code></td>
+<td>Password del pannello di controllo, usata solo alla prima accensione, finché nessuna password è salvata. Il valore predefinito del modello di configurazione è <code>CHANGEME</code>, che è pubblico: chiunque lo conosce.</td>
+<td>Una password vostra, lunga. In alternativa, lasciarla vuota e crearla nella procedura guidata del pannello.</td>
+</tr>
+<tr>
+<td><code>REQUIRE_API_KEY</code></td>
+<td>Se è <code>true</code>, ogni richiesta alla parte <code>/v1/</code> (quella che usano gli agenti) deve portare una chiave OmniRoute. Se è <code>false</code>, chiunque raggiunga la porta può usare i vostri fornitori e quindi spendere i vostri soldi.</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Secondo la documentazione, <code>REQUIRE_API_KEY=false</code> va bene solo se OmniRoute è raggiungibile unicamente da questo PC o se davanti c'è un sistema che controlla gli accessi. Per prudenza si imposta <code>true</code> comunque. Un dettaglio: la documentazione precisa che la richiesta <code>GET /v1/models</code> segue il controllo di accesso del pannello e non questa impostazione, quindi un rifiuto lì non dice nulla sulla protezione delle richieste vere.</p>
+<p>Conta anche l'indirizzo su cui OmniRoute ascolta. Con le impostazioni predefinite ascolta su tutte le interfacce di rete (<code>0.0.0.0</code>): chi è nella stessa rete può raggiungerlo. Per tenerlo chiuso dentro il PC, con il comando <code>omniroute serve</code> si usa la variabile <code>OMNIROUTE_SERVER_HOST=127.0.0.1</code>. Non usate la variabile <code>HOSTNAME</code>: il sistema la riempie con il nome del computer.</p>
+<p>Con npm, il modo più sicuro di passare le variabili è scriverle nella finestra PowerShell prima di avviare. Valgono solo per quella finestra e non lasciano file in giro:</p>
+<pre><code class="language-powershell">$env:INITIAL_PASSWORD = &quot;&lt;una-password-lunga-vostra&gt;&quot;
+$env:REQUIRE_API_KEY = &quot;true&quot;
+$env:OMNIROUTE_SERVER_HOST = &quot;127.0.0.1&quot;
+omniroute serve
+</code></pre>
+<p>Se installate da sorgente o con Docker, le stesse variabili si scrivono nel file <code>.env</code> (sorgente) o con <code>-e</code> (Docker).</p>
+<blockquote>
+<p>Da verificare a schermo: in quale cartella un'installazione npm cerca il file <code>.env</code>. La documentazione letta non lo dice. Il comando <code>omniroute env show</code> (se presente nella vostra versione) mostra i valori in uso. Secondo la documentazione, però, un'installazione npm crea un file <code>.env</code> copiando il modello di configurazione: parte quindi con <code>CHANGEME</code> e con <code>REQUIRE_API_KEY=false</code>. Finché non lo avete verificato, usate le variabili nella finestra, come sopra, e controllate che abbiano effetto: il pannello deve chiedere la vostra password e una richiesta allo strato 3 senza chiave deve essere rifiutata. La cartella dei dati (database, registri, copie) è <code>%USERPROFILE%\.omniroute</code>.</p>
+</blockquote>
+<p>Il file <code>.env</code> contiene segreti e non va mai inserito in un repository di codice.</p>
+<h3 id="avvio-e-primo-accesso">Avvio e primo accesso</h3>
+<p>Con le variabili impostate, <code>omniroute serve</code> avvia il programma sulla porta 20128. Windows può mostrare un avviso del firewall: consentite solo le reti private oppure annullate, se l'indirizzo è 127.0.0.1. Il testo esatto dell'avviso è da verificare a schermo.</p>
+<p>Aprite nel browser <code>http://localhost:20128</code>. Il pannello chiede la password. Se non l'avete impostata, parte la procedura guidata che ve la fa creare.</p>
+<p>Per cambiare la password in seguito: nel pannello, Impostazioni, sezione Sicurezza; oppure da terminale <code>omniroute reset-password</code>.</p>
+<p><strong>Strato 1 superato</strong> quando il pannello si apre e accetta la password.</p>
+<h2 id="parte-3-collegare-un-fornitore-con-una-chiave-api">Parte 3. Collegare un fornitore con una chiave API</h2>
+<p>Un fornitore è l'azienda che mette a disposizione i modelli. In OmniRoute un collegamento si aggiunge dal pannello, nella sezione dei fornitori (i nomi esatti dei menu sono da verificare a schermo: cambiano tra le versioni). L'esempio è Anthropic:</p>
+<ol>
+<li>Create la chiave nella console di Anthropic, in un'area di lavoro dedicata, con un tetto di spesa mensile. Il tetto vi protegge da un errore di configurazione.</li>
+<li>Nel pannello di OmniRoute aggiungete un fornitore di tipo "chiave API", scegliete Anthropic e incollate la chiave.</li>
+<li>Salvate e usate il pulsante di prova del collegamento, se c'è. Deve confermare che la chiave funziona.</li>
+</ol>
+<p><strong>La regola del corso sui fornitori.</strong> Si collegano solo fornitori usati tramite chiave API e con condizioni d'uso che escludono l'addestramento sui vostri dati. Non si collegano:</p>
+<ul>
+<li>account personali gratuiti (per esempio un account Google privato): le condizioni dei servizi gratuiti spesso permettono di usare i testi per migliorare il modello, e le risposte possono arrivare da lì senza che ve ne accorgiate;</li>
+<li>abbonamenti personali a un chatbot, usati al posto delle API: sono un altro prodotto, con altre regole, e possono violare le condizioni del servizio;</li>
+<li>servizi a pagamento inseriti come riserva silenziosa nella catena: costano senza che nessuno l'abbia deciso.</li>
+</ul>
+<p>Le condizioni di ciascun fornitore si leggono sul suo sito e vanno ricontrollate: cambiano.</p>
+<p>I collegamenti fatti con un accesso "tramite account" (e non con una chiave) hanno un token che scade. Quando scade, OmniRoute lo segnala con un errore (<code>invalid_grant</code>) e la combo perde tempo a provarlo prima di passare oltre. Un collegamento scaduto va riautorizzato o rimosso.</p>
+<h2 id="parte-4-creare-una-combo-e-una-chiave-omniroute">Parte 4. Creare una combo e una chiave OmniRoute</h2>
+<h3 id="la-combo">La combo</h3>
+<p>Una combo è una lista ordinata di modelli con una strategia. L'agente chiede "la combo X" e OmniRoute decide chi risponde davvero. Con la strategia a priorità (<code>priority</code>) si prova il primo; se fallisce o è saturo, si passa al secondo, e così via. OmniRoute offre anche altre strategie (per esempio <code>round-robin</code>, <code>cost-optimized</code>, <code>weighted</code>).</p>
+<ol>
+<li>Nel pannello aprite la sezione Combo e createne una nuova.</li>
+<li>Date un nome senza spazi, per esempio <code>Combo-Corso-Cascata</code>. Lo dovrete scrivere identico in OpenCode.</li>
+<li>Aggiungete i modelli in ordine, dal primo che volete usare al meno preferito. Solo modelli dei fornitori collegati con chiave API.</li>
+<li>Scegliete la strategia <code>priority</code>.</li>
+</ol>
+<p>OmniRoute crea da solo anche combo "virtuali" con nomi come <code>auto/coding</code>, <code>auto/fast</code>, <code>auto/cheap</code>, costruite sui fornitori collegati. La documentazione di OmniRoute cita anche un modello <code>auto</code> che smista tra i collegamenti idonei, ma nel caso reale da cui nasce questa guida <code>auto</code> non compariva nell'elenco dei modelli e OpenCode non funzionava (vedi più avanti). La regola sicura: usare solo un <code>id</code> che compare nell'elenco.</p>
+<h3 id="la-chiave-omniroute">La chiave OmniRoute</h3>
+<p>Con <code>REQUIRE_API_KEY=true</code> l'agente ha bisogno di una chiave OmniRoute. Va distinta dalla chiave del fornitore: la chiave OmniRoute dice a OmniRoute "questa richiesta è autorizzata", quella del fornitore resta dentro OmniRoute.</p>
+<ol>
+<li>Aprite nel pannello la pagina Endpoints (la documentazione la indica come il posto da cui copiare la chiave).</li>
+<li>Create una chiave, con un'etichetta che dica a cosa serve, per esempio <code>opencode-pc-casa</code>.</li>
+<li>Copiatela una volta e custoditela: la usate al passo successivo.</li>
+</ol>
+<p>Salvatela in una variabile d'ambiente dell'utente, così non finisce in nessun file di progetto:</p>
+<pre><code class="language-powershell">setx OMNIROUTE_API_KEY &quot;&lt;chiave&gt;&quot;
+</code></pre>
+<p><code>setx</code> vale per le finestre aperte da ora in poi, non per quella corrente. Chiudete PowerShell e riapritelo. Le applicazioni già aperte (compreso OpenCode desktop) vanno riavviate per vedere la variabile. Per usarla subito nella finestra attuale: <code>$env:OMNIROUTE_API_KEY = "&lt;chiave&gt;"</code>.</p>
+<h2 id="parte-5-provare-omniroute-da-solo-prima-di-opencode">Parte 5. Provare OmniRoute da solo, prima di OpenCode</h2>
+<p>Qui sta il metodo che fa risparmiare ore: si prova ogni strato separatamente, dal basso. OpenCode viene per ultimo.</p>
+<p><strong>Strato 1: il pannello risponde.</strong> Già visto: <code>http://localhost:20128</code> nel browser.</p>
+<p><strong>Strato 2: i modelli disponibili.</strong> In PowerShell, con la chiave nella variabile:</p>
+<pre><code class="language-powershell">curl.exe http://localhost:20128/v1/models -H &quot;Authorization: Bearer $env:OMNIROUTE_API_KEY&quot;
+</code></pre>
+<p>Scrivete <code>curl.exe</code> con il <code>.exe</code>: in Windows PowerShell la parola <code>curl</code> da sola è un altro comando, con parametri diversi. La risposta è un elenco JSON. Cercate il campo <code>id</code> della vostra combo: quella stringa è il nome esatto del modello, da copiare tale e quale (maiuscole, trattini, barre comprese). L'elenco contiene anche le combo <code>auto/...</code> e i modelli dei fornitori collegati.</p>
+<p><strong>Strato 3: una richiesta vera.</strong> Create un file <code>richiesta.json</code> con questo contenuto, sostituendo il nome della combo con quello che avete copiato:</p>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;Combo-Corso-Cascata&quot;,
+  &quot;messages&quot;: [{ &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Rispondi solo: ok&quot; }]
+}
+</code></pre>
+<p>Poi:</p>
+<pre><code class="language-powershell">curl.exe -i http://localhost:20128/v1/chat/completions -H &quot;Authorization: Bearer $env:OMNIROUTE_API_KEY&quot; -H &quot;Content-Type: application/json&quot; -d &quot;@richiesta.json&quot;
+</code></pre>
+<p>L'opzione <code>-i</code> mostra anche le intestazioni della risposta (gli "header"). Cercate:</p>
+<ul>
+<li>la prima riga, <code>HTTP/1.1 200 OK</code>: la richiesta è andata a buon fine;</li>
+<li><code>x-omniroute-provider</code> e <code>x-omniroute-model</code>: dicono quale fornitore e quale modello hanno risposto davvero. Sono state osservate sulla versione 3.8.52; la documentazione consultata cita un'intestazione simile, <code>X-OmniRoute-Decision</code>. Se non le vedete, cercate quelle che iniziano per <code>x-omniroute-</code>.</li>
+</ul>
+<p>Controllate che il fornitore che ha risposto sia quello che vi aspettate. Se risponde un collegamento diverso dal primo della combo, la combo ha saltato i precedenti: guardate perché (token scaduto, limite raggiunto, modello non disponibile).</p>
+<p><strong>Strato 4: OpenCode.</strong> Solo quando i tre strati precedenti funzionano.</p>
+<h2 id="parte-6-installare-opencode">Parte 6. Installare OpenCode</h2>
+<p>La documentazione di OpenCode consiglia, su Windows, di usare WSL (Windows Subsystem for Linux) per l'esperienza migliore, ma elenca anche le installazioni native. Per questa guida usiamo quelle native.</p>
+<p><strong>Da terminale (npm):</strong></p>
+<pre><code class="language-powershell">npm install -g opencode-ai
+</code></pre>
+<p>Altre vie indicate dalla documentazione: <code>choco install opencode</code> (Chocolatey), <code>scoop install opencode</code> (Scoop), oppure il file eseguibile dalla pagina delle versioni su GitHub. L'installazione con Bun su Windows non è ancora supportata.</p>
+<p><strong>Applicazione desktop.</strong> OpenCode esiste anche come app con finestra. La pagina di documentazione letta non riporta i passi di installazione: scaricatela da opencode.ai e controllate a schermo la procedura.</p>
+<p><strong>Una precauzione sulle versioni.</strong> Esistono due generazioni di OpenCode, la 1 e la 2, che usano lo stesso comando <code>opencode</code> e non possono convivere. L'installazione con npm porta la 1 (al 28 ottobre 2026 la versione pubblicata è la 1.19.5). Questa guida descrive la 1: se usate la 2, controllate i nomi dei file e dei campi nella sua documentazione.</p>
+<p>Per controllare: <code>opencode --version</code>.</p>
+<h2 id="parte-7-il-file-opencodejson">Parte 7. Il file <code>opencode.json</code></h2>
+<p>OpenCode legge la sua configurazione da più posti e li fonde. In ordine di importanza crescente:</p>
+<ol>
+<li>la configurazione globale dell'utente: <code>%USERPROFILE%\.config\opencode\opencode.json</code>;</li>
+<li>la configurazione indicata dalla variabile <code>OPENCODE_CONFIG</code>, se c'è;</li>
+<li>il file <code>opencode.json</code> nella cartella del progetto;</li>
+<li>le cartelle <code>.opencode</code> del progetto.</li>
+</ol>
+<p>Se la stessa impostazione compare in due posti vince quella più in basso nell'elenco. La cartella <code>.config</code> si crea a mano se manca.</p>
+<p>Questo è il file completo per collegare OpenCode a OmniRoute:</p>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://opencode.ai/config.json&quot;,
+  &quot;provider&quot;: {
+    &quot;omniroute&quot;: {
+      &quot;npm&quot;: &quot;@ai-sdk/openai-compatible&quot;,
+      &quot;name&quot;: &quot;OmniRoute&quot;,
+      &quot;options&quot;: {
+        &quot;baseURL&quot;: &quot;http://localhost:20128/v1&quot;,
+        &quot;apiKey&quot;: &quot;{env:OMNIROUTE_API_KEY}&quot;
+      },
+      &quot;models&quot;: {
+        &quot;Combo-Corso-Cascata&quot;: {
+          &quot;name&quot;: &quot;Combo del corso (cascata)&quot;
+        }
+      }
+    }
+  },
+  &quot;model&quot;: &quot;omniroute/Combo-Corso-Cascata&quot;
+}
+</code></pre>
+<p>Riga per riga (il formato JSON non ammette commenti dentro il file, quindi le spiegazioni stanno qui):</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Riga</th>
+<th>Cosa significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"$schema"</code></td>
+<td>Indirizzo che descrive i campi ammessi. Serve all'editor per segnalare errori e suggerire i nomi dei campi. OpenCode non ne ha bisogno per funzionare.</td>
+</tr>
+<tr>
+<td><code>"provider"</code></td>
+<td>Elenco dei fornitori che OpenCode conosce, oltre a quelli già incorporati. Qui ne aggiungiamo uno.</td>
+</tr>
+<tr>
+<td><code>"omniroute"</code></td>
+<td>Il nome interno che scegliete voi per questo fornitore. Ricomparirà davanti al modello (<code>omniroute/...</code>).</td>
+</tr>
+<tr>
+<td><code>"npm": "@ai-sdk/openai-compatible"</code></td>
+<td>Il componente software che sa parlare con il servizio. Il campo si chiama <code>npm</code>, non <code>npmPackage</code>: un nome sbagliato viene ignorato senza avvisi. Per un servizio compatibile con l'interfaccia di OpenAI, come OmniRoute, il componente giusto è <code>@ai-sdk/openai-compatible</code>. Il componente <code>@ai-sdk/openai</code> serve per i servizi che offrono l'interfaccia <code>/v1/responses</code>.</td>
+</tr>
+<tr>
+<td><code>"name"</code></td>
+<td>Il nome che vedete nei menu di OpenCode. Libero.</td>
+</tr>
+<tr>
+<td><code>"options"</code></td>
+<td>Le opzioni di collegamento.</td>
+</tr>
+<tr>
+<td><code>"baseURL"</code></td>
+<td>L'indirizzo di OmniRoute, con <code>/v1</code> in fondo.</td>
+</tr>
+<tr>
+<td><code>"apiKey": "{env:OMNIROUTE_API_KEY}"</code></td>
+<td>La chiave OmniRoute. La forma <code>{env:NOME}</code> dice a OpenCode di leggere la variabile d'ambiente <code>NOME</code> all'avvio. Se la variabile non esiste, il valore resta vuoto e le richieste vengono rifiutate.</td>
+</tr>
+<tr>
+<td><code>"models"</code></td>
+<td>I modelli di questo fornitore. Per un fornitore aggiunto a mano OpenCode non li scopre da solo: li dovete elencare voi.</td>
+</tr>
+<tr>
+<td><code>"Combo-Corso-Cascata"</code></td>
+<td>La chiave deve essere identica, carattere per carattere, al campo <code>id</code> della risposta di <code>/v1/models</code>. È il nome che OpenCode manda a OmniRoute.</td>
+</tr>
+<tr>
+<td><code>"name"</code> (dentro il modello)</td>
+<td>Nome leggibile nei menu. Libero.</td>
+</tr>
+<tr>
+<td><code>"model"</code></td>
+<td>Il modello predefinito, nella forma <code>fornitore/modello</code>. Così OpenCode parte già con quello giusto. Da verificare a schermo che compaia selezionato con il comando <code>/models</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Dove tenere la chiave.</strong> La forma <code>{env:NOME}</code> è sempre la scelta preferibile. Scrivere la chiave direttamente nel file (<code>"apiKey": "&lt;chiave&gt;"</code>) è accettabile in un solo caso: il file è quello globale nella vostra cartella utente (<code>%USERPROFILE%\.config\opencode\</code>), che non fa parte di nessun repository e non viene condiviso. Nel file <code>opencode.json</code> dentro un progetto la chiave non va mai: un repository si può pubblicare per distrazione e un segreto pubblicato va considerato perso, da revocare subito. In alternativa a <code>{env:...}</code> esiste <code>{file:percorso}</code>, che legge la chiave da un file a parte.</p>
+<h2 id="parte-8-primo-avvio-di-opencode">Parte 8. Primo avvio di OpenCode</h2>
+<p>Aprite un terminale nella cartella di un progetto (anche una cartella vuota di prova) e avviate <code>opencode</code>.</p>
+<ul>
+<li>Con <code>/models</code> si vede l'elenco dei modelli e si sceglie quello di OmniRoute.</li>
+<li>Scrivete una richiesta semplice, per esempio "elenca i file di questa cartella". Se risponde, tutta la catena funziona.</li>
+<li>Con <code>/init</code> OpenCode analizza il progetto e crea nella cartella il file <code>AGENTS.md</code>: le istruzioni permanenti del progetto (come si avvia, come si provano le modifiche, convenzioni). Si rilegge, si corregge a mano e si tiene nel repository. Se nella cartella c'è già un <code>CLAUDE.md</code>, OpenCode lo usa quando manca <code>AGENTS.md</code>; se ci sono entrambi vince <code>AGENTS.md</code>.</li>
+<li>Con il tasto Tab si passa da una modalità all'altra: <code>build</code> ha tutti gli strumenti e può modificare i file; <code>plan</code> serve a ragionare e proporre senza toccare il codice.</li>
+<li>I permessi si regolano nel campo <code>permission</code> di <code>opencode.json</code>. Ogni azione può essere <code>allow</code> (si esegue), <code>ask</code> (chiede conferma) o <code>deny</code> (vietata). Esempio prudente per i comandi del terminale:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;permission&quot;: {
+    &quot;bash&quot;: {
+      &quot;*&quot;: &quot;ask&quot;,
+      &quot;git status&quot;: &quot;allow&quot;,
+      &quot;rm *&quot;: &quot;deny&quot;
+    }
+  }
+}
+</code></pre>
+<p>Tra le regole che corrispondono vince l'ultima. Per default quasi tutto è permesso senza chiedere: se non volete sorprese, mettete <code>ask</code> come regola generale.</p>
+<h2 id="errori-frequenti">Errori frequenti</h2>
+<blockquote>
+<p>Se state per fare l'attività "Trova l'errore", leggete questa sezione dopo: contiene le risposte.</p>
+</blockquote>
+<p>Casi reali, nell'ordine in cui conviene controllarli (dal basso: servizio, modelli, richiesta, agente).</p>
+<p><strong>1. OpenCode non riceve risposta</strong></p>
+<ul>
+<li>Sintomo: errore di connessione a <code>localhost:20128</code>. Con curl: <code>Failed to connect to localhost port 20128</code>. Il pannello nel browser non si apre.</li>
+<li>Causa: OmniRoute è spento. Se è stato avviato con <code>npm run dev</code> (installazione da sorgente), vive solo finché il terminale resta aperto. Dopo un riavvio del PC o una finestra chiusa, nessuno ascolta sulla porta. I dati (fornitori, combo, chiavi) restano al loro posto, in <code>%USERPROFILE%\.omniroute</code>.</li>
+<li>Correzione: riavviare OmniRoute (<code>omniroute serve</code>, oppure <code>npm run dev</code> nella sua cartella) e ripetere lo strato 1. Per non ricadere nel problema, preferite l'installazione con npm.</li>
+</ul>
+<p><strong>2. Il campo del fornitore viene ignorato</strong></p>
+<ul>
+<li>Sintomo: OpenCode non mostra il fornitore, o ne usa uno diverso da quello scritto, senza nessun messaggio.</li>
+<li>Causa: il campo è stato scritto <code>npmPackage</code>. Il nome giusto è <code>npm</code>. I campi sconosciuti vengono ignorati in silenzio.</li>
+<li>Correzione: rinominarlo in <code>npm</code>. Il <code>$schema</code> in cima al file aiuta l'editor a sottolineare i nomi sbagliati.</li>
+</ul>
+<p><strong>3. Il componente sbagliato</strong></p>
+<ul>
+<li>Sintomo: errori strani sul formato della richiesta o della risposta, anche con OmniRoute acceso.</li>
+<li>Causa: <code>"npm": "@ai-sdk/openai"</code>. Quel componente è pensato per i servizi che offrono l'interfaccia <code>/v1/responses</code>. Con <code>@ai-sdk/openai-compatible</code> OpenCode usa invece <code>/v1/chat/completions</code>, la stessa interfaccia provata allo strato 3. OmniRoute espone anche <code>/v1/responses</code>, ma nel caso reale la configurazione con <code>@ai-sdk/openai</code> non funzionava.</li>
+<li>Correzione: <code>"npm": "@ai-sdk/openai-compatible"</code>.</li>
+</ul>
+<p><strong>4. Il nome del modello non esiste</strong></p>
+<ul>
+<li>Sintomo: errore "modello non trovato", o il modello non compare in <code>/models</code>.</li>
+<li>Causa: nel campo <code>models</code> c'è un nome che non compare nell'elenco (nel caso reale <code>auto</code>) invece dell'<code>id</code> esatto restituito da <code>GET /v1/models</code> (per esempio <code>auto/coding</code>, oppure il nome della vostra combo). OpenCode non scopre i modelli di un fornitore aggiunto a mano.</li>
+<li>Correzione: copiare l'<code>id</code> dalla risposta dello strato 2 e usarlo come chiave dentro <code>models</code> e dopo <code>omniroute/</code> nel campo <code>model</code>.</li>
+</ul>
+<p><strong>5. Il PC non vede la chiave</strong></p>
+<ul>
+<li>Sintomo: errore 401 (non autorizzato) pur avendo creato la chiave.</li>
+<li>Causa: la variabile <code>OMNIROUTE_API_KEY</code> è stata creata con <code>setx</code> ma OpenCode, o il terminale, erano già aperti. Oppure ha un nome diverso da quello scritto nel file.</li>
+<li>Correzione: chiudere e riaprire il terminale (e l'app), controllare con <code>echo $env:OMNIROUTE_API_KEY</code> che il valore ci sia, verificare il nome.</li>
+</ul>
+<p><strong>6. Risponde un fornitore diverso da quello creduto</strong></p>
+<ul>
+<li>Sintomo: tutto funziona, ma <code>x-omniroute-provider</code> indica un collegamento che non pensavate di usare.</li>
+<li>Causa: il primo anello della combo era un collegamento non adatto (per esempio un account gratuito personale) o fuori servizio, e la cascata ha proseguito.</li>
+<li>Correzione: rivedere l'ordine della combo e togliere i collegamenti che non rispettano la regola del corso. Ripetere lo strato 3 dopo ogni modifica.</li>
+</ul>
+<p><strong>7. Un collegamento scaduto rallenta tutto</strong></p>
+<ul>
+<li>Sintomo: le risposte arrivano, ma con ritardo; nel pannello compare <code>invalid_grant</code>.</li>
+<li>Causa: il token di un collegamento "tramite account" è scaduto e la cascata lo prova a vuoto.</li>
+<li>Correzione: riautorizzarlo o toglierlo dalla combo.</li>
+</ul>
+<p><strong>8. Impostazioni di sicurezza lasciate come da fabbrica</strong></p>
+<ul>
+<li>Sintomo: nessuno. Per questo è l'errore più pericoloso.</li>
+<li>Causa: password del pannello rimasta <code>CHANGEME</code>, <code>REQUIRE_API_KEY</code> non impostata, OmniRoute in ascolto su tutta la rete.</li>
+<li>Correzione: parte 2 di questa guida. Cambiare la password, impostare <code>REQUIRE_API_KEY=true</code>, limitare l'indirizzo a 127.0.0.1.</li>
+</ul>
+<h2 id="spegnere-e-riavviare">Spegnere e riavviare</h2>
+<ul>
+<li><strong>OmniRoute (npm):</strong> <code>Ctrl+C</code> nella finestra in cui gira. Per riavviarlo, <code>omniroute serve</code> con le stesse variabili. Non è un servizio di Windows: se chiudete la finestra o riavviate il PC, resta spento finché non lo riavviate voi.</li>
+<li><strong>OmniRoute (Docker):</strong> <code>docker stop omniroute</code> per fermarlo, <code>docker start omniroute</code> per riaccenderlo. Con l'opzione <code>--restart unless-stopped</code> riparte insieme a Docker.</li>
+<li><strong>OpenCode:</strong> <code>/exit</code> nel programma, oppure <code>Ctrl+C</code>.</li>
+<li><strong>Dopo un riavvio del PC</strong> controllate sempre lo strato 1 prima di accusare OpenCode.</li>
+</ul>
+<h2 id="sicurezza-in-sintesi">Sicurezza, in sintesi</h2>
+<ul>
+<li>Le chiavi (del fornitore e di OmniRoute) non entrano mai in un repository, in una chat o in uno screenshot. Se ne è uscita una, si revoca e se ne crea un'altra.</li>
+<li>Il file <code>opencode.json</code> di un progetto usa sempre <code>{env:NOME}</code>. La chiave scritta nel file è tollerata solo nel file globale nella cartella utente.</li>
+<li>Il file <code>.env</code> di OmniRoute resta fuori da Git: in un progetto con Git si controlla <code>.gitignore</code>.</li>
+<li>Sul fornitore si imposta un tetto di spesa mensile, in un'area di lavoro dedicata.</li>
+<li>OmniRoute ascolta solo su 127.0.0.1, con <code>REQUIRE_API_KEY=true</code> e una password vostra.</li>
+<li>Si collegano solo fornitori in chiave API con condizioni che escludono l'addestramento sui dati.</li>
+<li>L'agente può eseguire comandi sul vostro PC: tenete <code>ask</code> come regola generale e leggete ogni conferma prima di accettarla.</li>
+<li>I dati di studenti e famiglie non si usano in prove e dimostrazioni.</li>
+</ul>
+<h2 id="lo-schema-in-una-riga">Lo schema in una riga</h2>
+<p>OpenCode (agente) → <code>http://localhost:20128/v1</code> (OmniRoute: chiave, combo, registri) → fornitore con chiave API (modello).</p>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>
