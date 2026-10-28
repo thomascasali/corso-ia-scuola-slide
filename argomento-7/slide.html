@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argomento 7 · Gli strumenti dietro le quinte · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  @media (max-width: 900px) {
+    .two-col-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 4px; background: var(--bg-light); border: 1px solid var(--border); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--warn); cursor: pointer; border: 3px solid var(--bg); }
+  input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--warn); cursor: pointer; border: 3px solid var(--bg); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useMemo } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stessa libreria degli altri argomenti) ---------- */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- schemi propri di questo argomento ---------- */
+
+const REPO_URL = 'https://github.com/thomascasali/corso-ia-scuola-slide';
+const COMMITS_URL = 'https://github.com/thomascasali/corso-ia-scuola-slide/commits/main/';
+const B = 'Argomento 7 — Strumenti dietro le quinte';
+
+function ThreeCards({ cards }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '14px' }}>
+      {cards.map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '16px 18px' }}>
+          <div style={{ fontSize: '28px', marginBottom: '6px' }} aria-hidden="true">{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{c.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.5 }}>{c.text}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CommitCard() {
+  const rows = [
+    { k: 'Chi', v: 'Thomas Casali', c: colors.info },
+    { k: 'Quando', v: '27 ottobre 2026, 20:52', c: colors.purple },
+    { k: 'Cosa', v: '1 file cambiato: le slide della lezione 0 (56 righe aggiunte, 1 tolta)', c: colors.success },
+    { k: 'Perché', v: '«Lezione 0: slide con lo schema del percettrone»', c: colors.warn },
+  ];
+  return (
+    <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '16px 20px', maxWidth: '900px', margin: '0 auto' }}>
+      <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '10px' }}>Una voce della cronologia del sito del corso</div>
+      {rows.map((r, i) => (
+        <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'baseline', padding: '8px 0', borderTop: i ? `1px solid ${colors.border}` : 'none', flexWrap: 'wrap' }}>
+          <span style={{ color: r.c, fontWeight: 700, fontSize: 'var(--fs-sm)', minWidth: '90px' }}>{r.k}</span>
+          <span style={{ color: colors.text, fontSize: 'var(--fs-sm)', flex: 1, minWidth: '220px' }}>{r.v}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MessageCompare() {
+  const box = (title, color, items) => (
+    <div style={{ background: colors.bgCard, border: `1px solid ${color}60`, borderTop: `4px solid ${color}`, borderRadius: '8px', padding: '16px 18px' }}>
+      <div style={{ color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>{title}</div>
+      {items.map((t, i) => (
+        <div key={i} style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.text, background: colors.bgLight, borderRadius: '6px', padding: '8px 12px', marginBottom: '8px' }}>{t}</div>
+      ))}
+    </div>
+  );
+  return (
+    <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+      {box('Dice solo cosa', colors.danger, ['Aggiornato file', 'Modifiche varie', 'Correzioni'])}
+      {box('Dice cosa e perché', colors.success, ['Tolte le slide di pausa (le pause le decide il docente in laboratorio)', 'Slide adattive su schermi da PC (sui proiettori il testo era troppo piccolo)'])}
+    </div>
+  );
+}
+
+function ComparisonTable() {
+  const cols = [
+    { t: 'Chatbot', s: 'argomento 1', c: colors.info },
+    { t: 'Bot a compito fisso', s: '', c: colors.success },
+    { t: 'Agente in una chat', s: '', c: colors.purple },
+  ];
+  const rows = [
+    ['Quando lavora', 'Quando gli scrivete', 'A orari fissi o quando succede qualcosa', 'Quando gli scrivete, e anche a orari fissi'],
+    ['Chi decide cosa fare', 'Voi, una domanda alla volta', 'Chi l\'ha programmato, una volta per tutte', 'L\'agente, dentro i permessi che ha'],
+    ['Cosa può toccare', 'Quello che gli date nella chat', 'Solo il suo compito', 'Tutto ciò che gli è stato collegato'],
+    ['Se sbaglia', 'Una risposta sbagliata, che leggete', 'Sbaglia sempre allo stesso modo, si vede presto', 'Può fare un\'azione sbagliata, anche quando nessuno guarda'],
+  ];
+  const cell = { padding: '10px 12px', borderTop: `1px solid ${colors.border}`, fontSize: 'var(--fs-xs)', color: colors.textDim, verticalAlign: 'top', lineHeight: 1.45 };
+  return (
+    <div style={{ overflowX: 'auto' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', background: colors.bgCard, borderRadius: '8px', minWidth: '640px' }}>
+        <thead>
+          <tr>
+            <th style={{ ...cell, borderTop: 'none' }}></th>
+            {cols.map((c, i) => (
+              <th key={i} scope="col" style={{ ...cell, borderTop: `4px solid ${c.color}`, color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', textAlign: 'left' }}>
+                {c.t}{c.s && <div style={{ color: colors.textMuted, fontWeight: 400, fontSize: 'var(--fs-xs)' }}>{c.s}</div>}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>
+              <th scope="row" style={{ ...cell, color: colors.text, fontWeight: 700, textAlign: 'left', minWidth: '130px' }}>{r[0]}</th>
+              {r.slice(1).map((v, j) => <td key={j} style={cell}>{v}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ---------- app ---------- */
+
+const slides = [
+  {
+    block: 'Argomento 7 — Strumenti dietro le quinte · Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }} aria-hidden="true">🎛️</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Argomento 7
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '900px' }}>Gli strumenti dietro le quinte: GitHub, bot e agenti sempre attivi</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '22px', maxWidth: '760px' }}>
+          Prima di questo argomento conviene aver visto: <a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>.
+        </p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '26px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: "Slide di apertura. Se la sala non ha visto l'argomento 5, ricordate in una frase la differenza tra chatbot e agente: il chatbot risponde, l'agente fa una serie di passi con degli strumenti."
+  },
+  {
+    block: B + ' · Di cosa parliamo',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{B} · Di cosa parliamo</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quello che di solito non si vede</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Dietro un sito, un avviso sul telefono o un assistente in chat ci sono pochi strumenti, quasi sempre gli stessi. Qui ne vediamo tre.</p>
+        <ThreeCards cards={[
+          { icon: '🗂️', title: 'GitHub', color: colors.info, text: 'Il posto dove vivono codice e documenti, con la cronologia di ogni modifica.' },
+          { icon: '📨', title: 'I bot', color: colors.success, text: 'Programmi con un compito fisso che mandano o ricevono messaggi, per esempio su Telegram.' },
+          { icon: '🤖', title: 'Gli agenti sempre attivi', color: colors.purple, text: 'Un agente che resta acceso su un computer e risponde in chat, anche di notte.' },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>Servono per capire come sono fatti i casi di studio dell'argomento 8 e come lavora Claude Code nell'argomento 9.</p>
+      </div>
+    ),
+    notes: "Presentate i tre strumenti in un minuto. Non sono strumenti che i partecipanti useranno ogni giorno: servono a capire cosa c'è dietro i servizi che vedranno, e a fare le domande giuste quando qualcuno propone di introdurne uno a scuola."
+  },
+
+  /* --- github --- */
+  {
+    block: B + ' · GitHub',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{B} · GitHub</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Una cartella condivisa che ricorda tutto</h2>
+        <p style={{ color: colors.textDim, marginBottom: '14px' }}>GitHub è un servizio online dove si tengono i <strong style={{ color: colors.text }}>repository</strong>: cartelle di file (codice, testi, slide) che conservano la storia di ogni cambiamento.</p>
+        <ThreeCards cards={[
+          { icon: '🕓', title: 'La cronologia', color: colors.info, text: 'Ogni modifica salvata resta registrata: si può rivedere com\'era un file un mese fa.' },
+          { icon: '🚩', title: 'Le segnalazioni', color: colors.warn, text: 'Le «issue»: chi trova un problema lo scrive lì, e la discussione resta attaccata al lavoro.' },
+          { icon: '🌐', title: 'Le pagine pubblicate', color: colors.success, text: 'Con GitHub Pages i file di un repository diventano un sito che chiunque può aprire.' },
+        ]} />
+        <Box type="info" title="Pubblico o privato">
+          Un repository pubblico lo può leggere chiunque, anche senza account. Uno privato lo vede solo chi è autorizzato.
+        </Box>
+      </div>
+    ),
+    notes: "Restate sull'idea di cartella con memoria. Se qualcuno conosce la cronologia delle versioni di Google Documenti, è un buon aggancio: GitHub fa la stessa cosa per una cartella intera, e ogni salvataggio ha un autore e un messaggio. Non serve spiegare come si usa da programmatori."
+  },
+  {
+    block: B + ' · GitHub',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il commit, una voce di registro</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Ogni salvataggio si chiama <strong style={{ color: colors.text }}>commit</strong>. Come una riga del protocollo, risponde sempre alle stesse domande.</p>
+        <CommitCard />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '16px' }}>Il «perché» lo scrive chi fa la modifica, con parole sue: è il messaggio del commit.</p>
+      </div>
+    ),
+    notes: "Il commit mostrato è vero: è nella cronologia pubblica del sito del corso e lo ritroveranno nell'attività. Il paragone con il protocollo funziona bene con la segreteria: chi, quando, cosa, e un oggetto che spiega. Fate notare che chi, quando e cosa li registra il sistema da solo, mentre il perché dipende da chi scrive."
+  },
+  {
+    block: B + ' · GitHub',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Due esempi vicini a noi</h2>
+        <div className="two-col-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.success}60`, borderTop: `4px solid ${colors.success}`, borderRadius: '8px', padding: '16px 18px' }}>
+            <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Il sito di questo corso</div>
+            <p style={{ color: colors.textDim, fontSize: 'var(--fs-xs)' }}>Le slide che state guardando vengono da un repository pubblico su GitHub, pubblicato come sito con GitHub Pages. Ogni correzione alle slide è un commit.</p>
+            <p style={{ fontSize: 'var(--fs-xs)', marginTop: '10px' }}>
+              <a href={REPO_URL} target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">github.com/thomascasali/corso-ia-scuola-slide</a>
+            </p>
+          </div>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.info}60`, borderTop: `4px solid ${colors.info}`, borderRadius: '8px', padding: '16px 18px' }}>
+            <div style={{ color: colors.info, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>L'archivio delle circolari</div>
+            <p style={{ color: colors.textDim, fontSize: 'var(--fs-xs)' }}>Un programma copia da solo le circolari della scuola in un repository privato, insieme al testo estratto da ogni PDF. Nessuno lo aggiorna a mano.</p>
+          </div>
+        </div>
+        <Box type="tip" title="Perché interessa a chi non scrive codice">
+          Una cronologia così serve a ogni documento che cambia spesso: un regolamento, la modulistica, l'orario. Chi ha cambiato cosa, quando e perché smette di essere una domanda senza risposta.
+        </Box>
+      </div>
+    ),
+    notes: "Il secondo esempio è privato: non dite il nome del repository e non mostratelo. Basta l'idea che un archivio possa aggiornarsi da solo e tenere traccia di ogni aggiunta."
+  },
+  {
+    block: B + ' · Attività: la cronologia',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{B} · Attività: la cronologia</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Chi ha cambiato cosa, e perché</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Da soli o in coppia, 10-15 minuti. Non serve un account.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Aprite la cronologia del sito del corso (link qui sotto). La pagina è in inglese: «Commits» sono le modifiche registrate.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Rispondete alle domande del foglio: quando è cambiata una slide, chi l'ha cambiata, e perché.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Aprite un commit e guardate le righe in verde (aggiunte) e in rosso (tolte).</li>
+        </ol>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+          <ActivityBadge href={COMMITS_URL} label="Cronologia del sito del corso (GitHub)" />
+          <ActivityBadge href="../materiali/argomento-7/cronologia-del-sito.html" label="Foglio: chi ha cambiato cosa" />
+        </div>
+      </div>
+    ),
+    notes: "Mostrate prima voi sul proiettore come si arriva alla cronologia: dalla pagina del repository, il link con l'orologio e il numero di commit. Se compare un avviso sui cookie, si chiude rifiutando quelli facoltativi. Le date possono comparire in forma relativa («2 days ago»): passandoci sopra con il mouse compare la data completa. Le risposte sono nelle soluzioni per il docente. In chiusura chiedete chi ha trovato l'autore della modifica sulle pause: risulta un agente, e questo prepara l'argomento 9."
+  },
+  {
+    block: B + ' · Attività: la cronologia',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il perché non si scrive da solo</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Il sistema registra chi e quando. Il messaggio lo scrive una persona, o un agente: se è vago, fra sei mesi nessuno saprà più perché si è cambiato qualcosa.</p>
+        <MessageCompare />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '16px' }}>Lo stesso vale per un verbale, o per la nota che accompagna un regolamento modificato.</p>
+      </div>
+    ),
+    notes: "Dopo l'attività. Gli esempi a sinistra sono inventati. Quelli a destra vengono dalla cronologia vera del sito: ai messaggi sulle pause e sugli schermi da PC è stato aggiunto tra parentesi il motivo, per far vedere come sarebbe stato più chiaro. Chiedete se è capitato di trovare un documento cambiato senza sapere perché."
+  },
+
+  /* --- bot --- */
+  {
+    block: B + ' · I bot',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{B} · I bot</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il bot: un programma con un compito fisso</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Su Telegram (e su altre app di messaggistica) un bot è un contatto che non è una persona: dietro c'è un programma che manda o riceve messaggi.</p>
+        <FlowChain steps={[
+          { icon: '⏰', label: 'Succede qualcosa', sub: 'un orario, una circolare nuova, un guasto', color: colors.warn },
+          { icon: '⚙️', label: 'Il programma fa il suo compito', sub: 'sempre lo stesso', color: colors.info },
+          { icon: '📱', label: 'Arriva un messaggio', sub: 'sul telefono di chi deve saperlo', color: colors.success },
+        ]} />
+        <Box type="info" title="La forma più semplice di collegamento">
+          Il bot non decide niente. Fa una cosa sola, sempre nello stesso modo, e per questo è prevedibile.
+        </Box>
+      </div>
+    ),
+    notes: "Il bot è il modo più semplice di collegare un servizio a chi lo deve usare: invece di andare a controllare, si riceve un messaggio. Alcuni bot usano anche un'IA dentro il loro compito, per esempio per riassumere un testo, ma il compito resta quello fissato da chi li ha programmati."
+  },
+  {
+    block: B + ' · I bot',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Tre bot che lavorano ogni giorno</h2>
+        <ThreeCards cards={[
+          { icon: '🌅', title: 'Il riepilogo del registro', color: colors.purple, text: 'Alle 6:30 manda il riepilogo della giornata: orario, verifiche, circolari nuove. Durante il giorno avvisa quando esce una circolare.' },
+          { icon: '🚨', title: 'L\'allarme del server', color: colors.danger, text: 'Un programma controlla che un server funzioni. Se qualcosa non va, chi lo gestisce riceve subito un avviso.' },
+          { icon: '🏐', title: 'La console dello staff', color: colors.success, text: 'In un impianto sportivo lo staff apre le porte e blocca o sblocca le postazioni da remoto, scrivendo al bot.' },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '16px' }}>Il primo è Argo Briefing, il caso di studio che si riprende nell'argomento 8. Il terzo riceve comandi, oltre a mandare messaggi: lì conta molto chi può scrivergli.</p>
+      </div>
+    ),
+    notes: "Tre esempi reali, raccontati senza dettagli tecnici: niente nomi Telegram dei bot, indirizzi o modo in cui sono collegati. Nel terzo caso fate notare la differenza: un bot che apre una porta deve accettare comandi solo da chi è autorizzato, cioè dal gruppo dello staff. È lo stesso problema dei permessi che torna, più grande, con gli agenti."
+  },
+
+  /* --- agente in chat --- */
+  {
+    block: B + ' · Un agente in chat',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>{B} · Un agente in chat</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>OpenClaw, l'agente che vive in una chat</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>È un programma <strong style={{ color: colors.text }}>open source</strong>: il codice è pubblico e chiunque può installarlo.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gira su un computer proprio e può restare acceso sempre, anche quando nessuno lo usa.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gli si scrive da un'app di messaggistica: Telegram, WhatsApp e molte altre.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Per capire e rispondere usa un modello linguistico, scelto da chi lo installa.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Con gli strumenti che gli si collegano compie delle azioni, anche a orari fissi.</li>
+        </ul>
+        <Box type="tip" title="L'assistente del docente su Telegram">
+          È costruito così: un computer sempre acceso, un modello linguistico e alcuni strumenti collegati, scelti da chi l'ha installato. Lo vedrete al lavoro tra poco.
+        </Box>
+      </div>
+    ),
+    notes: "Le caratteristiche generali vengono dalla documentazione ufficiale del progetto (sito openclaw.ai, documentazione e codice su GitHub, controllati il 28/10/2026): open source con licenza MIT, gira sul proprio computer, si collega a Telegram, WhatsApp e altre app, funziona con modelli diversi, prevede attività programmate. Quali strumenti si collegano lo decide chi lo installa: calendario e documenti non sono compresi di serie. Non dite il nome dell'assistente."
+  },
+  {
+    block: B + ' · Un agente in chat',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Come è fatto</h2>
+        <FlowChain minItemWidth="140px" steps={[
+          { icon: '📱', label: 'Scrivete in chat', sub: '«Che scadenze ho questa settimana?»', color: colors.info },
+          { icon: '💻', label: 'Il computer sempre acceso', sub: 'riceve il messaggio', color: colors.warn },
+          { icon: '🧠', label: 'Il modello linguistico', sub: 'decide quali passi fare', color: colors.purple },
+          { icon: '🧰', label: 'Gli strumenti', sub: 'calendario, documenti, orario', color: colors.success },
+          { icon: '💬', label: 'La risposta', sub: 'torna nella chat', color: colors.info },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>È il ciclo dell'agente dell'argomento 5, con una differenza: non lo aprite voi quando serve, è sempre lì.</p>
+      </div>
+    ),
+    notes: "Collegate al ciclo dell'agente visto nell'argomento 5 (capire, pianificare, usare uno strumento, controllare). Le novità sono due: l'agente sta in una chat che si usa già tutti i giorni, e non si spegne quando si chiude una finestra. Può anche partire da solo a un orario stabilito."
+  },
+  {
+    block: B + ' · Un agente in chat',
+    content: () => (
+      <div style={{ padding: '18px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Chatbot, bot, agente in chat</h2>
+        <ComparisonTable />
+      </div>
+    ),
+    notes: "Leggete la tabella per righe, non per colonne: la riga «Se sbaglia» porta alla slide successiva. Il chatbot sbaglia davanti a voi, che leggete la risposta. Il bot sbaglia sempre nello stesso modo, quindi lo si nota presto. L'agente può fare un'azione sbagliata da solo, a un orario in cui nessuno guarda."
+  },
+  {
+    block: B + ' · Un agente in chat',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Più cose collega, più domande servono</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
+          {[
+            { icon: '🔑', t: 'Permessi', c: colors.warn, p: 'Che cosa può leggere e che cosa può fare? Leggere il calendario è diverso da mandare una mail a nome vostro.' },
+            { icon: '👥', t: 'Chi gli scrive', c: colors.info, p: 'Risponde solo a chi è autorizzato? Un messaggio che arriva da fuori può contenere istruzioni pensate per ingannarlo.' },
+            { icon: '💶', t: 'Costi', c: colors.purple, p: 'Ogni domanda e ogni attività programmata costa qualcosa, anche di notte. Serve un tetto di spesa.' },
+            { icon: '🧯', t: 'Se sbaglia', c: colors.danger, p: 'Chi se ne accorge, e quanto in fretta? Un\'azione si può annullare? Sulle cose delicate decide una persona.' },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${x.c}60`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '14px 16px' }}>
+              <div style={{ color: x.c, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}><span aria-hidden="true">{x.icon}</span> {x.t}</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.5 }}>{x.p}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>La documentazione di OpenClaw chiede di trattare come non affidabili i messaggi in arrivo e di decidere chi può scrivere all'agente.</p>
+      </div>
+    ),
+    notes: "È il punto centrale dell'argomento. La documentazione sulla sicurezza di OpenClaw raccomanda di limitare chi può scrivere all'agente (abbinamento ed elenchi di persone ammesse), di dare agli strumenti solo i permessi che servono, anche in sola lettura, e avverte che i contenuti esterni possono pilotare il comportamento del modello. Collegate i costi all'argomento 8, dove la calcolatrice mostra che il costo cresce con il numero di chiamate. Collegate «Se sbaglia» all'argomento 6: le decisioni che non si delegano."
+  },
+
+  /* --- dimostrazione --- */
+  {
+    block: B + ' · Dimostrazione dal vivo',
+    content: () => (
+      <div style={{ padding: '30px', textAlign: 'center' }}>
+        <BlockTag>{B} · Dimostrazione dal vivo</BlockTag>
+        <div style={{ fontSize: 'var(--fs-display)', margin: '10px 0 16px' }} aria-hidden="true">📱</div>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dimostrazione dal vivo del docente</h2>
+        <p style={{ color: colors.textDim, maxWidth: '820px', margin: '0 auto' }}>Durata indicativa: 10-15 minuti. A ogni risposta chiedetevi: quale strumento ha usato? Poteva sbagliare? Chi se ne sarebbe accorto?</p>
+      </div>
+    ),
+    notes: "Seguite il copione della dimostrazione, che non sta nelle slide. Prima di iniziare controllate che sul proiettore non compaia niente di personale."
+  },
+  {
+    block: B + ' · Dimostrazione dal vivo',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Bot, agente o niente?</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>A coppie, 10 minuti, solo a voce. Per ogni compito scegliete un bot a compito fisso, un agente in chat oppure nessuno dei due, e dite perché.</p>
+        <ChipRow items={[
+          'Ricordare a ogni docente la scadenza dei verbali',
+          'Rispondere alle famiglie sulle uscite',
+          'Avvisare il tecnico quando una stampante si blocca',
+          'Trovare in quale circolare si parlava dei colloqui',
+          'Confermare un\'iscrizione a un corso',
+        ]} />
+        <Box type="tip" title="Una domanda guida">
+          Se sbaglia, chi se ne accorge? Se la risposta è «nessuno, finché non è tardi», serve una persona nel mezzo.
+        </Box>
+      </div>
+    ),
+    notes: "Non c'è una risposta unica: conta il ragionamento. Spunti per guidare la discussione: la scadenza dei verbali e la stampante bloccata sono compiti fissi, adatti a un bot. Cercare una circolare è una domanda libera su documenti non personali, adatta a un agente. Rispondere alle famiglie tocca dati di minori e parla a nome della scuola: almeno una persona controlla prima dell'invio, come nell'argomento 6. Per confermare un'iscrizione può bastare un modulo con risposta automatica, senza IA."
+  },
+
+  /* --- chiusura --- */
+  {
+    block: B + ' · Chiusura',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>In breve</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Cosa portarsi a casa</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px' }}>Su GitHub ogni modifica ha un autore, una data e un messaggio. La cronologia dice chi ha cambiato cosa, e anche perché, se qualcuno l'ha scritto.</li>
+          <li style={{ marginBottom: '8px' }}>Un bot fa un compito fisso e manda messaggi: è prevedibile.</li>
+          <li>Un agente in chat sceglie i passi da solo ed è sempre acceso. Prima di collegarlo a qualcosa si decide che cosa può fare, chi può scrivergli, quanto può spendere e chi lo controlla.</li>
+        </ul>
+      </div>
+    ),
+    notes: "Slide di ricapitolazione. Se il tempo stringe, questa è la slide che non va saltata."
+  },
+  {
+    block: B + ' · Chiusura',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dopo questo argomento</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gli argomenti che vengono bene subito dopo:</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-8/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 8 — Dalla carta al servizio: i casi di studio</a>: tre procedure della scuola passate dalla carta a un servizio, e il caso Argo Briefing con i suoi costi.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-9/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 9 — Agenti al lavoro con Claude Code</a>: un gruppo di agenti con un revisore, poi Claude Code sui PC del laboratorio.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-6/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 6 — Usare l'IA con giudizio</a>: privacy, regole, verifica umana, fornitori e cosa non delegare.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>
+          I materiali di questo argomento restano su{' '}
+          <a href="../materiali/argomento-7/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            thomascasali.github.io/corso-ia-scuola-slide/materiali/argomento-7/
+          </a>
+        </p>
+      </div>
+    ),
+    notes: "Ultima slide dell'argomento. Scegliete con la sala da dove proseguire. Ricordate dove restano i materiali."
+  },
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span title={slide.block} style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

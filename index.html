@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Tools per l'Organizzazione scolastica</title>
-<meta name="description" content="Corso di intelligenza artificiale per il personale della scuola, ITTS &quot;Belluzzi-Da Vinci&quot; di Rimini: slide e materiali dei quattro incontri in laboratorio.">
+<meta name="description" content="Corso di intelligenza artificiale per il personale della scuola, ITTS &quot;Belluzzi-Da Vinci&quot; di Rimini: slide e materiali degli argomenti del corso e dei laboratori sui portali.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2315120f'/%3E%3Cpath d='M12 3 L14 10 L21 12 L14 14 L12 21 L10 14 L3 12 L10 10 Z' fill='%23d9a441'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -269,6 +269,70 @@
     .incontro-card .actions { margin-top: auto; padding-top: 18px; }
   }
 
+  /* ---------- Argomenti ---------- */
+
+  .card-prereq {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .card-stato {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border: 1px dashed var(--border-strong);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+
+  .in-preparazione .num { border-style: dashed; color: var(--text-muted); border-color: var(--border-strong); }
+
+  .sequenza {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sequenza li { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 14px; }
+
+  .sequenza li + li::before { content: '→'; color: var(--text-muted); margin-right: 4px; }
+
+  .sequenza a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .sequenza a:hover, .sequenza a:focus-visible { border-color: var(--accent); color: var(--accent-alt); }
+
+  .step-num { color: var(--accent); font-family: 'Fraunces', Georgia, serif; }
+
+  .step-futuro {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px dashed var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
   /* ---------- Footer ---------- */
 
   footer {
@@ -306,23 +370,52 @@
       <p class="meta">ITTS &quot;Belluzzi-Da Vinci&quot; · Rimini · Docente: Thomas Casali</p>
 
       <p class="intro">Il corso forma il personale della scuola a usare l'intelligenza artificiale con consapevolezza nel lavoro di organizzazione: capire come funzionano gli strumenti, usarli con giudizio e progettare procedure migliori. Non servono competenze informatiche: basta un browser e l'account Google della scuola.</p>
+      <p class="intro">Il corso è diviso in argomenti autonomi: il docente sceglie quali fare e in che ordine, secondo il gruppo. In ogni argomento si alternano spiegazione e lavoro al PC.</p>
     </header>
 
+    <section class="percorso" aria-labelledby="consigliato-h">
+      <h2 id="consigliato-h">Percorso completo consigliato</h2>
+      <ol class="sequenza">
+        <li><a href="argomento-0/slide.html"><span class="step-num">0</span> Come è fatta un'IA</a> <span class="facoltativo">(facoltativo)</span></li>
+        <li><a href="argomento-1/slide.html"><span class="step-num">1</span> Usare un chatbot</a></li>
+        <li><a href="argomento-2/slide.html"><span class="step-num">2</span> Gem e notebook</a></li>
+        <li><a href="argomento-3/slide.html"><span class="step-num">3</span> Le funzioni di Gemini</a></li>
+        <li><span class="step-futuro"><span class="step-num">4</span> Gemini e Workspace</span> <span class="facoltativo">(in preparazione)</span></li>
+        <li><a href="argomento-5/slide.html"><span class="step-num">5</span> Chatbot e agente</a></li>
+        <li><a href="argomento-6/slide.html"><span class="step-num">6</span> Usare l'IA con giudizio</a></li>
+        <li><a href="argomento-7/slide.html"><span class="step-num">7</span> Gli strumenti dietro le quinte</a></li>
+        <li><a href="argomento-8/slide.html"><span class="step-num">8</span> Dalla carta al servizio</a></li>
+        <li><a href="argomento-9/slide.html"><span class="step-num">9</span> Agenti al lavoro</a></li>
+        <li><a href="argomento-10/slide.html"><span class="step-num">10</span> Dalle idee al progetto</a></li>
+      </ol>
+    </section>
+
     <section class="percorso" aria-labelledby="percorso-h">
-      <h2 id="percorso-h">Il percorso</h2>
+      <h2 id="percorso-h">Gli argomenti</h2>
 
       <div class="timeline">
         <div class="line" aria-hidden="true"></div>
 
         <article class="incontro-card">
+          <div class="num" aria-hidden="true">0</div>
+          <div class="card-body">
+            <h3>Argomento 0 — Come è fatta un'IA</h3>
+            <p class="card-descr">Un richiamo alle basi, anche solo in parte: regole ed esempi, il neurone e la rete, token e parole vicine, come nasce un chatbot, probabilità e temperatura, catena di pensiero, limiti. Prima la spiegazione, poi le attività al PC.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="argomento-0/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-0/index.html">Materiali per le attività</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="incontro-card">
           <div class="num" aria-hidden="true">1</div>
           <div class="card-body">
-            <h3>Incontro 1 — Capire gli strumenti</h3>
-            <p class="card-descr">Si scopre come funziona, e dove sbaglia, un modello linguistico; si prepara un primo progetto in chat; si vede per la prima volta un agente al lavoro.</p>
+            <h3>Argomento 1 — Usare un chatbot: prevede testo, inventa, contesto e memoria</h3>
+            <p class="card-descr">Perché la stessa richiesta dà risposte diverse, perché a volte l'IA inventa e come accorgersene, che cosa vede il chatbot quando risponde. Con la caccia all'errore.</p>
             <div class="actions">
-              <a class="btn btn-primary" href="incontro-1/slide.html">Apri le slide <span class="arrow">→</span></a>
-              <a class="btn btn-outline" href="incontro-1/simulazione-agente.html">Simulazione: chatbot o agente?</a>
-              <a class="btn btn-outline" href="materiali/incontro-1/index.html">Materiali per le attività</a>
+              <a class="btn btn-primary" href="argomento-1/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-1/index.html">Materiali per le attività</a>
             </div>
           </div>
         </article>
@@ -330,11 +423,12 @@
         <article class="incontro-card">
           <div class="num" aria-hidden="true">2</div>
           <div class="card-body">
-            <h3>Incontro 2 — Dalla carta al servizio</h3>
-            <p class="card-descr">Si guarda come sono nati alcuni servizi digitali della scuola e si impara a riconoscere quando conviene delegare una decisione all'IA, e quando no.</p>
+            <h3>Argomento 2 — Gem e notebook: istruzioni e documenti</h3>
+            <p class="card-descr">Si prepara un assistente con istruzioni e documenti propri, un Gem o un notebook, e si controlla se risponde davvero in base a quei documenti.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 1.</p>
             <div class="actions">
-              <a class="btn btn-primary" href="incontro-2/slide.html">Apri le slide <span class="arrow">→</span></a>
-              <a class="btn btn-outline" href="materiali/incontro-2/index.html">Materiali per le attività</a>
+              <a class="btn btn-primary" href="argomento-2/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-2/index.html">Materiali per le attività</a>
             </div>
           </div>
         </article>
@@ -342,41 +436,101 @@
         <article class="incontro-card">
           <div class="num" aria-hidden="true">3</div>
           <div class="card-body">
-            <h3>Incontro 3 — Agenti al lavoro</h3>
-            <p class="card-descr">Un gioco di ruolo senza PC per vivere i ruoli di un gruppo di agenti, una demo dal vivo con un agente revisore, poi il primo contatto pratico con Claude Code.</p>
+            <h3>Argomento 3 — Le funzioni di Gemini oggi</h3>
+            <p class="card-descr">Ricerca e fonti, Deep Research, allegati, Canvas, Gemini Notebook, modello veloce o che ragiona, cronologia, immagini e voce, app connesse. Si provano in coppia.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 1.</p>
             <div class="actions">
-              <a class="btn btn-primary" href="incontro-3/slide.html">Apri le slide <span class="arrow">→</span></a>
-              <a class="btn btn-outline" href="materiali/incontro-3/index.html">Materiali per le attività</a>
+              <a class="btn btn-primary" href="argomento-3/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-3/index.html">Materiali per le attività</a>
             </div>
           </div>
         </article>
 
-        <article class="incontro-card">
+        <article class="incontro-card in-preparazione">
           <div class="num" aria-hidden="true">4</div>
           <div class="card-body">
-            <h3>Incontro 4 — Laboratorio idee</h3>
-            <p class="card-descr">Ognuno trasforma un problema del proprio lavoro in un'idea di servizio; il gruppo sceglie la migliore e il docente la trasforma in un prototipo, davanti a tutti.</p>
+            <h3>Argomento 4 — Gemini e Workspace</h3>
+            <p class="card-descr">Gemini dentro gli strumenti di lavoro della scuola.</p>
+            <p class="card-stato">In preparazione</p>
+          </div>
+        </article>
+
+        <article class="incontro-card">
+          <div class="num" aria-hidden="true">5</div>
+          <div class="card-body">
+            <h3>Argomento 5 — Chatbot e agente</h3>
+            <p class="card-descr">Che cosa cambia quando l'IA non si limita a rispondere ma agisce: una simulazione da giocare, una demo dal vivo, le parole dell'agente (strumenti, connettori, skill, plugin, subagenti).</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 1.</p>
             <div class="actions">
-              <a class="btn btn-primary" href="incontro-4/slide.html">Apri le slide <span class="arrow">→</span></a>
-              <a class="btn btn-outline" href="materiali/incontro-4/matrice-idee.html">Matrice per votare le idee</a>
-              <a class="btn btn-outline" href="materiali/incontro-4/index.html">Materiali per le attività</a>
+              <a class="btn btn-primary" href="argomento-5/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="argomento-5/simulazione-agente.html">Simulazione: chatbot o agente?</a>
+              <a class="btn btn-outline" href="materiali/argomento-5/index.html">Materiali per le attività</a>
             </div>
           </div>
         </article>
-      </div>
-    </section>
 
-    <section class="percorso" aria-labelledby="l0-h">
-      <h2 id="l0-h">Lezione di richiamo</h2>
-      <div class="timeline">
         <article class="incontro-card">
-          <div class="num" aria-hidden="true">0</div>
+          <div class="num" aria-hidden="true">6</div>
           <div class="card-body">
-            <h3>Lezione 0 — Come è fatta un'intelligenza artificiale</h3>
-            <p class="card-descr">Un richiamo alle basi, da fare quando serve e anche solo in parte: regole ed esempi, il neurone e la rete, token e parole vicine, come nasce un chatbot, probabilità e temperatura, catena di pensiero, limiti e parole chiave.</p>
+            <h3>Argomento 6 — Usare l'IA con giudizio</h3>
+            <p class="card-descr">Cosa non caricare mai, come anonimizzare, l'AI Act in breve, la verifica umana, la dipendenza dai fornitori e le decisioni che non si delegano.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 1.</p>
             <div class="actions">
-              <a class="btn btn-primary" href="incontro-0/slide.html">Apri le slide <span class="arrow">→</span></a>
-              <a class="btn btn-outline" href="materiali/incontro-0/index.html">Materiali per le attività</a>
+              <a class="btn btn-primary" href="argomento-6/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-6/index.html">Materiali per le attività</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="incontro-card">
+          <div class="num" aria-hidden="true">7</div>
+          <div class="card-body">
+            <h3>Argomento 7 — Gli strumenti dietro le quinte: GitHub, bot e agenti sempre attivi</h3>
+            <p class="card-descr">Dove vivono codice e documenti e come se ne legge la cronologia, i bot che mandano avvisi su Telegram, un agente che resta acceso e risponde in chat. Con un'attività sulla cronologia del sito del corso e una dimostrazione dal vivo.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 5.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="argomento-7/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-7/index.html">Materiali per le attività</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="incontro-card">
+          <div class="num" aria-hidden="true">8</div>
+          <div class="card-body">
+            <h3>Argomento 8 — Dalla carta al servizio: i casi di studio</h3>
+            <p class="card-descr">Come una procedura di carta diventa un servizio, partendo dai requisiti: tre casi della scuola da studiare e il caso Argo Briefing, il bot di riepilogo del registro.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 1.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="argomento-8/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-8/index.html">Materiali per le attività</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="incontro-card">
+          <div class="num" aria-hidden="true">9</div>
+          <div class="card-body">
+            <h3>Argomento 9 — Agenti al lavoro con Claude Code</h3>
+            <p class="card-descr">Un gioco di ruolo senza PC su un gruppo di agenti con un revisore, una demo dal vivo, poi Claude Code sui PC del laboratorio per costruire un piccolo strumento.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 5.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="argomento-9/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-9/index.html">Materiali per le attività</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="incontro-card">
+          <div class="num" aria-hidden="true">10</div>
+          <div class="card-body">
+            <h3>Argomento 10 — Dalle idee al progetto</h3>
+            <p class="card-descr">Un problema del proprio lavoro diventa una scheda-idea, con l'aiuto di un Gem; il gruppo sceglie le idee migliori e il docente ne trasforma una in prototipo, davanti a tutti.</p>
+            <p class="card-prereq">Prima conviene aver visto l'argomento 5 oppure l'8.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="argomento-10/slide.html">Apri le slide <span class="arrow">→</span></a>
+              <a class="btn btn-outline" href="materiali/argomento-10/matrice-idee.html">Matrice per votare le idee</a>
+              <a class="btn btn-outline" href="materiali/argomento-10/index.html">Materiali per le attività</a>
             </div>
           </div>
         </article>
