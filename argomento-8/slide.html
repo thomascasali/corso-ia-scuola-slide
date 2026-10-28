@@ -526,8 +526,8 @@ function TokenCostCalculator() {
       <CostBar label="Con i valori scelti sopra" value={costo} max={maxCosto} color={colors.accent} sub={formatEuro(costo)} />
       <CostBar label="Se raddoppiano le chiamate al giorno (testo e prezzo invariati)" value={costoDoppieChiamate} max={maxCosto} color={colors.danger} sub={formatEuro(costoDoppieChiamate)} />
 
-      <Box type="warn" title="Numeri inventati a scopo di esempio">
-        Una pagina ≈ {TOKENS_PER_PAGE} token (stima, non un dato di un fornitore reale); il prezzo per milione di token è un valore di esempio, diverso da fornitore a fornitore. Il calcolo conta solo il testo inviato: anche le risposte dell'IA si pagano a parte, qui ignorate per restare semplici.
+      <Box type="warn" title="Numeri e prezzi inventati, come esempio">
+        Una pagina ≈ {TOKENS_PER_PAGE} token (stima, non un dato di un fornitore reale); il prezzo per milione di token è una cifra di esempio, non un listino attuale: cambia da fornitore a fornitore e da modello a modello. Il calcolo conta solo il testo inviato: anche le risposte dell'IA si pagano a parte, qui ignorate per restare semplici.
       </Box>
     </div>
   );
@@ -938,10 +938,10 @@ const slides = [
         <Glow>
           <p>Un altro esempio, diverso dai primi tre: un bot che ogni mattina <strong style={{ color: colors.text }}>legge il registro elettronico</strong> e prepara un <strong style={{ color: colors.text }}>riepilogo automatico</strong> (orario, verifiche del giorno, circolari nuove) per chi lo usa.</p>
         </Glow>
-        <p style={{ color: colors.textMuted, marginTop: '16px' }}>Ci serve per parlare di una cosa nuova: da cosa dipende il costo di usare questi strumenti.</p>
+        <p style={{ color: colors.textMuted, marginTop: '16px' }}>Ci serve per vedere come è fatto un assistente costruito da fuori: cosa legge, da chi dipende e quale modello di IA usa.</p>
       </div>
     ),
-    notes: 'Presentate il bot in una riga, senza entrare nei dettagli tecnici: serve solo come esempio concreto per introdurre il tema: da cosa dipende il costo.'
+    notes: 'Presentate il bot in una riga, senza entrare nei dettagli tecnici: è un esempio concreto di assistente che legge dati da un servizio esistente e li passa a un modello di IA.'
   },
   {
     block: 'Argomento 8 — Dalla carta al servizio · Il caso Argo Briefing',
@@ -958,8 +958,24 @@ const slides = [
     block: 'Argomento 8 — Dalla carta al servizio · Il caso Argo Briefing',
     content: () => (
       <div style={{ padding: '24px 30px' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Da cosa dipende il costo</h2>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Ogni volta che un programma "parla" con un'intelligenza artificiale come questa, quella richiesta ha un costo. Per capire da cosa dipende, serve una parola nuova: token.</p>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Quale modello di IA usa</h2>
+        <Glow>
+          <p>Abbiamo provato a far girare l'assistente con <strong style={{ color: colors.text }}>modelli installati sul computer</strong>, ma non rispondevano abbastanza bene.</p>
+        </Glow>
+        <Box type="info" title="Oggi">
+          Usa un modello di Anthropic tramite le sue API, cioè il collegamento pensato per i programmi. Secondo le condizioni d'uso delle API, Anthropic non usa queste richieste per addestrare i propri modelli.
+        </Box>
+      </div>
+    ),
+    notes: 'Due fatti, da dire senza aggiungere altro: i modelli installati sul computer sono stati provati e scartati perché rispondevano troppo male; oggi l\'assistente usa solo le API di Anthropic, senza un modello di riserva. Sull\'addestramento: secondo le condizioni d\'uso delle API, le richieste non vengono usate per addestrare i modelli.Se chiedono dei dati del registro, ricordate che scegliere il fornitore e sapere cosa fa dei dati è il tema dell\'argomento 6.'
+  },
+  {
+    block: 'Argomento 8 — Dalla carta al servizio · Quanto costa un servizio di IA',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Argomento 8 — Dalla carta al servizio · Quanto costa un servizio di IA</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quanto costa un servizio di IA</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Quando un servizio usa un'intelligenza artificiale a pagamento, ogni richiesta ha un costo. Pensate a un assistente che risponde alle domande della segreteria, o a uno che riassume documenti. Per capire da cosa dipende il costo serve una parola nuova: token.</p>
         <Box type="info" title="Cos'è un token">
           Un token è un pezzetto di testo: più o meno una parola breve, o un pezzo di una parola lunga. Quando scrivete a un'IA, sia la vostra domanda sia la risposta vengono contate in token: è l'unità con cui i fornitori fanno pagare l'uso.
         </Box>
@@ -968,7 +984,7 @@ const slides = [
     notes: 'Non serve la precisione tecnica (byte-pair encoding, tokenizer specifici): basta far passare l\'idea "pezzo di testo, unità di misura del costo". Esempio pratico se serve: una pagina di testo scritto sono all\'incirca alcune centinaia di token.'
   },
   {
-    block: 'Argomento 8 — Dalla carta al servizio · Il caso Argo Briefing',
+    block: 'Argomento 8 — Dalla carta al servizio · Quanto costa un servizio di IA',
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '14px' }}>La formula del costo</h2>
@@ -989,35 +1005,35 @@ const slides = [
           </div>
         </div>
         <Box type="tip" title="Da ricordare">
-          Non conta solo "quanto è lunga la domanda", conta anche quante volte al giorno il programma la fa. Un servizio che girasse ogni mattina per molte persone moltiplicherebbe lo stesso costo per ognuna di esse.
+          Non conta solo "quanto è lunga la domanda", conta anche quante volte al giorno il programma la fa. Un assistente di segreteria usato da cento persone al giorno costa cento volte uno usato da una persona sola.
         </Box>
       </div>
     ),
     notes: 'Slide-ponte prima della calcolatrice interattiva. Fate notare la natura moltiplicativa: raddoppiare uno qualunque dei tre fattori raddoppia il costo. Lo si vede tra un attimo nella calcolatrice.'
   },
   {
-    block: 'Argomento 8 — Dalla carta al servizio · Il caso Argo Briefing',
+    block: 'Argomento 8 — Dalla carta al servizio · Quanto costa un servizio di IA',
     content: () => (
       <div style={{ padding: '12px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Provate voi: la calcolatrice</h2>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Muovete i cursori e guardate come cambia il costo stimato.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Immaginate un servizio che riassume documenti. Muovete i cursori e guardate come cambia il costo stimato.</p>
         <TokenCostCalculator />
       </div>
     ),
-    notes: 'Fate provare la calcolatrice sul proiettore, poi lasciate 3-4 minuti perché ognuno la muova sul proprio PC (è nella slide, non serve un link a parte). Mostrate in particolare la barra "se le chiamate al giorno raddoppiano": il costo raddoppia esattamente, perché è una moltiplicazione. Ribadite a voce che pagine-per-chiamata, chiamate, giorni e prezzo sono tutti scelti da chi costruisce e usa lo strumento: non sono un destino.'
+    notes: 'Il servizio è inventato (un riassuntore di documenti, oppure un assistente per le domande della segreteria) e i prezzi sono cifre d\'esempio, non listini attuali. Fate provare la calcolatrice sul proiettore, poi lasciate 3-4 minuti perché ognuno la muova sul proprio PC (è nella slide, non serve un link a parte). Mostrate in particolare la barra "se le chiamate al giorno raddoppiano": il costo raddoppia esattamente, perché è una moltiplicazione. Ribadite a voce che pagine-per-chiamata, chiamate, giorni e prezzo sono tutti scelti da chi costruisce e usa lo strumento: non sono un destino.'
   },
   {
-    block: 'Argomento 8 — Dalla carta al servizio · Il caso Argo Briefing',
+    block: 'Argomento 8 — Dalla carta al servizio · Quanto costa un servizio di IA',
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <BlockTag>Attività</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Quattro scenari con la calcolatrice</h2>
         <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 10 minuti.</p>
         <p style={{ color: colors.textDim }}>Tornate alla slide della calcolatrice (o apritela sul vostro PC) e provate i quattro scenari del foglio, segnando il costo stimato per ciascuno.</p>
-        <ActivityBadge href="../materiali/argomento-8/calcolatrice-scenari.html" label="Scenari per la calcolatrice dei costi" />
+        <ActivityBadge href="../materiali/argomento-8/calcolatrice-scenari.html" label="Quanto costa un servizio di IA: quattro scenari" />
       </div>
     ),
-    notes: 'Scheda 4 delle esercitazioni. La calcolatrice è dentro la slide precedente: chi vuole può tornare indietro con la freccia, oppure lavorare in coppia guardando lo schermo del proiettore mentre uno tiene il foglio. Girate tra i banchi e chiedete quale scenario li ha sorpresi di più.'
+    notes: 'Scheda 4 delle esercitazioni. Gli scenari riguardano un servizio inventato, non un progetto reale. La calcolatrice è dentro la slide precedente: chi vuole può tornare indietro con la freccia, oppure lavorare in coppia guardando lo schermo del proiettore mentre uno tiene il foglio. Girate tra i banchi e chiedete quale scenario li ha sorpresi di più.'
   },
   {
     block: 'Argomento 8 — Dalla carta al servizio · Chiusura',

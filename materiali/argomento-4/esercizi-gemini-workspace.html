@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini nelle app della scuola: sei esercizi — Materiali argomento 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 4</a>
+  <a class="dl-btn" href="esercizi-gemini-workspace.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>MATERIALE DEL CORSO — solo documenti inventati.</strong>
+Si lavora sulla cartella "Corso IA - dati di prova" del proprio Drive. Gli indirizzi email finiscono tutti in @demo.invalid, un dominio che non esiste.</p>
+</blockquote>
+<h1 id="gemini-nelle-app-della-scuola-sei-esercizi">Gemini nelle app della scuola: sei esercizi</h1>
+<p>Si lavora da soli o in coppia, su gemini.google.com con l'account della scuola. Prima serve la cartella "Corso IA - dati di prova" nel Drive: le istruzioni sono nel foglio "Come preparare la cartella".</p>
+<p>Le richieste da incollare sono nei riquadri grigi. Si possono cambiare: contano i controlli che vengono dopo, perché ogni file che Gemini crea va aperto e riletto prima di usarlo.</p>
+<h2 id="1-domande-al-regolamento-cercando-nel-drive-10-minuti">1. Domande al regolamento, cercando nel Drive (10 minuti)</h2>
+<p>Incollate una domanda alla volta, nella stessa chat.</p>
+<pre><code>Nel mio Drive, nella cartella &quot;Corso IA - dati di prova&quot;, c'è il regolamento delle uscite dell'Istituto Tecnico Dimostrativo. Rispondi solo in base a quel documento e indica l'articolo: quanti giorni prima della partenza va consegnata la domanda per una visita guidata?
+</code></pre>
+<pre><code>Una classe seconda può fare un viaggio d'istruzione?
+</code></pre>
+<pre><code>Si può fare una visita guidata mercoledì 28 gennaio 2026?
+</code></pre>
+<pre><code>Il modulo con le allergie e i farmaci si può mandare per email al docente referente?
+</code></pre>
+<pre><code>Quanto costa il pullman per la visita a Ravenna?
+</code></pre>
+<p><strong>Controlli.</strong> Per ogni risposta aprite il regolamento (dal collegamento al file, se Gemini lo indica come fonte, oppure direttamente dal Drive) e cercate l'articolo citato. Dice davvero quello? Per l'ultima domanda: il dato è nei documenti della cartella, o Gemini l'ha ricavato da qualche altra parte?</p>
+<h2 id="2-un-foglio-con-gli-accompagnatori-15-minuti">2. Un foglio con gli accompagnatori (15 minuti)</h2>
+<pre><code>Nella cartella &quot;Corso IA - dati di prova&quot; del mio Drive ci sono le pratiche delle uscite 2025/2026 e il regolamento. Crea un foglio Google intitolato &quot;Accompagnatori uscite 2025-26 - prova&quot; con una riga per ogni pratica e queste colonne: pratica, data di partenza, classe, tipo, studenti, accompagnatori necessari secondo l'articolo 4, accompagnatori presenti, accompagnatori mancanti.
+</code></pre>
+<p><strong>Controlli, a mano.</strong> Aprite il foglio creato e il PDF delle pratiche, uno accanto all'altro.</p>
+<ol>
+<li>Le righe sono 22? Manca qualche pratica, o ce n'è una in più?</li>
+<li>Rifate a mano il conto di quattro pratiche: P09, P10, P11 e P17. Leggete anche la colonna "Note" e i commi 1 e 2 dell'articolo 4.</li>
+<li>Fate clic su una cella della colonna "accompagnatori mancanti": nella barra in alto c'è una formula o un numero scritto a mano? Se cambiate il numero degli studenti, il conto si aggiorna?</li>
+<li>Se sono numeri scritti, chiedete nella stessa chat: "Rifai le colonne calcolate con formule di Google Fogli, così si aggiornano se cambio un dato." Poi cambiate il numero degli studenti di una pratica e guardate se il conto cambia.</li>
+</ol>
+<p>Se resta tempo, chiedete nella stessa chat: "C'è un docente che accompagna più di 2 viaggi d'istruzione nell'anno?" e "C'è una pratica in un periodo in cui il regolamento non permette di partire?". Poi controllate voi sul PDF.</p>
+<h2 id="3-una-circolare-dal-modello-10-15-minuti">3. Una circolare dal modello (10-15 minuti)</h2>
+<pre><code>Usa il modello di circolare e la scheda del viaggio a Torino della classe 4C, che trovi nel mio Drive nella cartella &quot;Corso IA - dati di prova&quot;, insieme al regolamento delle uscite. Crea un documento Google intitolato &quot;Circolare viaggio Torino 4C - prova&quot; con la circolare per le famiglie della 4C: date, quota, acconto, documenti da consegnare e scadenze. Segui le regole di compilazione del modello.
+</code></pre>
+<p><strong>Controlli.</strong> Aprite il documento creato.</p>
+<ol>
+<li>Numero della circolare e firma sono rimasti tra parentesi quadre, come chiede il modello?</li>
+<li>Le scadenze per il Modulo C e il Modulo D: ricontatele voi sul calendario, partendo dalla data di partenza e dagli articoli 10 e 11. Che giorno della settimana cade ciascuna?</li>
+<li>L'acconto è scritto in euro? Il conto torna con la quota della scheda?</li>
+<li>C'è qualcosa che nella scheda non c'è (un nome di albergo, un orario, un numero di telefono)?</li>
+</ol>
+<h2 id="4-cinque-diapositive-per-la-riunione-con-le-famiglie-15-minuti">4. Cinque diapositive per la riunione con le famiglie (15 minuti)</h2>
+<pre><code>Crea una presentazione Google di 5 diapositive intitolata &quot;Viaggio a Torino 4C - riunione con le famiglie - prova&quot;, partendo dalla scheda del viaggio e dal regolamento nella cartella &quot;Corso IA - dati di prova&quot; del mio Drive. Diapositive: 1) titolo, con data, ora e luogo della riunione; 2) il programma giorno per giorno; 3) quota, cosa comprende e acconto; 4) documenti da consegnare e scadenze; 5) regole durante il viaggio e contatti. Niente fotografie di persone.
+</code></pre>
+<p><strong>Controlli.</strong> Aprite la presentazione da Presentazioni Google.</p>
+<ol>
+<li>Le diapositive sono cinque, nell'ordine chiesto?</li>
+<li>Orari, quota e scadenze coincidono con la scheda e con la circolare dell'esercizio 3?</li>
+<li>Le immagini, se ci sono, mostrano qualcosa di vero (per esempio un museo che nel programma non c'è)?</li>
+<li>La presentazione si potrebbe proiettare così, o va sistemata? Che cosa cambiereste a mano?</li>
+</ol>
+<h2 id="5-una-bozza-di-convocazione-in-gmail-10-minuti">5. Una bozza di convocazione in Gmail (10 minuti)</h2>
+<pre><code>Nel mio Drive, nella cartella &quot;Corso IA - dati di prova&quot;, c'è l'orario di prova con l'occupazione dei laboratori. Controlla se il laboratorio Alfa è libero il martedì alla 6ª ora e a che ora inizia e finisce quell'ora. Poi prepara in Gmail una bozza di email a commissione.viaggi@demo.invalid per convocare la Commissione viaggi martedì prossimo alla 6ª ora nel laboratorio Alfa. Ordine del giorno: le pratiche di novembre con accompagnatori mancanti. Non inviarla.
+</code></pre>
+<p><strong>Controlli.</strong></p>
+<ol>
+<li>Aprite Gmail e la cartella "Bozze": la bozza c'è? Nella cartella "Inviati" non deve esserci niente di nuovo.</li>
+<li>Destinatario, giorno, ora e aula sono giusti? Confrontateli con l'orario di prova.</li>
+<li>La regola 1 sulle prenotazioni dei laboratori (paragrafo 6 dell'orario): con la data scelta, siete ancora in tempo?</li>
+<li>Alla fine cancellate la bozza: serviva solo per l'esercizio.</li>
+</ol>
+<h2 id="6-tutto-il-lavoro-in-una-sola-chat-20-minuti">6. Tutto il lavoro in una sola chat (20 minuti)</h2>
+<p>Un compito intero, dall'inizio alla fine, in una chat nuova. Le quattro richieste vanno incollate una alla volta, e prima di passare alla successiva si guarda il risultato.</p>
+<pre><code>Nella cartella &quot;Corso IA - dati di prova&quot; del mio Drive ci sono le pratiche delle uscite 2025/2026, il regolamento e l'elenco dei docenti disponibili. Quali pratiche di novembre hanno accompagnatori mancanti o in numero insufficiente secondo l'articolo 4? Leggi anche la colonna delle note.
+</code></pre>
+<pre><code>Crea un foglio Google intitolato &quot;Uscite novembre da sistemare - prova&quot; con queste pratiche e le colonne: pratica, data, giorno della settimana, classe, studenti, accompagnatori necessari, presenti, mancanti.
+</code></pre>
+<pre><code>Crea un documento Google intitolato &quot;Riepilogo uscite novembre - prova&quot; con: l'elenco delle pratiche da sistemare, l'articolo del regolamento per ogni problema, e una sezione &quot;Da decidere&quot; con le scelte che spettano a una persona. Come possibili sostituti proponi solo docenti dell'elenco dei docenti disponibili, liberi in quel giorno della settimana. Non inventare nomi.
+</code></pre>
+<pre><code>Prepara in Gmail una bozza di email a commissione.viaggi@demo.invalid con il riepilogo in poche righe e il nome del documento appena creato. Non inviarla.
+</code></pre>
+<p><strong>Controlli.</strong></p>
+<ol>
+<li>Le pratiche di novembre trovate da Gemini coincidono con quelle del vostro foglio dell'esercizio 2?</li>
+<li>I sostituti proposti sono liberi in quel giorno? Leggete anche le note dell'elenco dei docenti.</li>
+<li>Chi ha deciso i sostituti: voi o Gemini? Nella sezione "Da decidere" ci sono domande per una persona, o decisioni già prese?</li>
+<li>Contate quante volte siete intervenuti voi tra una richiesta e l'altra. Lo stesso compito torna nell'argomento 5 («Chatbot e agente»), fatto da un agente.</li>
+</ol>
+<h2 id="dopo-gli-esercizi">Dopo gli esercizi</h2>
+<p>Nel Drive restano i file creati da Gemini: hanno tutti "- prova" nel nome. Si possono cancellare insieme alla cartella "Corso IA - dati di prova".</p>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

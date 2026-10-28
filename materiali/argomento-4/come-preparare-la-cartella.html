@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Come preparare la cartella — Materiali argomento 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 4</a>
+  <a class="dl-btn" href="come-preparare-la-cartella.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>MATERIALE DEL CORSO — solo documenti inventati.</strong>
+Nella cartella vanno solo i file di prova di questa pagina. Non aggiungere documenti veri della scuola.</p>
+</blockquote>
+<h1 id="come-preparare-la-cartella-corso-ia-dati-di-prova">Come preparare la cartella "Corso IA - dati di prova"</h1>
+<p>Gli esercizi dell'argomento 4 chiedono a Gemini di cercare nel vostro Drive. Per questo ognuno carica nel proprio Drive, con l'account della scuola, una cartella con sei documenti inventati dell'"Istituto Tecnico Dimostrativo", una scuola che non esiste. Tempo: circa 10 minuti.</p>
+<h2 id="i-sei-file">I sei file</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Che cosa contiene</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="regolamento-viaggi-di-prova.pdf">regolamento-viaggi-di-prova.pdf</a></td>
+<td>Il regolamento delle uscite, delle visite guidate e dei viaggi d'istruzione</td>
+</tr>
+<tr>
+<td><a href="pratiche-uscite-2025-26.pdf">pratiche-uscite-2025-26.pdf</a></td>
+<td>Le 22 pratiche delle uscite dell'anno 2025/2026, con studenti e accompagnatori</td>
+</tr>
+<tr>
+<td><a href="docenti-disponibili.pdf">docenti-disponibili.pdf</a></td>
+<td>I docenti disponibili a sostituire un accompagnatore, con i giorni liberi</td>
+</tr>
+<tr>
+<td><a href="scheda-viaggio-torino-4c.pdf">scheda-viaggio-torino-4c.pdf</a></td>
+<td>Programma, costi e documenti del viaggio a Torino della classe 4C</td>
+</tr>
+<tr>
+<td><a href="modello-circolare.pdf">modello-circolare.pdf</a></td>
+<td>Il modello da seguire per scrivere una circolare</td>
+</tr>
+<tr>
+<td><a href="orario-di-prova.pdf">orario-di-prova.pdf</a></td>
+<td>L'orario di una classe e l'occupazione dei laboratori</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="passo-per-passo-computer-con-windows">Passo per passo (computer con Windows)</h2>
+<ol>
+<li>Scaricate lo zip con tutti i file: <a href="corso-ia-dati-di-prova.zip">corso-ia-dati-di-prova.zip</a>.</li>
+<li>Aprite la cartella Download, fate clic destro sullo zip e scegliete "Estrai tutto", poi "Estrai". Si apre la cartella "Corso IA - dati di prova" con i sei PDF.</li>
+<li>Aprite drive.google.com ed entrate con l'account della scuola (non quello personale).</li>
+<li>Trascinate la cartella "Corso IA - dati di prova" dentro "Il mio Drive". In alternativa: pulsante "Nuovo", poi "Caricamento cartella", e scegliete la cartella estratta.</li>
+<li>Aspettate la fine del caricamento, aprite la cartella nel Drive e controllate che ci siano sei file.</li>
+<li>Aprite gemini.google.com, sempre con l'account della scuola, e fate una prima prova: "Che file ci sono nella cartella Corso IA - dati di prova del mio Drive?". Se Gemini non trova ancora niente, aspettate qualche minuto: un file appena caricato può non comparire subito nelle ricerche.</li>
+</ol>
+<p>Se lo zip non si apre, scaricate i sei PDF uno alla volta dai collegamenti della tabella, create nel Drive una cartella con lo stesso nome (pulsante "Nuovo", poi "Nuova cartella") e caricateli lì.</p>
+<h2 id="due-regole-per-tutto-largomento">Due regole per tutto l'argomento</h2>
+<ul>
+<li>Nelle richieste nominate sempre la cartella "Corso IA - dati di prova": così Gemini cerca lì e non tra i vostri documenti di lavoro.</li>
+<li>In laboratorio non si chiede a Gemini di cercare nella posta: leggerebbe la vostra casella vera. Con Gmail si preparano solo bozze.</li>
+</ul>
+<p>A fine corso la cartella si può cancellare dal Drive, insieme ai file che Gemini ha creato durante gli esercizi.</p>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

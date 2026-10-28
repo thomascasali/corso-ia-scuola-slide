@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argomento 4 · Gemini e Workspace · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .agent-sim-grid { grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); }
+  @media (max-width: 900px) {
+    .agent-sim-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti di supporto ---------- */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+/* ---------- schemi riusabili (arricchimento slide + nuove sezioni) ---------- */
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- componenti propri dell'argomento 4 ---------- */
+
+const MATERIALI = '../materiali/argomento-4/';
+const FOGLIO_ESERCIZI = MATERIALI + 'esercizi-gemini-workspace.html';
+
+function AppCards({ items }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px' }}>
+      {items.map((a, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${a.color}`, borderRadius: '8px', padding: '12px 14px' }}>
+          <div style={{ fontSize: '26px' }}>{a.icon}</div>
+          <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', margin: '4px 0' }}>{a.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{a.text}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ExerciseSlide({ n, app, color, title, time, ask, checks, extra }) {
+  return (
+    <div style={{ padding: '14px 30px' }}>
+      <BlockTag>Esercizio {n} · {app}</BlockTag>
+      <h2 style={{ color, marginBottom: '6px' }}>{title}</h2>
+      <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>{time}, con l'account della scuola e la cartella «Corso IA - dati di prova».</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px' }}>
+        <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${color}`, borderRadius: '0 8px 8px 0', padding: '12px 16px' }}>
+          <div style={{ color, fontWeight: 700, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Cosa chiedete</div>
+          <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', margin: 0 }}>{ask}</p>
+        </div>
+        <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${colors.success}`, borderRadius: '0 8px 8px 0', padding: '12px 16px' }}>
+          <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>Cosa controllate</div>
+          <ul style={{ paddingLeft: '20px', margin: 0 }}>
+            {checks.map((c, i) => <li key={i} style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{c}</li>)}
+          </ul>
+        </div>
+      </div>
+      {extra}
+      <ActivityBadge href={FOGLIO_ESERCIZI} label={`Esercizi, sezione ${n}: le richieste da incollare`} />
+    </div>
+  );
+}
+
+/* ---------- dati delle slide ---------- */
+/* ogni voce: { block, content, notes } — block solo per il pannello note, senza minutaggio */
+
+const slides = [
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Apertura',
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>📂</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Argomento 4
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '900px' }}>Gemini e Workspace: dalla chat alle app</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '22px', maxWidth: '820px' }}>
+          Prima di questo argomento conviene aver visto: <a href="../argomento-1/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 1 — Usare un chatbot: prevede testo, inventa, contesto e memoria</a> e <a href="../argomento-3/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 3 — Le funzioni di Gemini oggi</a>.
+        </p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '26px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: 'Slide di apertura. L\'argomento riprende la voce "App connesse" dell\'argomento 3 e la mette al lavoro: si cerca nel Drive, si creano file veri, si prepara una bozza in Gmail. Prima di iniziare controllate a schermo, con un account della scuola, che le app collegate siano ancora quelle provate il 28/10/2026.'
+  },
+
+  /* --- cosa cambia --- */
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Cosa cambia',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Argomento 4 — Gemini e Workspace · Cosa cambia</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dalla risposta al file</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Finora Gemini rispondeva in chat, e il testo lo copiavate voi dove serviva. Collegato alle app della scuola, il risultato può essere un file nel vostro Drive o una bozza nella vostra posta.</p>
+        <CompareTwo
+          left={{ icon: '💬', title: 'Solo la chat', color: colors.info, points: ['Risponde con del testo nella conversazione', 'Legge solo quello che allegate o incollate', 'Il documento lo create voi, copiando'] }}
+          right={{ icon: '📂', title: 'Chat collegata alle app', color: colors.accent, points: ['Cerca tra i file del vostro Drive', 'Crea un Documento, un Foglio o una Presentazione nel Drive', 'Prepara una bozza in Gmail, senza inviarla'] }}
+        />
+      </div>
+    ),
+    notes: 'Il passaggio da far sentire: prima il risultato era testo da copiare, adesso è un file che esiste, con un nome, in una cartella. È comodo, ed è anche il motivo per cui va controllato: un file vero sembra un lavoro finito. Nell\'argomento 3 queste erano le "App connesse": qui le usiamo sul serio.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Cosa cambia',
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Cosa funziona con l'account della scuola</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Provato dal docente, dalla chat di Gemini, con un account della scuola. Tutto quello che segue nell'argomento usa solo queste cinque app.</p>
+        <AppCards items={[
+          { icon: '📁', title: 'Drive', color: colors.info, text: 'Cerca tra i vostri file, anche nei PDF, risponde in base a quello che ci trova e cita il file come fonte.' },
+          { icon: '📄', title: 'Documenti', color: colors.success, text: 'Crea un documento nuovo nel Drive: una circolare, un riepilogo.' },
+          { icon: '📊', title: 'Fogli', color: colors.warn, text: 'Crea un foglio con righe e colonne, per esempio un elenco da controllare.' },
+          { icon: '🖥️', title: 'Presentazioni', color: colors.purple, text: 'Crea delle diapositive nel Drive, da rivedere prima di proiettarle.' },
+          { icon: '✉️', title: 'Gmail', color: colors.danger, text: 'Prepara una bozza di email. Resta tra le bozze finché non la inviate voi.' },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Altre app possono comparire o sparire nel tempo: quello che c'è sul vostro account si controlla a schermo.</p>
+      </div>
+    ),
+    notes: 'Prove di Thomas del 28/10/2026 con l\'account della scuola. Moduli non c\'è nell\'elenco di proposito: con l\'account della scuola Gemini dice di non poter creare un modulo e propone un Documento con le domande, quindi nell\'argomento non si usa. Calendar funziona in lettura (provato il 28/10: Gemini legge gli impegni), ma qui non lo usiamo per non mostrare agende vere. Le altre app non sono state provate.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Cosa cambia',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '12px' }}>Chi le accende, e dove restano i dati</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.info}`, borderRadius: '8px', padding: '12px 16px' }}>
+            <div style={{ color: colors.info, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>🔑 Chi le accende</div>
+            <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', margin: 0 }}>L'amministratore del dominio della scuola decide quali app si collegano a Gemini, per tutti gli account.</p>
+          </div>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.warn}`, borderRadius: '8px', padding: '12px 16px' }}>
+            <div style={{ color: colors.warn, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>👤 Con quali permessi</div>
+            <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', margin: 0 }}>Quelli del vostro account: Gemini cerca tra i file e le email a cui avete accesso voi, compresi quelli che altri vi hanno condiviso.</p>
+          </div>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.success}`, borderRadius: '8px', padding: '12px 16px' }}>
+            <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>🏫 Dove finiscono i file</div>
+            <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', margin: 0 }}>Nel vostro Drive della scuola, come quelli che create a mano. Chi li vede dipende da come li condividete.</p>
+          </div>
+        </div>
+        <Box type="tip" title="Con l'account della scuola">
+          Per gli account Workspace for Education Google dichiara che chat e file caricati «non vengono rivisti da revisori umani né usati per migliorare i modelli di IA generativa».
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Questo non dice se un certo uso è permesso: per i dati personali valgono le regole della scuola (argomento 6).</p>
+      </div>
+    ),
+    notes: 'Tono prudente: non fate affermazioni legali. La frase tra virgolette è la stessa dichiarazione ufficiale di Google citata nell\'argomento 3. Il punto pratico è il secondo riquadro: se avete accesso a una cartella con documenti delicati, Gemini può leggerli quando glielo chiedete. Per questo negli esercizi si nomina sempre la cartella di prova. Chi vuole sapere quali app sono attive per la scuola lo chiede all\'amministratore del dominio.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Cosa cambia',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Decidete voi, ogni volta</h2>
+        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Gemini prepara. Inviare, condividere, correggere o cancellare resta una scelta vostra.</p>
+        <FlowChain steps={[
+          { icon: '✍️', label: 'Chiedete', sub: 'nominando la cartella e il file' },
+          { icon: '📄', label: 'Gemini prepara', sub: 'un file nel Drive o una bozza', color: colors.info },
+          { icon: '🔍', label: 'Aprite e controllate', sub: 'nomi, numeri, date', color: colors.success },
+          { icon: '✅', label: 'Decidete voi', sub: 'inviare, correggere, cancellare', color: colors.warn },
+        ]} />
+        <Box type="warn" title="La bozza non parte da sola">
+          Una bozza in Gmail resta tra le bozze finché qualcuno non preme «Invia». Un file nel Drive resta vostro finché non lo condividete.
+        </Box>
+      </div>
+    ),
+    notes: 'Il terzo passaggio è quello che si salta più facilmente, perché il file "c\'è" e sembra a posto. Negli esercizi il controllo fa parte del compito: ogni sezione del foglio ha i suoi controlli. Ricordate che anche sulle bozze serve attenzione: un clic su Invia e la mail parte davvero.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Cosa cambia',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.danger, marginBottom: '10px' }}>Attenzione: la vostra posta è vera</h2>
+        <p style={{ color: colors.textDim, marginBottom: '6px' }}>Una richiesta come «cerca nelle mie email i messaggi della segreteria» fa leggere a Gemini la vostra casella, con i messaggi di colleghi, famiglie e studenti. Lo stesso vale per il Drive: senza indicazioni, cerca tra tutti i vostri file.</p>
+        <Box type="danger" title="In laboratorio">
+          Nessuna ricerca nella posta, tanto meno con il proiettore acceso. Con Gmail si preparano solo bozze, a indirizzi @demo.invalid che non esistono.
+        </Box>
+        <Box type="info" title="Nel Drive">
+          Ogni richiesta nomina la cartella «Corso IA - dati di prova»: così Gemini cerca lì e non tra i documenti di lavoro.
+        </Box>
+      </div>
+    ),
+    notes: 'Fuori dal laboratorio la ricerca nella posta può essere utile (per esempio ritrovare una scadenza in una mail ricevuta), ma qui lo schermo è proiettato o visibile ai vicini e nella casella ci sono dati veri. Se qualcuno lo fa per abitudine, fermatelo con garbo. Le regole su cosa si può dare all\'IA sono nell\'argomento 6.'
+  },
+
+  /* --- preparazione --- */
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Preparazione',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Prepariamo la cartella</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Ognuno da solo, circa 10 minuti. Sei documenti inventati di una scuola che non esiste: regolamento delle uscite, pratiche dell'anno, docenti disponibili, scheda di un viaggio, modello di circolare, orario.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Scaricate lo zip dalla pagina dei materiali ed estraetelo (clic destro, «Estrai tutto»).</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Trascinate la cartella «Corso IA - dati di prova» nel vostro Drive della scuola.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Chiedete a Gemini: «Che file ci sono nella cartella Corso IA - dati di prova del mio Drive?»</li>
+        </ol>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href={MATERIALI + 'come-preparare-la-cartella.html'} label="Come preparare la cartella" />
+          <ActivityBadge href={MATERIALI + 'index.html'} label="Materiali dell'argomento 4" />
+        </div>
+      </div>
+    ),
+    notes: 'Il punto in cui ci si blocca è l\'estrazione dello zip: chi non ci riesce scarica i sei PDF uno per uno dal foglio. Fate fare a tutti la domanda di prova prima di iniziare: un file appena caricato può non comparire subito nelle ricerche di Gemini, e conviene scoprirlo adesso. Nella prova del 28/10 Gemini ha letto i PDF della cartella e ha citato il regolamento come fonte.'
+  },
+
+  /* --- esercizi --- */
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <ExerciseSlide n={1} app="Drive" color={colors.info} title="Domande al regolamento" time="10 minuti"
+        ask="Cinque domande sul regolamento delle uscite, una alla volta, chiedendo di rispondere solo in base a quel documento e di indicare l'articolo. L'ultima chiede un dato che nei documenti non c'è."
+        checks={['Aprite il regolamento e trovate l\'articolo citato: dice davvero quello?', 'Sul dato che manca: Gemini lo dice, o dà comunque una risposta?', 'Ha pescato file fuori dalla cartella?']} />
+    ),
+    notes: 'Se sotto la risposta compare il collegamento al file o la voce "Visualizza fonti", usatelo; altrimenti si apre il regolamento dal Drive (nelle prove del 28/10 Gemini ha citato il regolamento come fonte). La domanda sul pullman è la trappola: nessun documento della cartella ha quel dato. Le risposte sono nella scheda del docente.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <ExerciseSlide n={2} app="Fogli" color={colors.warn} title="Un foglio con gli accompagnatori" time="15 minuti"
+        ask="Un foglio Google con le 22 pratiche delle uscite e, per ognuna, quanti accompagnatori servono secondo l'articolo 4, quanti ce ne sono e quanti mancano."
+        checks={['Le righe sono 22, senza doppioni?', 'Rifate a mano i conti di P09, P10, P11 e P17, leggendo anche le note.', 'Nelle celle ci sono formule o numeri scritti?']} />
+    ),
+    notes: 'Le quattro pratiche da ricontare a mano sono scelte apposta: una ha i nomi nelle note, una richiede l\'arrotondamento per eccesso, una il minimo di due accompagnatori, una cade esattamente su un multiplo di 13. Lasciate che se ne accorgano da soli confrontando foglio e PDF. Se resta tempo, le due domande in più del foglio (un docente con troppi viaggi, una data non ammessa).'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Come si controlla un file creato</h2>
+        <p style={{ color: colors.textDim, marginBottom: '14px' }}>Vale per il foglio appena fatto e per tutti i file che seguono. Si fa con il file aperto accanto al documento di partenza.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
+          {[
+            { t: 'Nome e posto', d: 'Come si chiama il file e in quale cartella è finito?' },
+            { t: 'Tutte le voci', d: 'Ci sono tutte le righe, tutte le diapositive, tutti i paragrafi chiesti?' },
+            { t: 'Due o tre conti a mano', d: 'Su righe scelte da voi, non su quelle che Gemini mette in evidenza.' },
+            { t: 'Formule o numeri fissi', d: 'Se cambiate un dato, il totale si aggiorna?' },
+            { t: 'Cose aggiunte', d: 'Nomi, orari, cifre che nei documenti di partenza non ci sono.' },
+            { t: 'Date', d: 'Il giorno della settimana corrisponde? Le scadenze sono contate dal giorno giusto?' },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `4px solid ${colors.success}`, borderRadius: '0 8px 8px 0', padding: '8px 12px' }}>
+              <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{x.t}</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{x.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    notes: 'Dopo l\'esercizio 2 raccogliete a voce cosa hanno trovato di sbagliato nei fogli, senza dare voi le risposte: di solito emergono la pratica con i nomi nelle note e i conti arrotondati male. Poi questa lista diventa il metodo per gli esercizi successivi. L\'ultima voce, le date, torna utile subito nell\'esercizio 3.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <ExerciseSlide n={3} app="Documenti" color={colors.success} title="Una circolare dal modello" time="10-15 minuti"
+        ask="Un documento Google con la circolare alle famiglie della 4C per il viaggio a Torino, seguendo il modello di circolare e la scheda del viaggio: date, quota, acconto, documenti e scadenze."
+        checks={['Numero e firma sono rimasti tra parentesi quadre?', 'Ricontate sul calendario le scadenze dei moduli C e D.', 'C\'è qualcosa che nella scheda non c\'è?']} />
+    ),
+    notes: 'Il modello ha regole di compilazione scritte apposta: il numero e la firma li mette la segreteria. Gemini tende a riempire tutto. Le scadenze si contano all\'indietro dalla partenza (articoli 10 e 11 del regolamento): una delle due cade di domenica, e cosa fare in quel caso lo decide la scuola. Attenzione anche a come la circolare tratta il modulo con le informazioni sulla salute.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <ExerciseSlide n={4} app="Presentazioni" color={colors.purple} title="Cinque diapositive per le famiglie" time="15 minuti"
+        ask="Una presentazione Google di 5 diapositive per la riunione con le famiglie sul viaggio a Torino: titolo, programma, costi, documenti e scadenze, regole e contatti."
+        checks={['Cinque diapositive, nell\'ordine chiesto?', 'Orari, quota e scadenze coincidono con la scheda e con la circolare?', 'Le immagini mostrano luoghi che nel programma ci sono?']} />
+    ),
+    notes: 'Confronto utile: circolare e presentazione nascono in momenti diversi dagli stessi documenti, e possono non dire la stessa cosa. Chiedete a qualcuno di proiettare la sua presentazione e di dire cosa cambierebbe a mano prima di usarla in una riunione.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <ExerciseSlide n={5} app="Gmail" color={colors.danger} title="Una bozza di convocazione" time="10 minuti"
+        ask="Gemini controlla nell'orario di prova se il laboratorio Alfa è libero il martedì alla 6ª ora, poi prepara una bozza di email a commissione.viaggi@demo.invalid per convocare la Commissione viaggi. Senza inviarla."
+        checks={['In Gmail la bozza è tra le «Bozze», e in «Inviati» non c\'è niente di nuovo?', 'Giorno, ora e aula coincidono con l\'orario?', 'Alla fine, cancellate la bozza.']} />
+    ),
+    notes: 'L\'indirizzo @demo.invalid non esiste: anche un invio per sbaglio non arriverebbe a nessuno, ma l\'abitudine da prendere è controllare che resti bozza. Fate verificare anche l\'orario d\'inizio e fine della 6ª ora: è un dato che Gemini deve leggere nel documento, non indovinare.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Esercizi',
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Esercizio 6 · Tutto in una chat</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Le uscite di novembre, dall'inizio alla fine</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>20 minuti, in una chat nuova. Quattro richieste, una alla volta: prima di incollare la successiva guardate il risultato.</p>
+        <FlowChain minItemWidth="170px" steps={[
+          { icon: '📁', label: '1. Cerca nel Drive', sub: 'le pratiche di novembre con accompagnatori mancanti', color: colors.info },
+          { icon: '📊', label: '2. Crea un foglio', sub: 'le pratiche da sistemare', color: colors.warn },
+          { icon: '📄', label: '3. Crea un documento', sub: 'riepilogo, articoli, «Da decidere»', color: colors.success },
+          { icon: '✉️', label: '4. Prepara una bozza', sub: 'alla Commissione viaggi, senza inviarla', color: colors.danger },
+        ]} />
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>Alla fine: i sostituti proposti sono liberi quel giorno? Nella sezione «Da decidere» ci sono domande per una persona, o decisioni già prese?</p>
+        <ActivityBadge href={FOGLIO_ESERCIZI} label="Esercizi, sezione 6: le quattro richieste" />
+      </div>
+    ),
+    notes: 'È lo stesso compito della simulazione e della demo dell\'argomento 5 (le uscite di novembre con gli accompagnatori mancanti). Qui ogni passo lo chiede una persona e lo controlla prima del successivo. Fate contare quante volte sono intervenuti: il numero serve nella slide che segue. Se il tempo è poco, bastano le prime due richieste.'
+  },
+
+  /* --- verso gli agenti --- */
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Verso gli agenti',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Argomento 4 — Gemini e Workspace · Verso gli agenti</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Voi chiedete ogni passo. Un agente li sceglie</h2>
+        <CompareTwo
+          left={{ icon: '🧑‍💼', title: 'Gemini con le app (questo argomento)', color: colors.info, points: ['Ogni passo lo chiedete voi', 'Tra un passo e l\'altro guardate il risultato', 'Se dimenticate un controllo, nessuno lo fa'] }}
+          right={{ icon: '🤖', title: 'Un agente (argomento 5)', color: colors.success, points: ['Riceve il compito intero e fa un piano', 'Usa strumenti e ricontrolla il proprio lavoro', 'Le decisioni restano comunque a una persona'] }}
+        />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Le app collegate a Gemini sono già quello che nell'argomento 5 si chiama «connettore».</p>
+      </div>
+    ),
+    notes: 'Ponte verso l\'argomento 5 («Chatbot e agente»), dove lo stesso compito sulle uscite di novembre lo fa un agente. Chiedete alla sala quanti interventi hanno fatto nell\'esercizio 6: è il lavoro di regia che un agente si prende in carico. Non presentatelo come una promozione: anche l\'agente sbaglia, e anche lì decide una persona.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Chiusura',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Quattro abitudini da portare in ufficio</h2>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '10px' }}>Nominate sempre la cartella o il file su cui Gemini deve lavorare.</li>
+          <li style={{ marginBottom: '10px' }}>Aprite ogni file creato e rifate a mano almeno due conti.</li>
+          <li style={{ marginBottom: '10px' }}>Le email restano bozze finché non le avete rilette voi.</li>
+          <li style={{ marginBottom: '10px' }}>Niente ricerche nella posta o nel Drive davanti ad altri, quando ci sono dati veri.</li>
+        </ol>
+        <Box type="info" title="Pulizia">
+          I file creati negli esercizi hanno «- prova» nel nome: si possono cancellare dal Drive insieme alla cartella dei dati di prova.
+        </Box>
+      </div>
+    ),
+    notes: 'Riepilogo pratico, da lasciare proiettato mentre si chiude. Chiedete a due o tre persone quale procedura del proprio ufficio proverebbero a preparare così (una circolare ricorrente, un elenco da controllare) e quale invece non affiderebbero a Gemini.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Chiusura',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Chiusura</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dopo questo argomento</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gli argomenti che vengono bene subito dopo:</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>: lo stesso compito sulle uscite di novembre, fatto da un agente, con una demo dal vivo.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-6/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 6 — Usare l'IA con giudizio</a>: privacy, regole, verifica umana, fornitori e cosa non delegare.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-2/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 2 — Gem e notebook: istruzioni e documenti</a>: un assistente con istruzioni e documenti fissi, per chi lo ha saltato.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>
+          I materiali di questo argomento restano su{' '}
+          <a href="../materiali/argomento-4/" target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">
+            thomascasali.github.io/corso-ia-scuola-slide/materiali/argomento-4/
+          </a>
+        </p>
+      </div>
+    ),
+    notes: 'Ultima slide dell\'argomento. Scegliete con la sala da dove proseguire: chi ha fatto l\'esercizio 6 arriva all\'argomento 5 con il confronto già in mano. Ricordate dove restano i materiali.'
+  },
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span title={slide.block} style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
