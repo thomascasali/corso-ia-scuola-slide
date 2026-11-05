@@ -1177,6 +1177,32 @@ const slides = [
     notes: 'Corrisponde all\'esempio "Farsi un riassunto audio di un lungo documento, da ascoltare in viaggio". Da provare prima dell\'aula: lo strumento è attivo con l\'account della scuola, come si chiama, quanto tempo impiega con il regolamento di prova. In aula far partire la generazione per prima cosa, così l\'attesa non è tempo perso. Il riassunto cambia a ogni generazione: non ci sono risposte fisse. Cercate numeri arrotondati, eccezioni dimenticate, regole trasformate in consigli. Il messaggio: serve a orientarsi, non a sapere un numero. Tabella dei valori nei materiali del docente.'
   },
 
+  /* --- quanti documenti in un Gem --- */
+  {
+    block: 'Argomento 2 — Gem e notebook · Gem e notebook',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Quanti documenti in un Gem?</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Pochi, e solo quelli che servono. Google indica fino a <Strong>10 documenti</Strong> per Gem, ma conta anche quanto sono lunghi: l'IA tiene presente solo una certa quantità di testo alla volta.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
+          {[
+            { title: 'Una domanda singola', use: 'Chat normale', color: colors.textMuted },
+            { title: 'Un compito che si ripete', use: 'Un Gem per ogni compito, non un Gem con tutto', color: colors.info },
+            { title: 'Un materiale ampio da studiare', use: 'Un notebook', color: colors.success },
+          ].map(x => (
+            <div key={x.title} style={{ background: colors.bgLight, borderTop: `3px solid ${x.color}`, borderRadius: '8px', padding: '10px 14px' }}>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{x.title}</div>
+              <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{x.use}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '16px' }}><Strong>La prova:</Strong> fai una domanda su un dettaglio delle ultime pagine del documento più lungo. Se la risposta è giusta e indica il punto, è un buon segno. Se no, tieni solo le parti che servono, o usa un notebook.</p>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '10px' }}><Strong>Molti documenti:</Strong> raccoglili in un notebook e aggiungilo alle conoscenze del Gem. Nelle istruzioni scrivi di rispondere solo dalle fonti indicando il punto, poi fai la prova.</p>
+      </div>
+    ),
+    notes: 'Il limite di 10 documenti viene dalla pagina di Google su Gem e Classroom, letta il 5/11/2026. La quantità di testo che l\'IA tiene presente è il contesto, visto nell\'argomento 1, e dipende dal piano: le pagine di Google indicano 32.000 token senza piano IA e fino a 1 milione con i piani più alti, ma non dicono quale valga per un account Education. Non sappiamo nemmeno se un Gem legga sempre tutti i file o solo le parti pertinenti. Per questo si fa la prova, che va ripetuta su ogni documento lungo: una risposta giusta vale per quel dettaglio, non garantisce tutto il resto. Da provare prima dell\'aula con un documento lungo e l\'account della scuola. Nelle skill il limite indicato è di 100 MB di file in tutto. Un notebook si può aggiungere alle conoscenze del Gem (prova del docente con l\'account della scuola, 5/11/2026). Alla connessione la schermata dice che Gemini può accedere a notebook, fonti e istruzioni e gestirli; le chat e altre informazioni pertinenti possono essere condivise con il notebook; i file aggiunti come fonte non vengono usati direttamente per addestrare i modelli di IA generativa. Si disconnette dalla pagina App connesse. Da provare prima dell\'aula: se il Gem risponde solo dalle fonti e se dà i rimandi, che non sono ancora stati provati.'
+  },
+
   /* --- attività finale con il proprio materiale --- */
   {
     block: 'Argomento 2 — Gem e notebook · Attività',

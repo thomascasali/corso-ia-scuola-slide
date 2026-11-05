@@ -93,6 +93,16 @@
   .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
   .icon-btn.active:hover { color: var(--bg); }
   @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+  .cmp-head, .cmp-row { display: grid; grid-template-columns: 0.9fr 1.3fr 1.3fr 1.3fr; gap: 6px; }
+  .cmp-row { margin-top: 6px; }
+  .cmp-cell, .cmp-label { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: var(--fs-xs); line-height: 1.3; color: var(--text-dim); }
+  .cmp-label { font-weight: 700; color: var(--text); background: var(--bg-light); }
+  .cmp-head > div { font-weight: 800; font-size: var(--fs-sm); padding: 2px 10px; }
+  @media (max-width: 800px) {
+    .cmp-head { display: none; }
+    .cmp-row { grid-template-columns: 1fr; gap: 4px; margin-top: 12px; }
+    .cmp-cell::before { content: attr(data-tool) ": "; font-weight: 700; color: var(--text); }
+  }
 </style>
 </head>
 <body>
@@ -454,7 +464,7 @@ function FunctionsMapDiagram() {
     { title: 'Cerca e verifica', color: colors.info, items: ['Ricerca sul web e fonti', 'Deep Research'] },
     { title: 'Lavora sui documenti', color: colors.success, items: ['Allegati (PDF, foto, tabelle)', 'Canvas', 'Gemini Notebook'] },
     { title: 'Sceglie come rispondere', color: colors.warn, items: ['Modello veloce o che ragiona', 'Immagini e voce'] },
-    { title: 'Ricorda (o no) e si collega', color: colors.purple, items: ['Cronologia e chat temporanea', 'App connesse'] },
+    { title: 'Ricorda (o no) e si collega', color: colors.purple, items: ['Cronologia e chat temporanea', 'App connesse', 'Personalizzazione'] },
   ];
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
@@ -472,6 +482,48 @@ function FunctionsMapDiagram() {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function PersonalizeLevelsDiagram() {
+  const levels = [
+    { n: '1', color: colors.info, title: 'Per tutte le chat', text: 'Chi sei e come vuoi le risposte.', tag: 'Istruzioni generali' },
+    { n: '2', color: colors.success, title: 'Per un compito', text: 'Un assistente con le sue regole e i suoi documenti.', tag: 'Gem o skill' },
+    { n: '3', color: colors.warn, title: 'Cosa si ricorda', text: 'Informazioni salvate e chat passate: si guardano e si cancellano.', tag: 'Memoria' },
+    { n: '4', color: colors.purple, title: 'Con cosa si collega', text: 'Gmail, Drive, Calendar e altre app.', tag: 'App connesse' },
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '12px' }}>
+      {levels.map((l, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${l.color}`, borderRadius: '8px', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ color: l.color, fontWeight: 800, fontSize: 'var(--fs-sm)' }}>Livello {l.n} · {l.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.4 }}>{l.text}</div>
+          <div style={{ marginTop: 'auto', paddingTop: '4px', color: colors.text, fontWeight: 600, fontSize: 'var(--fs-xs)' }}>{l.tag}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ToolCompareTable({ rows }) {
+  const tools = [
+    { k: 'g', name: 'Gemini', color: colors.info },
+    { k: 'c', name: 'ChatGPT', color: colors.success },
+    { k: 'a', name: 'Claude', color: colors.warn },
+  ];
+  return (
+    <div role="table" aria-label="Confronto tra Gemini, ChatGPT e Claude">
+      <div className="cmp-head" role="row">
+        <div role="columnheader"></div>
+        {tools.map(t => <div key={t.k} role="columnheader" style={{ color: t.color }}>{t.name}</div>)}
+      </div>
+      {rows.map((r, i) => (
+        <div key={i} className="cmp-row" role="row">
+          <div className="cmp-label" role="rowheader">{r.label}</div>
+          {tools.map(t => <div key={t.k} className="cmp-cell" role="cell" data-tool={t.name}>{r[t.k]}</div>)}
+        </div>
+      ))}
     </div>
   );
 }
@@ -809,7 +861,7 @@ const slides = [
         <FunctionsMapDiagram />
       </div>
     ),
-    notes: 'Presentate la mappa a voce, categoria per categoria, senza entrare ancora nei dettagli: sono solo i nomi delle nove slide che seguono. Chiedete alla sala quante di queste funzioni hanno già usato almeno una volta, per capire da dove partire con il ritmo di questo argomento.'
+    notes: 'Presentate la mappa a voce, categoria per categoria, senza entrare ancora nei dettagli: sono solo i nomi delle dieci slide che seguono. Chiedete alla sala quante di queste funzioni hanno già usato almeno una volta, per capire da dove partire con il ritmo di questo argomento.'
   },
   {
     block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
@@ -955,6 +1007,97 @@ const slides = [
       </div>
     ),
     notes: 'Slide-ponte verso l\'argomento 5 («Chatbot e agente»): sottolineate a voce la frase "questo è già un connettore", perché tornerà identica lì. Chiedete alla sala quali app connesse sanno di avere attive: spesso nessuno lo sa con certezza, ed è un buon gancio per l\'attività successiva.'
+  },
+  {
+    block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.purple, marginBottom: '6px' }}>10. Personalizzare Gemini</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Si può regolare Gemini a quattro livelli, dal più generale al più preciso. La pagina «Personalizza» (in inglese «Customize»), nel menu a sinistra se compare sul tuo account, raccoglie skill e app connesse. Per la scuola: da verificare.</p>
+        <PersonalizeLevelsDiagram />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>
+          Il livello 2 è l'<a href="../argomento-2/slide.html" onClick={e => e.stopPropagation()} className="text-link">argomento 2</a>, il livello 4 l'<a href="../argomento-4/slide.html" onClick={e => e.stopPropagation()} className="text-link">argomento 4</a>. Qui guardiamo il livello 1 e il 3.
+        </p>
+        <Box type="warn" title="Con l'account della scuola">
+          Istruzioni generali dell'app Gemini, skill e app connesse: per l'account della scuola da verificare a schermo. La memoria delle informazioni salvate, secondo Google, non è per gli account di lavoro o scuola. Per le app di Workspace esistono istruzioni separate, con un piano idoneo.
+        </Box>
+      </div>
+    ),
+    notes: 'I quattro livelli sono l\'idea da portare a casa: prima si decide a che livello sta una regola, poi si cerca dove si scrive. Una regola che vale sempre va nelle istruzioni generali, una che vale per un solo compito va in un Gem o in una skill. Pagine di assistenza Google lette il 5/11/2026: il salvataggio di informazioni nella memoria non è disponibile con account di lavoro o scuola; per le istruzioni dell\'app Gemini la stessa pagina dice che tutti gli utenti possono aggiungerle, quindi per l\'account della scuola è da verificare. Per skill e app connesse il post di Google dice "tutti i clienti Google Workspace" e non nomina Education: da verificare. Per Gmail, Documenti, Drive, Chat e Presentazioni esistono istruzioni separate, che non si sincronizzano con quelle dell\'app Gemini (da Ask Gemini, menu, Impostazioni, Personalizzazione) e richiedono un piano Workspace idoneo; l\'amministratore non ha un controllo dedicato. Nel pannello di Gemini nelle app Workspace una frase come "D\'ora in poi..." si salva da sola come istruzione. Da provare prima dell\'aula: quali di queste voci compaiono sull\'account della scuola, e come si chiamano in italiano.'
+  },
+  {
+    block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Gemini, ChatGPT, Claude a confronto</h2>
+        <ToolCompareTable rows={[
+          { label: 'Istruzioni per tutte le chat', g: '«Istruzioni per Gemini». Account scuola: da verificare', c: 'Istruzioni personalizzate (Impostazioni > Personalizzazione)', a: 'Istruzioni (Impostazioni > Your Claude)' },
+          { label: 'Tono e stile', g: 'Istruzioni o skill (skill per la scuola: da verificare)', c: 'Stile e tono di base, cordialità, emoji, titoli ed elenchi', a: 'Stili: da verificare a schermo' },
+          { label: 'Memoria', g: 'Informazioni salvate e chat passate. Account scuola: no', c: 'Memoria, si attiva e si legge in Personalizzazione', a: 'Memoria: si legge e si cancella in Your Claude' },
+          { label: 'Spazi per un compito', g: 'Gem e skill (argomento 2); skill da verificare', c: 'Progetti e GPT personalizzati', a: 'Progetti e skill' },
+          { label: 'App collegate', g: 'App connesse, abilitate dall\'amministratore', c: 'App collegabili (Gmail, GitHub...)', a: 'Connettori (Gmail, Drive, Calendar)' },
+          { label: 'Attività programmate', g: 'Schedules, voce «Scheduled»: per la scuola da verificare', c: 'Attività programmate', a: 'Attività pianificate, a pagamento' },
+        ]} />
+        <p style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600, marginTop: '10px', marginBottom: '2px' }}>I nomi cambiano, le idee sono le stesse: chi sa farlo in uno lo ritrova negli altri.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>In laboratorio si usa Gemini con l'account della scuola. ChatGPT e Claude sono solo da conoscere: non serve nessun account.</p>
+      </div>
+    ),
+    notes: 'Non è una classifica: nessuno dei tre è migliore degli altri, e il confronto serve a riconoscere le stesse idee sotto nomi diversi. Le celle sono state controllate sulle pagine di assistenza di Google e di Anthropic il 5/11/2026; per ChatGPT valgono le schermate del docente (Impostazioni, Personalizzazione). Da verificare a schermo: gli stili di Claude, i nomi italiani delle voci, la disponibilità delle funzioni dipende dal piano e dal tipo di account. Su Claude le attività pianificate sono descritte nei piani a pagamento. Su Gemini la pagina parla di "Schedules", con la voce "Scheduled": per l\'account della scuola è da verificare.'
+  },
+  {
+    block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Istruzioni generali: cosa scrivere e cosa no</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
+          {[
+            { title: '✅ Un esempio per un collega di segreteria', color: colors.success, points: [
+              'Lavoro nella segreteria di una scuola superiore.',
+              'Scrivo a famiglie, docenti e uffici: tono cortese e diretto.',
+              'Frasi brevi, in italiano, senza elenchi se non li chiedo.',
+              'Se manca un dato, chiedimelo: non inventarlo.',
+            ] },
+            { title: '🚫 Cosa non scrivere', color: colors.danger, points: [
+              'Nomi di studenti o di colleghi',
+              'Dati sanitari o di situazioni familiari',
+              'Password, codici, indirizzi interni',
+              'Qualsiasi dato personale non necessario',
+            ] },
+          ].map((c, i) => (
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '10px 16px' }}>
+              <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{c.title}</div>
+              <ul style={{ paddingLeft: '20px', margin: 0 }}>
+                {c.points.map((p, j) => <li key={j} style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.4 }}>{p}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <Box type="tip" title="Poche e stabili">
+          <span style={{ fontSize: 'var(--fs-sm)' }}>Le istruzioni generali valgono in ogni chat, quindi restano poche e sempre vere. Quelle di un Gem valgono per un solo compito e possono essere lunghe e precise.</span>
+        </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>Quello che la memoria ha salvato si rilegge e si cancella ogni tanto. Le regole sui dati sono nell'<a href="../argomento-6/slide.html" onClick={e => e.stopPropagation()} className="text-link">argomento 6</a>.</p>
+      </div>
+    ),
+    notes: 'L\'esempio è inventato e senza nomi. Fate notare che dice chi sei, per chi scrivi, come vuoi le risposte e cosa fare quando manca un dato: niente di legato a un compito preciso. Se una regola vale solo per le circolari, va in un Gem. Le istruzioni generali accompagnano ogni chat: per questo non vi si scrivono dati personali, nemmeno "per comodità". Sulla memoria: Google avverte che chiedere a Gemini di dimenticare un argomento non sempre funziona, e che per togliere un argomento conviene cancellare le chat relative dalla cronologia delle attività.'
+  },
+  {
+    block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
+    content: () => (
+      <div style={{ padding: '14px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Personalizza il tuo Gemini</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Da soli o in coppia, circa 20 minuti (15 se il docente indica prima la strada), con l'account della scuola e solo dati inventati.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '2px' }}>In una chat nuova fate la richiesta del foglio e leggete la risposta.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '2px' }}>Scrivete 4 o 5 righe di istruzioni generali, dal modello del foglio.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '2px' }}>Fatele valere: dove c'è la voce, nelle impostazioni; altrimenti incollatele come primo messaggio.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '2px' }}>In una chat nuova rifate la stessa richiesta e confrontate.</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '2px' }}>Cambiate una riga e riprovate. Poi guardate come si spegne o si toglie quello che avete scritto.</li>
+        </ol>
+        <ActivityBadge href="../materiali/argomento-3/personalizza-gemini.html" label="Personalizza il tuo Gemini" />
+      </div>
+    ),
+    notes: 'Attività di circa 20 minuti, 15 se il docente indica prima la strada da seguire. Da provare prima dell\'aula: con l\'account della scuola, quale delle tre strade funziona (voce delle istruzioni nell\'app Gemini, Personalizzazione dentro Ask Gemini nelle app Workspace, oppure nessuna delle due). Per la prima la pagina di Google dice che tutti possono aggiungere istruzioni, ma per l\'account della scuola non è confermato, quindi il ripiego (incollare le preferenze come primo messaggio di una chat nuova) va preparato come strada normale, e mostra comunque la differenza. Chiedete a chi ha trovato la voce dove si trova e come si chiama in italiano, e annotatelo per aggiornare il foglio.'
   },
   {
     block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalizza il tuo Gemini — Materiali argomento 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 3</a>
+  <a class="dl-btn" href="personalizza-gemini.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO DIDATTICO.</strong> Scheda per l'attività «Personalizza il tuo Gemini».
+La richiesta e gli esempi sono inventati. Nelle istruzioni non si scrivono dati personali, tuoi o di altri.</p>
+</blockquote>
+<h1 id="personalizza-il-tuo-gemini">Personalizza il tuo Gemini</h1>
+<p>Tempo indicativo: 20 minuti, 15 se il docente ti indica prima la strada da seguire. Con l'account della scuola. Da soli o in coppia.</p>
+<p>Le istruzioni generali sono un breve testo che Gemini legge all'inizio di ogni chat. Dicono chi sei e come vuoi le risposte. Qui provi la stessa richiesta prima e dopo averle scritte.</p>
+<p>Su alcuni account la funzione non c'è, e su quello della scuola potrebbe mancare. Per questo la scheda ha un ripiego che funziona sempre (strada C).</p>
+<h2 id="1-la-richiesta-prima-delle-istruzioni">1. La richiesta, prima delle istruzioni</h2>
+<p>Apri una chat nuova e incolla questa richiesta.</p>
+<pre><code>Scrivi una mail alle famiglie della classe 3ª Z per avvisare che l'uscita al museo civico di giovedì è spostata a venerdì. L'orario di partenza non cambia.
+</code></pre>
+<p>Leggi la risposta. Guarda il tono, la lunghezza e come è fatta la mail (oggetto, saluto, chiusura). Scrivi cosa noti nella tabella in fondo, colonna «Prima».</p>
+<h2 id="2-scrivi-le-tue-istruzioni">2. Scrivi le tue istruzioni</h2>
+<p>Rispondi a quattro domande, in una riga ciascuna.</p>
+<ul>
+<li>Chi sei e che lavoro fai?</li>
+<li>Per chi scrivi di solito?</li>
+<li>Come vuoi le risposte (tono, lunghezza, formato)?</li>
+<li>Cosa deve fare Gemini se manca un'informazione?</li>
+</ul>
+<p>Esempio inventato per un collega di segreteria, da adattare:</p>
+<pre><code>Lavoro nella segreteria di una scuola superiore.
+Scrivo a famiglie, docenti e uffici: usa un tono cortese e diretto.
+Rispondi in italiano, con frasi brevi e senza elenchi puntati, salvo che li chieda.
+Nelle mail scrivi prima l'oggetto, poi il testo.
+Se manca un'informazione, chiedimela: non inventarla.
+</code></pre>
+<p>Non scrivere: nomi di studenti o colleghi, dati sanitari o di situazioni familiari, password o codici, indirizzi interni, dati personali che non servono.</p>
+<h2 id="3-falle-valere-tre-strade">3. Falle valere: tre strade</h2>
+<p>Prova nell'ordine e segna quale funziona sul tuo account. I nomi delle voci possono comparire in italiano o in inglese.</p>
+<p><strong>Strada A. Nell'app Gemini.</strong> Cerca «Impostazioni e guida» e poi «Suggerimenti su misura», dove dovrebbe esserci «Le tue istruzioni per Gemini» (la pagina inglese di Google lo chiama «Personal context»): da confermare a schermo. Scegli «Aggiungi», incolla il testo e conferma. La pagina di Google dice che tutti possono aggiungere istruzioni, ma per l'account della scuola non è confermato: se la voce manca, passa alla B.</p>
+<p><strong>Strada B. Dentro un'app di Workspace.</strong> Apri un Documento o Gmail, apri il pannello di Gemini, poi il menu in alto a sinistra, «Impostazioni» e «Personalizzazione». Scegli «Aggiungi», incolla il testo e salva. Serve un piano Workspace idoneo. Queste istruzioni valgono per Gemini dentro le app di Workspace e sono separate da quelle dell'app Gemini. Per un confronto giusto, con la strada B rifai la richiesta del punto 1 nel pannello di Gemini, prima di aggiungere le istruzioni, e scrivi cosa noti nella colonna «Prima». Poi aggiungi le istruzioni e ripeti la richiesta nel pannello.</p>
+<p><strong>Strada C. Il ripiego.</strong> Se non trovi né la A né la B, copia le istruzioni e incollale come primo messaggio di una chat nuova. Nel messaggio successivo scrivi la richiesta. Vale solo per quella chat, ma mostra la stessa differenza.</p>
+<h2 id="4-stessa-richiesta-chat-nuova">4. Stessa richiesta, chat nuova</h2>
+<ul>
+<li>Strada A: apri una chat nuova e incolla di nuovo la richiesta del punto 1.</li>
+<li>Strada B: nel pannello di Gemini, con le istruzioni già aggiunte, incolla di nuovo la richiesta (la risposta «Prima» l'hai già avuta nel pannello).</li>
+<li>Strada C: apri una chat nuova, incolla le istruzioni, poi la richiesta.</li>
+</ul>
+<p>Confronta con la risposta di prima e scrivi cosa è cambiato nella colonna «Dopo».</p>
+<h2 id="5-cambia-una-riga">5. Cambia una riga</h2>
+<p>Cambia una regola, per esempio chiedi un tono più formale oppure una mail di massimo cinque righe. Ripeti la richiesta in una chat nuova. La risposta segue il cambiamento?</p>
+<ul>
+<li>Strada A: apri la voce salvata, usa il menu accanto all'istruzione (in inglese «More») e scegli «Modifica» («Edit»).</li>
+<li>Strada B: elimina la riga e riaggiungila con il testo nuovo, oppure controlla a schermo se c'è un modo per modificarla.</li>
+<li>Strada C: cambia il testo del primo messaggio.</li>
+</ul>
+<h2 id="6-cosa-resta-e-come-si-toglie">6. Cosa resta e come si toglie</h2>
+<ul>
+<li><strong>Strade A e B.</strong> Nella stessa pagina c'è un interruttore: spegne le istruzioni senza cancellarle. «Elimina» («Delete») le toglie. Su Workspace l'eliminazione è definitiva.</li>
+<li><strong>Strada C.</strong> Non resta niente da togliere: le istruzioni vivevano solo in quella chat.</li>
+<li><strong>Memoria.</strong> Secondo Google, salvare informazioni nella memoria richiede un account personale, un piano Google AI e, per ora, gli Stati Uniti (da confermare a schermo). Con l'account della scuola la voce potrebbe mancare: se la vedi, scrivilo nella tabella e non salvare niente.</li>
+<li><strong>Cronologia.</strong> Le chat si gestiscono da «Impostazioni e guida» e «Attività».</li>
+<li>Se hai scritto per sbaglio qualcosa che non andava scritto, toglilo subito.</li>
+</ul>
+<h2 id="tabella-da-compilare">Tabella da compilare</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>Prima</th>
+<th>Dopo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tono</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Lunghezza</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Come è fatta la mail (oggetto, saluto, chiusura)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Cosa è cambiato di più</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Strada che ha funzionato sul mio account (A, B o C): ______</p>
+<p>Nome della voce così come compare sul mio schermo: ______</p>
+<h2 id="da-ricordare">Da ricordare</h2>
+<ul>
+<li>Le istruzioni generali valgono in ogni chat: poche, sempre vere, senza dati personali.</li>
+<li>Quelle di un Gem valgono per un solo compito e possono essere lunghe: si vede nell'argomento 2.</li>
+<li>Gemini può ignorare un'istruzione o seguirla male. La risposta va letta lo stesso.</li>
+<li>Se una funzione non c'è sul tuo account, scrivilo: è un'informazione utile quanto il resto.</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>
