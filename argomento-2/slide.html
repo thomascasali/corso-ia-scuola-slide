@@ -844,15 +844,15 @@ const slides = [
         <p style={{ color: colors.textDim, marginBottom: '16px' }}>Il Gem definisce <strong style={{ color: colors.text }}>come lavora</strong> l'IA. Il notebook definisce <strong style={{ color: colors.text }}>su cosa lavora</strong>.</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
           {[
-            { icon: '💎', name: 'Gem', sub: 'un assistente personalizzato dentro Gemini', color: colors.info, items: [
+            { icon: '💎', name: 'Gem', sub: 'Gemini con istruzioni specifiche di comportamento', color: colors.info, items: [
               'Gli dai istruzioni: ruolo, tono, cosa fare e cosa non fare.',
               'I documenti sono facoltativi.',
-              'Può usare anche le sue conoscenze generali, non solo i documenti.',
+              'Conosce le tue fonti, ma può usare anche le sue conoscenze e cercare sul web.',
               'Serve per i compiti che si ripetono.',
             ] },
             { icon: '📓', name: 'Notebook', sub: 'Gemini Notebook, prima NotebookLM', color: colors.success, items: [
               'Parti caricando i documenti: sono le sue fonti.',
-              'Risponde a partire dalle fonti, con un rimando al punto preciso.',
+              'Si basa solo sulle fonti, con un rimando al punto preciso: non cerca sul web.',
               'Ha strumenti propri: riassunti audio e video, mappe mentali, flashcard.',
               'Serve per studiare o analizzare un materiale preciso.',
             ] },
@@ -868,7 +868,7 @@ const slides = [
         </div>
       </div>
     ),
-    notes: 'La frase da ricordare è la prima: come lavora, su cosa lavora. Un Gem senza documenti funziona; un notebook nasce per lavorare sulle fonti. Attenzione a un equivoco: caricare il regolamento in un Gem non obbliga il Gem a rispondere solo da lì. Se serve, va scritto nelle istruzioni, e anche così il controllo resta vostro. Prima dell\'aula provate con l\'account della scuola se il Gem usa anche il web e quali strumenti del notebook sono attivi: possono cambiare da un account all\'altro.'
+    notes: 'La frase da ricordare è la prima: come lavora, su cosa lavora. Un Gem senza documenti funziona; un notebook nasce per lavorare sulle fonti. Attenzione a un equivoco: caricare il regolamento in un Gem non obbliga il Gem a rispondere solo da lì. Se serve, va scritto nelle istruzioni, e anche così il controllo resta vostro. Prima dell\'aula controllate con l\'account della scuola quali strumenti del notebook sono attivi: possono cambiare da un account all\'altro.'
   },
   {
     block: "Argomento 2 — Gem e notebook · Gem e notebook",
@@ -880,7 +880,7 @@ const slides = [
           {[
             { q: 'Scrivere le circolari sempre con lo stesso schema e lo stesso tono', a: 'Gem', why: 'conta come scrive', color: colors.info },
             { q: 'Rendere più chiare le email alle famiglie, togliendo il linguaggio burocratico', a: 'Gem', why: 'è un compito che si ripete', color: colors.info },
-            { q: 'Preparare la scaletta di ogni riunione a partire da pochi appunti', a: 'Gem', why: 'stesso metodo, contenuto ogni volta nuovo', color: colors.info },
+            { q: 'Cercare sul web i musei per un’uscita e proporli sempre nello stesso formato', a: 'Gem', why: 'istruzioni fisse, e può andare sul web', color: colors.info },
             { q: 'Sapere quanti giorni di preavviso chiede il regolamento per una visita guidata', a: 'Notebook', why: 'la risposta sta in un documento, e va ritrovata', color: colors.success },
             { q: 'Capire cosa cambia con una nuova norma, partendo dai testi ufficiali', a: 'Notebook', why: 'si lavora su quei testi, con mappa e rimandi', color: colors.success },
             { q: 'Farsi un riassunto audio di un lungo documento, da ascoltare in viaggio', a: 'Notebook', why: 'è uno strumento suo', color: colors.success },
@@ -952,6 +952,31 @@ const slides = [
       </div>
     ),
     notes: 'Chiusura della sezione sui Gem. Ribadite: avere documenti caricati riduce le invenzioni, ma non le azzera. La verifica della fonte resta un passaggio umano, sempre.'
+  },
+  {
+    block: "Argomento 2 — Gem e notebook · Gem e notebook",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>I Gem stanno diventando skill</h2>
+        <p style={{ color: colors.textDim, marginBottom: '14px' }}>Google sta sostituendo i Gem con le <strong style={{ color: colors.text }}>skill</strong>. L'idea resta la stessa: istruzioni e file preparati una volta, riusati sempre.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '14px' }}>
+          {[
+            { title: 'Cosa resta', color: colors.success, items: ['Nome, descrizione e istruzioni', 'I file, con l’eccezione di alcuni formati', 'La condivisione'] },
+            { title: 'Cosa cambia', color: colors.info, items: ['I Gem vengono convertiti in bozze di skill, da attivare', 'Una skill si richiama in qualsiasi chat digitando /'] },
+            { title: 'Quando', color: colors.warn, items: ['Account personali: rimossi dal 17/12/2026', 'Workspace aziendali: non prima dell’1/3/2027', 'Workspace Education: non prima dell’1/6/2027'] },
+          ].map(x => (
+            <div key={x.title} style={{ background: colors.bgLight, borderTop: `3px solid ${x.color}`, borderRadius: '8px', padding: '10px 14px' }}>
+              <div style={{ color: x.color, fontWeight: 700, marginBottom: '8px' }}>{x.title}</div>
+              <ul style={{ paddingLeft: '18px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
+                {x.items.map(i => <li key={i} style={{ marginBottom: '6px' }}>{i}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Cos\'è una skill, anche fuori da Gemini: <a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>.</p>
+      </div>
+    ),
+    notes: 'Quello che avete imparato sui Gem non si butta: scrivere istruzioni chiare è la stessa abilità che serve per una skill. Date e dettagli vengono dalle pagine di supporto di Google e possono cambiare: ricontrollateli prima dell\'aula. Controllate anche il tipo di account della scuola, se il Gem si crea ancora e se l\'amministratore ha attivato le skill: per Workspace è lui ad abilitarle. Gli account personali sono in sola lettura dal 17/11/2026. I formati che non passano nella conversione sono audio, video, archivi e i vecchi file di Office.'
   },
   {
     block: 'Argomento 2 — Gem e notebook · Chiusura',
