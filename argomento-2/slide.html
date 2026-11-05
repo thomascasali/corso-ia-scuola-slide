@@ -312,6 +312,14 @@ const ActivityBadge = ({ href, label }) => (
   </a>
 );
 
+const Steps = ({ items }) => (
+  <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+    {items.map((it, i) => <li key={i} style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{it}</li>)}
+  </ol>
+);
+
+const Strong = ({ children }) => <strong style={{ color: colors.text }}>{children}</strong>;
+
 /* ---------- schemi riusabili (arricchimento slide + nuove sezioni) ---------- */
 
 function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
@@ -954,12 +962,275 @@ const slides = [
     ),
     notes: 'Chiusura della sezione sui Gem. Ribadite: avere documenti caricati riduce le invenzioni, ma non le azzera. La verifica della fonte resta un passaggio umano, sempre.'
   },
+  /* --- come si scrivono le istruzioni --- */
+  {
+    block: 'Argomento 2 — Gem e notebook · Le istruzioni',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Argomento 2 — Gem e notebook · Le istruzioni</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Le cinque parti di una buona istruzione</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Un Gem è bravo quanto le istruzioni che riceve.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px' }}>
+          {[
+            { n: '1', name: 'Ruolo', q: 'Chi sei e per chi lavori?', ex: 'Sei l\'assistente della segreteria.', color: colors.info },
+            { n: '2', name: 'Compito', q: 'Che cosa devi fare?', ex: 'Riscrivi le email in modo chiaro.', color: colors.success },
+            { n: '3', name: 'Formato', q: 'Come deve essere la risposta?', ex: 'Prima cosa si chiede, poi i dettagli in elenco.', color: colors.warn },
+            { n: '4', name: 'Limiti', q: 'Che cosa non devi fare?', ex: 'Non cambiare date e importi.', color: colors.danger },
+            { n: '5', name: 'Se manca un dato', q: 'Che cosa fai se non lo hai?', ex: 'Scrivi «dato mancante», non inventare.', color: colors.purple },
+          ].map(x => (
+            <div key={x.n} style={{ background: colors.bgLight, borderTop: `4px solid ${x.color}`, borderRadius: '8px', padding: '12px 14px' }}>
+              <div style={{ color: x.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{x.n}. {x.name}</div>
+              <div style={{ color: colors.text, fontSize: 'var(--fs-xs)', margin: '4px 0 8px' }}>{x.q}</div>
+              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', fontStyle: 'italic' }}>{x.ex}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    notes: 'Le cinque parti sono la griglia da usare in tutte le attività che seguono. Non serve scriverle tutte e cinque ogni volta, ma quasi sempre mancano proprio "limiti" e "se manca un dato": sono quelle che evitano le invenzioni. Fate dire ai partecipanti, per ogni parte, che cosa succede se manca: senza ruolo il tono è a caso; senza formato ogni risposta ha una forma diversa; senza limiti aggiunge cose; senza "se manca un dato" inventa. Il foglio "Scrivere le istruzioni di un Gem" ha le stesse parti con esempi e un modello vuoto.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Le istruzioni',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Istruzione vaga, istruzione precisa</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.danger}`, borderRadius: '10px', padding: '14px 18px' }}>
+            <div style={{ color: colors.danger, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '8px' }}>Vaga</div>
+            <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-sm)', color: colors.textDim, marginBottom: '12px' }}>Aiuta a scrivere gli avvisi per le famiglie.</div>
+            <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
+              <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Ogni volta una forma diversa.</li>
+              <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Date e importi che cambiano.</li>
+              <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Un dato che manca viene inventato.</li>
+            </ul>
+          </div>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.success}`, borderRadius: '10px', padding: '14px 18px' }}>
+            <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '8px' }}>Precisa</div>
+            <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textDim, lineHeight: 1.6 }}>
+              <div><span style={{ color: colors.info }}>Ruolo:</span> assistente della segreteria della scuola.</div>
+              <div><span style={{ color: colors.success }}>Compito:</span> riscrivi in modo chiaro le comunicazioni alle famiglie.</div>
+              <div><span style={{ color: colors.warn }}>Formato:</span> prima cosa si chiede e entro quando, poi i dettagli in elenco.</div>
+              <div><span style={{ color: colors.danger }}>Limiti:</span> non cambiare date, orari e importi.</div>
+              <div><span style={{ color: colors.purple }}>Se manca un dato:</span> scrivi «dato mancante».</div>
+            </div>
+          </div>
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Stesso Gem, stessi documenti: cambia solo il testo delle istruzioni.</p>
+      </div>
+    ),
+    notes: 'Il confronto è su un caso di scuola semplice. Chiedete alla sala di indovinare che cosa farebbe il Gem con l\'istruzione vaga: nella prima attività lo vedranno con i loro occhi. Il testo completo delle due versioni è nel foglio "Scrivere le istruzioni di un Gem". Una bella istruzione non garantisce nulla: va provata.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Le istruzioni',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.warn, marginBottom: '14px' }}>Se la risposta è sbagliata</h2>
+        <Glow>
+          <p style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-lead)' }}>Correggi le istruzioni, non solo la chat.</p>
+          <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Quello che dici in una chat vale per quella chat. Le chat sono di norma separate: la prossima parte dalle istruzioni, e l'errore torna.</p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', margin: '16px 0 10px' }}>Il metodo:</p>
+        <FlowChain steps={[
+          { icon: '✍️', label: 'Scrivi', sub: 'le istruzioni', color: colors.info },
+          { icon: '🧪', label: 'Prova', sub: 'casi realistici, senza nomi, e un caso trappola', color: colors.success },
+          { icon: '🔧', label: 'Correggi', sub: 'le istruzioni', color: colors.warn },
+          { icon: '🔁', label: 'Riprova', sub: 'in una chat nuova', color: colors.purple },
+        ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/scrivere-le-istruzioni.html" label="Scrivere le istruzioni di un Gem" />
+        </div>
+      </div>
+    ),
+    notes: 'È la regola più importante di questa parte. In una chat si può dire "no, rifai" e funziona, ma resta in quella chat: come nella slide sui progetti, le chat dello stesso Gem di norma restano separate (per i Gem, da provare prima dell\'aula: alcuni strumenti hanno una memoria che può riprendere qualcosa da altre chat). Il caso trappola è un caso in cui l\'assistente dovrebbe fermarsi o segnalare un problema (un dato che manca, una domanda fuori dai documenti): se non si prova, non si scopre. Riprovare in una chat nuova serve a verificare che la correzione stia davvero nelle istruzioni.'
+  },
+
+  /* --- sei attività, una per esempio della slide "Gem o notebook?" --- */
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Gem «Circolari»: istruzioni da migliorare</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>30 minuti. Un Gem per scrivere circolari, con istruzioni che migliorate voi.</p>
+        <Steps items={[
+          <>Create il Gem <Strong>Circolari</Strong> con le istruzioni vaghe del foglio.</>,
+          <>Provatelo sui tre <Strong>appunti</Strong> del foglio, uno per volta. Segnate che cosa non va.</>,
+          <>Riscrivete le istruzioni <Strong>parte per parte</Strong>: ruolo, compito, formato, limiti, se manca un dato.</>,
+          <>Salvate, aprite una <Strong>chat nuova</Strong> e rifate i tre appunti. Che cosa è cambiato?</>,
+        ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/gem-circolari.html" label="Gem Circolari" />
+          <ActivityBadge href="../materiali/argomento-2/scrivere-le-istruzioni.html" label="Scrivere le istruzioni di un Gem" />
+        </div>
+      </div>
+    ),
+    notes: 'È l\'attività centrale sulle istruzioni. Tra gli appunti c\'è un caso trappola: non anticipatelo ai partecipanti, fate guardare le circolari e chiedete se ogni dato citato era negli appunti. Soluzioni ed esempio di istruzioni migliorate nei materiali del docente. Questa attività richiama il Gem "Circolari" della slide "Gem o notebook? Qualche esempio". Collegamento alle skill: nome, descrizione di quando si usa e istruzioni sono gli stessi tre pezzi.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Gem «Email chiare alle famiglie»</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>30 minuti. Questa volta le istruzioni le scrivete voi dall'inizio.</p>
+        <Steps items={[
+          <>Create il Gem <Strong>Email chiare alle famiglie</Strong> e scrivete le istruzioni con le cinque parti.</>,
+          <>Tra i <Strong>limiti</Strong>: non cambiare date, orari e importi. Pensate anche a che cosa fare se nel testo c'è un nome di persona.</>,
+          <>Riscrivete le tre <Strong>email burocratiche</Strong> del foglio, una alla volta.</>,
+          <>Confrontate con l'originale <Strong>ogni data e ogni importo</Strong>. Poi discutete con il vicino che cosa è successo.</>,
+        ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/gem-email-famiglie.html" label="Gem Email chiare alle famiglie" />
+          <ActivityBadge href="../materiali/argomento-2/scrivere-le-istruzioni.html" label="Scrivere le istruzioni di un Gem" />
+        </div>
+      </div>
+    ),
+    notes: 'Una delle tre email contiene un dato personale inventato: serve a discutere il punto vero, cioè che in lavoro reale i nomi non si incollano (ne parla l\'argomento 6). Controllate anche che date e importi non siano cambiati. Valori ed errori tipici nei materiali del docente.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Gem «Musei sul web»</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>15 minuti. Un Gem che cerca sul web: e un'informazione dal web va verificata.</p>
+        <Steps items={[
+          <>Create il Gem <Strong>Musei sul web</Strong> con le istruzioni del foglio: cercare sul web, stesso formato, «da verificare» per i dati non trovati.</>,
+          <>Chiedete <Strong>tre luoghi</Strong> adatti a un'uscita, nel comune della scuola o vicino.</>,
+          <>Aprite <Strong>ogni link</Strong>: il costo e ciò che il luogo offre sono scritti sul sito?</>,
+          <>In una chat nuova chiedete la scheda di un museo che <Strong>non esiste</Strong> (la richiesta è nel foglio). Che cosa risponde?</>,
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>Se il Gem non cerca sul web con il vostro account, dovrebbe dirlo (da provare): fate la stessa prova nella chat di Gemini, con le stesse istruzioni incollate, e scrivetelo sul foglio.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/gem-musei-web.html" label="Gem Musei sul web" />
+        </div>
+      </div>
+    ),
+    notes: 'Da provare prima dell\'aula: con l\'account della scuola, un Gem con queste istruzioni cerca davvero sul web e dà i link? Può dipendere dall\'account e dalle impostazioni. Se non cerca, la stessa prova si fa nella chat di Gemini con le stesse istruzioni incollate. Scegliete in anticipo un comune che dà risultati. Il messaggio: senza un documento di riferimento il controllo sta nel link; un costo o un orario non si usano in una circolare senza averli letti sul sito ufficiale. Note nei materiali del docente.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Notebook «Trova la regola»</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>15 minuti. Ritrovare una regola nel regolamento e controllare il rimando.</p>
+        <Steps items={[
+          <>Create un notebook con una sola fonte: il <Strong>Regolamento viaggi di prova</Strong>.</>,
+          <>Dal foglio delle domande scegliete <Strong>una per gruppo</Strong> (1, 2 e 3), escluse la 6 e la 10.</>,
+          <>Per ogni risposta aprite il <Strong>rimando</Strong> e controllate che il testo citato dica quello che il notebook afferma.</>,
+          <>Se avete fatto il primo Gem, rifate le stesse domande lì e confrontate.</>,
+          <>Per iscritto, in due righe: <Strong>che cosa cambia</Strong> tra i due strumenti?</>,
+        ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/notebook-trova-la-regola.html" label="Notebook Trova la regola" />
+          <ActivityBadge href="../materiali/argomento-2/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
+          <ActivityBadge href="../materiali/argomento-2/domande-preparate.html" label="Domande da fare al Gem o al notebook" />
+        </div>
+      </div>
+    ),
+    notes: 'Corrisponde all\'esempio "Sapere quanti giorni di preavviso chiede il regolamento per una visita guidata". Le domande 6 e 10 usano anche i dati dell\'orario, che qui non è caricato. Il punto da far vedere è il rimando: si apre con un clic e mostra il pezzo di documento. Con il notebook, per la domanda senza risposta nel documento, ci si aspetta che dica che non c\'è. Soluzioni delle domande e note per l\'attività nei materiali del docente. Da provare prima dell\'aula: gli strumenti del notebook cambiano da un account all\'altro.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Notebook «Cosa cambia»</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>20 minuti. Un regolamento e una delibera inventata che lo modifica, come una nuova norma.</p>
+        <Steps items={[
+          <>Create un notebook con <Strong>due fonti</Strong>: il regolamento e la delibera di modifica.</>,
+          <>Chiedete <Strong>che cosa cambia</Strong>. Contate prima voi le modifiche nella delibera, poi controllate con i rimandi.</>,
+          <>Fate le domande del foglio in cui <Strong>il vecchio testo e la delibera si contraddicono</Strong>: quale testo usa il notebook?</>,
+          <>Se c'è lo strumento, generate la <Strong>mappa mentale</Strong>. Mostra il «prima» e il «dopo»?</>,
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>Il documento è inventato: «nuova norma» è solo un paragone.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/notebook-cosa-cambia.html" label="Notebook Cosa cambia" />
+          <ActivityBadge href="../materiali/argomento-2/delibera-modifica-di-prova.html" label="Delibera di modifica (di prova)" />
+          <ActivityBadge href="../materiali/argomento-2/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
+        </div>
+      </div>
+    ),
+    notes: 'Corrisponde all\'esempio "Capire cosa cambia con una nuova norma, partendo dai testi ufficiali". La delibera è inventata. Non citate norme reali: l\'analogia è solo con il meccanismo di un testo che ne modifica un altro. Il punto: con due versioni della stessa regola il notebook può usare quella sbagliata o mescolarle, e solo i rimandi lo mostrano. Da provare prima dell\'aula: la mappa mentale è attiva con l\'account della scuola? Soluzioni nei materiali del docente.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Notebook «Riassunto audio»</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>25 minuti, con qualche minuto di attesa. Un riassunto da ascoltare, ma da controllare.</p>
+        <Steps items={[
+          <>Aprite un notebook con il regolamento e <Strong>avviate subito</Strong> il riassunto audio: può richiedere qualche minuto.</>,
+          <>Mentre aspettate, scegliete <Strong>tre numeri</Strong> che pensate debbano comparire.</>,
+          <>Ascoltate un pezzo e scrivete su un foglio <Strong>almeno un'affermazione</Strong> da controllare.</>,
+          <>Cercatela nel regolamento: <Strong>esatta, imprecisa o non presente</Strong>?</>,
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>Se lo schermo è diverso: lo strumento può non essere attivo o cambiare aspetto. In quel caso usate un altro strumento del notebook e controllate allo stesso modo.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/notebook-riassunto-audio.html" label="Notebook Riassunto audio" />
+          <ActivityBadge href="../materiali/argomento-2/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
+        </div>
+      </div>
+    ),
+    notes: 'Corrisponde all\'esempio "Farsi un riassunto audio di un lungo documento, da ascoltare in viaggio". Da provare prima dell\'aula: lo strumento è attivo con l\'account della scuola, come si chiama, quanto tempo impiega con il regolamento di prova. In aula far partire la generazione per prima cosa, così l\'attesa non è tempo perso. Il riassunto cambia a ogni generazione: non ci sono risposte fisse. Cercate numeri arrotondati, eccezioni dimenticate, regole trasformate in consigli. Il messaggio: serve a orientarsi, non a sapere un numero. Tabella dei valori nei materiali del docente.'
+  },
+
+  /* --- attività finale con il proprio materiale --- */
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.warn, marginBottom: '8px' }}>Prima di caricare un documento</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Quello che carichi in un Gem esce dal tuo computer. Nell'attività finale si usa solo materiale <Strong>senza dati personali</Strong>. Vale anche per ciò che scrivi in chat.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.success}`, borderRadius: '10px', padding: '12px 18px' }}>
+            <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Va bene</div>
+            <ul style={{ paddingLeft: '20px', color: colors.textDim }}>
+              {['Regolamenti', 'Modelli vuoti', 'Circolari già pubbliche', 'Procedure e schemi'].map(i => <li key={i} style={{ fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{i}</li>)}
+            </ul>
+          </div>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.danger}`, borderRadius: '10px', padding: '12px 18px' }}>
+            <div style={{ color: colors.danger, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Non caricare</div>
+            <ul style={{ paddingLeft: '20px', color: colors.textDim }}>
+              {['Nomi di studenti, famiglie, colleghi', 'Classi che fanno riconoscere una persona', 'Email e telefoni', 'Dati sanitari, voti, situazioni familiari'].map(i => <li key={i} style={{ fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{i}</li>)}
+            </ul>
+          </div>
+        </div>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Se il documento contiene dati: <Strong>copia ripulita</Strong> oppure un altro documento. Approfondimento: <a href="../argomento-6/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 6 — Usare l'IA con giudizio</a>.</p>
+      </div>
+    ),
+    notes: 'Passaggio obbligato prima dell\'attività finale. Le regole del corso non permettono dati reali di studenti, famiglie o personale: ognuno porta materiale proprio, ma solo se non contiene dati personali. Leggete la lista ad alta voce e fate controllare il documento prima di caricarlo. Un elenco classe, un verbale con nomi, un documento con dati sanitari non si caricano nemmeno se "è solo una prova". Chi non ha materiale adatto usa un documento di riserva (il regolamento di prova o un modello di circolare vuoto). Il foglio "Il tuo Gem" ha la stessa lista.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Il tuo Gem, con il tuo materiale</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>45 minuti. Un Gem per un compito del vostro lavoro, con l'account della scuola.</p>
+        <Steps items={[
+          <>Scegliete un <Strong>compito che ripetete spesso</Strong> e un documento senza dati personali. Passate la lista di controllo.</>,
+          <>Compilate la <Strong>scheda</Strong>: nome, quando va usato, ruolo, compito, formato, limiti, se manca un dato, documenti.</>,
+          <>Create il Gem e fate <Strong>tre prove</Strong>: due casi realistici, senza nomi, e un caso trappola.</>,
+          <><Strong>Correggete le istruzioni</Strong> e riprovate in una chat nuova.</>,
+          <>Fatelo provare a un <Strong>collega</Strong>: capisce a cosa serve da nome e descrizione?</>,
+        ]} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/il-tuo-gem.html" label="Il tuo Gem, con il tuo materiale" />
+          <ActivityBadge href="../materiali/argomento-2/scrivere-le-istruzioni.html" label="Scrivere le istruzioni di un Gem" />
+        </div>
+      </div>
+    ),
+    notes: 'Attività finale: porta tutto su un caso del lavoro di ciascuno. Se il tempo non basta, allungatela o fate fare la scheda e la prima prova e lasciate il resto come lavoro a casa. Nella scheda, nome, descrizione di quando va usato e istruzioni sono esattamente ciò che passa a una skill (vedi la slide sulle skill, più avanti): la descrizione di "quando va usato" è la cosa nuova da saper scrivere. Se sul vostro schermo il Gem non ha un campo descrizione, la si scrive come prima riga delle istruzioni. Girate tra i banchi: descrizioni vaghe, limiti assenti, prove trappola troppo facili. La condivisione con il collega dipende dall\'account della scuola: da provare prima dell\'aula; in alternativa il collega ricrea il Gem dalle istruzioni. Note e un esempio di scheda compilata nei materiali del docente.'
+  },
   {
     block: "Argomento 2 — Gem e notebook · Gem e notebook",
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '8px' }}>I Gem stanno diventando skill</h2>
-        <p style={{ color: colors.textDim, marginBottom: '14px' }}>Google sta sostituendo i Gem con le <strong style={{ color: colors.text }}>skill</strong>. L'idea resta la stessa: istruzioni e file preparati una volta, riusati sempre.</p>
+        <p style={{ color: colors.textDim, marginBottom: '14px' }}>Google sta sostituendo i Gem con le <strong style={{ color: colors.text }}>skill</strong>. L'idea resta la stessa: istruzioni e file preparati una volta, riusati sempre. Per questo conta scrivere bene nome, descrizione e istruzioni.</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '14px' }}>
           {[
             { title: 'Cosa resta', color: colors.success, items: ['Nome, descrizione e istruzioni', 'I file, con l’eccezione di alcuni formati', 'La condivisione'] },
@@ -977,7 +1248,7 @@ const slides = [
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Cos'è una skill, anche fuori da Gemini: <a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>.</p>
       </div>
     ),
-    notes: 'Quello che avete imparato sui Gem non si butta: scrivere istruzioni chiare è la stessa abilità che serve per una skill. Date e dettagli vengono dalle pagine di supporto di Google e possono cambiare: ricontrollateli prima dell\'aula. Controllate anche il tipo di account della scuola, se il Gem si crea ancora e se l\'amministratore ha attivato le skill: per Workspace è lui ad abilitarle. Gli account personali sono in sola lettura dal 17/11/2026. I formati che non passano nella conversione sono audio, video, archivi e i vecchi file di Office.'
+    notes: 'Quello che avete imparato sui Gem non si butta: scrivere istruzioni chiare è la stessa abilità che serve per una skill. Le attività sulle istruzioni preparano proprio a questo: nome, descrizione di quando si usa e istruzioni sono ciò che resta nel passaggio, e la descrizione di "quando va usato" è la cosa nuova da saper scrivere. Date e dettagli vengono dalle pagine di supporto di Google e possono cambiare: ricontrollateli prima dell\'aula. Controllate anche il tipo di account della scuola, se il Gem si crea ancora e se l\'amministratore ha attivato le skill: per Workspace è lui ad abilitarle. Gli account personali sono in sola lettura dal 17/11/2026. I formati che non passano nella conversione sono audio, video, archivi e i vecchi file di Office.'
   },
   {
     block: 'Argomento 2 — Gem e notebook · Chiusura',
