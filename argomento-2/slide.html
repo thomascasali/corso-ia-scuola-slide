@@ -817,7 +817,7 @@ const slides = [
     block: "Argomento 2 — Gem e notebook · Gem e notebook",
     content: () => (
       <div style={{ padding: '30px' }}>
-        <h2 style={{ color: colors.accent, marginBottom: '22px' }}>Tre nomi, la stessa idea</h2>
+        <h2 style={{ color: colors.accent, marginBottom: '22px' }}>Tre nomi, un'idea comune</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
           {[
             { name: 'Gem', tool: 'Gemini', icon: '💎' },
@@ -831,17 +831,77 @@ const slides = [
             </div>
           ))}
         </div>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '20px' }}>Il nome e i menu cambiano, l'idea è la stessa: documenti e istruzioni pronte, senza doverli ripetere ogni volta.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '20px' }}>L'idea comune: preparare una volta le cose che servono, senza doverle ripetere ogni volta. Gem e notebook però non sono la stessa cosa, e la differenza conta.</p>
       </div>
     ),
-    notes: 'Non entrate nei dettagli di interfaccia (pulsanti, menu): possono cambiare. Il messaggio da far passare è solo il paragone concettuale: sono tre modi diversi di fare la stessa cosa.'
+    notes: 'Non entrate nei dettagli di interfaccia (pulsanti, menu): possono cambiare. Il messaggio da far passare è il punto in comune: si prepara una volta, si riusa sempre. La slide dopo spiega cosa distingue Gem e notebook. I Progetti di Claude sono solo citati, perché nel corso lavoriamo con l\'account Google della scuola.'
+  },
+  {
+    block: "Argomento 2 — Gem e notebook · Gem e notebook",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Gem e notebook: la differenza</h2>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Il Gem definisce <strong style={{ color: colors.text }}>come lavora</strong> l'IA. Il notebook definisce <strong style={{ color: colors.text }}>su cosa lavora</strong>.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          {[
+            { icon: '💎', name: 'Gem', sub: 'un assistente personalizzato dentro Gemini', color: colors.info, items: [
+              'Gli dai istruzioni: ruolo, tono, cosa fare e cosa non fare.',
+              'I documenti sono facoltativi.',
+              'Può usare anche le sue conoscenze generali, non solo i documenti.',
+              'Serve per i compiti che si ripetono.',
+            ] },
+            { icon: '📓', name: 'Notebook', sub: 'Gemini Notebook, prima NotebookLM', color: colors.success, items: [
+              'Parti caricando i documenti: sono le sue fonti.',
+              'Risponde a partire dalle fonti, con un rimando al punto preciso.',
+              'Ha strumenti propri: riassunti audio e video, mappe mentali, flashcard.',
+              'Serve per studiare o analizzare un materiale preciso.',
+            ] },
+          ].map(x => (
+            <div key={x.name} style={{ background: colors.bgLight, border: `1px solid ${x.color}`, borderRadius: '10px', padding: '16px 20px' }}>
+              <div style={{ color: x.color, fontWeight: 700, fontSize: 'var(--fs-lead)' }}>{x.icon} {x.name}</div>
+              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '8px' }}>{x.sub}</div>
+              <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
+                {x.items.map(i => <li key={i} style={{ marginBottom: '6px' }}>{i}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+    notes: 'La frase da ricordare è la prima: come lavora, su cosa lavora. Un Gem senza documenti funziona; un notebook nasce per lavorare sulle fonti. Attenzione a un equivoco: caricare il regolamento in un Gem non obbliga il Gem a rispondere solo da lì. Se serve, va scritto nelle istruzioni, e anche così il controllo resta vostro. Prima dell\'aula provate con l\'account della scuola se il Gem usa anche il web e quali strumenti del notebook sono attivi: possono cambiare da un account all\'altro.'
+  },
+  {
+    block: "Argomento 2 — Gem e notebook · Gem e notebook",
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Gem o notebook? Qualche esempio</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>La domanda che aiuta a scegliere: conta di più il modo di lavorare o il materiale su cui lavorare?</p>
+        <div style={{ display: 'grid', gap: '7px' }}>
+          {[
+            { q: 'Scrivere le circolari sempre con lo stesso schema e lo stesso tono', a: 'Gem', why: 'conta come scrive', color: colors.info },
+            { q: 'Rendere più chiare le email alle famiglie, togliendo il linguaggio burocratico', a: 'Gem', why: 'è un compito che si ripete', color: colors.info },
+            { q: 'Preparare la scaletta di ogni riunione a partire da pochi appunti', a: 'Gem', why: 'stesso metodo, contenuto ogni volta nuovo', color: colors.info },
+            { q: 'Sapere quanti giorni di preavviso chiede il regolamento per una visita guidata', a: 'Notebook', why: 'la risposta sta in un documento, e va ritrovata', color: colors.success },
+            { q: 'Capire cosa cambia con una nuova norma, partendo dai testi ufficiali', a: 'Notebook', why: 'si lavora su quei testi, con mappa e rimandi', color: colors.success },
+            { q: 'Farsi un riassunto audio di un lungo documento, da ascoltare in viaggio', a: 'Notebook', why: 'è uno strumento suo', color: colors.success },
+          ].map(x => (
+            <div key={x.q} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 14px', background: colors.bgLight, borderLeft: `4px solid ${x.color}`, borderRadius: '6px', padding: '7px 14px' }}>
+              <div style={{ flex: '1 1 340px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>{x.q}</div>
+              <div style={{ flex: '0 1 340px', fontSize: 'var(--fs-xs)', color: colors.textMuted }}><strong style={{ color: x.color }}>{x.a}</strong>: {x.why}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Un Gem con i documenti può rispondere anche sul regolamento, se le istruzioni glielo chiedono: lo proverete nell'attività.</p>
+      </div>
+    ),
+    notes: 'Circa 5 minuti. L\'attività che segue chiede a un Gem proprio di rispondere sul regolamento: si fa apposta, per misurare quanto reggono le istruzioni. Commentate gli esempi, poi chiedete ai partecipanti un compito del loro lavoro e fate scegliere a loro. Si possono anche usare insieme: un Gem può scrivere la circolare dopo che nel notebook avete ritrovato la regola. Nessun dato personale nei documenti caricati, né nell\'uno né nell\'altro: se ne parla nell\'argomento 6.'
   },
   {
     block: "Argomento 2 — Gem e notebook · Gem e notebook",
     content: () => (
       <div style={{ padding: '24px 30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Come è fatto un Gem</h2>
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Sotto il nome, sono sempre le stesse tre cose messe insieme.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>Istruzioni, documenti se servono, la tua domanda.</p>
         <ConvergeDiagram
           inputs={[
             { icon: '📋', label: 'Istruzioni' },
@@ -850,11 +910,11 @@ const slides = [
           ]}
           outputIcon="💬"
           outputLabel="Risposta"
-          outputSub="con citazioni ai documenti caricati, quando ci sono"
+          outputSub="con i riferimenti ai documenti, se le istruzioni li chiedono"
         />
       </div>
     ),
-    notes: 'Mostrate lo schema e collegatelo a quello che stanno per fare: nella prossima slide scrivono loro le istruzioni e caricano loro i documenti. Ribadite: le citazioni aiutano, ma vanno comunque aperte e controllate, come nella slide "Controllate sempre le fonti" più avanti.'
+    notes: 'Mostrate lo schema e collegatelo a quello che stanno per fare: nella prossima slide scrivono loro le istruzioni e caricano loro i documenti. Ribadite: i riferimenti aiutano, ma vanno comunque aperti e controllati, come nella slide "Controllate sempre le fonti" più avanti.'
   },
   {
     block: "Argomento 2 — Gem e notebook · Gem e notebook",
