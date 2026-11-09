@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notebook «Audio e video su misura» — Materiali argomento 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 2</a>
+  <a class="dl-btn" href="notebook-audio-video-su-misura.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>DOCUMENTO DIDATTICO — scheda per l'attività «Notebook: audio e video su misura».</strong>
+Si lavora su un tema scelto da te, con fonti senza dati personali. Gli esempi usano l'"Istituto Tecnico Dimostrativo", che non esiste.</p>
+</blockquote>
+<h1 id="notebook-audio-e-video-su-misura">Notebook «Audio e video su misura»</h1>
+<p>Tempo indicativo: 40 minuti, di cui alcuni di attesa mentre lo strumento lavora. Con l'account della scuola.</p>
+<h2 id="1-scegli-il-tema-e-le-fonti">1. Scegli il tema e le fonti</h2>
+<p>Scegli un tema del tuo lavoro o della tua materia. Servono <strong>2-4 fonti</strong>: documenti, pagine web pubbliche, testi tuoi.</p>
+<p>Prima di caricare una fonte, controlla che <strong>non contenga</strong>:</p>
+<ul>
+<li>nomi e cognomi di studenti, famiglie, colleghi;</li>
+<li>classi o gruppi che fanno riconoscere una persona;</li>
+<li>email, telefoni, indirizzi, codici fiscali;</li>
+<li>dati sanitari, voti, note disciplinari, situazioni familiari.</li>
+</ul>
+<p>Se ne contiene, usa una copia ripulita o un altro documento. Se non hai materiale adatto, usa il <strong>Regolamento viaggi di prova</strong>. Se hai un dubbio, non caricare.</p>
+<p>Il mio tema: ________________________________________________</p>
+<p>Le mie fonti (2-4): ________________________________________</p>
+<h2 id="2-le-scelte-nella-finestra">2. Le scelte nella finestra</h2>
+<p>Nel pannello <strong>Studio</strong> del notebook clicca «Overview audio» oppure «Overview video». Si apre una finestra di personalizzazione. <strong>Non viene creato nulla finché non premi «Genera».</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>Audio</th>
+<th>Video</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formato</td>
+<td>Approfondimento (conversazione tra due host), Riepilogo (idee principali), Critica (revisione delle fonti con consigli), Dibattito (due host con prospettive diverse)</td>
+<td>Breve (icona verticale, idee principali) o Spiegazione (icona orizzontale, strutturata e dettagliata)</td>
+</tr>
+<tr>
+<td>Lingua</td>
+<td>Sì</td>
+<td>Sì</td>
+</tr>
+<tr>
+<td>Lunghezza</td>
+<td>Breve o Predefinito</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Fonti</td>
+<td>Scegli quali usare</td>
+<td>Scegli quali usare</td>
+</tr>
+<tr>
+<td>Su cosa concentrarsi</td>
+<td>Campo di testo</td>
+<td>Suggerimenti e campo «Argomento personalizzato»</td>
+</tr>
+<tr>
+<td>Stile visivo</td>
+<td>Non c'è</td>
+<td>Solo con Spiegazione: Selezione automatica, Personalizzato, Classico, Lavagna, Kawaii e altri</td>
+</tr>
+<tr>
+<td>Note del produttore</td>
+<td>Non c'è</td>
+<td>Interruttore «Esamina le note del produttore»</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ogni audio o video creato compare nello Studio. Dal menu del contenuto, «Prompt e fonti» mostra la richiesta usata e le fonti.</p>
+<h2 id="3-scheda-della-richiesta">3. Scheda della richiesta</h2>
+<p>Le sette parti. Compila a parole tue, una riga ciascuna.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Domanda</th>
+<th>La mia richiesta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Destinatari</td>
+<td>Chi ascolta o guarda?</td>
+<td></td>
+</tr>
+<tr>
+<td>2. Scopo</td>
+<td>Un titolo o una frase: a cosa serve?</td>
+<td></td>
+</tr>
+<tr>
+<td>3. Durata e formato</td>
+<td>Quanto dura? Audio, video Breve?</td>
+<td></td>
+</tr>
+<tr>
+<td>4. Struttura</td>
+<td>Quali punti, in che ordine?</td>
+<td></td>
+</tr>
+<tr>
+<td>5. Rigore sulle fonti</td>
+<td>Solo le fonti caricate? Che cosa non deve inventare? Se due fonti si contraddicono?</td>
+<td></td>
+</tr>
+<tr>
+<td>6. Stile</td>
+<td>Tono, termini difficili da spiegare, cose da evitare</td>
+<td></td>
+</tr>
+<tr>
+<td>7. Chiusura</td>
+<td>Come finisce? Una domanda, una cosa da fare?</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>È la stessa idea delle cinque parti di una buona istruzione (ruolo, compito, formato, limiti, se manca un dato), applicata a un audio o a un video.</p>
+<p>Unisci le sette righe in un solo testo e incollalo nel campo di testo su cosa concentrarsi.</p>
+<h2 id="4-genera-e-prepara-la-seconda-richiesta">4. Genera e prepara la seconda richiesta</h2>
+<ol>
+<li>Scegli un <strong>audio</strong> (formato e lunghezza adatti alla tua richiesta) oppure un <strong>video Breve</strong>, e premi «Genera». Può richiedere qualche minuto; il video può richiedere più dell'audio.</li>
+<li>Mentre aspetti, scrivi una <strong>seconda richiesta</strong>: cambia il formato (per esempio Riepilogo invece di Approfondimento), la durata o i destinatari.</li>
+</ol>
+<p>La seconda richiesta: ____________________________________________</p>
+<h2 id="5-due-esempi-pronti">5. Due esempi pronti</h2>
+<p>Sono inventati. Puoi incollarli per provare, oppure usarli come modello per il tuo tema. Servono come fonte il <strong>Regolamento viaggi di prova</strong> o un testo simile.</p>
+<h3 id="esempio-per-un-audio">Esempio per un audio</h3>
+<pre><code>TITOLO: Le uscite didattiche, in breve.
+DESTINATARI: genitori delle classi prime dell'Istituto Tecnico Dimostrativo, che non conoscono il regolamento.
+DURATA: circa 5 minuti.
+STRUTTURA: 1) a cosa servono le uscite; 2) cosa chiede la scuola prima di partire; 3) cosa chiede ai genitori; 4) a chi rivolgersi.
+RIGORE SULLE FONTI: usa solo il regolamento caricato. Non inventare numeri, date o eccezioni. Se un dato non è nel regolamento, dillo.
+STILE: conversazione semplice, senza sigle; se ne compare una, spiegala la prima volta.
+CHIUSURA: finisci con una cosa che un genitore può fare questa settimana.
+</code></pre>
+<h3 id="esempio-per-un-video-breve">Esempio per un video Breve</h3>
+<pre><code>TITOLO: Come si chiede un'uscita di classe.
+DESTINATARI: studenti delle classi seconde dell'Istituto Tecnico Dimostrativo.
+FORMATO: video verticale, circa 60 secondi, un solo concetto: i passaggi per proporre un'uscita.
+STRUTTURA: tre passaggi, uno per schermata.
+RIGORE SULLE FONTI: usa solo il regolamento caricato; non inventare tempi o numeri.
+STILE: testi brevi e leggibili su smartphone, schemi semplici, ritmo vivace.
+CHIUSURA: finisci con una domanda agli studenti.
+</code></pre>
+<h2 id="6-controlla-le-affermazioni">6. Controlla le affermazioni</h2>
+<p>Ascolta o guarda almeno due o tre minuti. Scegli <strong>due affermazioni</strong> e cercale nelle fonti.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Affermazione (a parole tue)</th>
+<th>Dove dovrebbe stare nelle fonti</th>
+<th>Esatta, imprecisa o non presente?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Controlla anche: la durata è quella che hai chiesto? I destinatari e lo stile sono quelli giusti? La chiusura c'è?</p>
+<h2 id="7-correggi-la-richiesta">7. Correggi la richiesta</h2>
+<ol>
+<li>Apri il menu del contenuto e scegli <strong>«Prompt e fonti»</strong>. Rileggi la richiesta usata e le fonti.</li>
+<li>Cosa manca o è vago? Segna con una crocetta.</li>
+</ol>
+<ul>
+<li>[ ] I destinatari non sono chiari</li>
+<li>[ ] Manca la durata</li>
+<li>[ ] Manca la struttura</li>
+<li>[ ] Non c'è il vincolo sulle fonti</li>
+<li>[ ] Lo stile non è quello voluto</li>
+<li>[ ] Non c'è una chiusura</li>
+</ul>
+<ol start="3">
+<li>Scrivi la richiesta corretta, e <strong>che cosa cambierebbe</strong> nel risultato:</li>
+</ol>
+<hr />
+<p>Se hai tempo, rigenera con la richiesta corretta e confronta.</p>
+<h2 id="8-da-discutere">8. Da discutere</h2>
+<ul>
+<li>Quale parte della richiesta ha cambiato di più il risultato?</li>
+<li>Dove l'audio o il video ha detto cose che nelle fonti non ci sono?</li>
+<li>Per quale uso lo useresti? Per quale no?</li>
+<li>Un audio o un video creato dall'IA va ascoltato e controllato prima di darlo ad altri: chi lo fa, nel tuo lavoro?</li>
+</ul>
+<blockquote>
+<p><strong>Se lo schermo è diverso</strong>
+Le opzioni possono cambiare da un account all'altro e nel tempo. Se manca un formato o un campo, usa quelli che trovi e scrivi comunque le sette parti: il metodo non cambia. Se audio e video non sono attivi, fai l'attività con un altro strumento del notebook (un riassunto scritto) e controlla allo stesso modo.</p>
+</blockquote>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>

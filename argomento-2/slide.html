@@ -861,7 +861,7 @@ const slides = [
             ] },
             { icon: '📓', name: 'Notebook', sub: 'Gemini Notebook, prima NotebookLM', color: colors.success, items: [
               'Parti caricando i documenti: sono le sue fonti.',
-              'Si basa solo sulle fonti, con un rimando al punto preciso: non cerca sul web.',
+              'Risponde dalle fonti, con un rimando al punto preciso. Se glielo chiedi, cerca anche nel tuo Drive.',
               'Ha strumenti propri: riassunti audio e video, mappe mentali, flashcard.',
               'Serve per studiare o analizzare un materiale preciso.',
             ] },
@@ -877,7 +877,7 @@ const slides = [
         </div>
       </div>
     ),
-    notes: 'La frase da ricordare è la prima: come lavora, su cosa lavora. Un Gem senza documenti funziona; un notebook nasce per lavorare sulle fonti. Attenzione a un equivoco: caricare il regolamento in un Gem non obbliga il Gem a rispondere solo da lì. Se serve, va scritto nelle istruzioni, e anche così il controllo resta vostro. Prima dell\'aula controllate con l\'account della scuola quali strumenti del notebook sono attivi: possono cambiare da un account all\'altro.'
+    notes: 'La frase da ricordare è la prima: come lavora, su cosa lavora. Un Gem senza documenti funziona; un notebook nasce per lavorare sulle fonti. Attenzione a un equivoco: caricare il regolamento in un Gem non obbliga il Gem a rispondere solo da lì. Se serve, va scritto nelle istruzioni, e anche così il controllo resta vostro. Prima dell\'aula controllate con l\'account della scuola quali strumenti del notebook sono attivi: possono cambiare da un account all\'altro. Novità provata dal docente con l\'account della scuola il 9/11/2026: il notebook mostra l\'avviso «Ora puoi fare domande sui file di Google Drive direttamente in Gemini Notebook». Alla richiesta di cercare nel Drive file utili sull\'argomento, ha cercato con alcune parole chiave tra tutti i file, ha elencato quelli trovati e ha detto che nessuno trattava il tema. Tre cose da dire: i file del Drive non diventano fonti, quindi per avere i rimandi precisi vanno aggiunti con «Aggiungi fonti»; nell\'elenco possono comparire documenti di lavoro che non c\'entrano, quindi la ricerca nel proprio Drive non si fa con il proiettore acceso; in laboratorio si nomina la cartella di prova, come nell\'argomento 4. Sul web il notebook non cerca da solo: per aggiungere fonti dal web c\'è la ricerca nel riquadro Fonti.'
   },
   {
     block: "Argomento 2 — Gem e notebook · Gem e notebook",
@@ -1175,6 +1175,100 @@ const slides = [
       </div>
     ),
     notes: 'Corrisponde all\'esempio "Farsi un riassunto audio di un lungo documento, da ascoltare in viaggio". Da provare prima dell\'aula: lo strumento è attivo con l\'account della scuola, come si chiama, quanto tempo impiega con il regolamento di prova. In aula far partire la generazione per prima cosa, così l\'attesa non è tempo perso. Il riassunto cambia a ogni generazione: non ci sono risposte fisse. Cercate numeri arrotondati, eccezioni dimenticate, regole trasformate in consigli. Il messaggio: serve a orientarsi, non a sapere un numero. Tabella dei valori nei materiali del docente.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Notebook',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Audio e video su misura</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Nel pannello <Strong>Studio</Strong> del notebook, «Overview audio» e «Overview video» aprono una finestra. <Strong>Non parte nulla finché non premete «Genera».</Strong></p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+          {[
+            { title: 'Audio', color: colors.info, items: [
+              'Formato: Approfondimento, Riepilogo, Critica o Dibattito',
+              'Lingua e lunghezza (Breve o Predefinito)',
+              'Fonti: quali usare tra quelle del notebook',
+              'Su cosa si concentrano i due host: il campo di testo',
+            ] },
+            { title: 'Video', color: colors.purple, items: [
+              'Formato: Breve (icona verticale) o Spiegazione (icona orizzontale)',
+              'Lingua e fonti',
+              'Su cosa si concentra il video: suggerimenti o argomento personalizzato',
+              'Solo con Spiegazione: stile visivo (Classico, Lavagna, Kawaii...)',
+              'Interruttore «Esamina le note del produttore»',
+            ] },
+          ].map(x => (
+            <div key={x.title} style={{ background: colors.bgLight, border: `1px solid ${x.color}`, borderRadius: '10px', padding: '12px 18px' }}>
+              <div style={{ color: x.color, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{x.title}</div>
+              <ul style={{ paddingLeft: '20px', color: colors.textDim }}>
+                {x.items.map(i => <li key={i} style={{ fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>{i}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '14px' }}><Strong>Per rivedere e rifare:</Strong> dal menu del contenuto creato si apre «Prompt e fonti», che mostra la richiesta usata e le fonti.</p>
+      </div>
+    ),
+    notes: 'Voci e nomi verificati a schermo dal docente con l\'account della scuola il 9/11/2026. Audio: quattro formati. Approfondimento è una conversazione tra due host che analizzano e collegano gli argomenti delle fonti; Riepilogo è una panoramica sintetica; Critica è una revisione esperta delle fonti con feedback costruttivo; Dibattito è un confronto ponderato tra due host con prospettive diverse. Video: Breve (una panoramica per cogliere le idee principali) e Spiegazione (panoramica strutturata e dettagliata che mette in relazione le fonti). Esempi del docente: un video Breve di 1:31 e uno Spiegazione di 10:22: la differenza di durata è grande, scegliere con cura. I tempi di generazione sono di qualche minuto e il video può richiedere più dell\'audio; il formato esatto del video in pixel non è stato verificato. Dimostrazione del docente: aprire le due finestre senza premere Genera e far vedere le scelte. Le voci possono cambiare da un account all\'altro e nel tempo.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Notebook',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Scrivere la richiesta per un audio o un video</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Nel campo di testo su cosa concentrarsi vale la regola delle istruzioni: ruolo, compito, formato, limiti, se manca un dato. Qui diventano <Strong>sette parti</Strong>.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px' }}>
+          {[
+            { n: '1', name: 'Destinatari', q: 'Chi ascolta o guarda?', color: colors.info },
+            { n: '2', name: 'Scopo', q: 'Un titolo o una frase', color: colors.success },
+            { n: '3', name: 'Durata e formato', q: 'Quanto, come', color: colors.warn },
+            { n: '4', name: 'Struttura', q: 'I punti, in ordine', color: colors.accent },
+            { n: '5', name: 'Rigore sulle fonti', q: 'Solo le fonti; non inventare', color: colors.danger },
+            { n: '6', name: 'Stile', q: 'Tono, termini spiegati', color: colors.purple },
+            { n: '7', name: 'Chiusura', q: 'Come finisce', color: colors.info },
+          ].map(x => (
+            <div key={x.n} style={{ background: colors.bgLight, borderTop: `4px solid ${x.color}`, borderRadius: '8px', padding: '8px 12px' }}>
+              <div style={{ color: x.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{x.n}. {x.name}</div>
+              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{x.q}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px', marginTop: '14px' }}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.danger}`, borderRadius: '10px', padding: '10px 16px' }}>
+            <div style={{ color: colors.danger, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>Richiesta vaga</div>
+            <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', fontStyle: 'italic' }}>«Fai un audio sul regolamento delle uscite.»</div>
+          </div>
+          <div style={{ background: colors.bgLight, border: `1px solid ${colors.success}`, borderRadius: '10px', padding: '10px 16px' }}>
+            <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '4px' }}>Richiesta precisa</div>
+            <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', fontStyle: 'italic' }}>«Per i genitori delle classi prime. Circa 5 minuti: cosa si può fare con il regolamento delle uscite, in tre punti. Usa solo il regolamento caricato, non inventare numeri. Tono semplice, spiega ogni sigla. Chiudi con una cosa da fare questa settimana.»</div>
+          </div>
+        </div>
+      </div>
+    ),
+    notes: 'Gli esempi sono inventati (Istituto Tecnico Dimostrativo). È la stessa idea delle cinque parti di un\'istruzione, applicata a un prodotto: se il risultato non va bene, si corregge la richiesta e si rigenera. Dimostrazione del docente: mostrare il proprio notebook e la finestra «Prompt e fonti» di un audio o un video già creato, per far vedere come una richiesta ben costruita (con titolo, destinatari, durata, struttura in punti, regole sulle fonti, stile e conclusione) si distingue da una richiesta vaga come «Crea il video sfruttando il documento». Non copiate testi lunghi in slide: basta far vedere la struttura. Nota sul rigore: scrivere «usa solo le fonti» riduce le invenzioni ma non le elimina, quindi si controlla comunque. Il foglio dell\'attività ha la scheda da compilare e due esempi pronti.'
+  },
+  {
+    block: 'Argomento 2 — Gem e notebook · Attività',
+    content: () => (
+      <div style={{ padding: '24px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.success, marginBottom: '8px' }}>Audio e video su misura</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>40 minuti, con qualche minuto di attesa. Un tema che interessa a voi, un audio o un video scritto con la vostra richiesta.</p>
+        <Steps items={[
+          <>Scegliete un <Strong>tema del vostro lavoro o della vostra materia</Strong>. Create un notebook con <Strong>2-4 fonti senza dati personali</Strong> (lista di controllo nel foglio).</>,
+          <>Compilate la <Strong>scheda della richiesta</Strong>: le sette parti.</>,
+          <>Generate un <Strong>audio</Strong> (oppure un video Breve) con la richiesta scritta.</>,
+          <>Mentre aspettate, preparate la <Strong>seconda richiesta</Strong>, diversa nel formato o nella durata.</>,
+          <>Controllate <Strong>due affermazioni</Strong> nelle fonti: esatte, imprecise o non presenti?</>,
+          <>Aprite <Strong>«Prompt e fonti»</Strong>, correggete la richiesta e annotate che cosa cambierebbe.</>,
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>Se il tempo è poco: solo audio Breve, senza la seconda richiesta.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-2/notebook-audio-video-su-misura.html" label="Audio e video su misura" />
+        </div>
+      </div>
+    ),
+    notes: 'Partecipanti diversi lavorano su temi diversi: girate tra i banchi. Prima di caricare le fonti, leggete la lista di controllo sui dati personali (è nel foglio, ed è la stessa della slide «Prima di caricare un documento», più avanti): niente nomi, email, dati sanitari, voti. Chi non ha materiale adatto usa il regolamento di prova o una procedura pubblica. In aula far partire la generazione il prima possibile, così l\'attesa è tempo per la seconda richiesta; il video può richiedere più dell\'audio. Cercate richieste troppo generiche, durata non indicata, nessun vincolo sulle fonti. Il messaggio: la richiesta è la parte che controlliamo noi; il risultato va sempre verificato sulle fonti. Note nei materiali del docente. Da provare prima dell\'aula: le opzioni possono variare da un account all\'altro.'
   },
 
   /* --- quanti documenti in un Gem --- */
