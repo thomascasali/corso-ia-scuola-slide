@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida: OpenCode sul PC del laboratorio, collegato al server del corso — Materiali argomento 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 10</a>
+  <a class="dl-btn" href="guida-opencode-laboratorio.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<h1 id="guida-opencode-sul-pc-del-laboratorio-collegato-al-server-del-corso">Guida: OpenCode sul PC del laboratorio, collegato al server del corso</h1>
+<p>Questa guida porta OpenCode, un agente di programmazione, dal download alla prima richiesta, sul PC del laboratorio. Non servono i permessi di amministratore. OpenCode non parla con un fornitore esterno: parla con il server del corso, che ha già tutto configurato e che vi ha dato una chiave personale.</p>
+<p>Due segnaposto, che trovate sul foglio consegnato in aula:</p>
+<ul>
+<li><code>&lt;indirizzo del server&gt;</code>: l'indirizzo del server del corso, nella forma <code>http://...:4000</code>;</li>
+<li><code>&lt;la tua chiave&gt;</code>: la vostra chiave personale, che comincia con <code>sk-</code>.</li>
+</ul>
+<p>Tempo indicativo: 15-20 minuti, quasi tutti per il download.</p>
+<h2 id="cosa-serve">Cosa serve</h2>
+<ul>
+<li>Un PC Windows 10 o 11 con PowerShell (è già installato).</li>
+<li>Il foglio con indirizzo e chiave.</li>
+<li>Un collegamento a internet, per scaricare OpenCode da GitHub. Tenetelo anche al primo avvio: OpenCode potrebbe scaricare qualche componente in più (per esempio il programma che usa per cercare nei file). Da verificare in laboratorio. Il server del corso si raggiunge dalla rete del laboratorio.</li>
+</ul>
+<p>Non serve installare Node.js né altri programmi: OpenCode è un unico file eseguibile.</p>
+<h2 id="1-scaricare-e-preparare-opencode-circa-10-minuti">1. Scaricare e preparare OpenCode (circa 10 minuti)</h2>
+<p>Aprite PowerShell (menu Start, scrivete <code>PowerShell</code>). Incollate i comandi uno alla volta.</p>
+<p>Il primo nasconde la barra di avanzamento, che su alcune versioni di PowerShell rallenta molto il download. Il secondo crea una cartella vostra, il terzo scarica il programma (circa 80 MB), il quarto lo scompatta e l'ultimo controlla la versione. Durante il download la finestra sembra ferma: aspettate che ricompaia il prompt.</p>
+<pre><code class="language-powershell">$ProgressPreference = 'SilentlyContinue'
+New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\opencode&quot; | Out-Null
+Invoke-WebRequest &quot;https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip&quot; -OutFile &quot;$env:USERPROFILE\opencode\opencode.zip&quot;
+Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPath &quot;$env:USERPROFILE\opencode&quot; -Force
+&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot; --version
+</code></pre>
+<p>L'ultimo comando deve scrivere <code>1.19.5</code>. Se lo scrive, OpenCode è pronto. La cartella <code>opencode</code> sta nel vostro profilo utente: per questo non servono permessi speciali.</p>
+<p>Note:</p>
+<ul>
+<li>Questa guida è provata con la versione 1.19.5. Il comando scarica proprio quella, anche se più avanti ne esce una nuova.</li>
+<li>Se il PC è molto vecchio e il programma non parte, nella stessa pagina c'è il file <code>opencode-windows-x64-baseline.zip</code>: stessa procedura, cambia solo il nome del file.</li>
+<li>Se Windows mostra un avviso di protezione o blocca il programma, fermatevi e chiamate il docente. Sui PC del laboratorio questo passaggio non è ancora stato provato.</li>
+</ul>
+<h3 id="poterlo-chiamare-con-il-solo-nome-opencode">Poterlo chiamare con il solo nome <code>opencode</code></h3>
+<p>Senza questo passaggio dovete scrivere ogni volta il percorso lungo. Si fa dalle impostazioni dell'utente, senza amministratore:</p>
+<ol>
+<li>Menu Start, scrivete <code>variabili</code> e scegliete la voce che finisce con <strong>relative all'account</strong> (per esempio "Modifica le variabili di ambiente relative all'account"). Non scegliete quella "di sistema": chiede l'amministratore.</li>
+<li>Nella lista in alto (variabili utente) selezionate <code>Path</code> e premete <strong>Modifica</strong>. Se <code>Path</code> non c'è, premete <strong>Nuova</strong> e usate <code>Path</code> come nome.</li>
+<li>Premete <strong>Nuovo</strong> e incollate il percorso della cartella. Per conoscerlo, in PowerShell: <code>echo "$env:USERPROFILE\opencode"</code> (di solito è <code>C:\Users\&lt;nome utente&gt;\opencode</code>, ma sui PC della scuola può essere diverso: copiate quello che scrive il comando).</li>
+<li>Confermate con <strong>OK</strong> su tutte le finestre.</li>
+<li>Chiudete PowerShell e riapritelo. Provate <code>opencode --version</code>.</li>
+</ol>
+<p>Se non riuscite, andate avanti lo stesso: negli altri passaggi si può scrivere <code>&amp; "$env:USERPROFILE\opencode\opencode.exe"</code> al posto di <code>opencode</code>.</p>
+<h2 id="2-collegarlo-al-server-del-corso-circa-5-minuti">2. Collegarlo al server del corso (circa 5 minuti)</h2>
+<h3 id="la-chiave">La chiave</h3>
+<p>La chiave è una password: non va scritta nei file di un progetto. La mettiamo in una variabile d'ambiente dell'utente, che OpenCode leggerà all'avvio.</p>
+<ol>
+<li>Aprite di nuovo la finestra delle variabili d'ambiente <strong>relative all'account</strong>.</li>
+<li>Nella lista <strong>in alto</strong> (variabili utente) premete <strong>Nuova</strong>.</li>
+<li>Nome: <code>CORSO_API_KEY</code>. Valore: incollate <code>&lt;la tua chiave&gt;</code>. Confermate con <strong>OK</strong>.</li>
+<li>Chiudete PowerShell e riapritelo: le variabili si leggono solo nelle finestre aperte dopo averle create.</li>
+</ol>
+<p>Se la finestra delle variabili non si apre sul PC del laboratorio, potete mettere la chiave solo nella finestra di PowerShell che state usando: <code>$env:CORSO_API_KEY = "&lt;la tua chiave&gt;"</code>. Vale finché non chiudete quella finestra, e OpenCode va avviato da lì.</p>
+<p>Per controllare senza mostrare la chiave, in PowerShell:</p>
+<pre><code class="language-powershell">if ($env:CORSO_API_KEY) { &quot;chiave presente&quot; } else { &quot;chiave mancante&quot; }
+</code></pre>
+<h3 id="il-file-di-configurazione">Il file di configurazione</h3>
+<p>Il file si chiama <code>opencode.json</code> e sta nella cartella di configurazione personale di OpenCode. Si crea così:</p>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\.config\opencode&quot; | Out-Null
+notepad &quot;$env:USERPROFILE\.config\opencode\opencode.json&quot;
+</code></pre>
+<p>Se Blocco note chiede se creare il file, rispondete di sì. Incollate questo testo, sostituendo <code>&lt;indirizzo del server&gt;</code> con quello del foglio. Lasciate in fondo all'indirizzo il pezzo <code>/v1</code>, e non scrivete la chiave: c'è già <code>{env:CORSO_API_KEY}</code>, che legge la variabile.</p>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://opencode.ai/config.json&quot;,
+  &quot;share&quot;: &quot;disabled&quot;,
+  &quot;autoupdate&quot;: false,
+  &quot;enabled_providers&quot;: [&quot;corso&quot;],
+  &quot;provider&quot;: {
+    &quot;corso&quot;: {
+      &quot;npm&quot;: &quot;@ai-sdk/openai-compatible&quot;,
+      &quot;name&quot;: &quot;Server del corso&quot;,
+      &quot;options&quot;: {
+        &quot;baseURL&quot;: &quot;&lt;indirizzo del server&gt;/v1&quot;,
+        &quot;apiKey&quot;: &quot;{env:CORSO_API_KEY}&quot;
+      },
+      &quot;models&quot;: {
+        &quot;claude-haiku-5-5&quot;: { &quot;name&quot;: &quot;Haiku (veloce)&quot; },
+        &quot;claude-sonnet-5-5&quot;: { &quot;name&quot;: &quot;Sonnet (più capace)&quot; }
+      }
+    }
+  },
+  &quot;model&quot;: &quot;corso/claude-haiku-5-5&quot;
+}
+</code></pre>
+<p>Salvate con Ctrl+S. Un esempio dell'indirizzo, con valori inventati: <code>http://192.0.2.10:4000/v1</code>.</p>
+<p>Cosa dice, riga per riga:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Riga</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"share": "disabled"</code></td>
+<td>Impedisce di pubblicare una conversazione su un sito esterno.</td>
+</tr>
+<tr>
+<td><code>"autoupdate": false</code></td>
+<td>OpenCode non si aggiorna da solo: resta la versione provata.</td>
+</tr>
+<tr>
+<td><code>"enabled_providers": ["corso"]</code></td>
+<td>Mostra solo il server del corso. Senza questa riga OpenCode propone anche modelli gratuiti di altri servizi, e mandare lì i vostri testi non è quello che vogliamo.</td>
+</tr>
+<tr>
+<td><code>"npm": "@ai-sdk/openai-compatible"</code></td>
+<td>Il server del corso parla un linguaggio molto diffuso (quello di OpenAI): questo componente lo conosce.</td>
+</tr>
+<tr>
+<td><code>"baseURL"</code></td>
+<td>L'indirizzo del server, con <code>/v1</code> in fondo.</td>
+</tr>
+<tr>
+<td><code>"apiKey": "{env:CORSO_API_KEY}"</code></td>
+<td>Legge la chiave dalla variabile creata prima. Se la variabile non c'è, la chiave resta vuota e il server rifiuta le richieste.</td>
+</tr>
+<tr>
+<td><code>"models"</code></td>
+<td>I modelli che potete usare. I nomi devono essere identici a quelli del server.</td>
+</tr>
+<tr>
+<td><code>"model"</code></td>
+<td>Il modello con cui OpenCode parte.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Per controllare che OpenCode legga il file e veda i modelli:</p>
+<pre><code class="language-powershell">opencode models
+</code></pre>
+<p>Dovrebbe elencare due righe: <code>corso/claude-haiku-5-5</code> e <code>corso/claude-sonnet-5-5</code>. Se ne vedete altre, <code>enabled_providers</code> non è stato letto: ricontrollate il file (virgole, virgolette, parentesi).</p>
+<h2 id="3-prima-prova-circa-5-minuti">3. Prima prova (circa 5 minuti)</h2>
+<p>Create una cartella di prova e apritevi OpenCode:</p>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\prova-opencode&quot; | Out-Null
+cd &quot;$env:USERPROFILE\prova-opencode&quot;
+opencode
+</code></pre>
+<p>Si apre l'interfaccia di OpenCode nella finestra del terminale. In fondo c'è la riga dove scrivere. Con questa configurazione l'interfaccia non è ancora stata provata sui PC del laboratorio: se qualcosa non corrisponde a quello che leggete qui, usate l'alternativa senza interfaccia più sotto e avvisate il docente. Provate:</p>
+<ol>
+<li>Una risposta di testo: <code>Rispondi con una frase: come ti chiami e che modello sei?</code></li>
+<li>Un compito con gli strumenti: <code>Crea un file ciao.txt con scritto: Ciao dal laboratorio. Poi leggilo e dimmi cosa contiene.</code></li>
+</ol>
+<p>Nel secondo caso vedrete comparire le azioni dell'agente (scrittura e lettura del file). Alla fine, in PowerShell, <code>dir</code> nella cartella di prova mostra <code>ciao.txt</code>. È la differenza tra un chatbot e un agente: il chatbot risponde, l'agente fa delle cose sul vostro computer, qui dentro la cartella in cui lo avete aperto.</p>
+<p>Per uscire: <code>/exit</code>, oppure Ctrl+C (da verificare a schermo quale dei due funziona con questa versione).</p>
+<p>Alternativa senza interfaccia, utile per provare in fretta (da PowerShell, nella cartella di prova). Questa strada è provata:</p>
+<pre><code class="language-powershell">opencode run &quot;Rispondi solo con la parola: pronto&quot;
+</code></pre>
+<h2 id="4-scegliere-il-modello">4. Scegliere il modello</h2>
+<p>Nel programma scrivete <code>/models</code>: dovrebbe comparire l'elenco, da cui si sceglie con le frecce e Invio (da verificare a schermo). Senza interfaccia il modello si sceglie con <code>-m</code>, per esempio <code>opencode run -m corso/claude-sonnet-5-5 "..."</code>. Ne avete due:</p>
+<ul>
+<li><strong>Haiku</strong>: veloce ed economico. Va bene per cominciare e per i compiti semplici.</li>
+<li><strong>Sonnet</strong>: più capace, più lento, costa di più. Usatelo quando Haiku sbaglia o il compito è articolato.</li>
+</ul>
+<p>Regola pratica: partite da Haiku e passate a Sonnet solo se serve. Il modello con cui OpenCode parte è quello scritto nel campo <code>"model"</code> del file.</p>
+<h2 id="5-quanto-costa">5. Quanto costa</h2>
+<p>La vostra chiave ha un budget. Ogni richiesta ne consuma un po': le richieste lunghe o con molti file ne consumano di più, e Sonnet più di Haiku. Quando il budget finisce, il server rifiuta le richieste con un messaggio di errore. Non succede niente di grave: avvisate il docente.</p>
+<h2 id="6-problemi-frequenti">6. Problemi frequenti</h2>
+<p>I messaggi sono quelli visti nelle prove con la versione 1.19.5, fatte con <code>opencode run</code> su un PC diverso da quelli del laboratorio.</p>
+<p><strong>1. <code>Authentication Error, No api key passed in.</code></strong></p>
+<ul>
+<li>Causa: la variabile <code>CORSO_API_KEY</code> non esiste in questa finestra di PowerShell. Di solito l'avete creata dopo aver aperto la finestra, o il nome è scritto diverso.</li>
+<li>Cosa fare: controllate con il comando "chiave presente / chiave mancante" della sezione 2, chiudete e riaprite PowerShell.</li>
+</ul>
+<p><strong>2. <code>Authentication Error, Invalid proxy server token passed.</code></strong></p>
+<ul>
+<li>Causa: la chiave c'è ma è sbagliata: un carattere in meno o in più, uno spazio incollato in fondo, oppure è la chiave di un'altra persona.</li>
+<li>Cosa fare: rincollate la chiave dal foglio nella variabile. Se non basta, chiedete al docente.</li>
+</ul>
+<p><strong>3. <code>The requested model '...' is not available for this API key, or the model name is invalid.</code></strong></p>
+<ul>
+<li>Causa: avete scelto un modello che la vostra chiave non può usare, oppure il nome nel file non è identico a quello del server.</li>
+<li>Cosa fare: usate solo i due modelli dell'elenco.</li>
+</ul>
+<p><strong>4. OpenCode parte, si scrive il messaggio e non succede niente, senza errori.</strong></p>
+<ul>
+<li>Causa più probabile: l'indirizzo o la porta del server sono sbagliati, oppure il PC non è nella rete del laboratorio. Nelle prove, una porta sbagliata non produce nessun messaggio: l'agente resta fermo.</li>
+<li>Cosa fare: ricontrollate <code>baseURL</code> nel file (indirizzo del foglio, <code>:4000</code>, <code>/v1</code> in fondo). Provate dal terminale: <code>curl.exe &lt;indirizzo del server&gt;/v1/models -H "Authorization: Bearer $env:CORSO_API_KEY"</code>. Se la risposta è un elenco di modelli, il server funziona e il problema è nel file. Se non risponde, avvisate il docente.</li>
+</ul>
+<p><strong>5. <code>opencode</code> non viene riconosciuto come comando.</strong></p>
+<ul>
+<li>Causa: la cartella non è nel <code>Path</code>, oppure PowerShell era già aperto quando l'avete aggiunta.</li>
+<li>Cosa fare: chiudete e riaprite PowerShell. In alternativa usate il percorso intero.</li>
+</ul>
+<p><strong>6. <code>opencode models</code> elenca molti modelli di altri servizi, o nessuno del corso.</strong></p>
+<ul>
+<li>Causa: il file non è stato letto per intero (errore di sintassi) oppure è nella cartella sbagliata.</li>
+<li>Cosa fare: il file deve chiamarsi <code>opencode.json</code> (non <code>opencode.json.txt</code>: in Blocco note scegliete "Tutti i file" al salvataggio) e stare in <code>%USERPROFILE%\.config\opencode\</code>.</li>
+</ul>
+<p><strong>7. <code>Unexpected server error. Check server logs...</code> appena dopo aver scelto un modello.</strong></p>
+<ul>
+<li>Causa: il modello scelto non compare nel file <code>opencode.json</code>.</li>
+<li>Cosa fare: tornate a Haiku con <code>/models</code>.</li>
+</ul>
+<h2 id="7-cosa-non-fare">7. Cosa non fare</h2>
+<ul>
+<li>Non condividete la chiave: non fotografatela, non scrivetela in chat, non passatela a un compagno. È collegata al vostro nome e al vostro budget. Se pensate che qualcuno l'abbia vista, ditelo al docente: il docente può revocarla e darvene un'altra.</li>
+<li>Non scrivete la chiave dentro un file di progetto (<code>opencode.json</code> in una cartella di lavoro, <code>AGENTS.md</code>, appunti). Solo nella variabile d'ambiente.</li>
+<li>Non date all'agente dati personali di studenti, famiglie o colleghi, né documenti riservati. Usate solo materiale inventato o pubblico.</li>
+<li>Aprite OpenCode solo in cartelle di prova: l'agente può creare, modificare e cancellare file in quella cartella. Non apritelo nella cartella Documenti o sul Desktop.</li>
+<li>Alla fine del corso, se il PC è condiviso, rimuovete la variabile <code>CORSO_API_KEY</code> dalle variabili d'ambiente dell'account, e la cartella <code>%USERPROFILE%\opencode</code> se non vi serve.</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+</body>
+</html>
