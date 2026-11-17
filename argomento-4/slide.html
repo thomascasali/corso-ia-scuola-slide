@@ -315,6 +315,62 @@ const slides = [
     notes: 'Prove di Thomas del 28/10/2026 con l\'account della scuola. Moduli non c\'è nell\'elenco di proposito: con l\'account della scuola Gemini dice di non poter creare un modulo e propone un Documento con le domande, quindi nell\'argomento non si usa. Calendar funziona in lettura (provato il 28/10: Gemini legge gli impegni), ma qui non lo usiamo per non mostrare agende vere. Le altre app non sono state provate.'
   },
   {
+    block: 'Argomento 4 — Gemini e Workspace · Le novità di novembre',
+    content: () => (
+      <div style={{ padding: '4px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Le novità di novembre: cosa vale per la scuola</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '10px' }}>Tra ottobre e novembre 2026 Google ha aggiunto molte funzioni. Non arrivano a tutti: molte dipendono dall'edizione di Workspace della scuola e dai componenti aggiuntivi a pagamento.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '12px' }}>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.success}`, borderRadius: '8px', padding: '10px 16px' }}>
+            <div style={{ color: colors.success, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>✅ Annunciate per i clienti Workspace</div>
+            <ul style={{ paddingLeft: '20px', margin: 0 }}>
+              {['App Gemini: il nuovo modello Gemini 4 Hydrogen (12/11), scelto anche in automatico; per la scuola dipende dalla licenza',
+                'Gmail: riassunto in cima alle conversazioni lunghe e aiuto a scrivere le bozze (dal 10/11, da 18 anni)',
+                'Documenti: «Confronta documenti» anche con un file Word (16/11)',
+                'Canvas: un\'app creata in Gemini diventa una bozza di Google Sites (19/10)',
+                'Gemini Notebook: si rivede la scaletta prima di slide e video (ottobre)'].map((t, i) =>
+                <li key={i} style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', marginBottom: '4px' }}>{t}</li>)}
+            </ul>
+          </div>
+          <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${colors.warn}`, borderRadius: '8px', padding: '10px 16px' }}>
+            <div style={{ color: colors.warn, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>💳 Con un'edizione superiore o un componente a pagamento</div>
+            <ul style={{ paddingLeft: '20px', margin: 0 }}>
+              {['Skill richiamate con @ dentro Gmail, Documenti, Presentazioni e Drive',
+                'Workspace Intelligence: Gemini nelle app usa da solo posta, Drive, Calendar e Chat (anche Education Plus; non sotto i 18 anni)',
+                'Moduli: analisi delle risposte con suggerimenti (anche Education Plus)',
+                'Presentazioni: cambiare tutta la presentazione con una richiesta (per ora solo in inglese)',
+                'Apps Script con Gemini, connettori a servizi aziendali come Asana o Salesforce'].map((t, i) =>
+                <li key={i} style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', marginBottom: '4px' }}>{t}</li>)}
+            </ul>
+          </div>
+        </div>
+        <p style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600, marginTop: '10px' }}>Quale edizione ha la scuola lo sa l'amministratore. Cosa compare sul vostro account lo controlliamo adesso, a schermo.</p>
+      </div>
+    ),
+    notes: 'Fonti: pagine ufficiali Google (blog Google, blog Workspace Updates, guide per gli amministratori) lette il 17/11/2026, elencate in FONTI.md. Il documento di ricerca preparato con Gemini mescolava fonti ufficiali, siti di terzi e piani business: qui restano solo le voci confermate sulle pagine Google, con le edizioni indicate lì. "Annunciate per i clienti Workspace" vuol dire che il post di Google parla di clienti Workspace; le edizioni Education spesso non sono nominate, per questo si controlla a schermo. Il componente aggiuntivo per la scuola si chiama Google AI Pro for Education. Non leggete la lista voce per voce: fate vedere le due colonne e passate all\'attività. Moduli resta fuori dagli esercizi: la nuova analisi delle risposte è per Education Plus o componenti aggiuntivi.'
+  },
+  {
+    block: 'Argomento 4 — Gemini e Workspace · Le novità di novembre',
+    content: () => (
+      <div style={{ padding: '20px 30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '8px' }}>Cosa vede il mio account</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Da soli o in coppia, circa 10 minuti, con l'account della scuola. Per ogni domanda: sì, no o non trovo.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>App Gemini: quali modelli compaiono nel selettore? C'è Hydrogen? Si sceglie quanto ragionare?</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>App Gemini: dove sono i Gem? C'è una voce Skill?</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Un Documento nuovo e vuoto: c'è il pulsante di Gemini? Scrivendo @ compaiono delle skill?</li>
+          <li style={{ fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>Un quiz nel Canvas: tra le voci per condividere o esportare c'è Google Sites?</li>
+        </ol>
+        <Box type="warn" title="Senza dati veri">
+          Niente ricerche nella posta o in tutto il Drive, tanto meno con il proiettore acceso. Dal Canvas non si pubblica niente.
+        </Box>
+        <ActivityBadge href={MATERIALI + 'novita-novembre-cosa-vedo.html'} label="Il foglio con le domande" />
+      </div>
+    ),
+    notes: 'Il confronto finale in sala è la parte utile: se tutti vedono le stesse cose, avete la risposta per l\'account della scuola. Annotate cosa compare, soprattutto il selettore dei modelli, la posizione dei Gem e il pulsante di Gemini nei Documenti, e riportatelo nelle fonti del corso. Dal 17/11/2026, sugli account Workspace, i Gem si spostano nelle Impostazioni dell\'app Gemini e restano utilizzabili; per Education restano almeno fino al 1/6/2027. Il riassunto delle conversazioni in Gmail non si prova qui, perché la posta è vera. Le note su ogni risposta sono nella scheda del docente.'
+  },
+  {
     block: 'Argomento 4 — Gemini e Workspace · Cosa cambia',
     content: () => (
       <div style={{ padding: '14px 30px' }}>

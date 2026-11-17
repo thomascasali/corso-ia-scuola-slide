@@ -926,9 +926,10 @@ const slides = [
           La segreteria scrive con Canvas la bozza di una circolare e la corregge un paragrafo alla volta, senza perdere il resto del testo.
         </Box>
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>Resta comunque testo generato: si rilegge come qualsiasi altra risposta, prima di usarlo.</p>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '6px' }}>Novità del 19/10/2026: un'app creata nel Canvas, per esempio un quiz, si esporta in una bozza privata di Google Sites. Per l'account della scuola: da verificare a schermo.</p>
       </div>
     ),
-    notes: 'Se avete tempo, mostrate dal vivo l\'apertura di un Canvas su un testo qualunque e una correzione mirata a un solo paragrafo: è il dettaglio che fa capire la differenza rispetto a riscrivere tutto da capo in chat.'
+    notes: 'Se avete tempo, mostrate dal vivo l\'apertura di un Canvas su un testo qualunque e una correzione mirata a un solo paragrafo: è il dettaglio che fa capire la differenza rispetto a riscrivere tutto da capo in chat. Esportazione verso Google Sites: post Workspace Updates del 19/10/2026, per clienti Workspace e account personali; Education non è nominata. La bozza resta privata finché non la si pubblica: in aula non si pubblica niente.'
   },
   {
     block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
@@ -949,17 +950,19 @@ const slides = [
   {
     block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
     content: () => (
-      <div style={{ padding: '24px 30px' }}>
+      <div style={{ padding: '6px 30px' }}>
         <h2 style={{ color: colors.warn, marginBottom: '6px' }}>6. Modello veloce o modello che ragiona</h2>
-        <p style={{ color: colors.textDim, marginBottom: '18px' }}>Si può scegliere quale "motore" risponde: uno pensato per essere veloce, uno che si prende più tempo per ragionare prima di scrivere la risposta.</p>
+        <p style={{ color: colors.textDim, marginBottom: '12px' }}>Si può scegliere quale "motore" risponde: uno veloce, o uno che si prende più tempo per ragionare.</p>
         <CompareTwo
           left={{ icon: '⚡', title: 'Modello veloce', color: colors.info, points: ['Risponde quasi subito', 'Va bene per una mail, un riassunto, una bozza veloce'] }}
-          right={{ icon: '🧠', title: 'Modello che ragiona', color: colors.purple, points: ['Ci mette più tempo', 'Sbaglia meno sui calcoli e sui ragionamenti con più passaggi', 'Per chi paga a consumo, costa di più'] }}
+          right={{ icon: '🧠', title: 'Modello che ragiona', color: colors.purple, points: ['Ci mette più tempo', 'Sbaglia meno sui calcoli e sui ragionamenti a più passaggi', 'A consumo costa di più'] }}
         />
-        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Esempio: per un conto con più regole del regolamento conviene il modello che ragiona; per una mail di routine basta il veloce. I numeri veri dei costi sono nell'argomento 8 («Dalla carta al servizio»).</p>
+        <Box type="tip" title="Novità di novembre 2026">
+          Dal 12/11 c'è Gemini 4 Hydrogen, che Gemini sceglie anche da solo. Con alcuni piani si sceglie quanto ragionare (Low, Medium, High). Scuola: da verificare.
+        </Box>
       </div>
     ),
-    notes: 'Non fate nomi di modelli né numeri di versione: cambiano continuamente, il concetto resta lo stesso. Il collegamento ai costi è solo un accenno, da riprendere con i numeri nell\'argomento 8 (quanto costa un servizio di IA): qui basta la domanda "chi decide quale motore usare, e quando conviene quello più lento?".'
+    notes: 'I nomi dei modelli cambiano spesso, il concetto resta lo stesso: Hydrogen si cita perché è la novità che i partecipanti vedono comparire. Fonti lette il 17/11/2026: blog Google del 12/11/2026 (Hydrogen nel menu dei modelli dell\'app Gemini; chi non sceglie lo riceve con la selezione automatica) e pagina di assistenza sul selettore dei modelli (Flash-Lite, Hydrogen, Pro, Argon, Carbon secondo il piano; livelli Low, Medium, High; per gli account di lavoro e di scuola dipende dalla licenza Workspace). Lasciate fuori benchmark e prezzi delle API. Esempio da dire a voce: per un conto con più regole del regolamento conviene il modello che ragiona, per una mail di routine basta il veloce. Il collegamento ai costi è solo un accenno, da riprendere con i numeri nell\'argomento 8 (quanto costa un servizio di IA): qui basta la domanda "chi decide quale motore usare, e quando conviene quello più lento?".'
   },
   {
     block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
@@ -1011,7 +1014,7 @@ const slides = [
   {
     block: "Argomento 3 — Le funzioni di Gemini · Le funzioni",
     content: () => (
-      <div style={{ padding: '24px 30px' }}>
+      <div style={{ padding: '10px 30px' }}>
         <h2 style={{ color: colors.purple, marginBottom: '6px' }}>10. Personalizzare Gemini</h2>
         <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Si può regolare Gemini a quattro livelli, dal più generale al più preciso. La pagina «Personalizza» (in inglese «Customize»), nel menu a sinistra se compare sul tuo account, raccoglie skill e app connesse. Per la scuola: da verificare.</p>
         <PersonalizeLevelsDiagram />
@@ -1021,6 +1024,7 @@ const slides = [
         <Box type="warn" title="Con l'account della scuola">
           Istruzioni generali dell'app Gemini, skill e app connesse: per l'account della scuola da verificare a schermo. La memoria delle informazioni salvate, secondo Google, non è per gli account di lavoro o scuola. Per le app di Workspace esistono istruzioni separate, con un piano idoneo.
         </Box>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '6px' }}>Novità di novembre: sugli account Workspace i Gem passano nelle Impostazioni e restano usabili (per Workspace for Education fino almeno a giugno 2027). Le skill si condividono e si collegano a file del Drive.</p>
       </div>
     ),
     notes: 'I quattro livelli sono l\'idea da portare a casa: prima si decide a che livello sta una regola, poi si cerca dove si scrive. Una regola che vale sempre va nelle istruzioni generali, una che vale per un solo compito va in un Gem o in una skill. Pagine di assistenza Google lette il 5/11/2026: il salvataggio di informazioni nella memoria non è disponibile con account di lavoro o scuola; per le istruzioni dell\'app Gemini la stessa pagina dice che tutti gli utenti possono aggiungerle, quindi per l\'account della scuola è da verificare. Per skill e app connesse il post di Google dice "tutti i clienti Google Workspace" e non nomina Education: da verificare. Per Gmail, Documenti, Drive, Chat e Presentazioni esistono istruzioni separate, che non si sincronizzano con quelle dell\'app Gemini (da Ask Gemini, menu, Impostazioni, Personalizzazione) e richiedono un piano Workspace idoneo; l\'amministratore non ha un controllo dedicato. Nel pannello di Gemini nelle app Workspace una frase come "D\'ora in poi..." si salva da sola come istruzione. Da provare prima dell\'aula: quali di queste voci compaiono sull\'account della scuola, e come si chiamano in italiano.'
