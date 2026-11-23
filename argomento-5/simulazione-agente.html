@@ -284,6 +284,22 @@ function App() {
           <p style={{ color: colors.danger }}>La simulazione non si è caricata. Ricaricate la pagina.</p>
         )}
 
+        <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${colors.success}`, borderRadius: '0 8px 8px 0', padding: '18px 22px', marginTop: '24px' }}>
+          <p style={{ color: colors.text, fontWeight: 700, margin: '0 0 8px' }}>Finita la simulazione? Ora provate con Gemini vero</p>
+          <p style={{ color: colors.textDim, margin: '0 0 12px' }}>
+            Stesso compito, stesse pratiche: allegate i due PDF a Gemini, incollate la richiesta e confrontate la risposta con quello che ha fatto l'agente. Durata indicativa: 10 minuti.
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+            {[
+              { href: '../materiali/argomento-5/gemini-vero-uscite-dicembre.html', label: "Il foglio dell'attività" },
+              { href: '../materiali/argomento-5/pratiche-uscite-dicembre.pdf', label: 'PDF: pratiche di dicembre' },
+              { href: '../materiali/argomento-5/regolamento-viaggi-di-prova.pdf', label: 'PDF: regolamento viaggi' },
+            ].map((x, i) => (
+              <a key={i} href={x.href} style={{ display: 'inline-flex', alignItems: 'center', minHeight: '44px', padding: '8px 14px', borderRadius: '8px', background: colors.success, color: '#10200b', fontWeight: 700, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>{x.label}</a>
+            ))}
+          </div>
+        </div>
+
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '24px' }}>
           Dati inventati per l'esercitazione: nessuna pratica, uscita o persona reale della scuola.
         </p>
