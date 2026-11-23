@@ -146,9 +146,9 @@ const ActivityBadge = ({ href, label, compact }) => (
   </a>
 );
 
-const DurationBadge = ({ children }) => (
+const InfoBadge = ({ children }) => (
   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
-    <span aria-hidden="true">⏱</span><span>{children}</span>
+    <span aria-hidden="true">ℹ</span><span>{children}</span>
   </div>
 );
 
@@ -263,7 +263,7 @@ function Shot({ file, role, title, text, duration, badges }) {
             ))}
           </ol>
         )}
-        {duration && <div><DurationBadge>{duration}</DurationBadge></div>}
+        {duration && <div><InfoBadge>{duration}</InfoBadge></div>}
         {badges && badges.map((b, i) => <div key={i}><ActivityBadge href={MAT + b.href} label={b.label} /></div>)}
       </div>
     </div>
@@ -315,7 +315,7 @@ const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
     <div style={{ padding: '14px 30px' }}>
       <BlockTag>{tag}</BlockTag>
       <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
-      <DurationBadge>{duration}</DurationBadge>
+      <InfoBadge>{duration}</InfoBadge>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', margin: '4px 0 2px' }}>
         {rows.map((r, i) => (
           <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${rc(r[0])}`, borderRadius: '6px', padding: '6px 14px' }}>
@@ -387,7 +387,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Apertura</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Che cosa facciamo oggi</h2>
-        <DurationBadge>10 minuti: apertura e introduzione, tutti insieme</DurationBadge>
+        <InfoBadge>apertura e introduzione, tutti insieme</InfoBadge>
         <CompareTwo
           left={{ icon: '🧭', color: colors.info, title: 'Proviamo il portale che userete', points: ["Calendario, prenotazioni, conflitti di orario, richieste e revoche", "Ruolo per ruolo: Docente, Tecnico, Amministratore", "Le email arrivano in una casella finta"] }}
           right={{ icon: '🤖', color: colors.accent, title: 'Cambiamo il portale dal vivo', points: ["A un certo punto vi accorgerete che manca qualcosa", "Lo descrivete voi come richiesta di modifica", "Thomas la affida a Claude Code e si riprova"] }}
@@ -561,8 +561,8 @@ const slides = [
   /* --- accesso --- */
   shot('Accesso', '01-accesso-login-con-banner.png', 'Tutti', 'Accesso con l\'account della scuola',
     'La fascia gialla dice che siete nell\'ambiente di prova. Un solo bottone: «Accedi con Google». Lasciate spenta la casella «Ricordami per 30 giorni».',
-    "Attività di accesso, circa dieci minuti per questa slide e le due successive. Tutti entrano con il proprio account della scuola: un indirizzo personale viene rifiutato. Non c'è registrazione: al primo accesso il portale vi riconosce e vi dà il ruolo Docente; i responsabili indicati da Thomas entrano già come Amministratori. Controllate che 'Ricordami' sia spento su ogni PC.",
-    { duration: '10 minuti, tutti insieme (con le due slide successive)', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
+    "Attività di accesso, che comprende questa slide e le due successive. Tutti entrano con il proprio account della scuola: un indirizzo personale viene rifiutato. Non c'è registrazione: al primo accesso il portale vi riconosce e vi dà il ruolo Docente; i responsabili indicati da Thomas entrano già come Amministratori. Controllate che 'Ricordami' sia spento su ogni PC.",
+    { duration: 'tutti insieme (con le due slide successive)', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
   {
     block: 'Accesso',
     content: () => (
@@ -587,7 +587,7 @@ const slides = [
     { badges: [{ href: "guida-accesso.html", label: "Guida all'accesso" }] }),
 
   /* --- tappa 1 --- */
-  tappa(T1, 'Tappa 1', 'Leggere il calendario e prenotare un carrello', '15 minuti, i due gruppi in parallelo',
+  tappa(T1, 'Tappa 1', 'Leggere il calendario e prenotare un carrello', 'i due gruppi in parallelo',
     [
       ['Tutti', 'Leggono la Dashboard, aprono il calendario del Carrello PC A e la legenda dei colori.'],
       ['Docente', 'Persona 3: prenota una cella verde, con la destinazione, e legge il messaggio.'],
@@ -601,7 +601,7 @@ const slides = [
     "Fate notare le due cose in alto: la fascia gialla e, nel menu, solo due voci per chi è Docente. L'etichetta In uso dice che c'è una prenotazione in corso adesso; per sapere com'è la settimana serve il calendario. Si entra nel calendario con Visualizza calendario."),
   shot(T1, '03-calendario-settimana-legenda.png', 'Docente', 'Il calendario e la legenda',
     'Frecce per cambiare settimana, Oggi, il campo della data e la legenda: Disponibile, Occupato, In approvazione, Passata, Periodica.',
-    "Lasciate un minuto a tutti per provare le frecce e il bottone Oggi. La legenda è la chiave della lezione: verde libero, rosso occupato, giallo in attesa di approvazione. Il bottone Stampa settimana lo useremo nell'ultima tappa."),
+    "Lasciate a tutti il tempo di provare le frecce e il bottone Oggi. La legenda è la chiave della lezione: verde libero, rosso occupato, giallo in attesa di approvazione. Il bottone Stampa settimana lo useremo nell'ultima tappa."),
   shot(T1, '04-calendario-celle-mattina.png', 'Docente', 'Le ore del mattino',
     'Le ore sono in riga, i giorni in colonna. In questa schermata il lunedì alla 3ª ora è verde e il martedì alla 3ª ora è rosso.',
     "Il pomeriggio è un blocco a parte, richiudibile: si apre da solo quando nella settimana c'è almeno una prenotazione pomeridiana. Per il gruppo B la cella da cercare è quella del giovedì, indicata nel copione."),
@@ -619,7 +619,7 @@ const slides = [
     "Dopo l'annullamento la cella torna verde. Questo passaggio prepara la tappa 2: la prenotazione periodica parte dalla stessa cella."),
 
   /* --- tappa 2 --- */
-  tappa(T2, 'Tappa 2', 'Prenotazione periodica e conflitti', '15 minuti, i due gruppi in parallelo',
+  tappa(T2, 'Tappa 2', 'Prenotazione periodica e conflitti', 'i due gruppi in parallelo',
     [
       ['Docente', 'Persona 3: prenota la stessa ora per quattro settimane, dopo aver letto le date.'],
       ['Docente', 'Persona 3: legge l\'esito, poi guarda le tre scelte di Annulla senza confermare.'],
@@ -646,7 +646,7 @@ const slides = [
     "Le persone 4 e 5 aprono la stessa cella; la 4 conferma, poi la 5. La seconda finestra era rimasta aperta su un calendario ormai vecchio: è il motivo per cui il controllo avviene al momento della conferma e non quando si apre la finestra."),
 
   /* --- tappa 3 --- */
-  tappa(T3, 'Tappa 3', 'Una risorsa con approvazione', '25 minuti, i due gruppi in parallelo',
+  tappa(T3, 'Tappa 3', 'Una risorsa con approvazione', 'i due gruppi in parallelo',
     [
       ['Docente', 'Persona 5: invia due richieste per lo stesso giorno, una alla 3ª ora e una alla 4ª.'],
       ['Destinatario', 'Persone 1 e 2: ricevono le email e trovano le richieste in Richieste da Approvare.'],
@@ -695,11 +695,11 @@ const slides = [
         <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
-    notes: "Due minuti per scrivere. Non dite ancora che questa sarà la modifica dal vivo e non commentate le risposte: raccoglietele a voce, a campione, e passate alla tappa 4. Se un gruppo non ha trovato il problema, vuol dire che non ha cercato il motivo: ripetete la domanda."
+    notes: "Lasciate scrivere con calma. Non dite ancora che questa sarà la modifica dal vivo e non commentate le risposte: raccoglietele a voce, a campione, e passate alla tappa 4. Se un gruppo non ha trovato il problema, vuol dire che non ha cercato il motivo: ripetete la domanda."
   },
 
   /* --- tappa 4 --- */
-  tappa(T4, 'Tappa 4', 'Ruoli e destinatari', '20 minuti, i due gruppi in parallelo',
+  tappa(T4, 'Tappa 4', 'Ruoli e destinatari', 'i due gruppi in parallelo',
     [
       ['Amministratore', 'Persona 1 rende Tecnico la persona 5. La persona 5 esce, rientra e guarda cosa cambia.'],
       ['Tecnico', 'Persona 5: legge le richieste senza poter decidere e nel calendario vede nome e aula.'],
@@ -730,7 +730,7 @@ const slides = [
     "Dopo la promozione, la persona 3 sceglie sé stessa e la persona 4 come destinatarie della risorsa del gruppo e salva. Se un destinatario non è più Amministratore viene saltato; se non resta nessuno, le richieste tornano a tutti gli Amministratori. Salvate solo la risorsa del vostro gruppo."),
 
   /* --- tappa 5 --- */
-  tappa(T5, 'Tappa 5', 'Revoca e prenotazione per conto di', '15 minuti, i due gruppi in parallelo',
+  tappa(T5, 'Tappa 5', 'Revoca e prenotazione per conto di', 'i due gruppi in parallelo',
     [
       ['Amministratore', 'Persona 4: revoca una data della prenotazione periodica, solo questa, scrivendo il motivo.'],
       ['Docente', 'Persona 3: legge la riga revocata in Le Mie Prenotazioni e cerca l\'email.'],
@@ -756,7 +756,7 @@ const slides = [
     "Nella casella finta è arrivata l'email «Prenotazione creata per te», indirizzata al collega. Chiedete: perché è utile avvisarlo?"),
 
   /* --- tappa 6 --- */
-  tappa(T6, 'Tappa 6', 'Una risorsa su autorizzazione', '10 minuti, i due gruppi in parallelo',
+  tappa(T6, 'Tappa 6', 'Una risorsa su autorizzazione', 'i due gruppi in parallelo',
     [
       ['Docente', 'Persona 6: guarda il Laboratorio Chimica: il bottone dice Non prenotabile.'],
       ['Amministratore', 'Persona 3: abilita la persona 6 da Permessi e salva. Prima salva il gruppo A, poi il gruppo B.'],
@@ -783,8 +783,8 @@ const slides = [
   /* --- tappa 7 --- */
   shot(T7, '34-stampa-menu.png', 'Tutti', 'Stampare la settimana',
     'Sopra il calendario, Stampa settimana offre due scelte, con la risorsa e la sede accanto: Questa risorsa o Tutta la sede.',
-    "Ultima tappa, cinque minuti, tutti. Scegliete Tutta la sede: un foglio per ogni risorsa, pensato per essere appeso in aula o in laboratorio. Il foglio mostra sempre i nomi dei docenti, anche a chi nel calendario legge solo Occupato.",
-    { duration: '5 minuti, tutti' }),
+    "Ultima tappa, tutti insieme. Scegliete Tutta la sede: un foglio per ogni risorsa, pensato per essere appeso in aula o in laboratorio. Il foglio mostra sempre i nomi dei docenti, anche a chi nel calendario legge solo Occupato.",
+    { duration: 'tutti' }),
   shot(T7, '35-stampa-foglio-settimanale.png', 'Tutti', 'Il foglio settimanale',
     'A4 in orizzontale: docente e aula in ogni cella, P per le periodiche, corsivo per le richieste in attesa. Stampa apre la stampa, Chiudi richiude il foglio.',
     "Le prenotazioni revocate o annullate non compaiono. La fascia gialla non si stampa. Stampa apre la finestra di stampa del browser, da dove si può anche salvare in PDF. Chiudi richiude il foglio."),
@@ -796,7 +796,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Cosa cambiereste</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il problema diventa una richiesta</h2>
-        <DurationBadge>10 minuti, a gruppi poi alla lavagna</DurationBadge>
+        <InfoBadge>a gruppi, poi alla lavagna</InfoBadge>
         <Box type="info" title="Tre cose da dire">
           Chi ha il problema (quale ruolo), dove (in quale schermata), cosa vorrebbe vedere.
         </Box>
@@ -807,7 +807,7 @@ const slides = [
         <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
-    notes: "Lasciate cinque minuti di scrittura nei gruppi, poi raccogliete alla lavagna le richieste. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come Docente, in Le Mie Prenotazioni, sulla riga di una richiesta rifiutata, vorrei leggere il motivo scritto dall'Amministratore, come già vedo per le prenotazioni revocate'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa, e ripartite dalla tappa 3. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
+    notes: "Lasciate ai gruppi il tempo di scrivere, poi raccogliete alla lavagna le richieste. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come Docente, in Le Mie Prenotazioni, sulla riga di una richiesta rifiutata, vorrei leggere il motivo scritto dall'Amministratore, come già vedo per le prenotazioni revocate'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa, e ripartite dalla tappa 3. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
   },
   {
     block: 'Cosa cambiereste',
@@ -839,7 +839,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Cosa cambiereste</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal vivo: la richiesta scelta dal gruppo</h2>
-        <DurationBadge>25 minuti, la fa Thomas davanti a voi</DurationBadge>
+        <InfoBadge>la fa Thomas davanti a voi</InfoBadge>
         <TerminalMock
           folder="copia di lavoro del portale"
           request="In Le Mie Prenotazioni, sulle richieste rifiutate, mostra il motivo scritto dall'Amministratore, nello stesso modo in cui oggi si vede il motivo delle revoche. Non cambiare le email né altre pagine. Prima dimmi il piano."
@@ -887,7 +887,7 @@ const slides = [
     ),
     notes: "Quattro osservazioni raccolte provando il portale. Presentatele come spunti di discussione, non come errori: non sappiamo se siano scelte volute. Il titolo dell'esito della periodica dice «Prenotazione confermata» anche se una data è saltata; l'etichetta Disponibile compare anche su una risorsa che si prenota solo con autorizzazione; per le prenotazioni confermate subito non parte nessuna email; l'elenco di Prenota per conto di comprende anche Amministratori e Tecnici. Chiedete alla sala cosa ne pensa e annotate le opinioni nel foglio: non tutte meritano una modifica."
   },
-  tappa('Cosa cambiereste', 'Si riprova', 'Si riprova il rifiuto', '5 minuti, i due gruppi in parallelo',
+  tappa('Cosa cambiereste', 'Si riprova', 'Si riprova il rifiuto', 'i due gruppi in parallelo',
     [
       ['Tecnico', 'Persona 5: apre in Le Mie Prenotazioni la richiesta rifiutata di prima, la sua. Cosa legge ora?'],
       ['Tecnico', 'Persona 5: invia una nuova richiesta, con i dati del copione.'],
@@ -951,7 +951,6 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Chiusura</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa ne pensate</h2>
-        <DurationBadge>5 minuti</DurationBadge>
         <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
         <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
         <ActivityBadge href={MAT + COSA.href} label={COSA.label} />

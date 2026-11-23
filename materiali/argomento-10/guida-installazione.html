@@ -124,7 +124,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Windows 10 o 11, con PowerShell (è già installato).</li>
 <li>Node.js: OmniRoute richiede la versione 22.22.2 o successive della 22, oppure la 24 o successive. Si controlla con <code class="cmd">node -v</code> in PowerShell. Se manca, si scarica la versione LTS da nodejs.org.</li>
 <li>Una chiave API di almeno un fornitore di modelli. In questa guida l'esempio è Anthropic; la chiave si crea nella console del fornitore e si paga a consumo.</li>
-<li>Circa mezz'ora la prima volta.</li>
+<li>Un po' di pazienza la prima volta: il download è la parte più lunga.</li>
 </ul>
 <p><strong>Come funziona, in due righe.</strong> OpenCode non parla direttamente con il fornitore del modello: parla con OmniRoute, che gira sul vostro stesso PC all'indirizzo <code>http://localhost:20128</code>. OmniRoute inoltra la richiesta al fornitore che avete configurato e riporta la risposta. L'indirizzo <code>localhost</code> significa "questo computer": nulla esce dal PC finché OmniRoute non contatta il fornitore.</p>
 <h2 id="parte-1-installare-omniroute">Parte 1. Installare OmniRoute</h2>

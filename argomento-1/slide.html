@@ -840,7 +840,7 @@ const slides = [
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '18px' }}>(Dati inventati: la classe e la scuola non esistono davvero.)</p>
       </div>
     ),
-    notes: 'Fate scrivere questa identica richiesta a tutti, in Gemini, sul loro PC. Cronometrate 3-4 minuti. Non correggete nessuno: l\'obiettivo è avere risposte diverse da confrontare nella slide successiva.'
+    notes: 'Fate scrivere questa identica richiesta a tutti, in Gemini, sul loro PC. Non correggete nessuno: l\'obiettivo è avere risposte diverse da confrontare nella slide successiva.'
   },
   {
     block: "Argomento 1 — Usare un chatbot · Prima provate",
@@ -938,13 +938,13 @@ const slides = [
         <BlockTag>Attività</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Caccia all'errore</h2>
         <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>
-          Niente trappole impossibili: si cercano gli errori credibili, quelli che nel lavoro passano inosservati. A coppie, circa 15 minuti.
+          Niente trappole impossibili: si cercano gli errori credibili, quelli che nel lavoro passano inosservati. A coppie.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
           {[
-            { l: 'A', t: 'Trova gli errori', c: colors.danger, d: 'Una risposta dell\'IA su un viaggio a Torino, da confrontare con il regolamento. Gli errori nascosti sono cinque.', f: 'Risposta da verificare', href: '../materiali/argomento-1/risposta-da-verificare.html', m: '7 min, a coppie' },
-            { l: 'B', t: 'La premessa falsa', c: colors.warn, d: 'Con il regolamento allegato, tre domande che danno per scontata una cosa sbagliata. L\'IA vi corregge o vi segue?', f: 'Caccia all\'errore', href: '../materiali/argomento-1/caccia-all-errore.html#parte-b-la-premessa-falsa', m: '5 min, uno dei due' },
-            { l: 'C', t: 'Chiedi le fonti', c: colors.info, d: 'Tre studi con autore, anno e link. Poi si aprono e si cercano, uno per uno.', f: 'Caccia all\'errore', href: '../materiali/argomento-1/caccia-all-errore.html#parte-c-chiedi-le-fonti-e-controllale', m: '5 min, l\'altro' },
+            { l: 'A', t: 'Trova gli errori', c: colors.danger, d: 'Una risposta dell\'IA su un viaggio a Torino, da confrontare con il regolamento. Gli errori nascosti sono cinque.', f: 'Risposta da verificare', href: '../materiali/argomento-1/risposta-da-verificare.html', m: 'a coppie' },
+            { l: 'B', t: 'La premessa falsa', c: colors.warn, d: 'Con il regolamento allegato, tre domande che danno per scontata una cosa sbagliata. L\'IA vi corregge o vi segue?', f: 'Caccia all\'errore', href: '../materiali/argomento-1/caccia-all-errore.html#parte-b-la-premessa-falsa', m: 'uno dei due' },
+            { l: 'C', t: 'Chiedi le fonti', c: colors.info, d: 'Tre studi con autore, anno e link. Poi si aprono e si cercano, uno per uno.', f: 'Caccia all\'errore', href: '../materiali/argomento-1/caccia-all-errore.html#parte-c-chiedi-le-fonti-e-controllale', m: 'l\'altro' },
           ].map(x => (
             <div key={x.l} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
@@ -963,7 +963,7 @@ const slides = [
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Se l'IA corregge la premessa o porta fonti vere, va bene lo stesso: l'abitudine da prendere è controllare.</p>
       </div>
     ),
-    notes: 'Scheda 2 delle esercitazioni. Parte A (7 minuti, a coppie): il foglio "Risposta da verificare" contiene una risposta scritta per il corso nello stile di un assistente IA, con cinque errori credibili in mezzo a molte informazioni giuste. Le soluzioni le avete nel materiale del docente. Parti B e C (5 minuti, una a testa dentro la coppia): le domande sono sul foglio "Caccia all\'errore". Per la B si allega il regolamento a una chat nuova di Gemini, la stessa mossa che torna nella scheda 3. Avvisate che nella B e nella C il risultato cambia da un PC all\'altro: se l\'IA corregge la premessa o trova studi veri, non è un fallimento, è un risultato da raccontare. Chiudete chiedendo quanti errori della parte A ha trovato ogni coppia e quale è sfuggito più spesso.'
+    notes: 'Scheda 2 delle esercitazioni. Parte A (a coppie): il foglio "Risposta da verificare" contiene una risposta scritta per il corso nello stile di un assistente IA, con cinque errori credibili in mezzo a molte informazioni giuste. Le soluzioni le avete nel materiale del docente. Parti B e C (una a testa dentro la coppia): le domande sono sul foglio "Caccia all\'errore". Per la B si allega il regolamento a una chat nuova di Gemini, la stessa mossa che torna nella scheda 3. Avvisate che nella B e nella C il risultato cambia da un PC all\'altro: se l\'IA corregge la premessa o trova studi veri, non è un fallimento, è un risultato da raccontare. Chiudete chiedendo quanti errori della parte A ha trovato ogni coppia e quale è sfuggito più spesso.'
   },
 
   /* --- contesto e memoria --- */
@@ -1000,7 +1000,7 @@ const slides = [
       <div style={{ padding: '30px' }}>
         <BlockTag>Attività</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Stessa domanda, due scrivanie</h2>
-        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 20 minuti.</p>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie.</p>
         <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
           <li>Aprite una chat nuova e chiedete: "Nel nostro istituto, per una visita guidata di una giornata con 27 studenti, quanti docenti accompagnatori servono e con quanto anticipo va presentata la domanda?" — senza allegare nulla.</li>
           <li>Aprite un'altra chat nuova, allegate il foglio <strong style={{ color: colors.text }}>Regolamento viaggi di prova</strong> e ripetete la stessa identica domanda.</li>

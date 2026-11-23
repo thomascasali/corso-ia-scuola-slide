@@ -144,12 +144,6 @@ const ActivityBadge = ({ href, label }) => (
   </a>
 );
 
-const DurationBadge = ({ children }) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
-    <span aria-hidden="true">⏱</span><span>{children}</span>
-  </div>
-);
-
 function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
   return (
     <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
@@ -505,7 +499,6 @@ const slides = [
     content: () => (
       <div style={{ ...wrap, textAlign: 'center' }}>
         <h2 style={h2s}>Nel vostro ufficio</h2>
-        <DurationBadge>3 minuti, a voce</DurationBadge>
         <p style={{ color: colors.textDim, maxWidth: '850px', margin: '0 auto' }}>
           Pensate a una procedura che conoscete bene. Chi fa da capo, chi esegue, chi controlla? Il controllo c'è sempre, o solo quando va male?
         </p>
@@ -550,7 +543,6 @@ const slides = [
     content: () => (
       <div style={wrap}>
         <h2 style={h2s}>A che livello lo metto?</h2>
-        <DurationBadge>5 minuti, a voce</DurationBadge>
         <ol style={{ paddingLeft: '30px', color: colors.textDim }}>
           <li style={{ marginBottom: '8px' }}>Contare quante pratiche non hanno la delibera.</li>
           <li style={{ marginBottom: '8px' }}>Scegliere quale tra due regolamenti in contrasto prevale.</li>
@@ -692,7 +684,7 @@ const slides = [
         </ul>
       </div>
     ),
-    notes: "Discussione a voce, 10 minuti circa, senza attività al PC: l'argomento è divulgativo. Raccogliete due o tre risposte per domanda. Non esiste una sola risposta giusta: conta il motivo detto in una frase. Punti da far emergere: il controllo spesso esiste ma non è assegnato a una persona; l'invio alle famiglie non è annullabile, quindi serve un sì."
+    notes: "Discussione a voce, senza attività al PC: l'argomento è divulgativo. Raccogliete due o tre risposte per domanda. Non esiste una sola risposta giusta: conta il motivo detto in una frase. Punti da far emergere: il controllo spesso esiste ma non è assegnato a una persona; l'invio alle famiglie non è annullabile, quindi serve un sì."
   },
 
   /* --- chiusura --- */

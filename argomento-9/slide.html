@@ -144,12 +144,6 @@ const ActivityBadge = ({ href, label }) => (
   </a>
 );
 
-const DurationBadge = ({ children }) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
-    <span aria-hidden="true">⏱</span><span>{children}</span>
-  </div>
-);
-
 function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
   return (
     <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
@@ -537,7 +531,7 @@ const slides = [
         <TimelineBar />
       </div>
     ),
-    notes: "Distribuite le carte adesso, una per ruolo, e una busta per gruppo. Sottolineate: la busta è l'unica fonte, se un dato non c'è scritto lì non esiste, e va segnalato, non inventato. Mostrate la barra dei tempi: 5 minuti per leggere e assegnare, 10 per il lavoro degli specialisti, 5 per la revisione."
+    notes: "Distribuite le carte adesso, una per ruolo, e una busta per gruppo. Sottolineate: la busta è l'unica fonte, se un dato non c'è scritto lì non esiste, e va segnalato, non inventato."
   },
   {
     block: 'Argomento 9 — Agenti al lavoro · Il gioco di ruolo, senza PC',
@@ -571,8 +565,8 @@ const slides = [
     block: 'Argomento 9 — Agenti al lavoro · Il gioco di ruolo, senza PC',
     content: () => (
       <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(55vh / var(--zoom, 1))' }}>
-        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>⏱️</div>
-        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Via! 20 minuti</h2>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>▶️</div>
+        <h2 style={{ color: colors.accent, marginBottom: '18px' }}>Via!</h2>
         <p style={{ color: colors.textDim, maxWidth: '640px' }}>
           Leggete solo la vostra carta. Usate solo quello che c'è nella busta. Alla fine il revisore dà un giudizio netto: approvato, oppure da correggere.
         </p>
@@ -585,7 +579,7 @@ const slides = [
         </div>
       </div>
     ),
-    notes: "Attività principale. Fate partire un timer visibile. Girate tra i gruppi senza intervenire nel merito: osservate se il capo progetto assegna compiti chiari, se il revisore controlla davvero o approva a naso. Intervenite solo se un gruppo è completamente bloccato."
+    notes: "Attività principale. Girate tra i gruppi senza intervenire nel merito: osservate se il capo progetto assegna compiti chiari, se il revisore controlla davvero o approva a naso. Intervenite solo se un gruppo è completamente bloccato."
   },
   {
     block: 'Argomento 9 — Agenti al lavoro · Il gioco di ruolo, senza PC',
@@ -794,7 +788,7 @@ const slides = [
         <BlockTag>Argomento 9 — Agenti al lavoro · Primo contatto con Claude Code</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Ora tocca a voi</h2>
         <p style={{ color: colors.textDim }}>
-          Stesso programma appena visto al lavoro sul proiettore, questa volta sul vostro PC. I PC del laboratorio passano da OmniRoute verso i modelli della lista scelta da Thomas: il comportamento può quindi non essere identico, punto per punto, a quello della demo. Prima qualche minuto di contesto tecnico, poi si apre davvero.
+          Stesso programma appena visto al lavoro sul proiettore, questa volta sul vostro PC. I PC del laboratorio passano da OmniRoute verso i modelli della lista scelta da Thomas: il comportamento può quindi non essere identico, punto per punto, a quello della demo. Prima un po' di contesto tecnico, poi si apre davvero.
         </p>
       </div>
     ),
@@ -860,7 +854,6 @@ const slides = [
     content: () => (
       <div style={{ padding: '30px' }}>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Apri Claude Code</h2>
-        <DurationBadge>15 minuti</DurationBadge>
         <p style={{ color: colors.textDim }}>Doppio clic sull'icona sul desktop, poi incolla:</p>
         <Glow>
           <p style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-body)', color: colors.text }}>
@@ -927,7 +920,7 @@ const slides = [
         </div>
       </div>
     ),
-    notes: "Il foglio ha già scritte le quattro richieste da incollare (1, 2, 4, 5): la sala non deve inventarsele. Il passaggio 3 non si incolla: si apre il file HTML con doppio clic, dalla stessa cartella di prova, e lo si guarda insieme. Ricordate: un passaggio alla volta, aspettando la risposta prima di incollare il successivo. Attività di 35-40 minuti a coppie."
+    notes: "Il foglio ha già scritte le quattro richieste da incollare (1, 2, 4, 5): la sala non deve inventarsele. Il passaggio 3 non si incolla: si apre il file HTML con doppio clic, dalla stessa cartella di prova, e lo si guarda insieme. Ricordate: un passaggio alla volta, aspettando la risposta prima di incollare il successivo. Attività a coppie."
   },
   {
     block: 'Argomento 9 — Agenti al lavoro · Costruite il vostro strumento',
@@ -935,7 +928,6 @@ const slides = [
       <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(50vh / var(--zoom, 1))' }}>
         <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>👥</div>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>A voi, in coppia</h2>
-        <DurationBadge>35-40 minuti, a coppie</DurationBadge>
         <p style={{ color: colors.textDim, maxWidth: '650px' }}>
           Se qualcosa non torna, chiamate il docente invece di insistere da soli: a volte basta riscrivere la richiesta con un dettaglio in più.
         </p>

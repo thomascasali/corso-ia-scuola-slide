@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La stessa cartella con Gemini: le adesioni della 4ª Y — Materiali argomento 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ee;
+  --bg-card: #ffffff;
+  --bg-callout: #f5ead2;
+  --border: #ddd0b8;
+  --text: #241f19;
+  --text-dim: #4a4136;
+  --text-muted: #6b5f4d;
+  --accent: #8a5a12;
+  --accent-strong: #6b450e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; line-height: 1.25; color: var(--text); }
+h1 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 6px; }
+h2 { font-size: clamp(21px, 2.6vw, 26px); margin: 34px 0 12px; color: var(--accent); }
+h3 { font-size: clamp(18px, 2.2vw, 21px); margin: 26px 0 10px; }
+p, li { color: var(--text-dim); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+}
+.topbar a.back { color: var(--text-dim); text-decoration: none; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.topbar a.back:hover, .topbar a.back:focus-visible { color: var(--accent); }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  padding: 10px 18px; border-radius: 7px; font-weight: 600; font-size: 15px;
+}
+.dl-btn:hover, .dl-btn:focus-visible { background: var(--accent-strong); }
+main.wrap { max-width: 760px; margin: 0 auto; padding: 36px 20px 80px; }
+blockquote {
+  border-left: 4px solid var(--accent); background: var(--bg-callout);
+  margin: 0 0 26px; padding: 14px 18px; border-radius: 0 8px 8px 0;
+  color: var(--text-dim); font-size: 15px;
+}
+blockquote p { margin: 0 0 6px; color: var(--text-dim); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote strong { color: var(--accent); }
+ul, ol { padding-left: 26px; }
+li { margin-bottom: 6px; }
+strong { color: var(--text); }
+hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+.table-scroll { overflow-x: auto; margin: 1.1em 0; border: 1px solid var(--border); border-radius: 8px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
+pre {
+  background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
+  overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+@media (max-width: 480px) {
+  main.wrap { padding: 24px 16px 60px; }
+  .topbar { padding: 10px 12px; }
+}
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12.5pt; }
+  main.wrap { max-width: 100%; padding: 0; }
+  a { color: inherit; text-decoration: underline; }
+  .table-scroll { border: none; overflow: visible; }
+  table { font-size: 11pt; }
+  pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
+  @page { margin: 16mm 14mm; }
+}
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <a class="back" href="index.html">&larr; Materiali dell'argomento 5</a>
+  <a class="dl-btn" href="gemini-adesioni-4Y.pdf" download>Scarica il PDF &darr;</a>
+</div>
+<main class="wrap">
+<blockquote>
+<p><strong>MATERIALE DEL CORSO — solo documenti inventati.</strong>
+I moduli, l'elenco della classe e i versamenti sono inventati.</p>
+</blockquote>
+<h1 id="la-stessa-cartella-con-gemini-le-adesioni-della-4a-y">La stessa cartella con Gemini: le adesioni della 4ª Y</h1>
+<p>Il docente ha fatto lavorare un agente su una cartella di moduli di adesione. Adesso provate lo stesso lavoro con Gemini e guardate cosa fa lui e cosa resta a voi. Si lavora da soli o in coppia.</p>
+<p>Solo i file della cartella: niente ricerche nel Drive o nella posta, niente dati vostri.</p>
+<h2 id="cosa-fare">Cosa fare</h2>
+<ol>
+<li>Dalla pagina dei materiali dell'argomento 5 scaricate lo zip «adesioni-4Y» ed estraetelo sul PC.</li>
+<li>Aprite gemini.google.com con l'account della scuola e iniziate una chat nuova.</li>
+<li>Allegate alla chat i moduli di adesione, l'elenco della classe e i versamenti. Se Gemini accetta solo alcuni file per volta, allegate prima l'elenco e i versamenti, poi i moduli, e annotate quanti ne ha accettati.</li>
+<li>Incollate la richiesta qui sotto, la stessa del docente.</li>
+</ol>
+<pre><code class="language-text">Confronta i moduli di adesione con l'elenco della classe. Rinomina ogni modulo come Cognome-Nome-stato, sposta in una cartella da-sollecitare quelli incompleti, prepara un riepilogo e verifica che i conti tornino.
+</code></pre>
+<ol start="5">
+<li>Leggete la risposta con calma. Poi compilate la tabella.</li>
+</ol>
+<h2 id="cosa-ha-fatto-gemini">Cosa ha fatto Gemini</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Domanda</th>
+<th>La vostra risposta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quanti file ha potuto leggere? Ha dovuto saltarne qualcuno?</td>
+<td></td>
+</tr>
+<tr>
+<td>Quanti studenti ha segnato con un modulo valido? E quanti senza modulo?</td>
+<td></td>
+</tr>
+<tr>
+<td>Ha rinominato o spostato davvero i file, o vi ha dato un elenco con i nuovi nomi?</td>
+<td></td>
+</tr>
+<tr>
+<td>Ha detto cosa non ha potuto verificare?</td>
+<td></td>
+</tr>
+<tr>
+<td>I conti del riepilogo tornano con l'elenco della classe?</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="cosa-resta-a-voi">Cosa resta a voi</h2>
+<ul>
+<li>Rinominare i file e spostare quelli incompleti nella cartella da-sollecitare: lo fate voi, a mano, a meno che Gemini non vi dica e mostri di poterlo fare.</li>
+<li>Se arrivano moduli nuovi, come nell'ultima richiesta della demo, li riportate voi nella chat e chiedete di aggiornare il lavoro.</li>
+<li>Decidere cosa fare dei casi dubbi e inviare i solleciti.</li>
+</ul>
+<h2 id="confronto-con-lagente">Confronto con l'agente</h2>
+<ul>
+<li>Cosa ha fatto l'agente direttamente nella cartella, e cosa ha fatto Gemini in chat?</li>
+<li>Quanto lavoro a mano è rimasto a voi nei due casi?</li>
+<li>Per un lavoro così, ripetuto ogni anno su molte classi, quale dei due modi vi sembra più comodo, e perché?</li>
+</ul>
+<footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
+</main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
+</body>
+</html>

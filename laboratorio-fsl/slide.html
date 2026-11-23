@@ -146,9 +146,9 @@ const ActivityBadge = ({ href, label, compact }) => (
   </a>
 );
 
-const DurationBadge = ({ children }) => (
+const InfoBadge = ({ children }) => (
   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
-    <span aria-hidden="true">⏱</span><span>{children}</span>
+    <span aria-hidden="true">ℹ</span><span>{children}</span>
   </div>
 );
 
@@ -266,7 +266,7 @@ function Shot({ file, role, title, text, duration, badges }) {
             ))}
           </ol>
         )}
-        {duration && <div><DurationBadge>{duration}</DurationBadge></div>}
+        {duration && <div><InfoBadge>{duration}</InfoBadge></div>}
         {badges && badges.map((b, i) => <div key={i}><ActivityBadge href={MAT + b.href} label={b.label} /></div>)}
       </div>
     </div>
@@ -318,7 +318,7 @@ const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
     <div style={{ padding: '14px 30px' }}>
       <BlockTag>{tag}</BlockTag>
       <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
-      <DurationBadge>{duration}</DurationBadge>
+      <InfoBadge>{duration}</InfoBadge>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '6px 0 4px' }}>
         {rows.map((r, i) => (
           <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${roleColor[r[0]] || colors.accent}`, borderRadius: '6px', padding: '8px 14px' }}>
@@ -541,8 +541,8 @@ const slides = [
   /* --- blocco 3: accesso --- */
   shot('Accesso', '01-accesso-login.png', 'Tutti', 'Accesso con l\'account della scuola',
     'Un solo bottone: «Accedi con Google», con l\'account della scuola. Lasciate spenta la casella «Ricordami per 30 giorni».',
-    "Attività di accesso, circa dieci minuti. Chi ha un ruolo del personale entra con il proprio account della scuola; chi interpreta lo studente entra con l'account di prova che gli è stato consegnato. Chi ha un ruolo esterno non entra da qui: userà i link nelle email. Se qualcuno entra ma vede solo 'Dashboard' nel menu, il ruolo non è ancora assegnato: lo sistema Thomas. Controllate che 'Ricordami' sia spento su ogni PC.",
-    { duration: '10 minuti, tutti insieme', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
+    "Attività di accesso. Chi ha un ruolo del personale entra con il proprio account della scuola; chi interpreta lo studente entra con l'account di prova che gli è stato consegnato. Chi ha un ruolo esterno non entra da qui: userà i link nelle email. Se qualcuno entra ma vede solo 'Dashboard' nel menu, il ruolo non è ancora assegnato: lo sistema Thomas. Controllate che 'Ricordami' sia spento su ogni PC.",
+    { duration: 'tutti insieme', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
   {
     block: 'Accesso',
     content: () => (
@@ -569,7 +569,7 @@ const slides = [
   },
 
   /* --- tappa 1 --- */
-  tappa('Tappa 1 · la pratica e l\'azienda', 'Tappa 1', 'La pratica nasce e l\'azienda si valida', '20 minuti, i due gruppi in parallelo',
+  tappa('Tappa 1 · la pratica e l\'azienda', 'Tappa 1', 'La pratica nasce e l\'azienda si valida', 'i due gruppi in parallelo',
     [
       ['Tutor interno', 'Crea la bozza, la invia in validazione e manda la scheda dei rischi al legale rappresentante.'],
       ['Legale rappresentante', 'Apre il link, scrive il codice, compila le otto dichiarazioni e firma.'],
@@ -617,7 +617,7 @@ const slides = [
     "Fine della prima tappa. Il pulsante 'Avvia la firma della convenzione' è in alto; le schede della pratica si chiamano Dati, Progettazione, Firme e convenzione, Presenze, Diario, Valutazioni, Timeline, Documenti."),
 
   /* --- tappa 2 --- */
-  tappa('Tappa 2 · progettazione e convenzione', 'Tappa 2', 'Scheda, attestati e convenzione', '25 minuti, i due gruppi in parallelo',
+  tappa('Tappa 2 · progettazione e convenzione', 'Tappa 2', 'Scheda, attestati e convenzione', 'i due gruppi in parallelo',
     [
       ['Tutor interno', 'Prova ad avviare la firma, legge cosa manca, poi compila la scheda di progettazione.'],
       ['Segreteria', 'Segna gli attestati di sicurezza come inviati all\'azienda.'],
@@ -647,7 +647,7 @@ const slides = [
     "Fate notare che i due link del legale rappresentante sono distinti: uno per la scheda dei rischi, uno per la convenzione. All'ultima firma la pratica avanza da sola."),
 
   /* --- tappa 3 --- */
-  tappa('Tappa 3 · patto formativo e firme', 'Tappa 3', 'Patto formativo e scheda di progettazione: le firme', '20 minuti, i due gruppi in parallelo',
+  tappa('Tappa 3 · patto formativo e firme', 'Tappa 3', 'Patto formativo e scheda di progettazione: le firme', 'i due gruppi in parallelo',
     [
       ['Tutor interno', 'Invia i link di firma a genitori e tutor aziendale.'],
       ['Studente', 'Dal proprio percorso firma il patto e la scheda di progettazione.'],
@@ -674,7 +674,7 @@ const slides = [
     "Fate leggere una riga: chi, che cosa, quando. Poi il Tutor interno preme 'Firma la scheda di progettazione' e con l'ultima firma la pratica avanza da sola."),
 
   /* --- tappa 4 --- */
-  tappa('Tappa 4 · comunicazioni agli enti', 'Tappa 4', 'Comunicazioni agli enti e avvio', '10 minuti, i due gruppi in parallelo',
+  tappa('Tappa 4 · comunicazioni agli enti', 'Tappa 4', 'Comunicazioni agli enti e avvio', 'i due gruppi in parallelo',
     [
       ['Tutor interno', 'Sceglie la classe e prepara le comunicazioni dovute.'],
       ['Dirigente Scolastico', 'Apre il modulo PDF: nella realtà lo firma su carta.'],
@@ -691,7 +691,7 @@ const slides = [
     "Il portale registra la traccia dell'invio, non l'invio. Quando entrambe le comunicazioni sono registrate, dalla pratica si preme 'Comunicazioni inviate → pronta' e poi il Tutor interno 'Avvia il percorso'."),
 
   /* --- tappa 5 --- */
-  tappa('Tappa 5 · presenze, diario, valutazione', 'Tappa 5', 'Presenze, diario e valutazione', '25 minuti, i due gruppi in parallelo',
+  tappa('Tappa 5 · presenze, diario, valutazione', 'Tappa 5', 'Presenze, diario e valutazione', 'i due gruppi in parallelo',
     [
       ['Studente', 'Registra quattro giornate e scrive il diario delle due settimane.'],
       ['Tutor aziendale', 'Conferma le settimane del registro.'],
@@ -722,7 +722,7 @@ const slides = [
     "Prima della chiusura il Tutor interno controlla che le settimane siano confermate. Poi lo studente consegna l'autovalutazione e la relazione finale: restano da fare solo il diario e il completamento."),
 
   /* --- tappa 6: il blocco --- */
-  tappa('Tappa 6 · completare la pratica', 'Tappa 6', 'Ultimo passo: completare la pratica', '5 minuti, i due gruppi in parallelo',
+  tappa('Tappa 6 · completare la pratica', 'Tappa 6', 'Ultimo passo: completare la pratica', 'i due gruppi in parallelo',
     [
       ['Tutor interno', 'Prova a premere «Completa la pratica».'],
       ['Tutti', 'Leggono il messaggio del portale e cercano il motivo.'],
@@ -734,7 +734,7 @@ const slides = [
   shot('Tappa 6 · completare la pratica', '37-tutor-completa-bloccata.png', 'Tutor interno', 'Il portale si ferma',
     'Il motivo che blocca è uno solo: «Diario di bordo non ancora completato/consegnato». Il giallo sulle ore è un avviso e non blocca.',
     "Il rosso blocca, il giallo si può accettare. Qui il rosso è uno solo e riguarda il diario. Chiedete: chi dovrebbe consegnare il diario? Lo studente. Dove? Nella sua pagina del diario. Mandate lo studente a cercare il bottone.",
-    { duration: '5 minuti: leggere, cercare, riconoscere il problema' }),
+    { duration: 'leggere, cercare, riconoscere il problema' }),
   shot('Tappa 6 · completare la pratica', '38-tutor-diario-senza-consegna.png', 'Tutor interno', 'Il Tutor interno non può consegnarlo',
     'Il Tutor interno vede il diario compilato, ma in sola lettura e senza bottoni.',
     "Il diario è compilato: il problema non è che manchi il contenuto, è che nessuno può dichiararlo consegnato. Il Tutor interno non può farlo, perché il diario è dello studente."),
@@ -750,7 +750,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Cosa cambiereste</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Il problema diventa una richiesta</h2>
-        <DurationBadge>10 minuti, a gruppi poi alla lavagna</DurationBadge>
+        <InfoBadge>a gruppi, poi alla lavagna</InfoBadge>
         <Box type="info" title="Tre cose da dire">
           Chi ha il problema (quale ruolo), dove (in quale schermata), cosa vorrebbe vedere.
         </Box>
@@ -761,7 +761,7 @@ const slides = [
         <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
-    notes: "Lasciate cinque minuti di scrittura nei gruppi, poi raccogliete alla lavagna le richieste sul blocco. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come studente, nella scheda Diario del mio percorso, vorrei un bottone Consegna il diario che segni il diario come consegnato, così il tutor può completare la pratica'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
+    notes: "Lasciate ai gruppi il tempo di scrivere, poi raccogliete alla lavagna le richieste sul blocco. Aiutate chi scrive in modo vago a precisare. Una buona richiesta suona così: 'Come studente, nella scheda Diario del mio percorso, vorrei un bottone Consegna il diario che segni il diario come consegnato, così il tutor può completare la pratica'. Se nessuno ci arriva, guidate con le tre domande: chi, dove, cosa. Poi Thomas sceglie la richiesta migliore e la porta all'agente."
   },
   {
     block: 'Cosa cambiereste',
@@ -789,7 +789,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Cosa cambiereste</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal vivo: il bottone «Consegna il diario»</h2>
-        <DurationBadge>25 minuti, la fa Thomas davanti a voi</DurationBadge>
+        <InfoBadge>la fa Thomas davanti a voi</InfoBadge>
         <TerminalMock
           folder="copia di lavoro del portale"
           request="Nella scheda Diario del percorso dello studente aggiungi il bottone «Consegna il diario». Compare solo quando la pratica è in corso o in valutazione e il diario ha almeno una settimana. Dopo la consegna mostra «Diario consegnato». Prima dimmi il piano. Non toccare altro."
@@ -881,7 +881,6 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Chiusura</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa ne pensate</h2>
-        <DurationBadge>5 minuti</DurationBadge>
         <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
         <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
         <ActivityBadge href={MAT + COSA_CAMBIEREI.href} label={COSA_CAMBIEREI.label} />

@@ -68,21 +68,21 @@ const AGENT_STEPS = [
     options: ["Carica la procedura e apre solo gli articoli che servono", "Risponde a memoria, senza aprire il regolamento", "Chiede a te di riassumergli il regolamento"], correct: 0 },
   { action: "Usa uno strumento per calcolare", detail: "Scrive un piccolo programma e lo esegue: per ogni pratica calcola i giorni di preavviso, gli accompagnatori necessari e il 71% delle adesioni. Alcuni risultati: 2ª X, 25 partecipanti, servono 2 accompagnatori e ne ha 1; 4ª Y, il 71% di 24 iscritti è 17,04; 3ª V, 12 giorni di preavviso.", icon: "🧮",
     options: ["Fa i conti a mente, pratica per pratica", "Chiede a te di rifare i conti con la calcolatrice", "Usa un programma per calcolare preavviso, accompagnatori e adesioni"], correct: 2 },
-  { action: "Confronta regola per regola", detail: "Trova la 2ª X con 1 accompagnatore invece di 2 (art. 4, commi 1 e 2) e la 5ª W con una quota di 55 euro sopra il tetto di 48 (art. 6, comma 1, lettera b). Nessuna data cade in un periodo escluso (art. 7) e i moduli ci sono tutti. Per la 4ª Y arrotonda 17,04 a 17: le 17 adesioni bastano. Per la 3ª V non sa quale regola usare.", icon: "⚖️",
+  { action: "Confronta regola per regola", detail: "Trova la 2ª X con 1 accompagnatore invece di 2 (art. 4, commi 1 e 2) e la 5ª W con una quota di 55 euro sopra il tetto di 48 (art. 6, comma 1, lettera b). Nessuna data cade in un periodo escluso (art. 7) e i moduli ci sono tutti. Per la 4ª Y il 71% di 24 è 17,04, che l'art. 5 arrotonda per eccesso a 18: ne ha 17 e non bastano. Per la 3ª V non sa quale regola usare.", icon: "⚖️",
     options: ["Segna tutte le pratiche come regolari, perché i dati sono completi", "Confronta ogni pratica con le regole e segna dove non tornano", "Corregge da solo nel file i valori che non tornano"], correct: 1 },
   { action: "Si ferma e chiede a te", detail: "La 3ª V va in una città vicina ma rientra entro le 13. L'articolo 1 chiama uscita didattica quella nel comune e dentro l'orario, visita guidata quella di una giornata intera: questo caso il regolamento non lo prevede, e per l'art. 13 decide il dirigente, sentita la Commissione. Con una visita guidata servono 17 giorni di preavviso, con un'uscita didattica 6 giorni di lezione. L'agente non sceglie. Tu rispondi: «Trattala come visita guidata.» Allora i 12 giorni di preavviso non bastano (art. 3, comma 2).", icon: "✋",
     options: ["La considera un'uscita didattica, così la pratica risulta in regola", "La segna come non conforme senza dirti perché", "Si ferma e ti chiede come classificare l'uscita della 3ª V"], correct: 2 },
   { action: "Chiede il permesso di scrivere", detail: "Prima di creare dei file chiede: «Posso creare la cartella bozze-dicembre con un file per ogni referente? Non invio nulla.» Tu rispondi di sì.", icon: "🔐",
     options: ["Chiede il permesso prima di creare i file delle bozze", "Crea i file senza chiedere niente", "Invia le mail e ti avvisa dopo"], correct: 0 },
-  { action: "Scrive le bozze", detail: "Crea tre file, per i referenti della 2ª X, della 3ª V e della 5ª W. Ogni bozza dice quale regola non è rispettata, l'articolo e cosa serve per sistemare. Sono testi da leggere: nessuno è stato inviato.", icon: "✍️",
-    options: ["Invia le tre mail ai referenti", "Scrive tre file di bozza, senza inviarli", "Cambia nel file la data di partenza della 3ª V per rispettare il preavviso"], correct: 1 },
-  { action: "Si controlla", detail: "Rilegge l'articolo 5, comma 1: il risultato si arrotonda sempre per eccesso, quindi 17,04 diventa 18 adesioni. La 4ª Y ne ha 17 e non raggiunge il minimo: l'agente aveva sbagliato. Corregge l'elenco e scrive una quarta bozza nella stessa cartella.", icon: "🔁",
-    options: ["Considera il lavoro finito senza riguardarlo", "Cancella tutte le bozze e ricomincia dall'inizio", "Rilegge le regole, trova l'arrotondamento sbagliato e aggiunge la quarta bozza"], correct: 2 },
-  { action: "Consegna", detail: "Presenta il riepilogo: 2 pratiche in regola (3ª Z e 1ª T), 4 con problemi (2ª X, 3ª V, 4ª Y, 5ª W), 4 bozze pronte. Ricorda che nulla è stato inviato e che la 3ª V dipende dalla tua scelta. Decidere e inviare tocca a te.", icon: "📬",
+  { action: "Scrive le bozze", detail: "Crea quattro file, per i referenti della 2ª X, della 3ª V, della 4ª Y e della 5ª W. Ogni bozza dice quale regola non è rispettata, l'articolo e cosa serve per sistemare. Gli indirizzi non sono nel file e non li inventa: le bozze restano senza destinatario. Sono testi da leggere: nessuno è stato inviato.", icon: "✍️",
+    options: ["Invia le quattro mail ai referenti", "Scrive quattro file di bozza, senza inviarli", "Cambia nel file la data di partenza della 3ª V per rispettare il preavviso"], correct: 1 },
+  { action: "Dichiara i limiti", detail: "Prima di consegnare scrive cosa non ha potuto verificare: gli indirizzi dei referenti non sono nei dati, la 3ª V dipende dalla tua scelta di classificarla come visita guidata, e il confronto con gli articoli l'ha fatto leggendo il testo del regolamento, non può sapere se esistono circolari successive.", icon: "🔍",
+    options: ["Dice che è tutto verificato e non aggiunge altro", "Cancella tutte le bozze e ricomincia dall'inizio", "Elenca cosa non ha potuto verificare e cosa ha deciso in base alla tua scelta"], correct: 2 },
+  { action: "Consegna", detail: "Presenta il riepilogo: 2 pratiche in regola (3ª Z e 1ª T), 4 con problemi (2ª X, 3ª V, 4ª Y, 5ª W), 4 bozze pronte, e l'elenco di ciò che non ha potuto verificare. Ricorda che nulla è stato inviato e che la 3ª V dipende dalla tua scelta. Decidere e inviare tocca a te.", icon: "📬",
     options: ["Invia le quattro bozze e poi consegna il riepilogo", "Consegna il riepilogo e le bozze, senza inviare nulla", "Segna le quattro pratiche come respinte"], correct: 1 },
 ];
 
-const AGENT_END = "Consegnato. L'agente ha pianificato, letto solo ciò che serviva, calcolato con uno strumento, chiesto a te nel caso dubbio e chiesto il permesso prima di scrivere. Ha corretto un proprio errore e ha lasciato a te la decisione e l'invio.";
+const AGENT_END = "Consegnato. L'agente ha pianificato, letto solo ciò che serviva, calcolato con uno strumento, chiesto a te nel caso dubbio e chiesto il permesso prima di scrivere. Ha dichiarato cosa non ha potuto verificare e ha lasciato a te la decisione e l'invio.";
 
 const PRATICHE = [
   ['Classe', 'Uscita', 'Tipo', 'Partenza', 'Domanda consegnata', 'Iscritti', 'Partecipanti', 'Accompagnatori', 'Quota', 'Referente'],
@@ -103,12 +103,12 @@ function ChatbotColumn() {
         <span style={{ fontSize: '26px' }}>💬</span>
         <h3 style={{ color: colors.info, margin: 0 }}>Chatbot</h3>
       </div>
-      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (allegando le pratiche e il regolamento, oppure usando un Gem con il regolamento tra le conoscenze) {AGENT_TASK}</div>
-      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «La 2ª X sembra avere pochi accompagnatori e la 5ª W una quota alta. La 4ª Y, con 17 adesioni su 24, mi sembra a posto» <em>(risposta chiara e veloce, ma il conto è fatto a occhio: il 71% di 24 fa 17,04 e il regolamento arrotonda sempre in su, quindi servono 18 adesioni e 17 non bastano. Te ne devi accorgere tu)</em>.</div>
-      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (decidi da solo come classificare l'uscita della 3ª V e chiedi le mail una alla volta)</div>
-      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «Ecco una bozza per il prof. Rossi…» <em>(poi tocca a te copiarla, correggerla e inviarla)</em></div>
+      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (allegando le pratiche e il regolamento, con le app collegate attive) {AGENT_TASK}</div>
+      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «Non sono in regola la 2ª X (1 accompagnatore invece di 2, art. 4), la 4ª Y (17 adesioni su 24: il 71% è 17,04 e si arrotonda a 18, art. 5) e la 5ª W (quota di 55 € sopra il tetto di 48 €, art. 6). La 3ª V è da chiarire (art. 1 e 13). La 3ª Z e la 1ª T sono in regola.» <em>(risposta giusta e in pochi secondi, in chat)</em></div>
+      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «Ho creato 4 bozze in Gmail, ai referenti delle pratiche con problemi. Vuoi inviarlo subito?» <em>(il destinatario è vuoto: l'indirizzo non era nei dati e non l'ha inventato)</em></div>
+      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> «No, le rileggo prima.»</div>
       <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: `1px dashed ${colors.border}`, fontSize: 'var(--fs-sm)', color: colors.textMuted }}>
-        Il chatbot fa bene un passo, con quello che gli dai tu. L'agente decide i passi: legge solo gli articoli che servono, conta con uno strumento, si ricontrolla e chiede prima di scrivere. Le bozze del chatbot restano testo in chat: copiarle, correggerle e inviarle tocca a te.
+        Il chatbot lavora con te: veloce, dentro gli strumenti che hai già, con le bozze nella tua casella Gmail. L'agente lavora da sé dentro una cartella: legge solo gli articoli che servono, conta con uno strumento, dichiara cosa non ha potuto verificare e chiede prima di scrivere. In tutti e due i casi rileggere e inviare tocca a te.
       </div>
     </div>
   );
@@ -256,7 +256,7 @@ function App() {
 
         <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${colors.warn}`, borderRadius: '0 8px 8px 0', padding: '18px 22px', marginBottom: '16px' }}>
           <p style={{ color: colors.textDim, margin: '0 0 10px' }}>
-            <strong style={{ color: colors.text }}>Un compito diverso da quello visto insieme sulla slide.</strong> Qui l'agente deve controllare sei pratiche contro il regolamento e preparare dei messaggi. Più avanti si ferma per farti una domanda e chiede un permesso prima di scrivere dei file. Durata indicativa: 10-12 minuti.
+            <strong style={{ color: colors.text }}>Un compito diverso da quello visto insieme sulla slide.</strong> Qui l'agente deve controllare sei pratiche contro il regolamento e preparare dei messaggi. Più avanti si ferma per farti una domanda e chiede un permesso prima di scrivere dei file.
           </p>
           <p style={{ color: colors.textDim, margin: 0 }}>
             <strong style={{ color: colors.text }}>Come si gioca:</strong> prima di ogni passo dell'agente premete "Indovina la prossima mossa", scegliete una delle tre opzioni e guardate quale si colora di verde. Poi premete "Avanti" per leggere nel registro cosa ha fatto l'agente. Il contatore in alto a destra della colonna Agente conta le previsioni azzeccate: i passi da indovinare sono nove.
@@ -285,9 +285,9 @@ function App() {
         )}
 
         <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${colors.success}`, borderRadius: '0 8px 8px 0', padding: '18px 22px', marginTop: '24px' }}>
-          <p style={{ color: colors.text, fontWeight: 700, margin: '0 0 8px' }}>Finita la simulazione? Ora provate con Gemini vero</p>
+          <p style={{ color: colors.text, fontWeight: 700, margin: '0 0 8px' }}>Finita la simulazione? Ora lo stesso compito con Gemini vero</p>
           <p style={{ color: colors.textDim, margin: '0 0 12px' }}>
-            Stesso compito, stesse pratiche: allegate i due PDF a Gemini, incollate la richiesta e confrontate la risposta con quello che ha fatto l'agente. Durata indicativa: 10 minuti.
+            Stesso compito, stesse pratiche: allegate i due PDF a Gemini, incollate la richiesta e guardate come lavora: dove mette il risultato, cosa vi chiede, cosa dice di non sapere. Poi confrontate con la colonna dell'agente. Se Gemini crea delle bozze in Gmail, finiscono nella vostra casella vera: rispondete no a «Vuoi inviarlo subito?» e cancellatele alla fine.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {[

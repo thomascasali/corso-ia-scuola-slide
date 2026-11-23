@@ -122,7 +122,6 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li><code>&lt;indirizzo del server&gt;</code>: l'indirizzo del server del corso, nella forma <code>http://...:4000</code>;</li>
 <li><code>&lt;la tua chiave&gt;</code>: la vostra chiave personale, che comincia con <code>sk-</code>.</li>
 </ul>
-<p>Tempo indicativo: 15-20 minuti, quasi tutti per il download.</p>
 <h2 id="cosa-serve">Cosa serve</h2>
 <ul>
 <li>Un PC Windows 10 o 11 con PowerShell (è già installato).</li>
@@ -130,7 +129,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Un collegamento a internet, per scaricare OpenCode da GitHub. Tenetelo anche al primo avvio: OpenCode potrebbe scaricare qualche componente in più (per esempio il programma che usa per cercare nei file). Da verificare in laboratorio. Il server del corso si raggiunge dalla rete del laboratorio.</li>
 </ul>
 <p>Non serve installare Node.js né altri programmi: OpenCode è un unico file eseguibile.</p>
-<h2 id="1-scaricare-e-preparare-opencode-circa-10-minuti">1. Scaricare e preparare OpenCode (circa 10 minuti)</h2>
+<h2 id="1-scaricare-e-preparare-opencode">1. Scaricare e preparare OpenCode</h2>
 <p>Aprite PowerShell (menu Start, scrivete <code>PowerShell</code>). Incollate i comandi uno alla volta.</p>
 <p>Il primo nasconde la barra di avanzamento, che su alcune versioni di PowerShell rallenta molto il download. Il secondo crea una cartella vostra, il terzo scarica il programma (circa 80 MB), il quarto lo scompatta e l'ultimo controlla la versione. Durante il download la finestra sembra ferma: aspettate che ricompaia il prompt.</p>
 <pre><code class="language-powershell">$ProgressPreference = 'SilentlyContinue'
@@ -160,7 +159,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Chiudete PowerShell e riapritelo. Provate <code class="cmd">opencode --version</code>.</li>
 </ol>
 <p>Se non riuscite, andate avanti lo stesso: negli altri passaggi si può scrivere <code class="cmd">&amp; "$env:USERPROFILE\opencode\opencode.exe"</code> al posto di <code>opencode</code>.</p>
-<h2 id="2-collegarlo-al-server-del-corso-circa-5-minuti">2. Collegarlo al server del corso (circa 5 minuti)</h2>
+<h2 id="2-collegarlo-al-server-del-corso">2. Collegarlo al server del corso</h2>
 <h3 id="la-chiave">La chiave</h3>
 <p>La chiave è una password: non va scritta nei file di un progetto. La mettiamo in una variabile d'ambiente dell'utente, che OpenCode leggerà all'avvio.</p>
 <ol>
@@ -250,7 +249,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <pre><code class="language-powershell">opencode models
 </code></pre>
 <p>Dovrebbe elencare due righe: <code>corso/claude-haiku-5-5</code> e <code>corso/claude-sonnet-5-5</code>. Se ne vedete altre, <code>enabled_providers</code> non è stato letto: ricontrollate il file (virgole, virgolette, parentesi).</p>
-<h2 id="3-prima-prova-circa-5-minuti">3. Prima prova (circa 5 minuti)</h2>
+<h2 id="3-prima-prova">3. Prima prova</h2>
 <p>Create una cartella di prova e apritevi OpenCode:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\prova-opencode&quot; | Out-Null
 </code></pre>

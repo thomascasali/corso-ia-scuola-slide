@@ -108,7 +108,7 @@ const colors = {
   success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
 };
 
-/* ---------- simulazione chatbot/agente (uscite di novembre; simulazione-agente.html ha un compito diverso) ---------- */
+/* ---------- simulazione chatbot/agente (uscite di novembre; simulazione-agente.html ha un compito diverso). Il chatbot con i file allegati risponde giusto: i due modi di lavorare sono diversi, nessuno sbaglia. ---------- */
 /* Nota: per garantire il funzionamento aprendo il file da file:// (Babel standalone non può
    caricare script esterni via XHR da file locali in molti browser), il componente è duplicato
    in modo controllato in argomento-5/slide.html e argomento-5/simulazione-agente.html. */
@@ -121,13 +121,13 @@ const AGENT_STEPS = [
     options: ['Manda subito una mail a tutti i docenti', 'Apre il file delle pratiche di novembre', 'Ti chiede di allegare il file'], correct: 1 },
   { action: 'Usa uno strumento', detail: 'Filtra le righe: tiene solo le pratiche di novembre senza un nome nella colonna "accompagnatore".', icon: '🔎',
     options: ['Rilegge tutto il file a mano, riga per riga', 'Cancella le righe che non capisce', 'Usa uno strumento per filtrare le pratiche senza accompagnatore'], correct: 2 },
-  { action: 'Trova il problema', detail: 'Il filtro restituisce 3 pratiche senza accompagnatore: "Uscita museo civico", "Visita azienda agricola" e "Teatro in lingua inglese".', icon: '🧾',
-    options: ['Trova le pratiche senza un accompagnatore assegnato', 'Non trova nessuna pratica incompleta', 'Si ferma e chiede a te di continuare'], correct: 0 },
+  { action: 'Trova il problema', detail: 'Trova 2 pratiche senza accompagnatore: "Uscita museo civico" e "Visita azienda agricola". Per "Teatro in lingua inglese" il nome è scritto nella colonna "note".', icon: '🧾',
+    options: ['Trova le pratiche senza un accompagnatore, guardando anche le note', 'Non trova nessuna pratica incompleta', 'Si ferma e chiede a te di continuare'], correct: 0 },
   { action: 'Scrive il riepilogo', detail: 'Crea il file "riepilogo-uscite-novembre.md" con l\'elenco completo e le pratiche da sistemare in evidenza.', icon: '✍️',
     options: ['Invia da solo una mail ai docenti coinvolti', 'Chiude tutto senza salvare nulla', 'Scrive un file di riepilogo con l\'elenco e le pratiche da sistemare'], correct: 2 },
-  { action: 'Si controlla', detail: 'Riconta le pratiche guardando anche le altre colonne: per "Teatro in lingua inglese" l\'accompagnatore è scritto nella colonna "note". Le pratiche senza accompagnatore sono 2, non 3: corregge il riepilogo.', icon: '🔁',
-    options: ['Considera il lavoro finito senza riguardarlo', 'Ricontrolla i conteggi e corregge un errore che aveva fatto', 'Ricomincia tutto il compito da capo'], correct: 1 },
-  { action: 'Consegna', detail: 'Presenta il riepilogo corretto e segnala le due pratiche da completare, pronte per essere controllate da una persona.', icon: '📬',
+  { action: 'Dichiara i limiti', detail: 'Prima di consegnare scrive cosa non ha potuto verificare: il nome nella colonna "note" del teatro l\'ha letto come accompagnatore, ma non può sapere se quel docente è stato davvero avvisato, e il file dei docenti disponibili è di prova.', icon: '🔍',
+    options: ['Dice che è tutto verificato e non aggiunge altro', 'Elenca cosa non ha potuto verificare', 'Ricomincia tutto il compito da capo'], correct: 1 },
+  { action: 'Consegna', detail: 'Presenta il riepilogo e segnala le due pratiche da completare, insieme a ciò che non ha potuto verificare, pronte per essere controllate da una persona.', icon: '📬',
     options: ['Consegna il riepilogo e segnala cosa manca', 'Approva da solo le uscite incomplete', 'Elimina le pratiche incomplete dal file'], correct: 0 },
 ];
 
@@ -142,16 +142,16 @@ function ChatbotColumn() {
         <strong style={{ color: colors.text }}>Tu:</strong> (allegando il file delle pratiche, oppure usando un Gem che ha il file tra le conoscenze) {AGENT_TASK}
       </div>
       <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.info }}>Chatbot:</strong> «Ecco la tabella ordinata. Le uscite senza accompagnatore sono <strong>3</strong>: museo civico, azienda agricola e teatro in lingua inglese.»
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «Le uscite senza accompagnatore sono <strong>2</strong>: museo civico e azienda agricola. Per il teatro il nome è nella colonna "note".»
       </div>
       <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.text }}>Tu:</strong> (tabella chiara, risposta in fretta: ti sembra a posto, ma per il teatro l'accompagnatore è scritto nella colonna «note» e il chatbot non l'ha letto. Te ne devi accorgere tu)
+        <strong style={{ color: colors.text }}>Tu:</strong> «Chi può sostituirli?» <em>(allegando anche il file dei docenti disponibili)</em>
       </div>
-      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.text }}>Tu:</strong> «Chi può sostituirli?» <em>(se non allegi anche il file dei docenti disponibili, non lo sa: devi ricordartene tu)</em>
+      <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «Dal file risultano liberi in quei giorni…» <em>(resta nella chat: la usi tu)</em>
       </div>
       <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: `1px dashed ${colors.border}`, fontSize: 'var(--fs-sm)', color: colors.textMuted }}>
-        Il chatbot fa bene un passo, con quello che gli dai tu. L'agente decide i passi: va a prendere i file che servono, conta con uno strumento, si ricontrolla, chiede prima di scrivere e lascia il file nella cartella.
+        Il chatbot lavora con te, sui file che gli porti, in chat. L'agente lavora da sé dentro una cartella: prende i file che servono, conta con uno strumento, dichiara cosa non ha potuto verificare, chiede prima di scrivere.
       </div>
     </div>
   );
@@ -259,7 +259,7 @@ function AgentColumn({ compact }) {
 
       {atEnd && (
         <div style={{ background: colors.success + '15', border: `1px solid ${colors.success}40`, borderRadius: '6px', padding: '7px 12px', color: colors.textDim, fontSize: 'var(--fs-sm)' }}>
-          Consegnato. L'agente ha pianificato, agito con uno strumento, controllato da solo e ha lasciato a una persona la decisione finale.
+          Consegnato. L'agente ha pianificato, agito con uno strumento, dichiarato cosa non ha potuto verificare e ha lasciato a una persona la decisione finale.
         </div>
       )}
 
@@ -804,20 +804,20 @@ const slides = [
     content: () => (
       <div style={{ padding: '30px' }}>
         <BlockTag>Argomento 5 — Chatbot e agente · Chatbot e agente</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Chatbot e agente</h2>
-        <p style={{ color: colors.textDim }}>Diamo lo <strong style={{ color: colors.text }}>stesso compito</strong> a un chatbot e a un agente:</p>
+        <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Chatbot e agente</h2>
+        <p style={{ color: colors.text, fontSize: 'var(--fs-body)', marginBottom: '10px' }}>Chatbot e agente sanno fare lo <strong style={{ color: colors.accent }}>stesso lavoro</strong>, in due modi: il chatbot lavora con te, nella chat e nelle tue app; l'agente lavora da sé dentro una cartella e ti consegna il risultato da approvare. In tutti e due i casi l'ultima parola è tua.</p>
         <Glow>
           <p style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.text }}>
             "Prepara l'elenco delle uscite di novembre con i docenti accompagnatori mancanti, partendo dal file delle pratiche."
           </p>
         </Glow>
-        <ul style={{ marginTop: '18px', paddingLeft: '28px', color: colors.textDim }}>
-          <li><strong style={{ color: colors.info }}>Chatbot:</strong> risponde bene con i file che gli alleghi, ma fa un solo passo: non va a cercare quello che manca e non si ricontrolla se non glielo chiedi.</li>
-          <li><strong style={{ color: colors.success }}>Agente:</strong> fa un piano, apre il file, usa uno strumento, controlla da solo e consegna.</li>
+        <ul style={{ marginTop: '12px', paddingLeft: '28px', color: colors.textDim }}>
+          <li><strong style={{ color: colors.info }}>Chatbot:</strong> lavora con te. Gli porti i file (o usa le app collegate), risponde in chat; con i file allegati risponde giusto.</li>
+          <li><strong style={{ color: colors.success }}>Agente:</strong> lavora da sé. Fa un piano, apre i file nella cartella, usa strumenti, dichiara cosa non ha potuto verificare e consegna.</li>
         </ul>
       </div>
     ),
-    notes: 'Introducete la simulazione principale del corso. Spiegate le due colonne prima di avanzare: a sinistra un chatbot normale, a destra un agente. Il compito è identico, i dati sono inventati (nessuna pratica reale). Il chatbot va immaginato usato al meglio, come negli argomenti 2 e 4: con il file allegato (o un Gem con i documenti tra le conoscenze), non uno che chiede di incollare tutto a mano. Risponde bene e in fretta, ma fa un passo solo con quello che gli date voi.'
+    notes: 'Introducete la simulazione principale del corso. Spiegate le due colonne prima di avanzare: a sinistra un chatbot normale, a destra un agente. Il compito è identico, i dati sono inventati (nessuna pratica reale). La tesi è questa: non c\'è un modo giusto e uno sbagliato, sono due modi di fare lo stesso lavoro. Il chatbot va immaginato usato al meglio, come negli argomenti 2 e 4: con il file allegato (o un Gem con i documenti tra le conoscenze). Risponde giusto e in fretta, lavora con voi e nelle vostre app. L\'agente lavora da sé dentro una cartella e consegna qualcosa da approvare. Chi decide, in tutti e due i casi, siete voi.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Chatbot e agente",
@@ -828,7 +828,7 @@ const slides = [
         <FlowChain wrap={false} minItemWidth="120px" steps={[
           { icon: '📝', label: 'Piano', color: colors.info },
           { icon: '🔧', label: 'Azione con uno strumento', color: colors.purple },
-          { icon: '🔁', label: 'Controllo', color: colors.warn },
+          { icon: '🔁', label: 'Controllo e limiti dichiarati', color: colors.warn },
           { icon: '📬', label: 'Consegna', color: colors.success },
           { icon: '🧑‍⚖️', label: 'Decisione della persona', color: colors.accent },
         ]} />
@@ -850,40 +850,56 @@ const slides = [
         {AgentSimulation ? <AgentSimulation compact={true} /> : <p style={{ color: colors.danger }}>Componente della simulazione non caricato.</p>}
       </div>
     ),
-    notes: 'Questa simulazione si gioca tutta insieme, al proiettore: nessuno la apre sul proprio PC in questo momento. Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Dite ad alta voce quante previsioni ha azzeccato la sala. Fate notare il registro delle azioni nella colonna di destra: nella slide successiva i partecipanti ritroveranno lo stesso linguaggio semplice, ma su un compito diverso e più lungo. Alla fine confrontate con la colonna chatbot: anche con il file allegato il chatbot dice 3 uscite senza accompagnatore e non vede che per il teatro il nome è nella colonna note; per sapere chi può sostituire dovete ricordarvi di allegare il file dei docenti. L\'agente invece va a prendere i file che servono, ha verificato e corretto da solo lo stesso errore di conteggio (sono 2).'
+    notes: 'Questa simulazione si gioca tutta insieme, al proiettore: nessuno la apre sul proprio PC in questo momento. Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Dite ad alta voce quante previsioni ha azzeccato la sala. Fate notare il registro delle azioni nella colonna di destra: nella slide successiva i partecipanti ritroveranno lo stesso linguaggio semplice, ma su un compito diverso e più lungo. Alla fine confrontate le due colonne: con i file allegati il chatbot risponde giusto (2 uscite senza accompagnatore, il nome del teatro è nella colonna note) e propone i sostituti se gli allegate anche il file dei docenti, tutto in chat. È un modo di lavorare: sui file che gli portate voi, in conversazione. L\'agente invece va a prendere i file che servono dalla cartella, conta con uno strumento, scrive il riepilogo e dichiara cosa non ha potuto verificare. Nessuno dei due ha sbagliato.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Chatbot e agente",
     content: () => (
       <div style={{ padding: '30px' }}>
         <BlockTag>Attività</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Provatela voi</h2>
-        <p style={{ color: colors.textDim }}>
-          Aprite sul vostro PC un'altra simulazione, con un compito diverso e più complesso: l'agente controlla sei pratiche di dicembre rispetto al regolamento e prepara le bozze dei messaggi ai referenti. Questa volta l'agente si ferma a farvi una domanda e chiede un permesso prima di scrivere. Indovinate ogni mossa prima che avvenga. Durata indicativa: 10-12 minuti.
-        </p>
-        <ActivityBadge href="simulazione-agente.html" label="Simulazione: chatbot o agente?" />
-      </div>
-    ),
-    notes: 'Fate aprire la simulazione dal link sulla slide: non è quella appena giocata insieme, il compito è diverso e più complesso (nove passi da indovinare dopo il piano). Lasciate 10-12 minuti per giocare da soli fino in fondo, con il foglio previsioni della scheda 6. Passando tra i banchi, fate notare i tre momenti nuovi: l\'agente che si ferma e chiede alla persona, la richiesta di permesso prima di scrivere i file, l\'errore di arrotondamento che l\'agente corregge da solo. Poi chiedete a mano alzata quanti hanno indovinato tutte le mosse e perché è giusto che le mail restino bozze. Subito dopo, nella slide «Ora con Gemini vero», gli stessi sei casi si fanno con un chatbot vero.'
-  },
-
-  {
-    block: "Argomento 5 — Chatbot e agente · Chatbot e agente",
-    content: () => (
-      <div style={{ padding: '30px' }}>
-        <BlockTag>Attività</BlockTag>
-        <h2 style={{ color: colors.accent, marginBottom: '20px' }}>Ora con Gemini vero</h2>
-        <p style={{ color: colors.textDim }}>
-          Lo stesso compito della simulazione, fatto davvero con Gemini e l'account della scuola: chat nuova, due PDF allegati (il regolamento e le sei pratiche di dicembre) e la stessa richiesta. Poi confrontate con quello che ha fatto l'agente: quali pratiche segnala, la 4ª Y passa o no, dove sono le bozze, cosa avete dovuto fare voi. Solo i due file allegati, niente ricerche nel Drive o nella posta. Durata indicativa: 10 minuti.
-        </p>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>Stesso compito, due modi</h2>
+        <p style={{ color: colors.textDim, marginBottom: '10px' }}>Il compito: controllare sei pratiche di dicembre rispetto al regolamento e preparare le bozze dei messaggi ai referenti.</p>
+        <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px' }}><strong style={{ color: colors.text }}>Prima la simulazione al PC.</strong> Indovinate ogni mossa dell'agente prima che avvenga: questa volta si ferma a farvi una domanda e chiede un permesso prima di scrivere.</li>
+          <li><strong style={{ color: colors.text }}>Poi lo stesso compito con Gemini vero</strong>, con l'account della scuola: chat nuova, i due PDF allegati e la stessa richiesta. Guardate dove finisce il risultato, cosa vi chiede, cosa dice di non sapere e cosa fate voi.</li>
+        </ol>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
-          <ActivityBadge href="../materiali/argomento-5/gemini-vero-uscite-dicembre.html" label="Ora con Gemini vero: il foglio" />
+          <ActivityBadge href="simulazione-agente.html" label="Simulazione: chatbot o agente?" />
+          <ActivityBadge href="../materiali/argomento-5/gemini-vero-uscite-dicembre.html" label="Foglio: Gemini vero" />
           <ActivityBadge href="../materiali/argomento-5/pratiche-uscite-dicembre.html" label="Pratiche delle uscite di dicembre" />
           <ActivityBadge href="../materiali/argomento-5/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
         </div>
       </div>
     ),
-    notes: 'I partecipanti scaricano i due PDF dai link, aprono Gemini con l\'account della scuola, una chat nuova, allegano i file e incollano la richiesta dal foglio, uguale a quella della simulazione. Dieci minuti, da soli o in coppia. Tutti i dati sono inventati. Girate tra i banchi: ognuno avrà una risposta un po\' diversa, e va bene. Chiedete di rifare a mano il conto della 4ª Y: il 71% di 24 è 17,04 e l\'articolo 5 arrotonda sempre per eccesso, quindi servono 18 adesioni e 17 non bastano. Due casi possibili. Se Gemini sbaglia e dà la 4ª Y in regola, è la dimostrazione dal vero: risposta chiara e sicura, ma sbagliata, e se non ricontrollate nessuno vi ferma; nella simulazione l\'agente ha fatto lo stesso errore ma si è riletto e corretto. Se Gemini la azzecca, fate notare che senza ricontrollo non sapete quale volta vi capita (provate a rifare la richiesta in una chat nuova), che ha fatto un passo solo e che le bozze restano testo in chat da copiare, correggere e inviare. Chiudete con la domanda del foglio: cosa ha fatto l\'agente in più?'
+    notes: 'Prima la simulazione: ognuno la apre dal link, gioca da solo fino in fondo e compila il foglio previsioni della scheda 1. Non è quella giocata insieme: il compito è diverso e più complesso (nove passi da indovinare dopo il piano). Poi Gemini vero: i partecipanti scaricano i due PDF dai link, aprono Gemini con l\'account della scuola, una chat nuova, allegano i file e incollano la richiesta dal foglio. Da soli o in coppia, dati tutti inventati. Se le app collegate sono attive, Gemini può creare le bozze direttamente in Gmail: finiscono nella casella vera di chi lavora. Dite di rispondere no a «Vuoi inviarlo subito?» e di cancellare le bozze dalla cartella Bozze a fine attività. Nessun indirizzo è nei dati: nella prova Gemini ha lasciato il destinatario con un segnaposto e non ne ha inventato uno. Risultato più probabile: tutti e due i modi trovano gli stessi problemi (2ª X con 1 accompagnatore invece di 2, art. 4; 4ª Y con 17 adesioni su 24 mentre servono 18, art. 5; 5ª W con quota 55 € oltre il tetto di 48 €, art. 6; 3ª V da chiarire, art. 1, 3 e 13; 3ª Z e 1ª T in regola). Non è una gara: chiedete in cosa il lavoro è stato diverso (dove è finito il risultato, cosa vi hanno chiesto, cosa hanno detto di non sapere) e chiedete di rifare a mano il conto della 4ª Y (il 71% di 24 è 17,04, arrotondato per eccesso a 18). Se qualcuno ha una risposta diversa, ricontrollate insieme sul PDF: ognuno avrà un testo un po\' diverso, e va bene.'
+  },
+  {
+    block: "Argomento 5 — Chatbot e agente · Chatbot e agente",
+    content: () => (
+      <div style={{ padding: '22px 30px' }}>
+        <h2 style={{ color: colors.accent, marginBottom: '6px' }}>Due modi di fare lo stesso lavoro</h2>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '14px' }}>Sulle sei pratiche di dicembre hanno trovato gli stessi problemi. Cambia come lavorano e cosa resta a voi.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+          {[
+            { icon: '💬', t: 'Gemini con le app collegate', c: colors.info, pts: ['Veloce, già negli strumenti della scuola', 'Risposta in chat e bozze create direttamente in Gmail', 'Chiede «Vuoi inviarlo subito?»: la risposta è vostra', 'Conviene per pochi documenti e azioni nelle proprie app'] },
+            { icon: '🤖', t: 'Agente in una cartella', c: colors.success, pts: ['Tabella motivata, pratica per pratica', 'Dichiara cosa non ha potuto verificare', 'Chiede prima di salvare i file', 'Conviene per molti file, lavori da ripetere, da sistemare e ricontrollare'] },
+            { icon: '🧑‍⚖️', t: 'Resta alla persona', c: colors.accent, pts: ['Dare i dati giusti', 'Rileggere tutto', 'Decidere i casi dubbi', 'Premere Invia'] },
+          ].map((x, i) => (
+            <div key={i} style={{ background: colors.bgCard, border: `1px solid ${x.c}60`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '12px 16px' }}>
+              <div style={{ fontSize: '26px', marginBottom: '4px' }}>{x.icon}</div>
+              <div style={{ color: x.c, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '6px' }}>{x.t}</div>
+              <ul style={{ paddingLeft: '18px', margin: 0, color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.5 }}>
+                {x.pts.map((pt, j) => <li key={j} style={{ marginBottom: '3px', fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{pt}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <Box type="tip" title="Un dettaglio">
+          L'indirizzo dei referenti non era nei dati: nessuno dei due l'ha inventato. La bozza è rimasta senza destinatario.
+        </Box>
+      </div>
+    ),
+    notes: 'Sintesi di una prova reale con l\'account della scuola: Gemini con i due PDF allegati e un agente (OpenCode con Claude Sonnet) hanno trovato tutto giusto, 4ª Y compresa (17 adesioni su 24: ne servono 18). Gemini ha creato quattro bozze direttamente in Gmail, con il destinatario vuoto, e ha chiesto «Vuoi inviarlo subito?». L\'agente ha dato una tabella motivata, le bozze scritte nel testo, un elenco di cosa non ha potuto verificare (compreso un dubbio su una sua deduzione) e ha chiesto prima di salvare file. Nessuno dei due ha inventato gli indirizzi. Il messaggio: non c\'è un vincitore. Gemini conviene per pochi documenti e per azioni nelle proprie app, l\'agente per molti file, lavori da ripetere, da sistemare e ricontrollare. Resta sempre alla persona fornire i dati giusti, rileggere, decidere i casi dubbi (la 3ª V) e premere Invia. Ricordate: le bozze create in aula finiscono nella casella Gmail vera e vanno cancellate dopo; in aula si risponde no a «Vuoi inviarlo subito?».'
   },
 
   /* --- demo dal vivo --- */
@@ -893,8 +909,8 @@ const slides = [
       <div style={{ padding: '24px 30px' }}>
         <BlockTag>Argomento 5 — Chatbot e agente · Demo dal vivo</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Ora dal vero</h2>
-        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Lo stesso compito della simulazione giocata insieme (le uscite di novembre), ma senza bottoni: il docente lo fa davvero, con Claude Code, sugli stessi file di prova.</p>
-        <p style={{ color: colors.textDim, marginBottom: '10px' }}>Guardate cosa succede, non solo il risultato finale. Durata indicativa: 15-20 minuti. Sotto, i file che l'agente apre.</p>
+        <p style={{ color: colors.textDim, marginBottom: '16px' }}>Un lavoro da segreteria in una cartella: i moduli di adesione di una classe (la 4ª Y), con nomi di file disordinati, l'elenco degli studenti e i versamenti. Il docente lo fa davvero, con Claude Code, senza bottoni: confronta i moduli con l'elenco, rinomina i file, sposta gli incompleti e controlla che i conti tornino. Dati tutti inventati.</p>
+        <p style={{ color: colors.textDim, marginBottom: '10px' }}>Guardate cosa succede, non solo il risultato finale.</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px' }}>
           {[
             { q: 'Quali strumenti usa?', c: colors.info },
@@ -909,15 +925,11 @@ const slides = [
           ))}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px', marginTop: '4px' }}>
-          <ActivityBadge href="../materiali/argomento-5/demo-pratiche-uscite.html" label="Pratiche delle uscite (demo)" />
-          <ActivityBadge href="../materiali/argomento-5/regolamento-viaggi-di-prova.html" label="Regolamento viaggi di prova" />
-          <ActivityBadge href="../materiali/argomento-5/demo-docenti-disponibili.html" label="Docenti disponibili (demo)" />
-          <ActivityBadge href="../materiali/argomento-5/demo-procedura-controllo-uscite.html" label="Procedura controllo-uscite (demo)" />
-          <ActivityBadge href="../materiali/argomento-5/demo-istruzioni-cartella.html" label="Istruzioni della cartella (demo)" />
+          <ActivityBadge href="../materiali/argomento-5/adesioni-4Y.zip" label="Scarica la cartella adesioni-4Y (zip)" />
         </div>
       </div>
     ),
-    notes: 'Seguite il copione della demo (15-20 minuti indicativi). Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non pratiche reali. I cinque fogli sulla slide sono i file che l\'agente apre: i partecipanti possono consultarli mentre guardate, per vedere da dove nasce ogni mossa. Le richieste da scrivere all\'agente sono nella slide seguente.'
+    notes: 'Seguite il copione della demo. Prima di iniziare, leggete a voce alta la griglia "cosa osservare": la sala deve sapere cosa cercare mentre guarda, non solo aspettare il risultato finale. Ricordate che i file sono di prova, non moduli reali. Lo zip sulla slide è la cartella su cui lavora l\'agente: i partecipanti possono scaricarla e aprirla mentre guardate, per vedere da dove nasce ogni mossa. Le richieste da scrivere all\'agente sono nella slide seguente.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Demo dal vivo",
@@ -928,10 +940,10 @@ const slides = [
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {[
             { t: 'Guardarsi intorno', p: "Cosa c'è in questa cartella? Spiegamelo in poche righe, senza modificare niente.", c: colors.info },
-            { t: 'Il compito', p: "Prepara l'elenco delle uscite di novembre con i docenti accompagnatori mancanti, partendo dal file delle pratiche.", c: colors.warn },
-            { t: 'Il controllo', p: "Riapri il regolamento e ricontrolla il riepilogo punto per punto: l'articolo citato dice davvero quello? Dimmi anche se hai dato per scontato qualcosa che nei file non c'è. Se trovi errori, correggi il riepilogo.", c: colors.success },
-            { t: 'Decide una persona', p: "Ecco le mie decisioni: [quelle prese insieme in aula]. Aggiorna il riepilogo con queste decisioni e prepara in un file a parte una bozza di messaggio per i docenti coinvolti. Non inviare niente.", c: colors.danger },
-            { t: 'Se resta tempo', p: "Guarda anche le pratiche degli altri mesi, senza scrivere file: c'è qualcosa che non va secondo il regolamento?", c: colors.purple },
+            { t: 'Il compito', p: "Confronta i moduli di adesione con l'elenco della classe. Rinomina ogni modulo come Cognome-Nome-stato, sposta in una cartella da-sollecitare quelli incompleti, prepara un riepilogo e verifica che i conti tornino.", c: colors.warn },
+            { t: 'Il controllo', p: "Fai un controllo: ogni studente deve comparire una volta sola e i file nelle cartelle devono tornare con il riepilogo. Dimmi anche cosa non hai potuto verificare.", c: colors.success },
+            { t: 'Decide una persona', p: "Ecco le mie decisioni: [quelle prese insieme in aula]. Prepara in un file a parte le bozze dei solleciti per le famiglie. Non inviare niente.", c: colors.danger },
+            { t: 'Se resta tempo', p: "Sono arrivati due moduli nuovi nella cartella in-arrivo: aggiorna il lavoro.", c: colors.purple },
           ].map((x, i) => (
             <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `4px solid ${x.c}`, borderRadius: '0 8px 8px 0', padding: '6px 12px' }}>
               <div style={{ color: x.c, fontWeight: 700, fontSize: 'var(--fs-xs)', marginBottom: '2px' }}>{i + 1}. {x.t}</div>
@@ -941,7 +953,7 @@ const slides = [
         </div>
       </div>
     ),
-    notes: 'Le stesse richieste del copione, in chiaro per la sala: chi guarda sa cosa avete chiesto e può confrontare la frase con quello che fa l\'agente. La quarta ha uno spazio vuoto: le decisioni le prende la sala, pratica per pratica, prima che le scriviate. Il testo già pronto con le decisioni di esempio è nel copione. La quinta è facoltativa.'
+    notes: 'Le stesse richieste del copione, in chiaro per la sala: chi guarda sa cosa avete chiesto e può confrontare la frase con quello che fa l\'agente. La quarta ha uno spazio vuoto: le decisioni le prende la sala (per esempio cosa fare dei moduli incompleti e di chi non ha consegnato il modulo), prima che le scriviate. Il testo già pronto con le decisioni di esempio è nel copione. La quinta è facoltativa. I solleciti sono bozze in un file: non parte niente.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Demo dal vivo",
@@ -952,8 +964,8 @@ const slides = [
           {[
             { icon: '🔧', term: 'Strumento', d: 'ogni azione concreta che ha fatto: leggere un file, cercare, scrivere', c: colors.info },
             { icon: '🔐', term: 'Permesso', d: 'il momento in cui si è fermato a chiedere il vostro sì prima di continuare', c: colors.warn },
-            { icon: '📋', term: 'Skill', d: 'la procedura scritta che ha aperto solo quando serviva', c: colors.purple },
-            { icon: '🔁', term: 'Controllo', d: 'il momento in cui ha riguardato il proprio lavoro confrontandolo col regolamento', c: colors.success },
+            { icon: '📋', term: 'Skill', d: 'la procedura scritta («controllo-adesioni») che ha aperto da sé solo quando serviva', c: colors.purple },
+            { icon: '🔁', term: 'Controllo', d: 'il momento in cui ha controllato i conti e ha detto cosa non ha potuto verificare', c: colors.success },
             { icon: '🧑‍⚖️', term: 'Decisione umana', d: 'cosa è rimasto da decidere a una persona, alla fine', c: colors.accent },
           ].map((x, i) => (
             <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderTop: `4px solid ${x.c}`, borderRadius: '8px', padding: '14px 16px' }}>
@@ -967,6 +979,23 @@ const slides = [
       </div>
     ),
     notes: 'Chiedete alla sala di riempire questi cinque riquadri con quello che hanno appena visto nella demo, prima di leggere le vostre descrizioni: "cosa avete visto che chiamiamo strumento? e permesso?". Questo schema è il ponte diretto verso la sezione successiva, dove ogni parola avrà una slide dedicata.'
+  },
+
+  {
+    block: "Argomento 5 — Chatbot e agente · Demo dal vivo",
+    content: () => (
+      <div style={{ padding: '30px' }}>
+        <BlockTag>Attività</BlockTag>
+        <h2 style={{ color: colors.accent, marginBottom: '16px' }}>La stessa cartella con Gemini</h2>
+        <p style={{ color: colors.textDim, marginBottom: '10px' }}>Scaricate la cartella della demo ed estraetela sul PC. Date a Gemini i moduli, l'elenco della classe e i versamenti, con la stessa richiesta numero 2 del docente.</p>
+        <p style={{ color: colors.textDim }}>Osservate cosa fa lui e cosa resta a voi: rinominare e spostare i file, per esempio. Se arrivano moduli nuovi, li riportate voi.</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-5/adesioni-4Y.zip" label="Scarica la cartella adesioni-4Y (zip)" />
+          <ActivityBadge href="../materiali/argomento-5/gemini-adesioni-4Y.html" label="Foglio: la stessa cartella con Gemini" />
+        </div>
+      </div>
+    ),
+    notes: 'Attività breve, subito dopo la demo. Ognuno scarica lo zip dalla slide, lo estrae e prova a dare a Gemini i file della cartella con la richiesta numero 2 del foglio. Due cose da guardare: cosa produce Gemini (confronto con l\'elenco, riepilogo, i conti) e cosa non può fare al posto vostro. Rinominare e spostare i file nelle cartelle resta a voi, e se arrivano moduli nuovi li riportate voi. Quanti allegati accetta in una volta e se può agire sui file del Drive sono punti da verificare a schermo con l\'account della scuola: non affermateli in aula senza averli provati. Le soluzioni e i numeri attesi sono in dati-demo/argomento-5/adesioni-4Y-soluzioni.md.'
   },
 
   /* --- le parole dell'agente --- */
@@ -994,7 +1023,7 @@ const slides = [
         <p style={{ color: colors.textDim, marginTop: '14px' }}>In Claude Code, ogni uso di uno strumento è visibile: si vede quale strumento è stato usato e con quali dati, e per le azioni più delicate l'agente si ferma a chiedere il permesso prima di procedere.</p>
       </div>
     ),
-    notes: 'Collegate esplicitamente alla demo appena vista: gli strumenti sono quello che avete visto usare a Claude Code (leggere il file, filtrare, scrivere il riepilogo). Il punto da far passare: uno strumento non è magia, è un\'azione precisa e visibile.'
+    notes: 'Collegate esplicitamente alla demo appena vista: gli strumenti sono quello che avete visto usare a Claude Code (leggere i moduli, rinominare e spostare i file, scrivere il riepilogo). Il punto da far passare: uno strumento non è magia, è un\'azione precisa e visibile.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Le parole dell'agente",
@@ -1027,7 +1056,7 @@ const slides = [
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>È lo stesso tema di questo corso: trasformare un modo di lavorare in una procedura scritta, chiara abbastanza da poter essere seguita anche da un agente.</p>
       </div>
     ),
-    notes: 'Il tema delle skill è il cuore del legame tra questo corso e il lavoro quotidiano: scrivere bene una procedura serve alle persone tanto quanto a un agente. Il riquadro sopra è la skill vista nella demo di prima (controllo-uscite): stesso nome, stessa descrizione, stessi primi passi. Anche Gemini va in questa direzione: Google sta trasformando i Gem in skill, come spiegato nell\'argomento 2.'
+    notes: 'Il tema delle skill è il cuore del legame tra questo corso e il lavoro quotidiano: scrivere bene una procedura serve alle persone tanto quanto a un agente. Il riquadro sopra è un esempio di skill, la procedura «controllo-uscite» per le pratiche delle uscite: nome, descrizione e primi passi. Nella demo la skill è un\'altra, «controllo-adesioni», con lo stesso schema: collegate le due. Anche Gemini va in questa direzione: Google sta trasformando i Gem in skill, come spiegato nell\'argomento 2.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Le parole dell'agente",
@@ -1077,7 +1106,7 @@ const slides = [
       <div style={{ padding: '24px 30px' }}>
         <BlockTag>Attività</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Abbinate le parole</h2>
-        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, 10 minuti, solo a voce: non serve un foglio.</p>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>A coppie, solo a voce: non serve un foglio.</p>
         <ol style={{ paddingLeft: '28px', color: colors.textDim }}>
           <li>Riprendete le sei parole: strumento, connettore, skill, plugin, subagente, permesso.</li>
           <li>Per ognuna, trovate un momento della demo appena vista (lista qui sotto) oppure, se nella demo non c'era, un esempio del vostro ufficio.</li>
@@ -1085,16 +1114,16 @@ const slides = [
         <div style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '16px 20px', marginTop: '14px' }}>
           <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Momenti della demo</div>
           <ul style={{ paddingLeft: '20px', color: colors.textDim, margin: 0 }}>
-            <li>Legge il file delle pratiche</li>
-            <li>Apre la procedura "controllo-uscite"</li>
-            <li>Chiede il permesso prima di eseguire un programma</li>
-            <li>Fa un conto con un piccolo programma</li>
-            <li>Chiede il permesso prima di scrivere il riepilogo</li>
+            <li>Legge l'elenco della classe e i moduli</li>
+            <li>Apre la procedura «controllo-adesioni»</li>
+            <li>Chiede il permesso prima di rinominare e spostare i file</li>
+            <li>Fa i conti con un piccolo programma</li>
+            <li>Dice cosa non ha potuto verificare e prepara i solleciti senza inviarli</li>
           </ul>
         </div>
       </div>
     ),
-    notes: 'Nella demo non compariva nessun connettore, nessun plugin né un gruppo di subagenti: l\'agente lavorava da solo, e Thomas lo dice esplicitamente in chiusura. Chiedete alla sala dove userebbero un connettore o un plugin nel proprio ufficio, e se conoscono un compito abbastanza grande da valere un gruppo di agenti con un subagente per parte. Girate tra le coppie senza correggere: qui conta il ragionamento a voce, non una risposta unica giusta. Bastano 10 minuti.'
+    notes: 'Nella demo non compariva nessun connettore, nessun plugin né un gruppo di subagenti: l\'agente lavorava da solo, e Thomas lo dice esplicitamente in chiusura. Chiedete alla sala dove userebbero un connettore o un plugin nel proprio ufficio, e se conoscono un compito abbastanza grande da valere un gruppo di agenti con un subagente per parte. Girate tra le coppie senza correggere: qui conta il ragionamento a voce, non una risposta unica giusta. Basta un breve scambio.'
   },
   {
     block: 'Argomento 5 — Chatbot e agente · Chiusura',

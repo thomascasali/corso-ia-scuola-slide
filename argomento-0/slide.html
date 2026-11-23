@@ -228,13 +228,13 @@ const TOPICS = [
 ];
 
 const ACTIVITIES = [
-  { n: 1, id: 'a1', icon: '✉️', title: 'Richieste in segreteria', minutes: 25 },
-  { n: 2, id: 'a2', icon: '🎛️', title: 'Il neurone giocattolo', minutes: 15 },
-  { n: 3, id: 'a3', icon: '🔢', title: 'Token e parole vicine', minutes: 15 },
-  { n: 4, id: 'a4', icon: '👍', title: 'Votate le risposte', minutes: 15 },
-  { n: 5, id: 'a5', icon: '🎲', title: 'La prossima parola', minutes: 15 },
-  { n: 6, id: 'a6', icon: '🧩', title: 'Veloce o che ragiona?', minutes: 20 },
-  { n: 7, id: 'a7', icon: '📖', title: 'Glossario e quiz', minutes: 20 },
+  { n: 1, id: 'a1', icon: '✉️', title: 'Richieste in segreteria' },
+  { n: 2, id: 'a2', icon: '🎛️', title: 'Il neurone giocattolo' },
+  { n: 3, id: 'a3', icon: '🔢', title: 'Token e parole vicine' },
+  { n: 4, id: 'a4', icon: '👍', title: 'Votate le risposte' },
+  { n: 5, id: 'a5', icon: '🎲', title: 'La prossima parola' },
+  { n: 6, id: 'a6', icon: '🧩', title: 'Veloce o che ragiona?' },
+  { n: 7, id: 'a7', icon: '📖', title: 'Glossario e quiz' },
 ];
 
 /* salto a una slide dato il suo id */
@@ -258,13 +258,12 @@ function Riprende({ goTo, topic, label }) {
   );
 }
 
-/* slide di attività: titolo, durata indicativa, passi, foglio o simulazione, tema ripreso */
-function ActivityCard({ title, minutes, steps, href, label, after, topic, goTo }) {
+/* slide di attività: titolo, passi, foglio o simulazione, tema ripreso */
+function ActivityCard({ title, steps, href, label, after, topic, goTo }) {
   return (
     <div style={{ padding: '18px 30px' }}>
       <BlockTag>Parte 2 · Attività al PC</BlockTag>
       <h2 style={{ color: colors.accent, marginBottom: '6px' }}>{title}</h2>
-      <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginBottom: '12px' }}>Circa {minutes} minuti.</p>
       <ol style={{ paddingLeft: '30px', color: colors.textDim }}>
         {steps.map((s, i) => <li key={i} style={{ marginBottom: '6px', fontSize: 'var(--fs-sm)' }}>{s}</li>)}
       </ol>
@@ -296,7 +295,6 @@ function LessonMap({ goTo }) {
           <button key={a.id} onClick={() => jumpToId(goTo, a.id)} className="activity-link map-activity" style={row}>
             <span aria-hidden="true">{a.icon}</span>
             <span style={{ fontWeight: 600, flex: '1 1 auto' }}>{a.n} · {a.title}</span>
-            <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.textMuted, fontSize: 'var(--fs-xs)', whiteSpace: 'nowrap' }}>{a.minutes} min</span>
           </button>
         ))}
       </div>
@@ -1049,7 +1047,6 @@ const slides = [
         goTo={goTo}
         topic="t1"
         title="Richieste in segreteria"
-        minutes="25"
         steps={[
           'Leggete i sedici messaggi del foglio. Sono tutti inventati.',
           'Scrivete 3 o 4 regole del tipo «se il messaggio parla di… allora il tipo è…».',
@@ -1070,7 +1067,6 @@ const slides = [
         goTo={goTo}
         topic="t2"
         title="Il neurone giocattolo"
-        minutes="15"
         steps={[
           'Aprite la simulazione: un neurone decide se un\'uscita didattica è approvabile.',
           'Girate le manopole dei pesi e la soglia finché il neurone non sbaglia più nessun esempio.',
@@ -1093,7 +1089,6 @@ const slides = [
         goTo={goTo}
         topic="t3"
         title="Token e parole vicine"
-        minutes="15"
         steps={[
           'Parte A: scrivete una frase della vostra giornata di lavoro e guardate come viene tagliata.',
           'Quali parole si spezzano? Provate con una parola lunga, una sigla della scuola, un numero.',
@@ -1114,7 +1109,6 @@ const slides = [
         goTo={goTo}
         topic="t4"
         title="Votate le risposte"
-        minutes="15"
         steps={[
           'Per ogni coppia del foglio scegliete A o B, da soli e senza parlare.',
           'Accanto al voto scrivete il motivo in una riga.',
@@ -1135,7 +1129,6 @@ const slides = [
         goTo={goTo}
         topic="t5"
         title="La prossima parola"
-        minutes="15"
         steps={[
           'Scegliete una partenza e premete «Estrai la prossima parola» fino alla fine: guardate le probabilità di ogni candidata.',
           'Mettete la temperatura al minimo e premete «Rigenera» tre volte.',
@@ -1156,7 +1149,6 @@ const slides = [
         goTo={goTo}
         topic="t6"
         title="Veloce o che ragiona?"
-        minutes="20"
         steps={[
           'Scegliete un problema del foglio e datelo a Gemini con il modello veloce. Annotate la risposta.',
           'Aprite una nuova chat, scegliete il modello che ragiona e incollate lo stesso problema.',
@@ -1177,7 +1169,6 @@ const slides = [
         goTo={goTo}
         topic="t7"
         title="Il glossario"
-        minutes="20"
         steps={[
           'Abbinate le diciotto parole del foglio alle definizioni, partendo dalle più facili.',
           'Rispondete alle dieci frasi vero o falso. Se una vi sembra falsa, riscrivetela in modo che diventi vera.',

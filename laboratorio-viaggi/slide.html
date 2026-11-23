@@ -146,9 +146,9 @@ const ActivityBadge = ({ href, label, compact }) => (
   </a>
 );
 
-const DurationBadge = ({ children }) => (
+const InfoBadge = ({ children }) => (
   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
-    <span aria-hidden="true">⏱</span><span>{children}</span>
+    <span aria-hidden="true">ℹ</span><span>{children}</span>
   </div>
 );
 
@@ -266,7 +266,7 @@ function Shot({ file, role, title, text, duration, badges }) {
             ))}
           </ol>
         )}
-        {duration && <div><DurationBadge>{duration}</DurationBadge></div>}
+        {duration && <div><InfoBadge>{duration}</InfoBadge></div>}
         {badges && badges.map((b, i) => <div key={i}><ActivityBadge href={MAT + b.href} label={b.label} /></div>)}
       </div>
     </div>
@@ -318,7 +318,7 @@ const tappa = (block, tag, title, duration, rows, badges, notes, tip) => ({
     <div style={{ padding: '14px 30px' }}>
       <BlockTag>{tag}</BlockTag>
       <h2 style={{ color: colors.accent, marginBottom: '10px' }}>{title}</h2>
-      <DurationBadge>{duration}</DurationBadge>
+      <InfoBadge>{duration}</InfoBadge>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '6px 0 4px' }}>
         {rows.map((r, i) => (
           <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'baseline', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `5px solid ${roleColor[r[0]] || colors.accent}`, borderRadius: '6px', padding: '8px 14px' }}>
@@ -393,7 +393,7 @@ const slides = [
         <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '14px' }}>Obiettivo: sapere cosa deve fare ciascuno nella procedura dematerializzata di uscite e viaggi.</p>
       </div>
     ),
-    notes: "Due obiettivi. Il primo è formare: alla fine ognuno deve sapere cosa tocca a lui e cosa fanno gli altri prima e dopo di lui. Il secondo è mostrare cosa significa, in pratica, chiedere una modifica a un agente: non una dimostrazione astratta, ma una richiesta che nasce da una difficoltà incontrata da voi mezz'ora prima."
+    notes: "Due obiettivi. Il primo è formare: alla fine ognuno deve sapere cosa tocca a lui e cosa fanno gli altri prima e dopo di lui. Il secondo è mostrare cosa significa, in pratica, chiedere una modifica a un agente: non una dimostrazione astratta, ma una richiesta che nasce da una difficoltà incontrata da voi poco prima."
   },
 
   /* --- blocco 1: perché digitale --- */
@@ -521,8 +521,8 @@ const slides = [
   /* --- blocco 3: accesso e ruoli --- */
   shot('Accesso', '01-accesso-login.png', 'Tutti', 'Accesso con l\'account della scuola',
     'Un solo bottone: «Accedi con Google», con l\'account della scuola. Lasciate spenta la casella «Ricordami per 30 giorni».',
-    "Attività di accesso, circa dieci minuti. Ogni partecipante entra con il proprio account della scuola; chi interpreta lo studente entra con l'account di prova che gli è stato consegnato. Se qualcuno entra ma vede solo 'Dashboard' nel menu, il ruolo non è ancora stato assegnato: lo sistema Thomas. Controllate che 'Ricordami' sia spento su ogni PC.",
-    { duration: '10 minuti, tutti insieme', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
+    "Attività di accesso. Ogni partecipante entra con il proprio account della scuola; chi interpreta lo studente entra con l'account di prova che gli è stato consegnato. Se qualcuno entra ma vede solo 'Dashboard' nel menu, il ruolo non è ancora stato assegnato: lo sistema Thomas. Controllate che 'Ricordami' sia spento su ogni PC.",
+    { duration: 'tutti insieme', badges: [{ href: 'guida-accesso.html', label: 'Guida all\'accesso' }] }),
   {
     block: 'Accesso',
     content: () => (
@@ -549,7 +549,7 @@ const slides = [
   },
 
   /* --- giro 1, tappa 1 --- */
-  tappa('Giro 1 · tappa 1', 'Giro 1 · tappa 1', 'Il docente crea la pratica', '15 minuti, i due gruppi in parallelo',
+  tappa('Giro 1 · tappa 1', 'Giro 1 · tappa 1', 'Il docente crea la pratica', 'i due gruppi in parallelo',
     [
       ['Docente referente', 'Compila i quattro passi, controlla gli errori e presenta la pratica.'],
       ['Segreteria', 'Legge la propria scheda; appena la pratica è presentata, la trova in dashboard.'],
@@ -585,7 +585,7 @@ const slides = [
     "Fine della prima tappa. La pratica passa nelle mani della Segreteria. Il docente la ritroverà durante la raccolta firme."),
 
   /* --- giro 1, tappa 2 --- */
-  tappa('Giro 1 · tappa 2', 'Giro 1 · tappa 2', 'Raccolta firme: Segreteria, studente, genitore', '15 minuti, i due gruppi in parallelo',
+  tappa('Giro 1 · tappa 2', 'Giro 1 · tappa 2', 'Raccolta firme: Segreteria, studente, genitore', 'i due gruppi in parallelo',
     [
       ['Segreteria', 'Apre la pratica presentata e avvia la raccolta firme.'],
       ['Studente', 'Apre «Le mie attività» e risponde «Sì, aderisco».'],
@@ -624,7 +624,7 @@ const slides = [
     "Le firme dei genitori con indirizzo inventato non arriveranno mai: è voluto. Introducete la doppia firma, che il gruppo proverà nel secondo giro."),
 
   /* --- giro 1, tappa 3 --- */
-  tappa('Giro 1 · tappa 3', 'Giro 1 · tappa 3', 'Controllo formale e visti', '10 minuti, i due gruppi in parallelo',
+  tappa('Giro 1 · tappa 3', 'Giro 1 · tappa 3', 'Controllo formale e visti', 'i due gruppi in parallelo',
     [
       ['Segreteria', 'Chiude la raccolta, fa il controllo formale e conferma gli avvisi.'],
       ['Commissione viaggi', 'Legge la pratica e appone il visto.'],
@@ -632,7 +632,7 @@ const slides = [
       ['Docente referente', 'Controlla l\'email con l\'esito del visto.']
     ],
     [...COPIONI, RUOLO.segr, RUOLO.comm, RUOLO.ds, RUOLO.ref],
-    "Tre passaggi in fila, ognuno con un ruolo diverso: la pratica passa di mano e ogni persona vede solo ciò che le serve. Fate notare l'ordine: nessuno può saltare un passaggio. Cronometrate: è la tappa dove i gruppi più rapidi finiscono prima."),
+    "Tre passaggi in fila, ognuno con un ruolo diverso: la pratica passa di mano e ogni persona vede solo ciò che le serve. Fate notare l'ordine: nessuno può saltare un passaggio. È la tappa dove i gruppi più rapidi finiscono prima."),
   shot('Giro 1 · tappa 3', '22-segreteria-controllo-formale-avvisi.png', 'Segreteria', 'Controllo formale',
     'Al controllo formale resta un solo avviso, il docente di riserva: va confermato con «Confermo nonostante gli avvisi».',
     "Il quorum, con una adesione su sette, qui passa. Dal controllo formale in poi il quorum diventa vincolante: se non fosse raggiunto il portale bloccherebbe."),
@@ -644,7 +644,7 @@ const slides = [
     "Nel primo giro si approva. Con 'VISTO: si approva' la pratica passa direttamente a Preventivi, perché c'è il mezzo a pagamento. La richiesta di revisione si prova nel secondo giro."),
 
   /* --- giro 1, tappa 4 --- */
-  tappa('Giro 1 · tappa 4', 'Giro 1 · tappa 4', 'La gara: Ufficio Patrimonio e agenzia', '10 minuti, i due gruppi in parallelo',
+  tappa('Giro 1 · tappa 4', 'Giro 1 · tappa 4', 'La gara: Ufficio Patrimonio e agenzia', 'i due gruppi in parallelo',
     [
       ['Ufficio Patrimonio', 'Richiede il preventivo scrivendo nome ed email dell\'agenzia.'],
       ['Agenzia', 'Apre il link ricevuto per email e carica l\'offerta.'],
@@ -679,7 +679,7 @@ const slides = [
       <div style={{ padding: '6px 30px' }}>
         <BlockTag>Giro 2</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '4px' }}>Si cambia ruolo, si cambia caso</h2>
-        <DurationBadge>35 minuti, i due gruppi in parallelo</DurationBadge>
+        <InfoBadge>i due gruppi in parallelo</InfoBadge>
         <Box type="info" title="Primo passo: scambio dei ruoli">Chi ha un ruolo interno ne prende uno che non ha ancora fatto, come indicato in «Ruoli e rotazione». Cambiano anche gli accessi: si esce e si rientra con i nuovi ruoli. Genitore e agenzia restano alla stessa persona.</Box>
         <Box type="tip" title="Secondo passo: un caso diverso">Ogni gruppo prova il proprio caso (vedi le slide seguenti), ripercorrendo solo i passaggi che cambiano: non serve rifare tutto il giro.</Box>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
@@ -770,7 +770,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Cosa cambiereste</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa cambiereste?</h2>
-        <DurationBadge>15 minuti, individuale e poi alla lavagna</DurationBadge>
+        <InfoBadge>individuale e poi alla lavagna</InfoBadge>
         <Box type="info" title="Tre domande, sul foglio «Cosa cambierei»">
           Cosa non era chiaro? Cosa mancava? Cosa proporreste di cambiare, e per chi?
         </Box>
@@ -778,7 +778,7 @@ const slides = [
         <ActivityBadge href={MAT + 'cosa-cambierei.html'} label="Cosa cambierei" />
       </div>
     ),
-    notes: "Lasciate cinque minuti di scrittura individuale, poi raccogliete alla lavagna. Aiutate chi scrive in modo vago a precisare: in quale schermata, per quale ruolo, cosa vorrebbe vedere. Poi votate: ognuno indica la richiesta che gli sembra più utile. Quella più votata, se realizzabile in pochi minuti, è la candidata per la modifica dal vivo."
+    notes: "Lasciate il tempo di scrivere da soli, poi raccogliete alla lavagna. Aiutate chi scrive in modo vago a precisare: in quale schermata, per quale ruolo, cosa vorrebbe vedere. Poi votate: ognuno indica la richiesta che gli sembra più utile. Quella più votata, se realizzabile in pochi minuti, è la candidata per la modifica dal vivo."
   },
   {
     block: 'Cosa cambiereste',
@@ -823,7 +823,7 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Cosa cambiereste</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Dal vivo: la modifica con Claude Code</h2>
-        <DurationBadge>25 minuti, la fa Thomas davanti a voi</DurationBadge>
+        <InfoBadge>la fa Thomas davanti a voi</InfoBadge>
         <TerminalMock
           folder="copia di lavoro del portale"
           request="Nella cronologia della pratica, accanto a ogni passaggio, mostra il nome di chi lo ha eseguito."
@@ -895,7 +895,6 @@ const slides = [
       <div style={{ padding: '14px 30px' }}>
         <BlockTag>Chiusura</BlockTag>
         <h2 style={{ color: colors.accent, marginBottom: '10px' }}>Cosa ne pensate</h2>
-        <DurationBadge>5 minuti</DurationBadge>
         <Box type="info">Il questionario di valutazione del corso comprende anche questo laboratorio. Thomas indica come e quando compilarlo.</Box>
         <Box type="tip">Se vi è venuta un'idea dopo aver lasciato l'aula, scrivetela comunque: il foglio «Cosa cambierei» resta aperto.</Box>
         <ActivityBadge href={MAT + COSA_CAMBIEREI.href} label={COSA_CAMBIEREI.label} />
