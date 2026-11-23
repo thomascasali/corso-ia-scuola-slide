@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guida: OpenCode sul PC del laboratorio, collegato al server del corso — Materiali argomento 10</title>
+<title>Guida: OpenCode desktop sul PC del laboratorio, collegato al server del corso — Materiali argomento 10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -116,7 +116,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </div>
 <main class="wrap">
 <h1 id="guida-opencode-sul-pc-del-laboratorio-collegato-al-server-del-corso">Guida: OpenCode sul PC del laboratorio, collegato al server del corso</h1>
-<p>Questa guida porta OpenCode, un agente di programmazione, dal download alla prima richiesta, sul PC del laboratorio. Non servono i permessi di amministratore. OpenCode non parla con un fornitore esterno: parla con il server del corso, che ha già tutto configurato e che vi ha dato una chiave personale.</p>
+<p>Questa guida porta OpenCode, un agente di programmazione, dall'installazione alla prima richiesta, sul PC del laboratorio. Si usa <strong>OpenCode desktop</strong>, l'applicazione per Windows con le sue finestre. In fondo, come alternativa, c'è la versione da terminale. OpenCode non parla con un fornitore esterno: parla con il server del corso, che ha già tutto configurato e che vi ha dato una chiave personale.</p>
 <p>Due segnaposto, che trovate sul foglio consegnato in aula:</p>
 <ul>
 <li><code>&lt;indirizzo del server&gt;</code>: l'indirizzo del server del corso, nella forma <code>http://...:4000</code>;</li>
@@ -126,54 +126,31 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <ul>
 <li>Un PC Windows 10 o 11 con PowerShell (è già installato).</li>
 <li>Il foglio con indirizzo e chiave.</li>
-<li>Un collegamento a internet, per scaricare OpenCode da GitHub. Tenetelo anche al primo avvio: OpenCode potrebbe scaricare qualche componente in più (per esempio il programma che usa per cercare nei file). Da verificare in laboratorio. Il server del corso si raggiunge dalla rete del laboratorio.</li>
+<li>Un collegamento a internet, per scaricare l'installatore. Il server del corso si raggiunge dalla rete del laboratorio.</li>
 </ul>
-<p>Non serve installare Node.js né altri programmi: OpenCode è un unico file eseguibile.</p>
-<h2 id="1-scaricare-e-preparare-opencode">1. Scaricare e preparare OpenCode</h2>
-<p>Aprite PowerShell (menu Start, scrivete <code>PowerShell</code>). Incollate i comandi uno alla volta.</p>
-<p>Il primo nasconde la barra di avanzamento, che su alcune versioni di PowerShell rallenta molto il download. Il secondo crea una cartella vostra, il terzo scarica il programma (circa 80 MB), il quarto lo scompatta e l'ultimo controlla la versione. Durante il download la finestra sembra ferma: aspettate che ricompaia il prompt.</p>
-<pre><code class="language-powershell">$ProgressPreference = 'SilentlyContinue'
-</code></pre>
-<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\opencode&quot; | Out-Null
-</code></pre>
-<pre><code class="language-powershell">Invoke-WebRequest &quot;https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip&quot; -OutFile &quot;$env:USERPROFILE\opencode\opencode.zip&quot;
-</code></pre>
-<pre><code class="language-powershell">Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPath &quot;$env:USERPROFILE\opencode&quot; -Force
-</code></pre>
-<pre><code class="language-powershell">&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot; --version
-</code></pre>
-<p>L'ultimo comando deve scrivere <code>1.19.5</code>. Se lo scrive, OpenCode è pronto. La cartella <code>opencode</code> sta nel vostro profilo utente: per questo non servono permessi speciali.</p>
-<p>Note:</p>
-<ul>
-<li>Questa guida è provata con la versione 1.19.5. Il comando scarica proprio quella, anche se più avanti ne esce una nuova.</li>
-<li>Se il PC è molto vecchio e il programma non parte, nella stessa pagina c'è il file <code>opencode-windows-x64-baseline.zip</code>: stessa procedura, cambia solo il nome del file.</li>
-<li>Se Windows mostra un avviso di protezione o blocca il programma, fermatevi e chiamate il docente. Sui PC del laboratorio questo passaggio non è ancora stato provato.</li>
-</ul>
-<h3 id="poterlo-chiamare-con-il-solo-nome-opencode">Poterlo chiamare con il solo nome <code>opencode</code></h3>
-<p>Senza questo passaggio dovete scrivere ogni volta il percorso lungo. Si fa dalle impostazioni dell'utente, senza amministratore:</p>
+<p>L'app si installa solo per il vostro utente: non servono i permessi di amministratore. Se Windows chiede la password di amministratore o blocca l'installatore, fermatevi e chiamate il docente (da verificare a schermo sui PC del laboratorio).</p>
+<h2 id="1-installare-opencode-desktop">1. Installare OpenCode desktop</h2>
 <ol>
-<li>Menu Start, scrivete <code>variabili</code> e scegliete la voce che finisce con <strong>relative all'account</strong> (per esempio "Modifica le variabili di ambiente relative all'account"). Non scegliete quella "di sistema": chiede l'amministratore.</li>
-<li>Nella lista in alto (variabili utente) selezionate <code>Path</code> e premete <strong>Modifica</strong>. Se <code>Path</code> non c'è, premete <strong>Nuova</strong> e usate <code>Path</code> come nome.</li>
-<li>Premete <strong>Nuovo</strong> e incollate il percorso della cartella. Per conoscerlo, in PowerShell: <code class="cmd">echo "$env:USERPROFILE\opencode"</code> (di solito è <code>C:\Users\&lt;nome utente&gt;\opencode</code>, ma sui PC della scuola può essere diverso: copiate quello che scrive il comando).</li>
-<li>Confermate con <strong>OK</strong> su tutte le finestre.</li>
-<li>Chiudete PowerShell e riapritelo. Provate <code class="cmd">opencode --version</code>.</li>
+<li>Aprite la pagina di download di opencode.ai (indirizzo: <code>opencode.ai/download</code>).</li>
+<li>Nel riquadro dell'app desktop scegliete la voce <strong>Windows (x64)</strong>. Si scarica un file <code>opencode-desktop-win-x64.exe</code>. Se il PC avesse un processore ARM, c'è la voce <strong>Windows (ARM64)</strong>.</li>
+<li>Aprite il file scaricato e seguite l'installazione fino alla fine. I passaggi della finestra di installazione non sono stati verificati: da verificare a schermo.</li>
+<li>Se Windows mostra un avviso di protezione, fermatevi e chiamate il docente. Sui PC del laboratorio questo passaggio non è ancora stato provato.</li>
+<li><strong>Non aprite ancora OpenCode.</strong> Prima servono la chiave e il file di configurazione: l'app li legge all'avvio.</li>
 </ol>
-<p>Se non riuscite, andate avanti lo stesso: negli altri passaggi si può scrivere <code class="cmd">&amp; "$env:USERPROFILE\opencode\opencode.exe"</code> al posto di <code>opencode</code>.</p>
-<h2 id="2-collegarlo-al-server-del-corso">2. Collegarlo al server del corso</h2>
-<h3 id="la-chiave">La chiave</h3>
+<p>L'app installa i suoi file nel vostro profilo utente (di solito in <code>%LOCALAPPDATA%\Programs</code>), per questo non servono permessi speciali. Lavora con un servizio che resta attivo in secondo piano: è il motivo del passaggio 4.</p>
+<h2 id="2-la-chiave">2. La chiave</h2>
 <p>La chiave è una password: non va scritta nei file di un progetto. La mettiamo in una variabile d'ambiente dell'utente, che OpenCode leggerà all'avvio.</p>
 <ol>
-<li>Aprite di nuovo la finestra delle variabili d'ambiente <strong>relative all'account</strong>.</li>
+<li>Menu Start, scrivete <code>variabili</code> e scegliete la voce che finisce con <strong>relative all'account</strong> (per esempio "Modifica le variabili di ambiente relative all'account"). Non scegliete quella "di sistema": chiede l'amministratore.</li>
 <li>Nella lista <strong>in alto</strong> (variabili utente) premete <strong>Nuova</strong>.</li>
-<li>Nome: <code>CORSO_API_KEY</code>. Valore: incollate <code>&lt;la tua chiave&gt;</code>. Confermate con <strong>OK</strong>.</li>
-<li>Chiudete PowerShell e riapritelo: le variabili si leggono solo nelle finestre aperte dopo averle create.</li>
+<li>Nome: <code>CORSO_API_KEY</code>. Valore: incollate <code>&lt;la tua chiave&gt;</code> dal foglio. Confermate con <strong>OK</strong> su tutte le finestre.</li>
 </ol>
-<p>Se la finestra delle variabili non si apre sul PC del laboratorio, potete mettere la chiave solo nella finestra di PowerShell che state usando: <code class="cmd">$env:CORSO_API_KEY = "&lt;la tua chiave&gt;"</code>. Vale finché non chiudete quella finestra, e OpenCode va avviato da lì.</p>
-<p>Per controllare senza mostrare la chiave, in PowerShell:</p>
+<p>Se la finestra delle variabili non si apre sul PC del laboratorio, chiamate il docente: con l'app desktop la variabile deve essere una variabile utente, non basta scriverla in una finestra di PowerShell.</p>
+<p>Per controllare senza mostrare la chiave, aprite PowerShell (una finestra nuova, aperta dopo aver creato la variabile):</p>
 <pre><code class="language-powershell">if ($env:CORSO_API_KEY) { &quot;chiave presente&quot; } else { &quot;chiave mancante&quot; }
 </code></pre>
-<h3 id="il-file-di-configurazione">Il file di configurazione</h3>
-<p>Il file si chiama <code>opencode.json</code> e sta nella cartella di configurazione personale di OpenCode. Si crea così:</p>
+<h2 id="3-il-file-di-configurazione">3. Il file di configurazione</h2>
+<p>Il file si chiama <code>opencode.json</code> e sta nella cartella di configurazione personale di OpenCode. Si crea così, in PowerShell, un comando alla volta:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\.config\opencode&quot; | Out-Null
 </code></pre>
 <pre><code class="language-powershell">notepad &quot;$env:USERPROFILE\.config\opencode\opencode.json&quot;
@@ -245,49 +222,58 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </tr>
 </tbody>
 </table></div>
-<p>Per controllare che OpenCode legga il file e veda i modelli:</p>
-<pre><code class="language-powershell">opencode models
+<h2 id="4-chiudere-tutto-e-riaprire">4. Chiudere tutto e riaprire</h2>
+<p>Questo passaggio è quello che più spesso fa perdere tempo. L'app desktop lascia un servizio attivo in secondo piano, e quel servizio non vede una variabile creata dopo la sua partenza. Se resta acceso, OpenCode risponde con un errore sulla chiave anche se la chiave è giusta.</p>
+<ol>
+<li>Se OpenCode è aperto, chiudetelo dalla sua finestra.</li>
+<li>Fermate i processi rimasti, in PowerShell:</li>
+</ol>
+<pre><code class="language-powershell">Get-Process opencode* -ErrorAction SilentlyContinue | Stop-Process -Force
 </code></pre>
-<p>Dovrebbe elencare due righe: <code>corso/claude-haiku-5-5</code> e <code>corso/claude-sonnet-5-5</code>. Se ne vedete altre, <code>enabled_providers</code> non è stato letto: ricontrollate il file (virgole, virgolette, parentesi).</p>
-<h2 id="3-prima-prova">3. Prima prova</h2>
-<p>Create una cartella di prova e apritevi OpenCode:</p>
+<p>Se non scrive niente, non c'erano processi aperti: va bene.</p>
+<ol start="3">
+<li>Aprite di nuovo OpenCode dal menu Start. Ora legge la variabile e il file di configurazione.</li>
+</ol>
+<p>Se in laboratorio la variabile non viene vista nemmeno così, uscite da Windows e rientrate con il vostro utente (da verificare a schermo), poi riaprite OpenCode.</p>
+<h2 id="5-aprire-una-cartella-di-lavoro-e-fare-la-prima-prova">5. Aprire una cartella di lavoro e fare la prima prova</h2>
+<p>OpenCode lavora dentro una cartella: ciò che l'agente legge, crea e modifica sta lì. Create una cartella di prova, in PowerShell:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\prova-opencode&quot; | Out-Null
 </code></pre>
-<pre><code class="language-powershell">cd &quot;$env:USERPROFILE\prova-opencode&quot;
+<p>Poi, dall'app, aprite quella cartella come progetto. Il nome del pulsante o della voce di menu per aprire una cartella è da verificare a schermo: cercate qualcosa come "Apri progetto" o "Open project" e scegliete <code>prova-opencode</code> dentro il vostro profilo utente.</p>
+<p>Nella finestra di scrittura dell'app provate due richieste, una alla volta. La prima è una risposta di testo:</p>
+<pre><code class="language-text">Rispondi con una frase: come ti chiami e che modello sei?
 </code></pre>
-<pre><code class="language-powershell">opencode
+<p>La seconda è un compito con gli strumenti:</p>
+<pre><code class="language-text">Crea un file ciao.txt con scritto: Ciao dal laboratorio. Poi leggilo e dimmi cosa contiene.
 </code></pre>
-<p>Si apre l'interfaccia di OpenCode nella finestra del terminale. In fondo c'è la riga dove scrivere. Con questa configurazione l'interfaccia non è ancora stata provata sui PC del laboratorio: se qualcosa non corrisponde a quello che leggete qui, usate l'alternativa senza interfaccia più sotto e avvisate il docente. Provate:</p>
-<ol>
-<li>Una risposta di testo: <code class="cmd">Rispondi con una frase: come ti chiami e che modello sei?</code></li>
-<li>Un compito con gli strumenti: <code class="cmd">Crea un file ciao.txt con scritto: Ciao dal laboratorio. Poi leggilo e dimmi cosa contiene.</code></li>
-</ol>
-<p>Nel secondo caso vedrete comparire le azioni dell'agente (scrittura e lettura del file). Alla fine, in PowerShell, <code class="cmd">dir</code> nella cartella di prova mostra <code>ciao.txt</code>. È la differenza tra un chatbot e un agente: il chatbot risponde, l'agente fa delle cose sul vostro computer, qui dentro la cartella in cui lo avete aperto.</p>
-<p>Per uscire: <code class="cmd">/exit</code>, oppure Ctrl+C (da verificare a schermo quale dei due funziona con questa versione).</p>
-<p>Alternativa senza interfaccia, utile per provare in fretta (da PowerShell, nella cartella di prova). Questa strada è provata:</p>
-<pre><code class="language-powershell">opencode run &quot;Rispondi solo con la parola: pronto&quot;
-</code></pre>
-<h2 id="4-scegliere-il-modello">4. Scegliere il modello</h2>
-<p>Nel programma scrivete <code class="cmd">/models</code>: dovrebbe comparire l'elenco, da cui si sceglie con le frecce e Invio (da verificare a schermo). Senza interfaccia il modello si sceglie con <code>-m</code>, per esempio <code class="cmd">opencode run -m corso/claude-sonnet-5-5 "..."</code>. Ne avete due:</p>
+<p>Nel secondo caso vedrete comparire le azioni dell'agente (scrittura e lettura del file). Se l'app chiede un permesso, leggetelo e rispondete sì solo se è quello che vi aspettate. Alla fine il file <code>ciao.txt</code> è nella cartella di prova: lo vedete in Esplora file. È la differenza tra un chatbot e un agente: il chatbot risponde, l'agente fa delle cose sul vostro computer, qui dentro la cartella in cui lo avete aperto.</p>
+<h2 id="6-scegliere-il-modello">6. Scegliere il modello</h2>
+<p>Nell'app c'è un selettore del modello vicino alla finestra di scrittura (la posizione esatta è da verificare a schermo). Ne avete due:</p>
 <ul>
 <li><strong>Haiku</strong>: veloce ed economico. Va bene per cominciare e per i compiti semplici.</li>
 <li><strong>Sonnet</strong>: più capace, più lento, costa di più. Usatelo quando Haiku sbaglia o il compito è articolato.</li>
 </ul>
 <p>Regola pratica: partite da Haiku e passate a Sonnet solo se serve. Il modello con cui OpenCode parte è quello scritto nel campo <code>"model"</code> del file.</p>
-<h2 id="5-quanto-costa">5. Quanto costa</h2>
+<p>Per controllare che OpenCode legga il file e veda i due modelli, senza aprire l'app:</p>
+<pre><code class="language-powershell">&amp; &quot;$env:LOCALAPPDATA\Programs\@opencodedesktop\resources\opencode-cli.exe&quot; models
+</code></pre>
+<p>Dovrebbe elencare due righe: <code>corso/claude-haiku-5-5</code> e <code>corso/claude-sonnet-5-5</code>. Se ne vedete altre, <code>enabled_providers</code> non è stato letto: ricontrollate il file (virgole, virgolette, parentesi). Il percorso del programma è quello dell'installazione per utente; se il comando dice che non trova il file, la cartella ha un altro nome sul vostro PC (da verificare a schermo).</p>
+<h2 id="7-quanto-costa">7. Quanto costa</h2>
 <p>La vostra chiave ha un budget. Ogni richiesta ne consuma un po': le richieste lunghe o con molti file ne consumano di più, e Sonnet più di Haiku. Quando il budget finisce, il server rifiuta le richieste con un messaggio di errore. Non succede niente di grave: avvisate il docente.</p>
-<h2 id="6-problemi-frequenti">6. Problemi frequenti</h2>
-<p>I messaggi sono quelli visti nelle prove con la versione 1.19.5, fatte con <code>opencode run</code> su un PC diverso da quelli del laboratorio.</p>
+<h2 id="8-problemi-frequenti">8. Problemi frequenti</h2>
 <p><strong>1. <code>Authentication Error, No api key passed in.</code></strong></p>
 <ul>
-<li>Causa: la variabile <code>CORSO_API_KEY</code> non esiste in questa finestra di PowerShell. Di solito l'avete creata dopo aver aperto la finestra, o il nome è scritto diverso.</li>
-<li>Cosa fare: controllate con il comando "chiave presente / chiave mancante" della sezione 2, chiudete e riaprite PowerShell.</li>
+<li>Causa: OpenCode non vede la variabile <code>CORSO_API_KEY</code>. Di solito l'avete creata dopo aver avviato l'app, o il nome è scritto diverso.</li>
+<li>Cosa fare: controllate con il comando "chiave presente / chiave mancante" della sezione 2 in una finestra PowerShell nuova. Poi rifate il passaggio 4: chiudere l'app, fermare i processi, riaprire.</li>
 </ul>
-<p><strong>2. <code>Authentication Error, Invalid proxy server token passed.</code></strong></p>
+<p><strong>2. <code>Authentication Error ... Invalid proxy server token passed.</code></strong></p>
 <ul>
-<li>Causa: la chiave c'è ma è sbagliata: un carattere in meno o in più, uno spazio incollato in fondo, oppure è la chiave di un'altra persona.</li>
-<li>Cosa fare: rincollate la chiave dal foglio nella variabile. Se non basta, chiedete al docente.</li>
+<li>Causa: la chiave c'è ma è sbagliata o copiata male: un carattere in meno o in più, uno spazio in fondo, oppure è la chiave di un'altra persona.</li>
+<li>Cosa fare: ricopiate la chiave dal foglio nella variabile. Per vedere le ultime quattro lettere di quella che OpenCode legge, in una finestra PowerShell nuova:</li>
 </ul>
+<pre><code class="language-powershell">$env:CORSO_API_KEY.Substring($env:CORSO_API_KEY.Length-4)
+</code></pre>
+<p>Confrontatele con le ultime quattro lettere della chiave sul foglio. Se sono diverse, correggete la variabile e rifate il passaggio 4 (chiudere, fermare i processi, riaprire). Se sono uguali e l'errore resta, chiamate il docente.</p>
 <p><strong>3. <code>The requested model '...' is not available for this API key, or the model name is invalid.</code></strong></p>
 <ul>
 <li>Causa: avete scelto un modello che la vostra chiave non può usare, oppure il nome nel file non è identico a quello del server.</li>
@@ -296,31 +282,56 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <p><strong>4. OpenCode parte, si scrive il messaggio e non succede niente, senza errori.</strong></p>
 <ul>
 <li>Causa più probabile: l'indirizzo o la porta del server sono sbagliati, oppure il PC non è nella rete del laboratorio. Nelle prove, una porta sbagliata non produce nessun messaggio: l'agente resta fermo.</li>
-<li>Cosa fare: ricontrollate <code>baseURL</code> nel file (indirizzo del foglio, <code>:4000</code>, <code>/v1</code> in fondo). Provate dal terminale: <code class="cmd">curl.exe &lt;indirizzo del server&gt;/v1/models -H "Authorization: Bearer $env:CORSO_API_KEY"</code>. Se la risposta è un elenco di modelli, il server funziona e il problema è nel file. Se non risponde, avvisate il docente.</li>
+<li>Cosa fare: ricontrollate <code>baseURL</code> nel file (indirizzo del foglio, <code>:4000</code>, <code>/v1</code> in fondo). Poi provate da PowerShell il comando qui sotto, dopo aver sostituito <code>&lt;indirizzo del server&gt;</code> con quello del foglio. Se la risposta è un elenco di modelli, il server funziona e il problema è nel file. Se non risponde, avvisate il docente.</li>
 </ul>
-<p><strong>5. <code>opencode</code> non viene riconosciuto come comando.</strong></p>
-<ul>
-<li>Causa: la cartella non è nel <code>Path</code>, oppure PowerShell era già aperto quando l'avete aggiunta.</li>
-<li>Cosa fare: chiudete e riaprite PowerShell. In alternativa usate il percorso intero.</li>
-</ul>
-<p><strong>6. <code>opencode models</code> elenca molti modelli di altri servizi, o nessuno del corso.</strong></p>
+<pre><code class="language-powershell">curl.exe &lt;indirizzo del server&gt;/v1/models -H &quot;Authorization: Bearer $env:CORSO_API_KEY&quot;
+</code></pre>
+<p><strong>5. Il selettore mostra molti modelli di altri servizi, o nessuno del corso.</strong></p>
 <ul>
 <li>Causa: il file non è stato letto per intero (errore di sintassi) oppure è nella cartella sbagliata.</li>
-<li>Cosa fare: il file deve chiamarsi <code>opencode.json</code> (non <code>opencode.json.txt</code>: in Blocco note scegliete "Tutti i file" al salvataggio) e stare in <code>%USERPROFILE%\.config\opencode\</code>.</li>
+<li>Cosa fare: il file deve chiamarsi <code>opencode.json</code> (non <code>opencode.json.txt</code>: in Blocco note scegliete "Tutti i file" al salvataggio) e stare in <code>%USERPROFILE%\.config\opencode\</code>. Dopo averlo corretto, rifate il passaggio 4.</li>
 </ul>
-<p><strong>7. <code>Unexpected server error. Check server logs...</code> appena dopo aver scelto un modello.</strong></p>
+<p><strong>6. <code>Unexpected server error. Check server logs...</code> appena dopo aver scelto un modello.</strong></p>
 <ul>
 <li>Causa: il modello scelto non compare nel file <code>opencode.json</code>.</li>
-<li>Cosa fare: tornate a Haiku con <code class="cmd">/models</code>.</li>
+<li>Cosa fare: tornate a Haiku dal selettore dei modelli.</li>
 </ul>
-<h2 id="7-cosa-non-fare">7. Cosa non fare</h2>
+<p><strong>7. Ho cambiato la chiave o il file, ma l'app si comporta come prima.</strong></p>
+<ul>
+<li>Causa: il servizio in background è rimasto acceso con le impostazioni vecchie.</li>
+<li>Cosa fare: rifate il passaggio 4, sempre.</li>
+</ul>
+<h2 id="9-cosa-non-fare">9. Cosa non fare</h2>
 <ul>
 <li>Non condividete la chiave: non fotografatela, non scrivetela in chat, non passatela a un compagno. È collegata al vostro nome e al vostro budget. Se pensate che qualcuno l'abbia vista, ditelo al docente: il docente può revocarla e darvene un'altra.</li>
 <li>Non scrivete la chiave dentro un file di progetto (<code>opencode.json</code> in una cartella di lavoro, <code>AGENTS.md</code>, appunti). Solo nella variabile d'ambiente.</li>
 <li>Non date all'agente dati personali di studenti, famiglie o colleghi, né documenti riservati. Usate solo materiale inventato o pubblico.</li>
 <li>Aprite OpenCode solo in cartelle di prova: l'agente può creare, modificare e cancellare file in quella cartella. Non apritelo nella cartella Documenti o sul Desktop.</li>
-<li>Alla fine del corso, se il PC è condiviso, rimuovete la variabile <code>CORSO_API_KEY</code> dalle variabili d'ambiente dell'account, e la cartella <code>%USERPROFILE%\opencode</code> se non vi serve.</li>
+<li>Leggete ogni richiesta di permesso prima di rispondere sì.</li>
+<li>Alla fine del corso, se il PC è condiviso, rimuovete la variabile <code>CORSO_API_KEY</code> dalle variabili d'ambiente dell'account e disinstallate l'app (Impostazioni di Windows, App installate).</li>
 </ul>
+<h2 id="alternativa-opencode-da-terminale">Alternativa: OpenCode da terminale</h2>
+<p>Se l'app desktop non si installa o non parte, c'è la versione da terminale: un unico file eseguibile, senza installazione. La chiave e il file <code>opencode.json</code> (sezioni 2 e 3) sono gli stessi. Questa strada è provata con la versione 1.19.5.</p>
+<p>In PowerShell, un comando alla volta. Il primo nasconde la barra di avanzamento, che rallenta il download:</p>
+<pre><code class="language-powershell">$ProgressPreference = 'SilentlyContinue'
+</code></pre>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\opencode&quot; | Out-Null
+</code></pre>
+<pre><code class="language-powershell">Invoke-WebRequest &quot;https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip&quot; -OutFile &quot;$env:USERPROFILE\opencode\opencode.zip&quot;
+</code></pre>
+<pre><code class="language-powershell">Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPath &quot;$env:USERPROFILE\opencode&quot; -Force
+</code></pre>
+<pre><code class="language-powershell">&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot; --version
+</code></pre>
+<p>Deve scrivere <code>1.19.5</code>. Poi, nella cartella di prova:</p>
+<pre><code class="language-powershell">cd &quot;$env:USERPROFILE\prova-opencode&quot;
+</code></pre>
+<pre><code class="language-powershell">&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot;
+</code></pre>
+<p>L'interfaccia si apre nella finestra del terminale. Per provare in fretta senza interfaccia:</p>
+<pre><code class="language-powershell">&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot; run &quot;Rispondi solo con la parola: pronto&quot;
+</code></pre>
+<p>Il modello si sceglie con <code>-m</code>, per esempio <code>-m corso/claude-sonnet-5-5</code>. Se Windows blocca il programma, fermatevi e chiamate il docente. Se il PC è molto vecchio e il programma non parte, nella stessa pagina di GitHub c'è il file <code>opencode-windows-x64-baseline.zip</code>: stessa procedura, cambia il nome del file.</p>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
 <script>
