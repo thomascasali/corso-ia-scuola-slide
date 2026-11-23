@@ -66,11 +66,31 @@ th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: 
 th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
 tr:last-child td { border-bottom: none; }
 code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
 pre {
   background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
   overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
 }
 pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
 @media (max-width: 480px) {
   main.wrap { padding: 24px 16px 60px; }
@@ -84,6 +104,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
   .table-scroll { border: none; overflow: visible; }
   table { font-size: 11pt; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
   @page { margin: 16mm 14mm; }
 }
 </style>
@@ -122,9 +143,15 @@ Si lavora sulla cartella "Corso IA - dati di prova" del proprio Drive. Gli indir
 <li>Le righe sono 22? Manca qualche pratica, o ce n'è una in più?</li>
 <li>Rifate a mano il conto di quattro pratiche: P09, P10, P11 e P17. Leggete anche la colonna "Note" e i commi 1 e 2 dell'articolo 4.</li>
 <li>Fate clic su una cella della colonna "accompagnatori mancanti": nella barra in alto c'è una formula o un numero scritto a mano? Se cambiate il numero degli studenti, il conto si aggiorna?</li>
-<li>Se sono numeri scritti, chiedete nella stessa chat: "Rifai le colonne calcolate con formule di Google Fogli, così si aggiornano se cambio un dato." Poi cambiate il numero degli studenti di una pratica e guardate se il conto cambia.</li>
+<li>Se sono numeri scritti, incollate nella stessa chat la richiesta del riquadro qui sotto. Poi cambiate il numero degli studenti di una pratica e guardate se il conto cambia.</li>
 </ol>
-<p>Se resta tempo, chiedete nella stessa chat: "C'è un docente che accompagna più di 2 viaggi d'istruzione nell'anno?" e "C'è una pratica in un periodo in cui il regolamento non permette di partire?". Poi controllate voi sul PDF.</p>
+<pre><code class="language-text">Rifai le colonne calcolate con formule di Google Fogli, così si aggiornano se cambio un dato.
+</code></pre>
+<p>Se resta tempo, incollate nella stessa chat una alla volta queste due domande. Poi controllate voi sul PDF.</p>
+<pre><code class="language-text">C'è un docente che accompagna più di 2 viaggi d'istruzione nell'anno?
+</code></pre>
+<pre><code class="language-text">C'è una pratica in un periodo in cui il regolamento non permette di partire?
+</code></pre>
 <h2 id="3-una-circolare-dal-modello-10-15-minuti">3. Una circolare dal modello (10-15 minuti)</h2>
 <pre><code>Usa il modello di circolare e la scheda del viaggio a Torino della classe 4C, che trovi nel mio Drive nella cartella &quot;Corso IA - dati di prova&quot;, insieme al regolamento delle uscite. Crea un documento Google intitolato &quot;Circolare viaggio Torino 4C - prova&quot; con la circolare per le famiglie della 4C: date, quota, acconto, documenti da consegnare e scadenze. Segui le regole di compilazione del modello.
 </code></pre>
@@ -176,5 +203,48 @@ Si lavora sulla cartella "Corso IA - dati di prova" del proprio Drive. Gli indir
 <p>Nel Drive restano i file creati da Gemini: hanno tutti "- prova" nel nome. Si possono cancellare insieme alla cartella "Corso IA - dati di prova".</p>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
 </body>
 </html>

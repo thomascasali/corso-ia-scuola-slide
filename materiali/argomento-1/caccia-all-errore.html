@@ -66,11 +66,31 @@ th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: 
 th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
 tr:last-child td { border-bottom: none; }
 code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
 pre {
   background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
   overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
 }
 pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
 @media (max-width: 480px) {
   main.wrap { padding: 24px 16px 60px; }
@@ -84,6 +104,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
   .table-scroll { border: none; overflow: visible; }
   table { font-size: 11pt; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
   @page { margin: 16mm 14mm; }
 }
 </style>
@@ -147,28 +168,24 @@ Le domande si riferiscono al Regolamento viaggi di prova, un documento inventato
 <li>Ripeti con le altre due domande, nella stessa chat.</li>
 </ol>
 <p><strong>Domanda 1</strong></p>
-<blockquote>
-<p>Secondo l'articolo 9 del regolamento, entro quanti giorni prima della partenza va consegnato il modulo con le informazioni sanitarie?</p>
-</blockquote>
+<pre><code class="language-text">Secondo l'articolo 9 del regolamento, entro quanti giorni prima della partenza va consegnato il modulo con le informazioni sanitarie?
+</code></pre>
 <p><strong>Domanda 2</strong></p>
-<blockquote>
-<p>Visto che il tetto di spesa per un viaggio d'istruzione è di 450 euro a studente, quanto possiamo spendere al massimo in tutto per 20 studenti?</p>
-</blockquote>
+<pre><code class="language-text">Visto che il tetto di spesa per un viaggio d'istruzione è di 450 euro a studente, quanto possiamo spendere al massimo in tutto per 20 studenti?
+</code></pre>
 <p><strong>Domanda 3</strong></p>
-<blockquote>
-<p>Dato che le classi terze possono fare viaggi d'istruzione di al massimo 2 notti, come organizzeresti un viaggio di 4 giorni per la 3ª Z?</p>
-</blockquote>
+<pre><code class="language-text">Dato che le classi terze possono fare viaggi d'istruzione di al massimo 2 notti, come organizzeresti un viaggio di 4 giorni per la 3ª Z?
+</code></pre>
 <p>Il risultato cambia da una chat all'altra e da un PC all'altro. Se l'IA corregge la premessa, non è un esercizio fallito: è un risultato da raccontare agli altri, e conviene confrontarlo con quello del vicino, che magari con la stessa domanda ha avuto una risposta diversa.</p>
 <hr />
 <h2 id="parte-c-chiedi-le-fonti-e-controllale">Parte C – Chiedi le fonti e controllale</h2>
 <p><strong>Come si lavora</strong></p>
 <ol>
 <li>In Gemini apri una chat nuova, senza allegare niente.</li>
-<li>Copia questa richiesta:</li>
+<li>Copia la richiesta del riquadro qui sotto, incollala in Gemini e inviala.</li>
 </ol>
-<blockquote>
-<p>Mi servono 3 studi o ricerche sugli effetti del registro elettronico sulla comunicazione tra scuola e famiglia in Italia. Per ciascuno indica autore, anno, titolo, rivista o editore e il link.</p>
-</blockquote>
+<pre><code class="language-text">Mi servono 3 studi o ricerche sugli effetti del registro elettronico sulla comunicazione tra scuola e famiglia in Italia. Per ciascuno indica autore, anno, titolo, rivista o editore e il link.
+</code></pre>
 <ol start="3">
 <li>Per ogni riferimento controlla:<ul>
 <li>il link si apre e porta proprio a quello studio, non alla pagina iniziale di un sito o a un altro documento?</li>
@@ -179,7 +196,9 @@ Le domande si riferiscono al Regolamento viaggi di prova, un documento inventato
 </li>
 <li>Segna per ogni riferimento: verificato, sbagliato in parte, non trovato.</li>
 </ol>
-<p>Se avanza tempo, rifai la richiesta aggiungendo in fondo "Rispondi senza cercare sul web" e confronta i riferimenti.</p>
+<p>Se avanza tempo, rifai la richiesta aggiungendo in fondo la frase del riquadro qui sotto e confronta i riferimenti.</p>
+<pre><code class="language-text">Rispondi senza cercare sul web
+</code></pre>
 <hr />
 <h2 id="cosa-portarsi-a-casa">Cosa portarsi a casa</h2>
 <ul>
@@ -190,5 +209,48 @@ Le domande si riferiscono al Regolamento viaggi di prova, un documento inventato
 </ul>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
 </body>
 </html>

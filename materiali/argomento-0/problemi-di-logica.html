@@ -66,11 +66,31 @@ th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: 
 th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
 tr:last-child td { border-bottom: none; }
 code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
 pre {
   background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
   overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
 }
 pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
 @media (max-width: 480px) {
   main.wrap { padding: 24px 16px 60px; }
@@ -84,6 +104,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
   .table-scroll { border: none; overflow: visible; }
   table { font-size: 11pt; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
   @page { margin: 16mm 14mm; }
 }
 </style>
@@ -107,12 +128,13 @@ I docenti, le classi, i prezzi e le regole di questi problemi sono inventati.</p
 <li>Scegli il modello <strong>veloce</strong> e apri una chat nuova. Copia il problema così com'è e incollalo. Leggi la risposta finale, senza ancora guardare i passaggi, e scrivila nella tabella.</li>
 <li>Apri un'altra chat nuova, scegli il modello che <strong>ragiona</strong> e incolla lo stesso problema. Scrivi la risposta nella seconda colonna. Se l'app mostra il ragionamento, aprilo: qual è il passaggio decisivo?</li>
 <li>Controlla da solo, con carta e calcolatrice: qual è la risposta giusta? Segna nella tabella dove i due modelli hanno sbagliato.</li>
-<li>Un ultimo tentativo: torna al modello veloce, in una chat nuova, e aggiungi in fondo al problema "Ragiona passo passo e scrivi tutti i passaggi prima della risposta". Cambia qualcosa?</li>
+<li>Un ultimo tentativo: torna al modello veloce, in una chat nuova, incolla il problema e aggiungi in fondo la frase del riquadro qui sotto. Cambia qualcosa?</li>
 </ol>
+<pre><code class="language-text">Ragiona passo passo e scrivi tutti i passaggi prima della risposta
+</code></pre>
 <h2 id="i-cinque-problemi">I cinque problemi</h2>
 <h3 id="problema-1-i-turni-di-sorveglianza">Problema 1. I turni di sorveglianza</h3>
-<blockquote>
-<p>Cinque docenti (Magnolia, Noce, Ortensia, Quercia, Rovere) devono fare un turno di sorveglianza all'intervallo, ciascuno in un giorno diverso, dal lunedì al venerdì. Ogni giorno c'è un solo docente. Queste sono le condizioni:
+<pre><code class="language-text">Cinque docenti (Magnolia, Noce, Ortensia, Quercia, Rovere) devono fare un turno di sorveglianza all'intervallo, ciascuno in un giorno diverso, dal lunedì al venerdì. Ogni giorno c'è un solo docente. Queste sono le condizioni:
 1. Quercia può fare il turno solo il venerdì.
 2. Magnolia può farlo solo il martedì o il giovedì.
 3. Noce non può né il lunedì né il martedì.
@@ -120,29 +142,25 @@ I docenti, le classi, i prezzi e le regole di questi problemi sono inventati.</p
 5. Rovere non può né il mercoledì né il venerdì.
 6. Magnolia fa il turno il giorno subito dopo Rovere.
 7. Noce fa il turno in un giorno precedente a quello di Ortensia.
-Chi fa il turno ogni giorno?</p>
-</blockquote>
+Chi fa il turno ogni giorno?
+</code></pre>
 <h3 id="problema-2-la-quota-del-viaggio">Problema 2. La quota del viaggio</h3>
-<blockquote>
-<p>La 3ª Z fa un viaggio d'istruzione di due notti con 38 studenti. Gli accompagnatori sono un docente ogni 15 studenti o frazione di 15. Il pullman costa 1.540 euro in tutto. L'albergo costa 46 euro a notte a persona, per studenti e accompagnatori. Il biglietto del museo costa 8 euro a studente, mentre gli accompagnatori entrano gratis. Gli accompagnatori non pagano niente: la loro parte è divisa tra gli studenti. Quanto paga ogni studente, al centesimo? Se la scuola chiede una cifra intera in euro, quale conviene chiedere e quanto avanza in cassa?</p>
-</blockquote>
+<pre><code class="language-text">La 3ª Z fa un viaggio d'istruzione di due notti con 38 studenti. Gli accompagnatori sono un docente ogni 15 studenti o frazione di 15. Il pullman costa 1.540 euro in tutto. L'albergo costa 46 euro a notte a persona, per studenti e accompagnatori. Il biglietto del museo costa 8 euro a studente, mentre gli accompagnatori entrano gratis. Gli accompagnatori non pagano niente: la loro parte è divisa tra gli studenti. Quanto paga ogni studente, al centesimo? Se la scuola chiede una cifra intera in euro, quale conviene chiedere e quanto avanza in cassa?
+</code></pre>
 <h3 id="problema-3-le-sostituzioni-di-mercoledi">Problema 3. Le sostituzioni di mercoledì</h3>
-<blockquote>
-<p>Mercoledì il prof. Rovere è assente e vanno coperte tre ore: la prima ora (2ª A), la terza ora (3ª Z) e la quinta ora (4ª B). Ogni docente può fare al massimo una sostituzione nella giornata e può coprire solo le ore in cui è libero. Le ore libere sono:
+<pre><code class="language-text">Mercoledì il prof. Rovere è assente e vanno coperte tre ore: la prima ora (2ª A), la terza ora (3ª Z) e la quinta ora (4ª B). Ogni docente può fare al massimo una sostituzione nella giornata e può coprire solo le ore in cui è libero. Le ore libere sono:
 - Quercia: la prima ora
 - Magnolia: la prima e la terza ora
 - Sambuco: la terza e la quinta ora
 - Noce: la quinta ora
-In quanti modi diversi si possono coprire le tre ore? E se il prof. Noce mercoledì è assente, in quanti modi?</p>
-</blockquote>
+In quanti modi diversi si possono coprire le tre ore? E se il prof. Noce mercoledì è assente, in quanti modi?
+</code></pre>
 <h3 id="problema-4-la-frequenza">Problema 4. La frequenza</h3>
-<blockquote>
-<p>Nell'istituto dimostrativo l'anno scolastico vale se lo studente è stato presente almeno ai tre quarti delle ore di lezione dell'anno. Le ore di lezione sono 33 alla settimana per 33 settimane. Ogni 3 ritardi contano come 1 ora di assenza (il resto non conta: 4 ritardi valgono 1 ora). Uno studente ha già fatto 220 ore di assenza e 14 ritardi. Quante ore intere di assenza può ancora fare senza perdere l'anno?</p>
-</blockquote>
+<pre><code class="language-text">Nell'istituto dimostrativo l'anno scolastico vale se lo studente è stato presente almeno ai tre quarti delle ore di lezione dell'anno. Le ore di lezione sono 33 alla settimana per 33 settimane. Ogni 3 ritardi contano come 1 ora di assenza (il resto non conta: 4 ritardi valgono 1 ora). Uno studente ha già fatto 220 ore di assenza e 14 ritardi. Quante ore intere di assenza può ancora fare senza perdere l'anno?
+</code></pre>
 <h3 id="problema-5-le-riunioni">Problema 5. Le riunioni</h3>
-<blockquote>
-<p>Il collegio dei docenti si riunisce ogni 6 settimane e il dipartimento ogni 4 settimane. Nella settimana 0 si sono riuniti entrambi. Nelle 36 settimane successive (dalla settimana 1 alla 36 compresa): in quali settimane si riuniscono entrambi? Quante riunioni del dipartimento cadono in una settimana in cui non c'è il collegio?</p>
-</blockquote>
+<pre><code class="language-text">Il collegio dei docenti si riunisce ogni 6 settimane e il dipartimento ogni 4 settimane. Nella settimana 0 si sono riuniti entrambi. Nelle 36 settimane successive (dalla settimana 1 alla 36 compresa): in quali settimane si riuniscono entrambi? Quante riunioni del dipartimento cadono in una settimana in cui non c'è il collegio?
+</code></pre>
 <h2 id="tabella-da-compilare">Tabella da compilare</h2>
 <div class="table-scroll"><table>
 <thead>
@@ -196,5 +214,48 @@ In quanti modi diversi si possono coprire le tre ore? E se il prof. Noce mercole
 <p>Le soluzioni le ha il docente.</p>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
 </body>
 </html>

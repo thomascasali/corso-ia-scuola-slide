@@ -66,11 +66,31 @@ th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: 
 th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
 tr:last-child td { border-bottom: none; }
 code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
 pre {
   background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
   overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
 }
 pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
 @media (max-width: 480px) {
   main.wrap { padding: 24px 16px 60px; }
@@ -84,6 +104,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
   .table-scroll { border: none; overflow: visible; }
   table { font-size: 11pt; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
   @page { margin: 16mm 14mm; }
 }
 </style>
@@ -120,7 +141,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </tr>
 <tr>
 <td>Mansione / attività prevista</td>
-<td>Affiancamento al team di assistenza: installazione e collaudo di postazioni, documentazione della rete di un cliente.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Scheda rischi, dove si svolgerà lo stage</td>
@@ -128,7 +149,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </tr>
 <tr>
 <td>Scheda rischi, che cosa farà lo studente</td>
-<td>Affiancamento al team di assistenza: postazioni e documentazione della rete.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Scheda rischi, macchine</td>
@@ -152,7 +173,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </tr>
 <tr>
 <td>Scheda di progettazione, Attività previste in azienda</td>
-<td>Installazione e collaudo di tre postazioni, mappa della rete di un cliente, stesura della documentazione insieme al tutor aziendale.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Convenzione, studenti coperti</td>
@@ -172,23 +193,23 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </tr>
 <tr>
 <td>Diario, settimana 1, attività svolte</td>
-<td>Settimana 1: installazione di due postazioni e prove di collegamento alla rete.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Diario, settimana 1, riflessioni</td>
-<td>Ho imparato a controllare ogni cavo e ogni impostazione prima di dire che funziona.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Diario, settimana 2, attività svolte</td>
-<td>Settimana 2: mappa della rete di un cliente e documento con i dispositivi trovati.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Diario, settimana 2, riflessioni</td>
-<td>Ho capito che una buona documentazione fa risparmiare tempo a chi viene dopo.</td>
+<td>Testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Valutazione aziendale</td>
-<td>Cinque competenze a scelta, livelli 3 o 4, giudizio: «Studentessa precisa e collaborativa: ha imparato in fretta a installare e a documentare.»</td>
+<td>Cinque competenze a scelta, livelli 3 o 4. Giudizio: testo nel riquadro sotto la tabella</td>
 </tr>
 <tr>
 <td>Relazione finale</td>
@@ -196,6 +217,31 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </tr>
 </tbody>
 </table></div>
+<p>Da incollare, un riquadro per ogni testo:</p>
+<p><strong>Mansione / attività prevista</strong></p>
+<pre><code class="language-text">Affiancamento al team di assistenza: installazione e collaudo di postazioni, documentazione della rete di un cliente.
+</code></pre>
+<p><strong>Scheda rischi, che cosa farà lo studente</strong></p>
+<pre><code class="language-text">Affiancamento al team di assistenza: postazioni e documentazione della rete.
+</code></pre>
+<p><strong>Scheda di progettazione, Attività previste in azienda</strong></p>
+<pre><code class="language-text">Installazione e collaudo di tre postazioni, mappa della rete di un cliente, stesura della documentazione insieme al tutor aziendale.
+</code></pre>
+<p><strong>Diario, settimana 1, attività svolte</strong></p>
+<pre><code class="language-text">Settimana 1: installazione di due postazioni e prove di collegamento alla rete.
+</code></pre>
+<p><strong>Diario, settimana 1, riflessioni</strong></p>
+<pre><code class="language-text">Ho imparato a controllare ogni cavo e ogni impostazione prima di dire che funziona.
+</code></pre>
+<p><strong>Diario, settimana 2, attività svolte</strong></p>
+<pre><code class="language-text">Settimana 2: mappa della rete di un cliente e documento con i dispositivi trovati.
+</code></pre>
+<p><strong>Diario, settimana 2, riflessioni</strong></p>
+<pre><code class="language-text">Ho capito che una buona documentazione fa risparmiare tempo a chi viene dopo.
+</code></pre>
+<p><strong>Valutazione aziendale, giudizio</strong></p>
+<pre><code class="language-text">Studentessa precisa e collaborativa: ha imparato in fretta a installare e a documentare.
+</code></pre>
 <h2 id="chi-fa-cosa-in-ordine">Chi fa cosa, in ordine</h2>
 <h3 id="tappa-1-la-pratica-e-lazienda">Tappa 1: la pratica e l'azienda</h3>
 <ol>
@@ -255,5 +301,48 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 </ul>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
 </body>
 </html>

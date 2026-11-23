@@ -66,11 +66,31 @@ th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: 
 th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
 tr:last-child td { border-bottom: none; }
 code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
 pre {
   background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
   overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
 }
 pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
 @media (max-width: 480px) {
   main.wrap { padding: 24px 16px 60px; }
@@ -84,6 +104,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
   .table-scroll { border: none; overflow: visible; }
   table { font-size: 11pt; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
   @page { margin: 16mm 14mm; }
 }
 </style>
@@ -101,7 +122,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <p><strong>Cosa serve</strong></p>
 <ul>
 <li>Windows 10 o 11, con PowerShell (è già installato).</li>
-<li>Node.js: OmniRoute richiede la versione 22.22.2 o successive della 22, oppure la 24 o successive. Si controlla con <code>node -v</code> in PowerShell. Se manca, si scarica la versione LTS da nodejs.org.</li>
+<li>Node.js: OmniRoute richiede la versione 22.22.2 o successive della 22, oppure la 24 o successive. Si controlla con <code class="cmd">node -v</code> in PowerShell. Se manca, si scarica la versione LTS da nodejs.org.</li>
 <li>Una chiave API di almeno un fornitore di modelli. In questa guida l'esempio è Anthropic; la chiave si crea nella console del fornitore e si paga a consumo.</li>
 <li>Circa mezz'ora la prima volta.</li>
 </ul>
@@ -115,7 +136,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <p>Se compare un avviso sugli script di installazione bloccati (succede con npm 11 e successivi), OmniRoute ha bisogno che il suo script finale venga eseguito. In quel caso si rilancia l'installazione autorizzando i pacchetti che npm elenca nell'avviso. La forma indicata dalla documentazione di OmniRoute è:</p>
 <pre><code class="language-powershell">npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
 </code></pre>
-<p>Per controllare la versione installata: <code>npm ls -g omniroute</code>. Al 28 ottobre 2026 l'ultima versione pubblicata è la 3.8.52.</p>
+<p>Per controllare la versione installata: <code class="cmd">npm ls -g omniroute</code>. Al 28 ottobre 2026 l'ultima versione pubblicata è la 3.8.52.</p>
 <h3 id="alternativa-docker">Alternativa: Docker</h3>
 <p>Serve Docker Desktop già installato e avviato. Il comando della documentazione è:</p>
 <pre><code class="language-powershell">docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
@@ -124,10 +145,14 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <h3 id="alternativa-dal-codice-sorgente">Alternativa: dal codice sorgente</h3>
 <p>Serve Git. Conviene solo se volete modificare il programma.</p>
 <pre><code class="language-powershell">git clone https://github.com/diegosouzapw/OmniRoute.git
-cd OmniRoute
-copy .env.example .env
-npm install
-$env:PORT = &quot;20128&quot;; npm run dev
+</code></pre>
+<pre><code class="language-powershell">cd OmniRoute
+</code></pre>
+<pre><code class="language-powershell">copy .env.example .env
+</code></pre>
+<pre><code class="language-powershell">npm install
+</code></pre>
+<pre><code class="language-powershell">$env:PORT = &quot;20128&quot;; npm run dev
 </code></pre>
 <p>Attenzione: <code>npm run dev</code> è la modalità di sviluppo. Funziona finché il terminale resta aperto; chiuso quello, OmniRoute si spegne. È il motivo per cui a molte persone "OmniRoute non risponde" (vedi gli errori frequenti).</p>
 <h2 id="parte-2-prima-accensione-e-sicurezza">Parte 2. Prima accensione e sicurezza</h2>
@@ -158,9 +183,12 @@ $env:PORT = &quot;20128&quot;; npm run dev
 <p>Conta anche l'indirizzo su cui OmniRoute ascolta. Con le impostazioni predefinite ascolta su tutte le interfacce di rete (<code>0.0.0.0</code>): chi è nella stessa rete può raggiungerlo. Per tenerlo chiuso dentro il PC, con il comando <code>omniroute serve</code> si usa la variabile <code>OMNIROUTE_SERVER_HOST=127.0.0.1</code>. Non usate la variabile <code>HOSTNAME</code>: il sistema la riempie con il nome del computer.</p>
 <p>Con npm, il modo più sicuro di passare le variabili è scriverle nella finestra PowerShell prima di avviare. Valgono solo per quella finestra e non lasciano file in giro:</p>
 <pre><code class="language-powershell">$env:INITIAL_PASSWORD = &quot;&lt;una-password-lunga-vostra&gt;&quot;
-$env:REQUIRE_API_KEY = &quot;true&quot;
-$env:OMNIROUTE_SERVER_HOST = &quot;127.0.0.1&quot;
-omniroute serve
+</code></pre>
+<pre><code class="language-powershell">$env:REQUIRE_API_KEY = &quot;true&quot;
+</code></pre>
+<pre><code class="language-powershell">$env:OMNIROUTE_SERVER_HOST = &quot;127.0.0.1&quot;
+</code></pre>
+<pre><code class="language-powershell">omniroute serve
 </code></pre>
 <p>Se installate da sorgente o con Docker, le stesse variabili si scrivono nel file <code>.env</code> (sorgente) o con <code>-e</code> (Docker).</p>
 <blockquote>
@@ -170,7 +198,7 @@ omniroute serve
 <h3 id="avvio-e-primo-accesso">Avvio e primo accesso</h3>
 <p>Con le variabili impostate, <code>omniroute serve</code> avvia il programma sulla porta 20128. Windows può mostrare un avviso del firewall: consentite solo le reti private oppure annullate, se l'indirizzo è 127.0.0.1. Il testo esatto dell'avviso è da verificare a schermo.</p>
 <p>Aprite nel browser <code>http://localhost:20128</code>. Il pannello chiede la password. Se non l'avete impostata, parte la procedura guidata che ve la fa creare.</p>
-<p>Per cambiare la password in seguito: nel pannello, Impostazioni, sezione Sicurezza; oppure da terminale <code>omniroute reset-password</code>.</p>
+<p>Per cambiare la password in seguito: nel pannello, Impostazioni, sezione Sicurezza; oppure da terminale <code class="cmd">omniroute reset-password</code>.</p>
 <p><strong>Strato 1 superato</strong> quando il pannello si apre e accetta la password.</p>
 <h2 id="parte-3-collegare-un-fornitore-con-una-chiave-api">Parte 3. Collegare un fornitore con una chiave API</h2>
 <p>Un fornitore è l'azienda che mette a disposizione i modelli. In OmniRoute un collegamento si aggiunge dal pannello, nella sezione dei fornitori (i nomi esatti dei menu sono da verificare a schermo: cambiano tra le versioni). L'esempio è Anthropic:</p>
@@ -207,7 +235,7 @@ omniroute serve
 <p>Salvatela in una variabile d'ambiente dell'utente, così non finisce in nessun file di progetto:</p>
 <pre><code class="language-powershell">setx OMNIROUTE_API_KEY &quot;&lt;chiave&gt;&quot;
 </code></pre>
-<p><code>setx</code> vale per le finestre aperte da ora in poi, non per quella corrente. Chiudete PowerShell e riapritelo. Le applicazioni già aperte (compreso OpenCode desktop) vanno riavviate per vedere la variabile. Per usarla subito nella finestra attuale: <code>$env:OMNIROUTE_API_KEY = "&lt;chiave&gt;"</code>.</p>
+<p><code>setx</code> vale per le finestre aperte da ora in poi, non per quella corrente. Chiudete PowerShell e riapritelo. Le applicazioni già aperte (compreso OpenCode desktop) vanno riavviate per vedere la variabile. Per usarla subito nella finestra attuale: <code class="cmd">$env:OMNIROUTE_API_KEY = "&lt;chiave&gt;"</code>.</p>
 <h2 id="parte-5-provare-omniroute-da-solo-prima-di-opencode">Parte 5. Provare OmniRoute da solo, prima di OpenCode</h2>
 <p>Qui sta il metodo che fa risparmiare ore: si prova ogni strato separatamente, dal basso. OpenCode viene per ultimo.</p>
 <p><strong>Strato 1: il pannello risponde.</strong> Già visto: <code>http://localhost:20128</code> nel browser.</p>
@@ -236,10 +264,10 @@ omniroute serve
 <p><strong>Da terminale (npm):</strong></p>
 <pre><code class="language-powershell">npm install -g opencode-ai
 </code></pre>
-<p>Altre vie indicate dalla documentazione: <code>choco install opencode</code> (Chocolatey), <code>scoop install opencode</code> (Scoop), oppure il file eseguibile dalla pagina delle versioni su GitHub. L'installazione con Bun su Windows non è ancora supportata.</p>
+<p>Altre vie indicate dalla documentazione: <code class="cmd">choco install opencode</code> (Chocolatey), <code class="cmd">scoop install opencode</code> (Scoop), oppure il file eseguibile dalla pagina delle versioni su GitHub. L'installazione con Bun su Windows non è ancora supportata.</p>
 <p><strong>Applicazione desktop.</strong> OpenCode esiste anche come app con finestra. La pagina di documentazione letta non riporta i passi di installazione: scaricatela da opencode.ai e controllate a schermo la procedura.</p>
 <p><strong>Una precauzione sulle versioni.</strong> Esistono due generazioni di OpenCode, la 1 e la 2, che usano lo stesso comando <code>opencode</code> e non possono convivere. L'installazione con npm porta la 1 (al 28 ottobre 2026 la versione pubblicata è la 1.19.5). Questa guida descrive la 1: se usate la 2, controllate i nomi dei file e dei campi nella sua documentazione.</p>
-<p>Per controllare: <code>opencode --version</code>.</p>
+<p>Per controllare: <code class="cmd">opencode --version</code>.</p>
 <h2 id="parte-7-il-file-opencodejson">Parte 7. Il file <code>opencode.json</code></h2>
 <p>OpenCode legge la sua configurazione da più posti e li fonde. In ordine di importanza crescente:</p>
 <ol>
@@ -331,11 +359,11 @@ omniroute serve
 </table></div>
 <p><strong>Dove tenere la chiave.</strong> La forma <code>{env:NOME}</code> è sempre la scelta preferibile. Scrivere la chiave direttamente nel file (<code>"apiKey": "&lt;chiave&gt;"</code>) è accettabile in un solo caso: il file è quello globale nella vostra cartella utente (<code>%USERPROFILE%\.config\opencode\</code>), che non fa parte di nessun repository e non viene condiviso. Nel file <code>opencode.json</code> dentro un progetto la chiave non va mai: un repository si può pubblicare per distrazione e un segreto pubblicato va considerato perso, da revocare subito. In alternativa a <code>{env:...}</code> esiste <code>{file:percorso}</code>, che legge la chiave da un file a parte.</p>
 <h2 id="parte-8-primo-avvio-di-opencode">Parte 8. Primo avvio di OpenCode</h2>
-<p>Aprite un terminale nella cartella di un progetto (anche una cartella vuota di prova) e avviate <code>opencode</code>.</p>
+<p>Aprite un terminale nella cartella di un progetto (anche una cartella vuota di prova) e avviate <code class="cmd">opencode</code>.</p>
 <ul>
-<li>Con <code>/models</code> si vede l'elenco dei modelli e si sceglie quello di OmniRoute.</li>
+<li>Con <code class="cmd">/models</code> si vede l'elenco dei modelli e si sceglie quello di OmniRoute.</li>
 <li>Scrivete una richiesta semplice, per esempio "elenca i file di questa cartella". Se risponde, tutta la catena funziona.</li>
-<li>Con <code>/init</code> OpenCode analizza il progetto e crea nella cartella il file <code>AGENTS.md</code>: le istruzioni permanenti del progetto (come si avvia, come si provano le modifiche, convenzioni). Si rilegge, si corregge a mano e si tiene nel repository. Se nella cartella c'è già un <code>CLAUDE.md</code>, OpenCode lo usa quando manca <code>AGENTS.md</code>; se ci sono entrambi vince <code>AGENTS.md</code>.</li>
+<li>Con <code class="cmd">/init</code> OpenCode analizza il progetto e crea nella cartella il file <code>AGENTS.md</code>: le istruzioni permanenti del progetto (come si avvia, come si provano le modifiche, convenzioni). Si rilegge, si corregge a mano e si tiene nel repository. Se nella cartella c'è già un <code>CLAUDE.md</code>, OpenCode lo usa quando manca <code>AGENTS.md</code>; se ci sono entrambi vince <code>AGENTS.md</code>.</li>
 <li>Con il tasto Tab si passa da una modalità all'altra: <code>build</code> ha tutti gli strumenti e può modificare i file; <code>plan</code> serve a ragionare e proporre senza toccare il codice.</li>
 <li>I permessi si regolano nel campo <code>permission</code> di <code>opencode.json</code>. Ogni azione può essere <code>allow</code> (si esegue), <code>ask</code> (chiede conferma) o <code>deny</code> (vietata). Esempio prudente per i comandi del terminale:</li>
 </ul>
@@ -359,7 +387,7 @@ omniroute serve
 <ul>
 <li>Sintomo: errore di connessione a <code>localhost:20128</code>. Con curl: <code>Failed to connect to localhost port 20128</code>. Il pannello nel browser non si apre.</li>
 <li>Causa: OmniRoute è spento. Se è stato avviato con <code>npm run dev</code> (installazione da sorgente), vive solo finché il terminale resta aperto. Dopo un riavvio del PC o una finestra chiusa, nessuno ascolta sulla porta. I dati (fornitori, combo, chiavi) restano al loro posto, in <code>%USERPROFILE%\.omniroute</code>.</li>
-<li>Correzione: riavviare OmniRoute (<code>omniroute serve</code>, oppure <code>npm run dev</code> nella sua cartella) e ripetere lo strato 1. Per non ricadere nel problema, preferite l'installazione con npm.</li>
+<li>Correzione: riavviare OmniRoute (<code class="cmd">omniroute serve</code>, oppure <code class="cmd">npm run dev</code> nella sua cartella) e ripetere lo strato 1. Per non ricadere nel problema, preferite l'installazione con npm.</li>
 </ul>
 <p><strong>2. Il campo del fornitore viene ignorato</strong></p>
 <ul>
@@ -383,7 +411,7 @@ omniroute serve
 <ul>
 <li>Sintomo: errore 401 (non autorizzato) pur avendo creato la chiave.</li>
 <li>Causa: la variabile <code>OMNIROUTE_API_KEY</code> è stata creata con <code>setx</code> ma OpenCode, o il terminale, erano già aperti. Oppure ha un nome diverso da quello scritto nel file.</li>
-<li>Correzione: chiudere e riaprire il terminale (e l'app), controllare con <code>echo $env:OMNIROUTE_API_KEY</code> che il valore ci sia, verificare il nome.</li>
+<li>Correzione: chiudere e riaprire il terminale (e l'app), controllare con <code class="cmd">echo $env:OMNIROUTE_API_KEY</code> che il valore ci sia, verificare il nome.</li>
 </ul>
 <p><strong>6. Risponde un fornitore diverso da quello creduto</strong></p>
 <ul>
@@ -405,9 +433,9 @@ omniroute serve
 </ul>
 <h2 id="spegnere-e-riavviare">Spegnere e riavviare</h2>
 <ul>
-<li><strong>OmniRoute (npm):</strong> <code>Ctrl+C</code> nella finestra in cui gira. Per riavviarlo, <code>omniroute serve</code> con le stesse variabili. Non è un servizio di Windows: se chiudete la finestra o riavviate il PC, resta spento finché non lo riavviate voi.</li>
-<li><strong>OmniRoute (Docker):</strong> <code>docker stop omniroute</code> per fermarlo, <code>docker start omniroute</code> per riaccenderlo. Con l'opzione <code>--restart unless-stopped</code> riparte insieme a Docker.</li>
-<li><strong>OpenCode:</strong> <code>/exit</code> nel programma, oppure <code>Ctrl+C</code>.</li>
+<li><strong>OmniRoute (npm):</strong> <code>Ctrl+C</code> nella finestra in cui gira. Per riavviarlo, <code class="cmd">omniroute serve</code> con le stesse variabili. Non è un servizio di Windows: se chiudete la finestra o riavviate il PC, resta spento finché non lo riavviate voi.</li>
+<li><strong>OmniRoute (Docker):</strong> <code class="cmd">docker stop omniroute</code> per fermarlo, <code class="cmd">docker start omniroute</code> per riaccenderlo. Con l'opzione <code>--restart unless-stopped</code> riparte insieme a Docker.</li>
+<li><strong>OpenCode:</strong> <code class="cmd">/exit</code> nel programma, oppure <code>Ctrl+C</code>.</li>
 <li><strong>Dopo un riavvio del PC</strong> controllate sempre lo strato 1 prima di accusare OpenCode.</li>
 </ul>
 <h2 id="sicurezza-in-sintesi">Sicurezza, in sintesi</h2>
@@ -425,5 +453,48 @@ omniroute serve
 <p>OpenCode (agente) → <code>http://localhost:20128/v1</code> (OmniRoute: chiave, combo, registri) → fornitore con chiave API (modello).</p>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
 </body>
 </html>

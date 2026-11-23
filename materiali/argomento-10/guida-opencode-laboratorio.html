@@ -66,11 +66,31 @@ th, td { border-bottom: 1px solid var(--border); padding: 9px 12px; text-align: 
 th { background: var(--bg-callout); color: var(--text); font-family: 'Public Sans', sans-serif; }
 tr:last-child td { border-bottom: none; }
 code { background: var(--bg-callout); padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+:not(pre) > code { overflow-wrap: anywhere; }
 pre {
   background: #2a241a; color: #f2ead9; border-radius: 8px; padding: 16px 18px;
   overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 14.5px; line-height: 1.55;
 }
 pre code { background: none; padding: 0; color: inherit; }
+.cmd-copy {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  width: 28px; height: 28px; margin-left: 4px; padding: 0; border: 1px solid var(--border);
+  border-radius: 5px; background: var(--bg-card); color: var(--accent); cursor: pointer;
+}
+.cmd-copy:hover { background: var(--bg-callout); }
+.cmd-copy svg { width: 16px; height: 16px; }
+.cmd-copy.ok { width: auto; padding: 0 8px; font: 600 13px 'Public Sans', sans-serif; }
+pre:has(> code.language-text), pre:not(:has(> code[class*="language-"])) { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+pre > code.language-text, pre > code:not([class*="language-"]) { font-family: inherit; }
+.code-box { position: relative; }
+.code-box pre { padding-top: 54px; }
+.copy-btn {
+  position: absolute; top: 8px; right: 8px; min-height: 36px;
+  background: #f2ead9; color: #2a241a; border: none; border-radius: 6px;
+  padding: 6px 12px; font: 600 14px 'Public Sans', sans-serif; cursor: pointer;
+}
+.copy-btn:hover { background: #ffffff; }
+.copy-btn:focus-visible { outline: 3px solid #f2ead9; outline-offset: 2px; }
 footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
 @media (max-width: 480px) {
   main.wrap { padding: 24px 16px 60px; }
@@ -84,6 +104,7 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
   .table-scroll { border: none; overflow: visible; }
   table { font-size: 11pt; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
+  .code-box pre { padding-top: 16px; }
   @page { margin: 16mm 14mm; }
 }
 </style>
@@ -113,10 +134,14 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <p>Aprite PowerShell (menu Start, scrivete <code>PowerShell</code>). Incollate i comandi uno alla volta.</p>
 <p>Il primo nasconde la barra di avanzamento, che su alcune versioni di PowerShell rallenta molto il download. Il secondo crea una cartella vostra, il terzo scarica il programma (circa 80 MB), il quarto lo scompatta e l'ultimo controlla la versione. Durante il download la finestra sembra ferma: aspettate che ricompaia il prompt.</p>
 <pre><code class="language-powershell">$ProgressPreference = 'SilentlyContinue'
-New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\opencode&quot; | Out-Null
-Invoke-WebRequest &quot;https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip&quot; -OutFile &quot;$env:USERPROFILE\opencode\opencode.zip&quot;
-Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPath &quot;$env:USERPROFILE\opencode&quot; -Force
-&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot; --version
+</code></pre>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\opencode&quot; | Out-Null
+</code></pre>
+<pre><code class="language-powershell">Invoke-WebRequest &quot;https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-windows-x64.zip&quot; -OutFile &quot;$env:USERPROFILE\opencode\opencode.zip&quot;
+</code></pre>
+<pre><code class="language-powershell">Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPath &quot;$env:USERPROFILE\opencode&quot; -Force
+</code></pre>
+<pre><code class="language-powershell">&amp; &quot;$env:USERPROFILE\opencode\opencode.exe&quot; --version
 </code></pre>
 <p>L'ultimo comando deve scrivere <code>1.19.5</code>. Se lo scrive, OpenCode è pronto. La cartella <code>opencode</code> sta nel vostro profilo utente: per questo non servono permessi speciali.</p>
 <p>Note:</p>
@@ -130,11 +155,11 @@ Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPa
 <ol>
 <li>Menu Start, scrivete <code>variabili</code> e scegliete la voce che finisce con <strong>relative all'account</strong> (per esempio "Modifica le variabili di ambiente relative all'account"). Non scegliete quella "di sistema": chiede l'amministratore.</li>
 <li>Nella lista in alto (variabili utente) selezionate <code>Path</code> e premete <strong>Modifica</strong>. Se <code>Path</code> non c'è, premete <strong>Nuova</strong> e usate <code>Path</code> come nome.</li>
-<li>Premete <strong>Nuovo</strong> e incollate il percorso della cartella. Per conoscerlo, in PowerShell: <code>echo "$env:USERPROFILE\opencode"</code> (di solito è <code>C:\Users\&lt;nome utente&gt;\opencode</code>, ma sui PC della scuola può essere diverso: copiate quello che scrive il comando).</li>
+<li>Premete <strong>Nuovo</strong> e incollate il percorso della cartella. Per conoscerlo, in PowerShell: <code class="cmd">echo "$env:USERPROFILE\opencode"</code> (di solito è <code>C:\Users\&lt;nome utente&gt;\opencode</code>, ma sui PC della scuola può essere diverso: copiate quello che scrive il comando).</li>
 <li>Confermate con <strong>OK</strong> su tutte le finestre.</li>
-<li>Chiudete PowerShell e riapritelo. Provate <code>opencode --version</code>.</li>
+<li>Chiudete PowerShell e riapritelo. Provate <code class="cmd">opencode --version</code>.</li>
 </ol>
-<p>Se non riuscite, andate avanti lo stesso: negli altri passaggi si può scrivere <code>&amp; "$env:USERPROFILE\opencode\opencode.exe"</code> al posto di <code>opencode</code>.</p>
+<p>Se non riuscite, andate avanti lo stesso: negli altri passaggi si può scrivere <code class="cmd">&amp; "$env:USERPROFILE\opencode\opencode.exe"</code> al posto di <code>opencode</code>.</p>
 <h2 id="2-collegarlo-al-server-del-corso-circa-5-minuti">2. Collegarlo al server del corso (circa 5 minuti)</h2>
 <h3 id="la-chiave">La chiave</h3>
 <p>La chiave è una password: non va scritta nei file di un progetto. La mettiamo in una variabile d'ambiente dell'utente, che OpenCode leggerà all'avvio.</p>
@@ -144,14 +169,15 @@ Expand-Archive &quot;$env:USERPROFILE\opencode\opencode.zip&quot; -DestinationPa
 <li>Nome: <code>CORSO_API_KEY</code>. Valore: incollate <code>&lt;la tua chiave&gt;</code>. Confermate con <strong>OK</strong>.</li>
 <li>Chiudete PowerShell e riapritelo: le variabili si leggono solo nelle finestre aperte dopo averle create.</li>
 </ol>
-<p>Se la finestra delle variabili non si apre sul PC del laboratorio, potete mettere la chiave solo nella finestra di PowerShell che state usando: <code>$env:CORSO_API_KEY = "&lt;la tua chiave&gt;"</code>. Vale finché non chiudete quella finestra, e OpenCode va avviato da lì.</p>
+<p>Se la finestra delle variabili non si apre sul PC del laboratorio, potete mettere la chiave solo nella finestra di PowerShell che state usando: <code class="cmd">$env:CORSO_API_KEY = "&lt;la tua chiave&gt;"</code>. Vale finché non chiudete quella finestra, e OpenCode va avviato da lì.</p>
 <p>Per controllare senza mostrare la chiave, in PowerShell:</p>
 <pre><code class="language-powershell">if ($env:CORSO_API_KEY) { &quot;chiave presente&quot; } else { &quot;chiave mancante&quot; }
 </code></pre>
 <h3 id="il-file-di-configurazione">Il file di configurazione</h3>
 <p>Il file si chiama <code>opencode.json</code> e sta nella cartella di configurazione personale di OpenCode. Si crea così:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\.config\opencode&quot; | Out-Null
-notepad &quot;$env:USERPROFILE\.config\opencode\opencode.json&quot;
+</code></pre>
+<pre><code class="language-powershell">notepad &quot;$env:USERPROFILE\.config\opencode\opencode.json&quot;
 </code></pre>
 <p>Se Blocco note chiede se creare il file, rispondete di sì. Incollate questo testo, sostituendo <code>&lt;indirizzo del server&gt;</code> con quello del foglio. Lasciate in fondo all'indirizzo il pezzo <code>/v1</code>, e non scrivete la chiave: c'è già <code>{env:CORSO_API_KEY}</code>, che legge la variabile.</p>
 <pre><code class="language-json">{
@@ -227,21 +253,23 @@ notepad &quot;$env:USERPROFILE\.config\opencode\opencode.json&quot;
 <h2 id="3-prima-prova-circa-5-minuti">3. Prima prova (circa 5 minuti)</h2>
 <p>Create una cartella di prova e apritevi OpenCode:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\prova-opencode&quot; | Out-Null
-cd &quot;$env:USERPROFILE\prova-opencode&quot;
-opencode
+</code></pre>
+<pre><code class="language-powershell">cd &quot;$env:USERPROFILE\prova-opencode&quot;
+</code></pre>
+<pre><code class="language-powershell">opencode
 </code></pre>
 <p>Si apre l'interfaccia di OpenCode nella finestra del terminale. In fondo c'è la riga dove scrivere. Con questa configurazione l'interfaccia non è ancora stata provata sui PC del laboratorio: se qualcosa non corrisponde a quello che leggete qui, usate l'alternativa senza interfaccia più sotto e avvisate il docente. Provate:</p>
 <ol>
-<li>Una risposta di testo: <code>Rispondi con una frase: come ti chiami e che modello sei?</code></li>
-<li>Un compito con gli strumenti: <code>Crea un file ciao.txt con scritto: Ciao dal laboratorio. Poi leggilo e dimmi cosa contiene.</code></li>
+<li>Una risposta di testo: <code class="cmd">Rispondi con una frase: come ti chiami e che modello sei?</code></li>
+<li>Un compito con gli strumenti: <code class="cmd">Crea un file ciao.txt con scritto: Ciao dal laboratorio. Poi leggilo e dimmi cosa contiene.</code></li>
 </ol>
-<p>Nel secondo caso vedrete comparire le azioni dell'agente (scrittura e lettura del file). Alla fine, in PowerShell, <code>dir</code> nella cartella di prova mostra <code>ciao.txt</code>. È la differenza tra un chatbot e un agente: il chatbot risponde, l'agente fa delle cose sul vostro computer, qui dentro la cartella in cui lo avete aperto.</p>
-<p>Per uscire: <code>/exit</code>, oppure Ctrl+C (da verificare a schermo quale dei due funziona con questa versione).</p>
+<p>Nel secondo caso vedrete comparire le azioni dell'agente (scrittura e lettura del file). Alla fine, in PowerShell, <code class="cmd">dir</code> nella cartella di prova mostra <code>ciao.txt</code>. È la differenza tra un chatbot e un agente: il chatbot risponde, l'agente fa delle cose sul vostro computer, qui dentro la cartella in cui lo avete aperto.</p>
+<p>Per uscire: <code class="cmd">/exit</code>, oppure Ctrl+C (da verificare a schermo quale dei due funziona con questa versione).</p>
 <p>Alternativa senza interfaccia, utile per provare in fretta (da PowerShell, nella cartella di prova). Questa strada è provata:</p>
 <pre><code class="language-powershell">opencode run &quot;Rispondi solo con la parola: pronto&quot;
 </code></pre>
 <h2 id="4-scegliere-il-modello">4. Scegliere il modello</h2>
-<p>Nel programma scrivete <code>/models</code>: dovrebbe comparire l'elenco, da cui si sceglie con le frecce e Invio (da verificare a schermo). Senza interfaccia il modello si sceglie con <code>-m</code>, per esempio <code>opencode run -m corso/claude-sonnet-5-5 "..."</code>. Ne avete due:</p>
+<p>Nel programma scrivete <code class="cmd">/models</code>: dovrebbe comparire l'elenco, da cui si sceglie con le frecce e Invio (da verificare a schermo). Senza interfaccia il modello si sceglie con <code>-m</code>, per esempio <code class="cmd">opencode run -m corso/claude-sonnet-5-5 "..."</code>. Ne avete due:</p>
 <ul>
 <li><strong>Haiku</strong>: veloce ed economico. Va bene per cominciare e per i compiti semplici.</li>
 <li><strong>Sonnet</strong>: più capace, più lento, costa di più. Usatelo quando Haiku sbaglia o il compito è articolato.</li>
@@ -269,7 +297,7 @@ opencode
 <p><strong>4. OpenCode parte, si scrive il messaggio e non succede niente, senza errori.</strong></p>
 <ul>
 <li>Causa più probabile: l'indirizzo o la porta del server sono sbagliati, oppure il PC non è nella rete del laboratorio. Nelle prove, una porta sbagliata non produce nessun messaggio: l'agente resta fermo.</li>
-<li>Cosa fare: ricontrollate <code>baseURL</code> nel file (indirizzo del foglio, <code>:4000</code>, <code>/v1</code> in fondo). Provate dal terminale: <code>curl.exe &lt;indirizzo del server&gt;/v1/models -H "Authorization: Bearer $env:CORSO_API_KEY"</code>. Se la risposta è un elenco di modelli, il server funziona e il problema è nel file. Se non risponde, avvisate il docente.</li>
+<li>Cosa fare: ricontrollate <code>baseURL</code> nel file (indirizzo del foglio, <code>:4000</code>, <code>/v1</code> in fondo). Provate dal terminale: <code class="cmd">curl.exe &lt;indirizzo del server&gt;/v1/models -H "Authorization: Bearer $env:CORSO_API_KEY"</code>. Se la risposta è un elenco di modelli, il server funziona e il problema è nel file. Se non risponde, avvisate il docente.</li>
 </ul>
 <p><strong>5. <code>opencode</code> non viene riconosciuto come comando.</strong></p>
 <ul>
@@ -284,7 +312,7 @@ opencode
 <p><strong>7. <code>Unexpected server error. Check server logs...</code> appena dopo aver scelto un modello.</strong></p>
 <ul>
 <li>Causa: il modello scelto non compare nel file <code>opencode.json</code>.</li>
-<li>Cosa fare: tornate a Haiku con <code>/models</code>.</li>
+<li>Cosa fare: tornate a Haiku con <code class="cmd">/models</code>.</li>
 </ul>
 <h2 id="7-cosa-non-fare">7. Cosa non fare</h2>
 <ul>
@@ -296,5 +324,48 @@ opencode
 </ul>
 <footer>Materiale del corso "AI Tools per l'Organizzazione scolastica" — ITTS "Belluzzi-Da Vinci".</footer>
 </main>
+<script>
+document.querySelectorAll('main pre').forEach(function (pre) {
+  var box = document.createElement('div'); box.className = 'code-box';
+  pre.parentNode.insertBefore(box, pre); box.appendChild(pre);
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'copy-btn no-print'; b.textContent = 'Copia';
+  b.setAttribute('aria-label', 'Copia il testo');
+  b.addEventListener('click', function () {
+    var txt = pre.innerText.trimEnd();
+    var ok = function () { b.textContent = 'Copiato ✓'; setTimeout(function () { b.textContent = 'Copia'; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var done = false; try { done = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (done) { ok(); } else { b.textContent = 'Selezionate e copiate a mano'; setTimeout(function () { b.textContent = 'Copia'; }, 2500); }
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(ok, fallback); }
+    else { fallback(); }
+  });
+  box.appendChild(b);
+});
+document.querySelectorAll('main code.cmd').forEach(function (c) {
+  var b = document.createElement('button'); b.type = 'button';
+  b.className = 'cmd-copy no-print'; b.title = 'Copia il comando';
+  b.setAttribute('aria-label', 'Copia il comando: ' + c.textContent);
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  b.innerHTML = icon;
+  b.addEventListener('click', function () {
+    var txt = c.textContent;
+    var done = function (msg) { b.classList.add('ok'); b.textContent = msg; setTimeout(function () { b.classList.remove('ok'); b.innerHTML = icon; }, 1500); };
+    var fallback = function () {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); done(ok ? 'Copiato' : 'Copiate a mano');
+    };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(txt).then(function () { done('Copiato'); }, fallback); }
+    else { fallback(); }
+  });
+  c.insertAdjacentElement('afterend', b);
+});
+</script>
 </body>
 </html>
