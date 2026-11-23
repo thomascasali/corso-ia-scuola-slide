@@ -63,7 +63,7 @@ const AGENT_TASK = "Controlla le pratiche delle uscite di dicembre rispetto al r
 const AGENT_STEPS = [
   { action: "Fa un piano", detail: "Prima di muoversi, elenca cosa deve fare: leggere le pratiche, aprire del regolamento solo ciò che serve, fare i conti, confrontare, preparare le bozze, consegnare.", icon: "📝" },
   { action: "Legge il file", detail: "Apre «pratiche-uscite-dicembre.xlsx» (dati inventati): sei pratiche, con classe, tipo, date, adesioni, accompagnatori, quota e documenti.", icon: "📂",
-    options: ["Manda subito una mail ai referenti di tutte le pratiche", "Chiede a te di incollare le righe del file", "Apre il file delle pratiche di dicembre"], correct: 2 },
+    options: ["Manda subito una mail ai referenti di tutte le pratiche", "Ti chiede di allegare il file", "Apre il file delle pratiche di dicembre"], correct: 2 },
   { action: "Legge solo gli articoli che servono", detail: "Carica la procedura «controllo-uscite» e apre il regolamento soltanto agli articoli utili: 1 (tipi di iniziativa), 3 (preavviso), 4 (accompagnatori), 5 (adesioni), 6 (quota massima), 7 (periodi esclusi) e 9 (documenti). Gli altri restano chiusi.", icon: "📖",
     options: ["Carica la procedura e apre solo gli articoli che servono", "Risponde a memoria, senza aprire il regolamento", "Chiede a te di riassumergli il regolamento"], correct: 0 },
   { action: "Usa uno strumento per calcolare", detail: "Scrive un piccolo programma e lo esegue: per ogni pratica calcola i giorni di preavviso, gli accompagnatori necessari e il 71% delle adesioni. Alcuni risultati: 2ª X, 25 partecipanti, servono 2 accompagnatori e ne ha 1; 4ª Y, il 71% di 24 iscritti è 17,04; 3ª V, 12 giorni di preavviso.", icon: "🧮",
@@ -103,14 +103,12 @@ function ChatbotColumn() {
         <span style={{ fontSize: '26px' }}>💬</span>
         <h3 style={{ color: colors.info, margin: 0 }}>Chatbot</h3>
       </div>
-      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> {AGENT_TASK}</div>
-      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «Certo, incollami qui le pratiche e il regolamento, poi ti dico quali non vanno.»</div>
-      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (incolli le sei righe del file e cerchi da solo nel regolamento gli articoli giusti, sperando di non perderne nessuno)</div>
-      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «La 2ª X sembra avere pochi accompagnatori e la 5ª W una quota alta. La 4ª Y, con 17 adesioni su 24, mi sembra a posto» <em>(il conto è a mente: può sbagliare un arrotondamento)</em>.</div>
-      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (rifai tu i giorni di preavviso, decidi da solo come classificare l'uscita della 3ª V e chiedi le mail una alla volta)</div>
+      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (allegando le pratiche e il regolamento, oppure usando un Gem con il regolamento tra le conoscenze) {AGENT_TASK}</div>
+      <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «La 2ª X sembra avere pochi accompagnatori e la 5ª W una quota alta. La 4ª Y, con 17 adesioni su 24, mi sembra a posto» <em>(risposta chiara e veloce, ma il conto è fatto a occhio: il 71% di 24 fa 17,04 e il regolamento arrotonda sempre in su, quindi servono 18 adesioni e 17 non bastano. Te ne devi accorgere tu)</em>.</div>
+      <div style={mine}><strong style={{ color: colors.text }}>Tu:</strong> (decidi da solo come classificare l'uscita della 3ª V e chiedi le mail una alla volta)</div>
       <div style={box}><strong style={{ color: colors.info }}>Chatbot:</strong> «Ecco una bozza per il prof. Rossi…» <em>(poi tocca a te copiarla, correggerla e inviarla)</em></div>
       <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: `1px dashed ${colors.border}`, fontSize: 'var(--fs-sm)', color: colors.textMuted }}>
-        Finisce qui: il testo che risponde. Copiare i dati, cercare gli articoli, controllare ogni conto e preparare ogni messaggio restano compiti tuoi.
+        Il chatbot fa bene un passo, con quello che gli dai tu. L'agente decide i passi: legge solo gli articoli che servono, conta con uno strumento, si ricontrolla e chiede prima di scrivere. Le bozze del chatbot restano testo in chat: copiarle, correggerle e inviarle tocca a te.
       </div>
     </div>
   );

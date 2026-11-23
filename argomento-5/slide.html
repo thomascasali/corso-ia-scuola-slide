@@ -118,7 +118,7 @@ const AGENT_TASK = 'Prepara l\'elenco delle uscite di novembre con i docenti acc
 const AGENT_STEPS = [
   { action: 'Fa un piano', detail: 'Prima di muoversi, elenca cosa deve fare: aprire il file, filtrare, controllare, scrivere il riepilogo.', icon: '📝' },
   { action: 'Legge il file', detail: 'Apre "pratiche-uscite-novembre.xlsx" (dati di prova) e ne guarda il contenuto.', icon: '📂',
-    options: ['Manda subito una mail a tutti i docenti', 'Apre il file delle pratiche di novembre', 'Chiede a te di incollare i dati a mano'], correct: 1 },
+    options: ['Manda subito una mail a tutti i docenti', 'Apre il file delle pratiche di novembre', 'Ti chiede di allegare il file'], correct: 1 },
   { action: 'Usa uno strumento', detail: 'Filtra le righe: tiene solo le pratiche di novembre senza un nome nella colonna "accompagnatore".', icon: '🔎',
     options: ['Rilegge tutto il file a mano, riga per riga', 'Cancella le righe che non capisce', 'Usa uno strumento per filtrare le pratiche senza accompagnatore'], correct: 2 },
   { action: 'Trova il problema', detail: 'Il filtro restituisce 3 pratiche senza accompagnatore: "Uscita museo civico", "Visita azienda agricola" e "Teatro in lingua inglese".', icon: '🧾',
@@ -139,19 +139,19 @@ function ChatbotColumn() {
         <h3 style={{ color: colors.info, margin: 0 }}>Chatbot</h3>
       </div>
       <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.text }}>Tu:</strong> {AGENT_TASK}
+        <strong style={{ color: colors.text }}>Tu:</strong> (allegando il file delle pratiche, oppure usando un Gem che ha il file tra le conoscenze) {AGENT_TASK}
       </div>
       <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.info }}>Chatbot:</strong> «Certo, incollami qui l'elenco delle pratiche e ti dico quali sembrano senza accompagnatore.»
+        <strong style={{ color: colors.info }}>Chatbot:</strong> «Ecco la tabella ordinata. Le uscite senza accompagnatore sono <strong>3</strong>: museo civico, azienda agricola e teatro in lingua inglese.»
       </div>
       <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.text }}>Tu:</strong> (copi e incolli a mano le righe del file, sperando di non saltarne nessuna)
+        <strong style={{ color: colors.text }}>Tu:</strong> (tabella chiara, risposta in fretta: ti sembra a posto, ma per il teatro l'accompagnatore è scritto nella colonna «note» e il chatbot non l'ha letto. Te ne devi accorgere tu)
       </div>
-      <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
-        <strong style={{ color: colors.info }}>Chatbot:</strong> «In base a quello che mi hai incollato, sembrano mancare gli accompagnatori per 2 o 3 uscite» <em>(può sbagliare il conteggio: non ha riletto il file da solo)</em>.
+      <div style={{ background: colors.bgLight, borderRadius: '8px', padding: '7px 10px', fontSize: 'var(--fs-sm)', color: colors.textDim }}>
+        <strong style={{ color: colors.text }}>Tu:</strong> «Chi può sostituirli?» <em>(se non allegi anche il file dei docenti disponibili, non lo sa: devi ricordartene tu)</em>
       </div>
       <div style={{ marginTop: 'auto', paddingTop: '8px', borderTop: `1px dashed ${colors.border}`, fontSize: 'var(--fs-sm)', color: colors.textMuted }}>
-        Finisce qui: il testo che risponde. Copiare i dati giusti, controllare il conteggio e scrivere il riepilogo restano compiti tuoi.
+        Il chatbot fa bene un passo, con quello che gli dai tu. L'agente decide i passi: va a prendere i file che servono, conta con uno strumento, si ricontrolla, chiede prima di scrivere e lascia il file nella cartella.
       </div>
     </div>
   );
@@ -812,12 +812,12 @@ const slides = [
           </p>
         </Glow>
         <ul style={{ marginTop: '18px', paddingLeft: '28px', color: colors.textDim }}>
-          <li><strong style={{ color: colors.info }}>Chatbot:</strong> risponde con del testo, chiede di incollare i dati, può inventare, finisce lì.</li>
+          <li><strong style={{ color: colors.info }}>Chatbot:</strong> risponde bene con i file che gli alleghi, ma fa un solo passo: non va a cercare quello che manca e non si ricontrolla se non glielo chiedi.</li>
           <li><strong style={{ color: colors.success }}>Agente:</strong> fa un piano, apre il file, usa uno strumento, controlla da solo e consegna.</li>
         </ul>
       </div>
     ),
-    notes: 'Introducete la simulazione principale del corso. Spiegate le due colonne prima di avanzare: a sinistra un chatbot normale, a destra un agente. Il compito è identico, i dati sono inventati (nessuna pratica reale).'
+    notes: 'Introducete la simulazione principale del corso. Spiegate le due colonne prima di avanzare: a sinistra un chatbot normale, a destra un agente. Il compito è identico, i dati sono inventati (nessuna pratica reale). Il chatbot va immaginato usato al meglio, come negli argomenti 2 e 4: con il file allegato (o un Gem con i documenti tra le conoscenze), non uno che chiede di incollare tutto a mano. Risponde bene e in fretta, ma fa un passo solo con quello che gli date voi.'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Chatbot e agente",
@@ -850,7 +850,7 @@ const slides = [
         {AgentSimulation ? <AgentSimulation compact={true} /> : <p style={{ color: colors.danger }}>Componente della simulazione non caricato.</p>}
       </div>
     ),
-    notes: 'Questa simulazione si gioca tutta insieme, al proiettore: nessuno la apre sul proprio PC in questo momento. Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Dite ad alta voce quante previsioni ha azzeccato la sala. Fate notare il registro delle azioni nella colonna di destra: nella slide successiva i partecipanti ritroveranno lo stesso linguaggio semplice, ma su un compito diverso e più lungo. Alla fine confrontate con la colonna chatbot: il chatbot si è fermato al testo, l\'agente ha anche verificato e corretto un proprio errore di conteggio.'
+    notes: 'Questa simulazione si gioca tutta insieme, al proiettore: nessuno la apre sul proprio PC in questo momento. Avanzate un passo alla volta con il pulsante "indovina" e poi "avanti", coinvolgendo il pubblico a voce ("chi pensa la A? chi la B?") prima di rivelare. Dite ad alta voce quante previsioni ha azzeccato la sala. Fate notare il registro delle azioni nella colonna di destra: nella slide successiva i partecipanti ritroveranno lo stesso linguaggio semplice, ma su un compito diverso e più lungo. Alla fine confrontate con la colonna chatbot: anche con il file allegato il chatbot dice 3 uscite senza accompagnatore e non vede che per il teatro il nome è nella colonna note; per sapere chi può sostituire dovete ricordarvi di allegare il file dei docenti. L\'agente invece va a prendere i file che servono, ha verificato e corretto da solo lo stesso errore di conteggio (sono 2).'
   },
   {
     block: "Argomento 5 — Chatbot e agente · Chatbot e agente",
