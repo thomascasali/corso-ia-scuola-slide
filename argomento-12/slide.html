@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argomento 12 · Una squadra di agenti · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stesso impianto dell'argomento 5) ---------- */
+/* Nota: duplicati apposta in questo file, come già fatto tra argomento-5/slide.html e
+   argomento-5/simulazione-agente.html, perché Babel standalone non carica script esterni
+   via XHR quando il file si apre da file://. */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+const DurationBadge = ({ children }) => (
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '6px 16px', fontSize: 'var(--fs-xs)', color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", marginBottom: '14px' }}>
+    <span aria-hidden="true">⏱</span><span>{children}</span>
+  </div>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px', fontSize: 'var(--fs-sm)' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- schemi nuovi per l'argomento 12 ---------- */
+
+function RoleGrid({ roles }) {
+  return (
+    <div className="role-grid" style={{ display: 'grid', gap: '14px', width: '100%' }}>
+      {roles.map((r, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `4px solid ${r.color}`, borderRadius: '10px', padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ fontSize: '28px' }}>{r.icon}</div>
+          <div style={{ color: r.color, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.5 }}>{r.desc}</div>
+          {r.href && <ActivityBadge href={r.href} label={r.label || 'Apri la carta'} />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DeskDiagram() {
+  const items = [
+    { t: 'Istruzioni', w: 9, c: colors.info },
+    { t: 'Documento 1', w: 17, c: colors.warn },
+    { t: 'Documento 2', w: 17, c: colors.warn },
+    { t: 'Tentativi', w: 20, c: colors.purple },
+    { t: 'Risposte vecchie', w: 22, c: colors.textMuted },
+  ];
+  return (
+    <div style={{ width: '100%', maxWidth: '760px', margin: '0 auto' }}>
+      <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginBottom: '6px' }}>La «scrivania» di un agente (il contesto), a metà lavoro</div>
+      <div style={{ display: 'flex', width: '100%', height: '56px', borderRadius: '8px', overflow: 'hidden', border: `1px solid ${colors.border}` }}>
+        {items.map((s, i) => (
+          <div key={i} style={{ width: `${s.w}%`, background: s.c + '35', borderRight: `2px solid ${colors.bg}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.text, fontSize: 'var(--fs-xs)', textAlign: 'center', padding: '0 4px' }}>{s.t}</div>
+        ))}
+        <div style={{ flex: 1, background: colors.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.success, fontSize: 'var(--fs-xs)' }}>libero</div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '6px' }}>
+        <span>all'inizio: quasi tutto libero</span><span>dopo molte ore: poco spazio per il lavoro nuovo</span>
+      </div>
+    </div>
+  );
+}
+
+function GateDiagram() {
+  return (
+    <FlowChain wrap steps={[
+      { icon: '🧭', label: 'Il capo', sub: 'ha messo insieme il lavoro', color: colors.accent },
+      { icon: '🔍', label: 'Il revisore', sub: 'rilegge con occhi nuovi', color: colors.danger },
+      { icon: '🙋', label: 'Una persona', sub: 'dice sì alle azioni difficili da annullare', color: colors.warn },
+      { icon: '✅', label: 'Fatto', sub: 'solo dopo questi passaggi', color: colors.success },
+    ]} />
+  );
+}
+
+function LevelsDiagram() {
+  const rows = [
+    { n: '1', title: 'Veloce ed economico', when: 'Compiti piccoli e chiusi, che un controllo semplice prova: contare, confrontare con una regola, riordinare una tabella.', c: colors.success },
+    { n: '2', title: 'Più capace', when: 'Una causa da cercare, una scelta che conta, più documenti da incrociare, un testo da scrivere con giudizio.', c: colors.info },
+    { n: '3', title: 'Il più forte', when: 'Il controllo finale, i progetti, le decisioni difficili da annullare.', c: colors.danger },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+      {rows.map((r, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'stretch', gap: '14px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderLeft: `6px solid ${r.c}`, borderRadius: '8px', padding: '10px 16px' }}>
+          <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 900, fontSize: 'var(--fs-h2)', color: r.c, minWidth: '34px', textAlign: 'center' }}>{r.n}</div>
+          <div>
+            <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{r.title}</div>
+            <div style={{ color: colors.textDim, fontSize: 'var(--fs-xs)', lineHeight: 1.45 }}>{r.when}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MorningDiagram() {
+  const box = (icon, title, sub, c) => (
+    <div style={{ background: colors.bgLight, border: `1px solid ${c}`, borderTop: `4px solid ${c}`, borderRadius: '8px', padding: '8px 14px', minWidth: '200px', maxWidth: '300px', textAlign: 'center' }}>
+      <div style={{ fontSize: '22px' }}>{icon}</div>
+      <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{title}</div>
+      <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', lineHeight: 1.35 }}>{sub}</div>
+    </div>
+  );
+  const arrow = <div style={{ fontSize: '18px', color: colors.textMuted, lineHeight: 1 }} aria-hidden="true">↓</div>;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+      {box('🧭', 'Il capo', 'mostra il piano e divide il lavoro', colors.accent)}
+      {arrow}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {box('🛰️', 'Specialista A', 'controlla un servizio e prepara gli accessi dei partecipanti', colors.info)}
+        {box('📄', 'Specialista B', 'sistema i fogli delle esercitazioni', colors.info)}
+      </div>
+      {arrow}
+      {box('🔍', 'Il revisore', 'controlla prima che si pubblichi', colors.danger)}
+      {arrow}
+      {box('💾', 'Una sola sessione', 'salva e pubblica, dopo il sì di una persona', colors.success)}
+    </div>
+  );
+}
+
+/* ---------- slide ---------- */
+
+const T = 'Argomento 12 — Una squadra di agenti';
+const wrap = { padding: '24px 30px' };
+const h2s = { color: colors.accent, marginBottom: '14px' };
+const ext = (href, label) => <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">{label}</a>;
+
+const slides = [
+  {
+    block: `${T} · Apertura`,
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🧑‍🤝‍🧑</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Argomento 12
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '900px' }}>Una squadra di agenti</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '22px', maxWidth: '820px' }}>
+          Prima di questo argomento conviene aver visto: <a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>; meglio anche <a href="../argomento-9/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 9 — Agenti al lavoro con Claude Code</a>.
+        </p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '26px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: "Slide di apertura. Argomento solo divulgativo: racconto e discussione a voce, nessuna attività al PC e nessuna installazione. Chi ha visto l'argomento 9 ha già provato il gioco di ruolo con capo, specialisti e revisore: qui si guarda lo stesso schema da più vicino."
+  },
+  {
+    block: `${T} · Apertura`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Di cosa parliamo</h2>
+        <p style={{ color: colors.textDim }}>
+          Un agente che lavora da solo va bene per un compito piccolo. Quando il lavoro cresce, conviene una <strong style={{ color: colors.text }}>squadra</strong>: chi decide, chi esegue, chi controlla.
+        </p>
+        <Glow>
+          <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+            <li style={{ marginBottom: '6px' }}>Perché un agente solo non basta</li>
+            <li style={{ marginBottom: '6px' }}>I ruoli e il modello giusto per ciascuno</li>
+            <li style={{ marginBottom: '6px' }}>La memoria condivisa e le regole di controllo</li>
+            <li>Una mattina di lavoro, raccontata; poi qualche domanda da discutere</li>
+          </ul>
+        </Glow>
+      </div>
+    ),
+    notes: "Le parole dell'agente (strumento, permesso, subagente) sono quelle dell'argomento 5: non si rispiegano. Annunciate la struttura in una riga: è un argomento divulgativo, senza attività al PC."
+  },
+  {
+    block: `${T} · Il caso di studio`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · Il caso di studio</BlockTag>
+        <h2 style={h2s}>Un esempio pubblico: Memoteca</h2>
+        <p style={{ color: colors.textDim }}>
+          Un metodo di lavoro per Claude Code, pubblicato come raccolta aperta di regole e strumenti, che mette per iscritto una squadra di agenti. Tre parti:
+        </p>
+        <RoleGrid roles={[
+          { icon: '📚', title: 'Conoscenza', color: colors.info, desc: 'Quello che si impara in un progetto arriva agli altri.' },
+          { icon: '🧭', title: 'Orchestrazione', color: colors.accent, desc: 'Un capo che delega, con tre livelli di modello.' },
+          { icon: '🔍', title: 'Qualità', color: colors.danger, desc: 'Niente è finito prima che il revisore lo abbia visto.' },
+        ]} />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>
+          Lo usiamo come esempio concreto, non da installare. Codice: {ext('https://github.com/thomascasali/memoteca', 'github.com/thomascasali/memoteca')}
+        </p>
+      </div>
+    ),
+    notes: "Memoteca è il toolkit pubblico di Thomas (README; versione 0.4.1 secondo il CHANGELOG del 5 novembre 2026): regole scritte per una persona che mantiene da sola molti progetti non collegati tra loro. Qui interessa solo come esempio di regole di squadra messe per iscritto; in una scuola andrebbero adattate. Non è la ragione di questo argomento e non serve installarlo. Per chi vuole approfondire: la presentazione pubblica su thomascasali.github.io/presentazione-memoteca/."
+  },
+
+  /* --- 1. perché uno non basta --- */
+  {
+    block: `${T} · Perché uno solo non basta`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · Perché uno solo non basta</BlockTag>
+        <h2 style={h2s}>Tre limiti di un agente solo</h2>
+        <RoleGrid roles={[
+          { icon: '🗄️', title: 'Il contesto si riempie', color: colors.warn, desc: 'Tutto quello che legge e prova resta sulla sua «scrivania». Dopo molte ore c\'è poco spazio.' },
+          { icon: '⏳', title: 'I lavori lunghi si perdono', color: colors.info, desc: 'Più passi ci sono, più è facile che un dettaglio dell\'inizio venga dimenticato.' },
+          { icon: '🙈', title: 'Nessuno controlla', color: colors.danger, desc: 'Chi ha scritto il lavoro non vede i propri errori: rileggendo, ripete lo stesso sbaglio.' },
+        ]} />
+      </div>
+    ),
+    notes: "Tre problemi, uno per colonna. Chiedete alla sala se riconosce gli stessi problemi in un lavoro d'ufficio lungo (una circolare con molti allegati, un orario). Sono la ragione per cui si divide il lavoro; non sono misure."
+  },
+  {
+    block: `${T} · Perché uno solo non basta`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>La scrivania si riempie</h2>
+        <DeskDiagram />
+        <Box type="tip">
+          Una squadra tiene pulita la scrivania del capo: i dettagli (file letti, tentativi, prove) restano sulle scrivanie degli specialisti, che si buttano a fine lavoro.
+        </Box>
+      </div>
+    ),
+    notes: "La scrivania è un paragone per il «contesto» dell'argomento 1: lo spazio che l'agente può tenere presente in una volta. Il vantaggio dei subagenti, secondo la documentazione di Memoteca, non è solo fare cose in parallelo: i dettagli restano nei loro contesti usa e getta e il capo mantiene il quadro. Non servono numeri."
+  },
+  {
+    block: `${T} · Perché uno solo non basta`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Chi controlla chi lavora?</h2>
+        <p style={{ color: colors.textDim }}>
+          In una scuola nessuna circolare importante esce con una sola lettura: la scrive una persona, la rilegge un'altra, la firma una terza.
+        </p>
+        <Glow>
+          <p>
+            Con gli agenti vale lo stesso. Un revisore che arriva dopo, <strong style={{ color: colors.text }}>senza aver visto il lavoro mentre nasceva</strong>, vede cose che l'autore non vede.
+          </p>
+        </Glow>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '10px' }}>
+          Nel caso di studio: in un controllo di Memoteca il revisore ha trovato anche un errore scritto dal capo.
+        </p>
+      </div>
+    ),
+    notes: "Il dato sul revisore che trova un errore del capo è nella presentazione pubblica di Memoteca (slide «Il gate»). Non aggiungete episodi che non ricordate con esattezza. Domanda alla sala: nel vostro ufficio, chi rilegge prima che un documento esca?"
+  },
+
+  /* --- 2. i ruoli --- */
+  {
+    block: `${T} · I ruoli`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · I ruoli</BlockTag>
+        <h2 style={h2s}>Capo, specialisti, revisore</h2>
+        <RoleGrid roles={[
+          { icon: '🧭', title: 'Il capo', color: colors.accent, desc: 'Pianifica, divide, assegna, decide. Come il dirigente: non fa lui ogni pratica.' },
+          { icon: '🔧', title: 'Gli specialisti', color: colors.info, desc: 'Eseguono compiti chiusi. Come gli uffici: segreteria, ufficio tecnico, ciascuno con la sua competenza.' },
+          { icon: '🔍', title: 'Il revisore', color: colors.danger, desc: 'Controlla prima di dire «fatto». Come il visto prima della firma o il collaudo prima dell\'uso.' },
+        ]} />
+      </div>
+    ),
+    notes: "Il paragone con la scuola serve a dare un nome ai ruoli, non a dire che gli agenti sostituiscono gli uffici. Chi ha fatto il gioco di ruolo dell'argomento 9 riconosce le tre carte. Se qualcuno non l'ha fatto, bastano queste tre righe."
+  },
+  {
+    block: `${T} · I ruoli`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Il capo: pianifica e delega</h2>
+        <FlowChain steps={[
+          { icon: '📝', label: 'Pianifica', sub: 'mostra il piano prima di agire', color: colors.accent },
+          { icon: '✂️', label: 'Divide', sub: 'in fasi che si possono delegare', color: colors.accent },
+          { icon: '📨', label: 'Delega', sub: 'agli specialisti', color: colors.accent },
+          { icon: '🧩', label: 'Mette insieme', sub: 'i risultati', color: colors.accent },
+        ]} />
+        <Box type="warn" title="Regola del caso di studio">
+          Delega solo il capo: uno specialista che delega a sua volta moltiplica tempi e costi e fa perdere il filo. I lavori banali il capo li fa direttamente.
+        </Box>
+      </div>
+    ),
+    notes: "Quattro passaggi dal documento di orchestrazione di Memoteca: pianifica, scompone, delega, sintetizza. «La delega resta piatta»: delega solo il capo. Un lavoro banale non merita cerimonie: il capo lo fa in prima persona."
+  },
+  {
+    block: `${T} · I ruoli`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Gli specialisti: un compito chiuso</h2>
+        <p style={{ color: colors.textDim }}>
+          Ogni specialista ha una <strong style={{ color: colors.text }}>descrizione</strong>: cosa sa fare e quando va chiamato. Il capo sceglie leggendo le descrizioni.
+        </p>
+        <CompareTwo
+          left={{ icon: '✅', color: colors.success, title: 'Compito chiuso', points: ['«Confronta queste cinque pratiche con le tre regole»', 'Si sa quando è finito', 'Si può controllare'] }}
+          right={{ icon: '⚠️', color: colors.warn, title: 'Compito aperto', points: ['«Sistema le uscite»', 'Non si sa quando è finito', 'Lo specialista deve indovinare'] }}
+        />
+      </div>
+    ),
+    notes: "Nel toolkit gli specialisti sono dieci (per esempio: sito web, app, server, database). Per noi basta l'idea: se la squadra delega male, si corregge la descrizione dello specialista, non si riscrive ogni volta la richiesta. Un compito è chiuso quando un controllo semplice dice se è fatto."
+  },
+  {
+    block: `${T} · I ruoli`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Il revisore: il cancello prima di «fatto»</h2>
+        <GateDiagram />
+        <p style={{ color: colors.textDim, marginTop: '14px' }}>
+          Il revisore parte da zero, con la scrivania pulita, e può dire di no anche al capo.
+        </p>
+      </div>
+    ),
+    notes: "Il gate è obbligatorio nel metodo di Memoteca: prima di dichiarare finito un lavoro passa dal revisore. Secondo il documento di orchestrazione è il singolo accorgimento con il miglior rapporto tra costo e benefici. La persona che dice sì è l'ultimo anello per le azioni difficili da annullare: ne parliamo nella sezione sulle regole di controllo."
+  },
+  {
+    block: `${T} · I ruoli`,
+    content: () => (
+      <div style={{ ...wrap, textAlign: 'center' }}>
+        <h2 style={h2s}>Nel vostro ufficio</h2>
+        <DurationBadge>3 minuti, a voce</DurationBadge>
+        <p style={{ color: colors.textDim, maxWidth: '850px', margin: '0 auto' }}>
+          Pensate a una procedura che conoscete bene. Chi fa da capo, chi esegue, chi controlla? Il controllo c'è sempre, o solo quando va male?
+        </p>
+      </div>
+    ),
+    notes: "Breve scambio a voce, senza foglio. Raccogliete due o tre risposte. Il punto da far emergere: in molti uffici il controllo esiste ma non è assegnato a una persona; con gli agenti va deciso prima, per iscritto."
+  },
+
+  /* --- 3. il modello giusto --- */
+  {
+    block: `${T} · Il modello giusto`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · Il modello giusto</BlockTag>
+        <h2 style={h2s}>Tre livelli, per compiti diversi</h2>
+        <LevelsDiagram />
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>
+          Ogni famiglia di modelli ha taglie diverse. Nel caso di studio, per Claude: Haiku, Sonnet, Opus.
+        </p>
+      </div>
+    ),
+    notes: "Corrispondenza del toolkit: Haiku è il livello di partenza per lavori piccoli e chiusi; Sonnet per cause da trovare, scelte tra approcci, modifiche ampie; Opus per progetti, secondo parere, controllo finale. I nomi sono un esempio: l'idea vale per ogni fornitore. Non date prezzi né confronti di costo."
+  },
+  {
+    block: `${T} · Il modello giusto`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Si sale solo per un motivo che si sa dire</h2>
+        <CompareTwo
+          left={{ icon: '👍', color: colors.success, title: 'Motivi che reggono', points: ['Serve scegliere tra strade diverse', 'Il lavoro torna incompleto', 'È l\'ultimo controllo prima di una decisione difficile'] }}
+          right={{ icon: '👎', color: colors.danger, title: 'Motivi che non reggono', points: ['«Per sicurezza»', '«Così è più bravo»', '«Non ho voglia di pensarci»'] }}
+        />
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>
+          Se un livello torna incompleto, il lavoro sale a quello sopra <strong style={{ color: colors.text }}>con quanto già fatto allegato</strong>.
+        </p>
+      </div>
+    ),
+    notes: "Regola del toolkit: il modello più economico che basta. Il livello più basso non tocca file con segreti, non lavora su server in produzione e non dà mai l'ok finale. La salita avviene con il lavoro precedente allegato, così non si ricomincia. Tradotto per la scuola: la scelta del livello va sempre accompagnata da una frase di motivo."
+  },
+  {
+    block: `${T} · Il modello giusto`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>A che livello lo metto?</h2>
+        <DurationBadge>5 minuti, a voce</DurationBadge>
+        <ol style={{ paddingLeft: '30px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px' }}>Contare quante pratiche non hanno la delibera.</li>
+          <li style={{ marginBottom: '8px' }}>Scegliere quale tra due regolamenti in contrasto prevale.</li>
+          <li style={{ marginBottom: '8px' }}>Scrivere un avviso alle famiglie con tono delicato.</li>
+          <li>Dare l'ok finale prima che una circolare esca.</li>
+        </ol>
+      </div>
+    ),
+    notes: "Risposte di riferimento, da discutere e non da imporre. 1: livello 1, compito chiuso e verificabile. 2: livello 2 per istruire la scelta, ma la decisione spetta a una persona. 3: livello 2 se il tono conta, 1 se c'è un modello; sempre con revisore. 4: livello 3 come controllo, e il sì finale è di una persona. Chiedete il motivo in una frase a chi propone un livello più alto."
+  },
+
+  /* --- 4. memoria condivisa --- */
+  {
+    block: `${T} · La memoria condivisa`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · La memoria condivisa</BlockTag>
+        <h2 style={h2s}>Non ricominciare ogni volta</h2>
+        <p style={{ color: colors.textDim }}>
+          Un agente che riparte da zero ripete gli stessi errori. La squadra tiene <strong style={{ color: colors.text }}>guide e appunti</strong> che restano da un lavoro all'altro.
+        </p>
+        <FlowChain steps={[
+          { icon: '🗒️', label: 'Appunti del lavoro', sub: 'cambiano a ogni sessione', color: colors.warn },
+          { icon: '📓', label: 'Quaderno ordinato', sub: 'cresce, è provvisorio', color: colors.info },
+          { icon: '📘', label: 'Guide stabili', sub: 'poche, verificate', color: colors.success },
+        ]} />
+      </div>
+    ),
+    notes: "In Memoteca i tre livelli si chiamano sessione, wiki e KB stabile. Paragone con la scuola: gli appunti di una riunione, il verbale, il regolamento. L'auto-memory di Claude Code vale per un progetto e una macchina; il toolkit aggiunge il livello che porta i fatti da un progetto agli altri."
+  },
+  {
+    block: `${T} · La memoria condivisa`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Non tutto diventa una guida</h2>
+        <p style={{ color: colors.textDim }}>
+          Una pagina entra tra le guide stabili solo se supera un esame. Basta una di queste tre:
+        </p>
+        <ChipRow items={['usata da due o più lavori', 'un errore già pagato, che costerebbe un\'ora a rifarlo', 'una regola dichiarata da una persona']} />
+        <p style={{ color: colors.textDim, marginTop: '14px' }}>
+          E in ogni caso: <strong style={{ color: colors.text }}>verificata nella pratica</strong>. Così le guide restano poche e di cui ci si fida.
+        </p>
+      </div>
+    ),
+    notes: "È l'«esame di promozione» di Memoteca (README e presentazione). Il testo originale: usata da 2 o più progetti, oppure un gotcha già pagato, oppure uno standard dichiarato, e in ogni caso verificata in produzione o su un dispositivo reale. Tradotto: «un errore già pagato» è uno sbaglio che è costato almeno un'ora. Per la scuola: un modulo che ha dato problemi due volte merita una nota; uno sbaglio isolato no."
+  },
+  {
+    block: `${T} · La memoria condivisa`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Ogni informazione ha una casa sola</h2>
+        <p style={{ color: colors.textDim }}>
+          Gli altri posti rimandano, non copiano: altrimenti una copia viene aggiornata e le altre invecchiano in silenzio.
+        </p>
+        <ul style={{ paddingLeft: '26px', color: colors.textDim }}>
+          <li style={{ marginBottom: '6px', fontSize: 'var(--fs-sm)' }}>Lo stato di un lavoro: una pagina sola, che cambia spesso.</li>
+          <li style={{ marginBottom: '6px', fontSize: 'var(--fs-sm)' }}>Le istruzioni per lavorare: nel documento del progetto, senza date né versioni.</li>
+          <li style={{ marginBottom: '6px', fontSize: 'var(--fs-sm)' }}>Le password e le chiavi: nel gestore delle password, mai copiate altrove.</li>
+        </ul>
+        <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>Come l'orario ufficiale: uno solo, tutti gli altri rimandano a quello.</p>
+      </div>
+    ),
+    notes: "Dalla pagina «Fonte unica» di Memoteca: stato corrente, fatti stabili, istruzioni operative, feedback, segreti. Per la scuola il paragone è l'orario o la circolare: se circolano tre copie, prima o poi una è sbagliata. Nei segreti si dice dove stanno, mai cosa contengono."
+  },
+
+  /* --- 5. regole di controllo --- */
+  {
+    block: `${T} · Le regole di controllo`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · Le regole di controllo</BlockTag>
+        <h2 style={h2s}>Tre regole che tengono ferma la squadra</h2>
+        <RoleGrid roles={[
+          { icon: '💾', title: 'Una sola sessione decide', color: colors.accent, desc: 'Salvare e pubblicare spetta a una sola: gli altri agenti propongono.' },
+          { icon: '🔐', title: 'I segreti non passano a schermo', color: colors.danger, desc: 'Password e chiavi restano dove stanno. Nessun agente le stampa o le ripete.' },
+          { icon: '🙋', title: 'Una persona dice sì', color: colors.warn, desc: 'Prima di ogni azione difficile da annullare.' },
+        ]} />
+      </div>
+    ),
+    notes: "Sono le regole di lavoro del docente, applicate alla sua squadra. Nel toolkit pubblico corrispondono in parte: delega piatta (solo il capo), gate del revisore e uno scanner che controlla i file prima del salvataggio per tenere fuori i segreti. Il «sì di una persona» è lo stesso principio della domanda «Posso farlo?» di Claude Code, vista nell'argomento 9."
+  },
+  {
+    block: `${T} · Le regole di controllo`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Cosa si può annullare, cosa no</h2>
+        <CompareTwo
+          left={{ icon: '↩️', color: colors.success, title: 'Si torna indietro', points: ['Una bozza di avviso', 'Una copia di lavoro del file', 'Un controllo o un riepilogo'] }}
+          right={{ icon: '🚫', color: colors.danger, title: 'Non si torna indietro', points: ['Inviare un\'email alle famiglie', 'Pubblicare una circolare sul sito', 'Sostituire o cancellare l\'originale'] }}
+        />
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '12px' }}>
+          Colonna di sinistra: l'agente può andare avanti. Colonna di destra: si ferma e chiede.
+        </p>
+      </div>
+    ),
+    notes: "La domanda pratica da farsi su ogni lavoro: se sbaglia, si torna indietro in un minuto? Se no, serve il sì di una persona. Un modo per rendere reversibile un lavoro: farlo su una copia e mostrare le differenze. Le famiglie ricevono davvero l'email: per questo l'invio non va mai affidato a un agente senza sì."
+  },
+
+  /* --- 6. una mattina --- */
+  {
+    block: `${T} · Una mattina di lavoro`,
+    content: () => (
+      <div style={{ padding: '12px 30px' }}>
+        <BlockTag>{T} · Una mattina di lavoro</BlockTag>
+        <MorningDiagram />
+      </div>
+    ),
+    notes: "Racconto per chi parla, senza dettagli tecnici. «Una mattina, due lavori da fare: un servizio da controllare con gli accessi da preparare per i partecipanti, e i fogli delle esercitazioni da sistemare. Il capo ha mostrato il piano. Due specialisti hanno lavorato ciascuno sul suo pezzo. Poi un revisore ha controllato tutto prima che qualcosa uscisse. Alla fine una sola sessione ha salvato e pubblicato, e solo dopo il mio sì.» Non mostrate chiavi, indirizzi o nomi di servizi. Se qualcuno chiede dettagli: «sono dati riservati, per questo non li mostro»."
+  },
+  {
+    block: `${T} · Una mattina di lavoro`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Cosa si vede, in quel racconto</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><strong style={{ color: colors.text }}>Ruoli:</strong> un piano, due lavori separati, un controllo, un salvataggio.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><strong style={{ color: colors.text }}>Livelli:</strong> ogni lavoro con il modello che serve, non il più forte per tutti.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><strong style={{ color: colors.text }}>Memoria:</strong> le istruzioni stanno scritte, non ripetute a voce a ogni lavoro.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}><strong style={{ color: colors.text }}>Controllo:</strong> i segreti non appaiono, la pubblicazione ha un solo punto di passaggio.</li>
+        </ul>
+      </div>
+    ),
+    notes: "Riportate il racconto sui quattro temi dell'argomento. Non è una dimostrazione di successo: è l'esempio di una divisione del lavoro. Se la sala chiede cosa sia andato storto in quella mattina, rispondete solo con ciò che ricordate davvero."
+  },
+
+  /* --- da discutere --- */
+  {
+    block: `${T} · Da discutere`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · Da discutere</BlockTag>
+        <h2 style={h2s}>Domande per la sala</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)' }}>Si risponde a voce, senza foglio e senza PC. Pensate a un lavoro della vostra scuola con più passaggi, per esempio preparare le uscite di dicembre.</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Quali pezzi di quel lavoro darebbe a uno specialista, e quali terrebbe il capo?</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Dove metterebbe il controllo, e chi lo farebbe?</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Quali passaggi non si possono annullare e richiedono il sì di una persona?</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Cosa non dareste a nessun agente?</li>
+        </ul>
+      </div>
+    ),
+    notes: "Discussione a voce, 10 minuti circa, senza attività al PC: l'argomento è divulgativo. Raccogliete due o tre risposte per domanda. Non esiste una sola risposta giusta: conta il motivo detto in una frase. Punti da far emergere: il controllo spesso esiste ma non è assegnato a una persona; l'invio alle famiglie non è annullabile, quindi serve un sì."
+  },
+
+  /* --- chiusura --- */
+  {
+    block: `${T} · Chiusura`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Da ricordare</h2>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Un agente solo si riempie, si perde e non è controllato: per lavori grandi, una squadra.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Capo che decide, specialisti con compiti chiusi, revisore prima di «fatto».</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Il livello più economico che basta; si sale con un motivo.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}>Guide e appunti che restano, ognuno in una casa sola.</li>
+          <li style={{ fontSize: 'var(--fs-sm)' }}>Una sola sessione salva, i segreti non si vedono, una persona dice sì.</li>
+        </ul>
+      </div>
+    ),
+    notes: "Cinque righe, una per sezione. Ricordate che Memoteca è un esempio pubblico che si può leggere (github.com/thomascasali/memoteca), non un prodotto da installare in laboratorio."
+  },
+  {
+    block: `${T} · Chiusura`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dopo questo argomento</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gli argomenti che vengono bene subito dopo:</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-10/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 10 — Dentro un agente: OmniRoute e OpenCode</a>: come è fatto un agente e dove si sceglie il modello.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-6/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 6 — Usare l'IA con giudizio</a>: privacy, regole, verifica umana e cosa non delegare.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-7/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 7 — Gli strumenti dietro le quinte</a>: GitHub, bot e agenti sempre attivi.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-11/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 11 — Dalle idee al progetto</a>: un problema del vostro lavoro diventa una scheda-idea e poi un prototipo.</li>
+        </ul>
+      </div>
+    ),
+    notes: "Ultima slide. Scegliete con la sala da dove proseguire."
+  },
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span title={slide.block} style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
