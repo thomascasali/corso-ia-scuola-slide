@@ -235,6 +235,13 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Aprite di nuovo OpenCode dal menu Start. Ora legge la variabile e il file di configurazione.</li>
 </ol>
 <p>Se in laboratorio la variabile non viene vista nemmeno così, uscite da Windows e rientrate con il vostro utente (da verificare a schermo), poi riaprite OpenCode.</p>
+<h3 id="prova-di-connessione-facoltativa">Prova di connessione (facoltativa)</h3>
+<p>Per sapere se il server risponde, prima ancora di usare OpenCode. In PowerShell, un comando alla volta, dopo aver sostituito <code>&lt;indirizzo del server&gt;</code> con quello del foglio. Attenzione: qui l'indirizzo va <strong>senza</strong> il <code>/v1</code> finale, che invece sta nel file di configurazione. Il primo deve scrivere <code>200</code>:</p>
+<pre><code class="language-powershell">curl.exe -s -o NUL -w &quot;%{http_code}&quot; &lt;indirizzo del server&gt;/health/liveliness
+</code></pre>
+<p>Il secondo mostra l'elenco dei modelli che la vostra chiave può usare. Qui l'indirizzo ha <code>/v1</code> dopo il nome del server, perché è la richiesta dell'elenco:</p>
+<pre><code class="language-powershell">curl.exe &lt;indirizzo del server&gt;/v1/models -H &quot;Authorization: Bearer $env:CORSO_API_KEY&quot;
+</code></pre>
 <h2 id="5-aprire-una-cartella-di-lavoro-e-fare-la-prima-prova">5. Aprire una cartella di lavoro e fare la prima prova</h2>
 <p>OpenCode lavora dentro una cartella: ciò che l'agente legge, crea e modifica sta lì. Create una cartella di prova, in PowerShell:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\prova-opencode&quot; | Out-Null
@@ -310,6 +317,75 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Leggete ogni richiesta di permesso prima di rispondere sì.</li>
 <li>Alla fine del corso, se il PC è condiviso, rimuovete la variabile <code>CORSO_API_KEY</code> dalle variabili d'ambiente dell'account e disinstallate l'app (Impostazioni di Windows, App installate).</li>
 </ul>
+<h2 id="su-mac">Su Mac</h2>
+<p>Questa sezione vale per chi usa un Mac, al posto delle sezioni 1-4 (da 5 in poi la guida è la stessa). Le differenze sono quattro: dove si scarica l'app, come si dà la chiave, come si modifica il file e come si prova il server. Il contenuto di <code>opencode.json</code> è identico a quello della sezione 3.</p>
+<h3 id="installare-opencode-desktop-su-mac">Installare OpenCode desktop su Mac</h3>
+<ol>
+<li>Aprite la pagina <code>opencode.ai/download</code> e cercate il riquadro dell'app desktop. Per macOS ci sono due voci: <strong>macOS (Apple Silicon)</strong>, file <code>opencode-desktop-mac-arm64.dmg</code>, e <strong>macOS (Intel)</strong>, file <code>opencode-desktop-mac-x64.dmg</code>. Sono immagini disco (<code>.dmg</code>). Voci e nomi sono stati letti sulla pagina ufficiale il 23/11/2026.</li>
+<li>Per sapere quale scegliere: menu Apple in alto a sinistra, <strong>Informazioni su questo Mac</strong>. Alla riga <strong>Chip</strong> c'è scritto "Apple M1" (o M2, M3...) per Apple Silicon, oppure "Intel" per il processore Intel.</li>
+<li>Aprite il file <code>.dmg</code> scaricato: compare una finestra con l'icona di OpenCode. Trascinatela nella cartella <strong>Applicazioni</strong>.</li>
+<li><strong>Non aprite ancora OpenCode.</strong> Prima servono la chiave e il file di configurazione.</li>
+</ol>
+<p>Alla prima apertura macOS può chiedere conferma, perché l'app viene da internet: scegliete <strong>Apri</strong>. Il testo esatto dell'avviso e il pulsante da premere sono da verificare a schermo. Se macOS blocca l'app senza dare l'opzione di aprirla, fermatevi e chiamate il docente.</p>
+<h3 id="la-chiave-su-mac">La chiave su Mac</h3>
+<p>Sul Mac le app che si aprono dal Dock non vedono le variabili del Terminale né quelle scritte nel file <code>~/.zshrc</code>. Bisogna darla al sistema con <code>launchctl</code>. Aprite il Terminale (Launchpad, cartella Altro, <strong>Terminale</strong>). Sostituite <code>&lt;la tua chiave&gt;</code> con quella del foglio, tenendo le virgolette, e premete Invio:</p>
+<pre><code class="language-bash">launchctl setenv CORSO_API_KEY &quot;&lt;la tua chiave&gt;&quot;
+</code></pre>
+<p>Poi chiudete OpenCode con <strong>Cmd+Q</strong> (chiudere la finestra non basta) e fermate i processi rimasti:</p>
+<pre><code class="language-bash">pkill -f opencode
+</code></pre>
+<p>Se non scrive niente, non c'erano processi aperti: va bene. Riaprite OpenCode da Applicazioni. Che l'app desktop legga la variabile impostata con <code>launchctl</code> è da verificare a schermo.</p>
+<p>La variabile vale <strong>fino al riavvio del Mac</strong>: dopo un riavvio va ridata, con lo stesso comando, e poi di nuovo Cmd+Q e <code>pkill</code>.</p>
+<p>Due alternative, se <code>launchctl</code> non funziona:</p>
+<ul>
+<li><strong>Usare OpenCode dal Terminale</strong>, nella stessa finestra in cui avete dato la chiave. Il comando serve solo in quella finestra (sostituite <code>&lt;la tua chiave&gt;</code>):</li>
+</ul>
+<pre><code class="language-bash">export CORSO_API_KEY=&quot;&lt;la tua chiave&gt;&quot;
+</code></pre>
+<ul>
+<li><strong>Solo su un Mac personale</strong>: scrivere la chiave direttamente in <code>opencode.json</code>, al posto di <code>{env:CORSO_API_KEY}</code>. È meno sicuro: la chiave resta scritta in un file, che non va mai condiviso, fotografato o copiato altrove. Sui Mac del laboratorio o prestati non fatelo.</li>
+</ul>
+<h3 id="il-file-di-configurazione-su-mac">Il file di configurazione su Mac</h3>
+<p>Stesso percorso, <code>~/.config/opencode/opencode.json</code>, e stesso contenuto della sezione 3. In Terminale, un comando alla volta. Il primo crea la cartella:</p>
+<pre><code class="language-bash">mkdir -p ~/.config/opencode
+</code></pre>
+<p>Il secondo crea il file vuoto, se non c'è già:</p>
+<pre><code class="language-bash">touch ~/.config/opencode/opencode.json
+</code></pre>
+<p>Il terzo lo apre in TextEdit:</p>
+<pre><code class="language-bash">open -e ~/.config/opencode/opencode.json
+</code></pre>
+<p>Incollate il testo della sezione 3, con <code>&lt;indirizzo del server&gt;</code> sostituito e il <code>/v1</code> in fondo all'indirizzo, e salvate con Cmd+S. Due attenzioni, tipiche di TextEdit:</p>
+<ul>
+<li><strong>Solo testo.</strong> Il file deve essere testo semplice, non un documento formattato. Se la finestra ha la barra degli strumenti di formattazione, scegliete il menu <strong>Formato</strong>, voce <strong>Converti in formato solo testo</strong>, e poi salvate. Altrimenti il file diventa <code>opencode.json.rtf</code> e OpenCode non lo legge.</li>
+<li><strong>Virgolette dritte.</strong> Il JSON vuole le virgolette dritte (<code>"</code>), non quelle curve (<code>“ ”</code>). Disattivate le virgolette tipografiche: menu <strong>Modifica</strong>, <strong>Sostituzioni</strong>, togliete la spunta a <strong>Virgolette intelligenti</strong>. Meglio ancora: incollate il testo senza riscriverlo.</li>
+</ul>
+<p>Dopo il salvataggio rifate Cmd+Q e <code>pkill -f opencode</code>, poi riaprite l'app.</p>
+<h3 id="prova-di-connessione-su-mac">Prova di connessione su Mac</h3>
+<p>Sostituite <code>&lt;indirizzo del server&gt;</code> con quello del foglio. Qui l'indirizzo va <strong>senza</strong> il <code>/v1</code> finale: il foglio lo riporta con <code>/v1</code> perché serve nel file di configurazione, ma questa prova interroga una pagina diversa del server. Deve scrivere <code>200</code>:</p>
+<pre><code class="language-bash">curl -s -o /dev/null -w &quot;%{http_code}\n&quot; &lt;indirizzo del server&gt;/health/liveliness
+</code></pre>
+<p>Per l'elenco dei modelli, se avete dato la chiave anche nella finestra del Terminale con <code>export</code>:</p>
+<pre><code class="language-bash">curl &lt;indirizzo del server&gt;/v1/models -H &quot;Authorization: Bearer $CORSO_API_KEY&quot;
+</code></pre>
+<p>Se invece la chiave l'avete data solo con <code>launchctl</code>, il Terminale non la vede: nel comando qui sopra sostituite <code>$CORSO_API_KEY</code> con la chiave incollata (tra le virgolette, dopo <code>Bearer</code>).</p>
+<h3 id="problemi-frequenti-su-mac">Problemi frequenti su Mac</h3>
+<p><strong><code>Authentication Error, No api key passed in.</code></strong></p>
+<ul>
+<li>Causa: l'app non vede la variabile. Succede se avete aperto OpenCode prima di dare la chiave, se il Mac è stato riavviato, o se la chiave l'avete scritta solo nel Terminale.</li>
+<li>Cosa fare: rifate <code>launchctl setenv</code>, poi Cmd+Q su OpenCode, <code>pkill -f opencode</code>, e riaprite.</li>
+</ul>
+<p><strong>Il file è stato salvato come <code>opencode.json.rtf</code>, o i modelli del corso non compaiono.</strong></p>
+<ul>
+<li>Causa: TextEdit ha salvato un documento formattato.</li>
+<li>Cosa fare: in Finder, o con <code>ls ~/.config/opencode</code>, controllate come si chiama il file. Deve essere <code>opencode.json</code>. Se c'è l'<code>.rtf</code>, riaprite il file, convertite in solo testo, salvate di nuovo e cancellate quello sbagliato.</li>
+</ul>
+<p><strong>Il file ha le virgolette curve e OpenCode lo ignora.</strong></p>
+<ul>
+<li>Causa: TextEdit ha trasformato le virgolette dritte in virgolette tipografiche, e il JSON non è più valido.</li>
+<li>Cosa fare: disattivate le virgolette intelligenti, cancellate il contenuto, incollate di nuovo il testo della sezione 3 e salvate.</li>
+</ul>
+<p>Per gli altri errori valgono quelli della sezione 8.</p>
 <h2 id="alternativa-opencode-da-terminale">Alternativa: OpenCode da terminale</h2>
 <p>Se l'app desktop non si installa o non parte, c'è la versione da terminale: un unico file eseguibile, senza installazione. La chiave e il file <code>opencode.json</code> (sezioni 2 e 3) sono gli stessi. Questa strada è provata con la versione 1.19.5.</p>
 <p>In PowerShell, un comando alla volta. Il primo nasconde la barra di avanzamento, che rallenta il download:</p>
