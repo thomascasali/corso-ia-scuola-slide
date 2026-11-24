@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argomento 13 · Il tuo agente sul PC: installare OpenCode · AI Tools per l'Organizzazione scolastica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #15120f;
+    --bg-card: #1e1a15;
+    --bg-light: #29231d;
+    --border: #3c332a;
+    --text: #f4eee3;
+    --text-dim: #d2c8b8;
+    --text-muted: #a89a83;
+    --success: #6fae5c;
+    --danger: #e0563a;
+    --warn: #d9a441;
+    --info: #4e93b8;
+    --purple: #a879c4;
+    --fs-xs: clamp(15px, 0.8vw + 12px, 17px);
+    --fs-sm: clamp(17px, 0.9vw + 13px, 20px);
+    --fs-body: clamp(21px, 1.3vw + 15px, 26px);
+    --fs-lead: clamp(24px, 1.6vw + 16px, 30px);
+    --fs-h3: clamp(26px, 1.8vw + 16px, 32px);
+    --fs-h2: clamp(32px, 2.6vw + 18px, 46px);
+    --fs-h1: clamp(40px, 5vw + 20px, 64px);
+    --fs-display: clamp(48px, 7vw + 22px, 88px);
+    --lh-body: 1.55;
+    --lh-heading: 1.15;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+  #root { min-height: 100vh; position: relative; }
+  a { color: inherit; }
+  h1 { font-family: 'Fraunces', serif; line-height: var(--lh-heading); }
+  h2, h3 { font-family: 'Public Sans', sans-serif; line-height: var(--lh-heading); font-weight: 700; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  p, li { line-height: var(--lh-body); font-size: var(--fs-body); }
+  button { font-family: 'Public Sans', sans-serif; }
+  .bg-texture {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .role-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  @media (max-width: 900px) {
+    .role-grid { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 768px) {
+    .slide-content { padding: 16px !important; margin: 0 auto !important; }
+    .top-bar { padding: 0 10px !important; }
+    .top-bar span { font-size: var(--fs-xs) !important; }
+    .top-bar > div:first-child { gap: 8px !important; }
+    .bottom-bar { padding: 0 12px !important; }
+    svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .top-bar > div:first-child span:nth-child(3) { display: none; }
+  }
+  .notes-panel {
+    position: fixed; left: 0; right: 0; bottom: 60px; max-height: 42vh; overflow-y: auto;
+    background: #0e0c0a; border-top: 2px solid var(--warn); padding: 18px 26px; z-index: 90;
+    font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.6;
+  }
+  .notes-panel strong { color: var(--warn); }
+  .activity-badge:focus-visible, .activity-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .activity-badge:hover, .activity-link:hover { border-color: var(--info) !important; }
+  .kbd { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; color: var(--text-dim); background: var(--bg-light); }
+  .text-link {
+    color: var(--warn); text-decoration: underline; text-underline-offset: 3px;
+    overflow-wrap: anywhere; word-break: break-word; font-weight: 600;
+  }
+  .text-link:hover { color: var(--text); }
+  .text-link:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; border-radius: 2px; }
+  .icon-btn-group { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--info); color: var(--text); }
+  .icon-btn:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .icon-btn:disabled { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
+  .icon-btn.active { background: var(--warn); border-color: var(--warn); color: var(--bg); }
+  .icon-btn.active:hover { color: var(--bg); }
+  .os-switch { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--bg-card); flex: 0 0 auto; }
+  .os-btn { min-height: 44px; min-width: 96px; padding: 0 18px; background: transparent; color: var(--text-dim); border: 0; font-size: var(--fs-sm); font-weight: 700; cursor: pointer; }
+  .os-btn + .os-btn { border-left: 1px solid var(--border); }
+  .os-btn:hover { color: var(--text); background: var(--bg-light); }
+  .os-btn.active { background: var(--warn); color: var(--bg); }
+  .os-btn:focus-visible, .copy-btn:focus-visible, .cmdbox-pre:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .cmdbox { margin: 6px 0; }
+  .cmdbox-label { color: var(--text-muted); font-size: var(--fs-xs); margin-bottom: 3px; }
+  .cmdbox-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+  .cmdbox-pre { flex: 1 1 260px; min-width: 0; margin: 0; background: #0e0c0a; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; }
+  .cmdbox-pre.tall { max-height: calc(44vh / var(--zoom, 1)); overflow: auto; }
+  .copy-btn { flex: 0 0 auto; min-height: 44px; min-width: 96px; padding: 0 16px; background: var(--warn); color: var(--bg); border: 1px solid var(--warn); border-radius: 8px; font-size: var(--fs-xs); font-weight: 700; cursor: pointer; }
+  .copy-btn:hover { background: #f0c169; }
+  .copy-btn.ok { background: var(--success); border-color: var(--success); color: var(--bg); }
+  .map-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0; }
+  .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .trouble { background: var(--bg-card); border: 1px solid var(--border); border-top: 4px solid var(--danger); border-radius: 10px; padding: 12px 16px; min-width: 0; }
+  .trouble-title { font-weight: 700; color: var(--text); font-size: var(--fs-sm); margin-bottom: 6px; overflow-wrap: anywhere; }
+  @media (max-width: 900px) { .map-grid { grid-template-columns: repeat(2, 1fr); } .two-col { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .map-grid { grid-template-columns: 1fr; } .copy-btn { width: 100%; } }
+  @media (max-width: 760px) { .flow-nowrap { flex-wrap: wrap !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const colors = {
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+  accent: '#d9a441', accentAlt: '#f0c169',
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+};
+
+/* ---------- componenti condivisi (stesso impianto dell'argomento 5) ---------- */
+/* Nota: duplicati apposta in questo file, come già fatto tra argomento-5/slide.html e
+   argomento-5/simulazione-agente.html, perché Babel standalone non carica script esterni
+   via XHR quando il file si apre da file://. */
+
+const Glow = ({ children }) => (
+  <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${colors.accent}40, transparent, ${colors.accent}20)` }}>
+    <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+  </div>
+);
+
+const Box = ({ type = 'info', title, children }) => {
+  const cfg = { info: colors.info, warn: colors.warn, danger: colors.danger, tip: colors.purple, success: colors.success };
+  const c = cfg[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 20px', margin: '14px 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-sm)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)' }}>{children}</div>
+    </div>
+  );
+};
+
+const BlockTag = ({ children }) => (
+  <div style={{ display: 'inline-block', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '2px', border: `1px solid ${colors.accent}60`, borderRadius: '20px', padding: '5px 16px', marginBottom: '18px' }}>
+    {children}
+  </div>
+);
+
+const ActivityBadge = ({ href, label }) => (
+  <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}
+     className="activity-badge"
+     style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.info, background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '6px', padding: '8px 14px', marginTop: '12px', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+    <span aria-hidden="true">📄</span><span>{label}</span><span aria-hidden="true">↗</span>
+  </a>
+);
+
+function FlowChain({ steps, wrap = true, minItemWidth = '150px' }) {
+  return (
+    <div className={wrap ? undefined : 'flow-nowrap'} style={{ display: 'flex', flexWrap: wrap ? 'wrap' : 'nowrap', alignItems: 'stretch', gap: '10px', justifyContent: 'center' }}>
+      {steps.map((s, i) => (
+        <React.Fragment key={i}>
+          <div style={{ background: colors.bgLight, border: `1px solid ${s.color || colors.border}60`, borderTop: `4px solid ${s.color || colors.accent}`, borderRadius: '8px', padding: '14px 16px', minWidth: minItemWidth, maxWidth: '230px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center' }}>
+            {s.icon && <span style={{ fontSize: '28px' }}>{s.icon}</span>}
+            <span style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)' }}>{s.label}</span>
+            {s.sub && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>{s.sub}</span>}
+          </div>
+          {i < steps.length - 1 && (
+            <div style={{ alignSelf: 'center', color: colors.textMuted, fontSize: '22px', padding: '0 2px' }} aria-hidden="true">→</div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function ConvergeDiagram({ inputs, outputIcon, outputLabel, outputSub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+        {inputs.map((inp, i) => (
+          <div key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '12px 16px', minWidth: '140px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>{inp.icon}</div>
+            <div style={{ color: colors.text, fontSize: 'var(--fs-sm)', fontWeight: 600 }}>{inp.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: '26px', color: colors.textMuted }} aria-hidden="true">↓</div>
+      <div style={{ background: colors.accent + '20', border: `1px solid ${colors.accent}`, borderRadius: '8px', padding: '14px 20px', textAlign: 'center', minWidth: '220px' }}>
+        <div style={{ fontSize: '26px' }}>{outputIcon}</div>
+        <div style={{ color: colors.text, fontWeight: 700 }}>{outputLabel}</div>
+        {outputSub && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '4px' }}>{outputSub}</div>}
+      </div>
+    </div>
+  );
+}
+
+function CompareTwo({ left, right }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', gap: '16px' }}>
+      {[left, right].map((c, i) => (
+        <div key={i} style={{ background: colors.bgCard, border: `1px solid ${c.color}60`, borderTop: `4px solid ${c.color}`, borderRadius: '8px', padding: '18px 20px' }}>
+          <div style={{ fontSize: '30px', marginBottom: '8px' }}>{c.icon}</div>
+          <div style={{ color: c.color, fontWeight: 700, fontSize: 'var(--fs-lead)', marginBottom: '10px' }}>{c.title}</div>
+          <ul style={{ paddingLeft: '20px', color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 1.5, margin: 0 }}>
+            {c.points.map((p, j) => <li key={j} style={{ marginBottom: '4px', fontSize: 'var(--fs-sm)' }}>{p}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChipRow({ items }) {
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '8px 16px', fontSize: 'var(--fs-sm)', color: colors.text }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- selettore Windows / Mac ---------- */
+
+const OsCtx = React.createContext({ os: 'win', setOs: () => {} });
+const useOs = () => React.useContext(OsCtx);
+const OS_KEY = 'argomento13-sistema';
+const readOs = () => {
+  try { const v = window.localStorage.getItem(OS_KEY); if (v === 'win' || v === 'mac') return v; } catch (e) { /* niente: memoria del browser non disponibile */ }
+  return 'win';
+};
+const saveOs = v => { try { window.localStorage.setItem(OS_KEY, v); } catch (e) { /* niente */ } };
+
+function OsSwitch() {
+  const { os, setOs } = useOs();
+  const opts = [['win', 'Windows'], ['mac', 'Mac']];
+  return (
+    <div role="group" aria-label="Sistema del PC" className="os-switch" onClick={e => e.stopPropagation()}>
+      {opts.map(([k, label]) => (
+        <button key={k} type="button" data-own-keys="1" aria-pressed={os === k} className={os === k ? 'os-btn active' : 'os-btn'} onClick={() => setOs(k)}>{label}</button>
+      ))}
+    </div>
+  );
+}
+
+const Os = ({ win, mac }) => { const { os } = useOs(); return os === 'win' ? win : mac; };
+
+/* ---------- riquadro di comando con tasto Copia ---------- */
+
+function CommandBox({ cmd, label, tall, kind }) {
+  const [state, setState] = useState('idle');
+  const timer = useRef(null);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const finish = s => { setState(s); clearTimeout(timer.current); timer.current = setTimeout(() => setState('idle'), s === 'ok' ? 1500 : 2500); };
+  const fallback = txt => {
+    let done = false;
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = txt; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      done = document.execCommand('copy');
+      ta.remove();
+    } catch (err) { done = false; }
+    finish(done ? 'ok' : 'fail');
+  };
+  const copy = e => {
+    e.stopPropagation();
+    const txt = cmd.trimEnd();
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(txt).then(() => finish('ok'), () => fallback(txt));
+    } else { fallback(txt); }
+  };
+  const isText = kind === 'text';
+  const caption = state === 'ok' ? 'Copiato' : (state === 'fail' ? 'Selezionate e copiate a mano' : 'Copia');
+  return (
+    <div className="cmdbox" data-cmdbox="1" onClick={e => e.stopPropagation()}>
+      {label && <div className="cmdbox-label">{label}</div>}
+      <div className="cmdbox-row">
+        <pre tabIndex={0} aria-label={label || 'Comando'} className={tall ? 'cmdbox-pre tall' : 'cmdbox-pre'} style={isText ? { fontFamily: "'Public Sans', sans-serif" } : undefined}>{cmd}</pre>
+        <button type="button" data-own-keys="1" onClick={copy} className={state === 'ok' ? 'copy-btn ok' : 'copy-btn'} aria-label={'Copia: ' + (label || cmd.slice(0, 40))}>{caption}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- pezzi di slide ---------- */
+
+const T = 'Argomento 13 — Il tuo agente sul PC';
+const wrap = { padding: '20px 30px' };
+const h2s = { color: colors.accent, marginBottom: '12px' };
+const ext = (href, label) => <a href={href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()} className="text-link">{label}</a>;
+const P = ({ children, style }) => <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', margin: '0 0 8px', ...style }}>{children}</p>;
+const Li = ({ children }) => <li style={{ marginBottom: '5px', fontSize: 'var(--fs-sm)' }}>{children}</li>;
+const Ul = ({ children }) => <ul style={{ paddingLeft: '26px', color: colors.textDim, margin: '0 0 8px' }}>{children}</ul>;
+const Ol = ({ children }) => <ol style={{ paddingLeft: '28px', color: colors.textDim, margin: '0 0 8px' }}>{children}</ol>;
+const S = ({ children }) => <strong style={{ color: colors.text }}>{children}</strong>;
+
+function Step({ n, title, children }) {
+  return (
+    <div style={wrap}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px 20px', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <span aria-hidden="true" style={{ flex: '0 0 auto', width: '46px', height: '46px', borderRadius: '50%', border: `2px solid ${colors.accent}`, color: colors.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-lead)' }}>{n}</span>
+          <h2 style={{ color: colors.accent, margin: 0, fontSize: 'var(--fs-h3)' }}><span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>Passo {n}: </span>{title}</h2>
+        </div>
+        <OsSwitch />
+      </div>
+      {children}
+    </div>
+  );
+}
+
+const Checkpoint = ({ children }) => (
+  <div style={{ background: colors.success + '18', border: `1px solid ${colors.success}50`, borderLeft: `5px solid ${colors.success}`, borderRadius: '0 8px 8px 0', padding: '10px 16px', margin: '10px 0 0' }}>
+    <div style={{ fontWeight: 700, color: colors.success, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' }}>Punto di controllo</div>
+    <div style={{ color: colors.text, fontSize: 'var(--fs-sm)' }}>{children}</div>
+  </div>
+);
+
+const Note = ({ type = 'warn', title, children }) => {
+  const c = { info: colors.info, warn: colors.warn, danger: colors.danger }[type];
+  return (
+    <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `5px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '8px 16px', margin: '10px 0 0' }}>
+      {title && <div style={{ fontWeight: 700, color: c, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{title}</div>}
+      <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)' }}>{children}</div>
+    </div>
+  );
+};
+
+const Verify = () => <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)' }}> (da verificare a schermo)</span>;
+
+/* ---------- comandi e testi (stesso contenuto della guida) ---------- */
+
+const CMD = {
+  winCheckKey: String.raw`if ($env:CORSO_API_KEY) { "chiave presente" } else { "chiave mancante" }`,
+  winMkConfig: String.raw`New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\opencode" | Out-Null`,
+  winOpenJson: String.raw`notepad "$env:USERPROFILE\.config\opencode\opencode.json"`,
+  winOpenAgents: String.raw`notepad "$env:USERPROFILE\.config\opencode\AGENTS.md"`,
+  winModels: String.raw`& "$env:LOCALAPPDATA\Programs\@opencodedesktop\resources\opencode-cli.exe" models`,
+  winStop: String.raw`Get-Process opencode* -ErrorAction SilentlyContinue | Stop-Process -Force`,
+  winHealth: String.raw`curl.exe -s -o NUL -w "%{http_code}" <indirizzo del server>/health/liveliness`,
+  winModelsApi: String.raw`curl.exe <indirizzo del server>/v1/models -H "Authorization: Bearer $env:CORSO_API_KEY"`,
+  winUv: String.raw`powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`,
+  winUvCheck: 'uvx --version',
+  winUvPath: String.raw`& "$env:USERPROFILE\.local\bin\uvx.exe" --version`,
+  winMkTest: String.raw`New-Item -ItemType Directory -Force "$env:USERPROFILE\prova-opencode" | Out-Null`,
+  winCdTest: String.raw`cd "$env:USERPROFILE\prova-opencode"`,
+  winLast4: String.raw`$env:CORSO_API_KEY.Substring($env:CORSO_API_KEY.Length-4)`,
+  macKey: 'launchctl setenv CORSO_API_KEY "<la tua chiave>"',
+  macStop: 'pkill -f opencode',
+  macMkConfig: 'mkdir -p ~/.config/opencode',
+  macTouchJson: 'touch ~/.config/opencode/opencode.json',
+  macOpenJson: 'open -e ~/.config/opencode/opencode.json',
+  macTouchAgents: 'touch ~/.config/opencode/AGENTS.md',
+  macOpenAgents: 'open -e ~/.config/opencode/AGENTS.md',
+  macLs: 'ls ~/.config/opencode',
+  macHealth: 'curl -s -o /dev/null -w "%{http_code}\\n" <indirizzo del server>/health/liveliness',
+  macModelsApi: 'curl <indirizzo del server>/v1/models -H "Authorization: Bearer $CORSO_API_KEY"',
+  macExport: 'export CORSO_API_KEY="<la tua chiave>"',
+  macUv: 'curl -LsSf https://astral.sh/uv/install.sh | sh',
+  macMkTest: 'mkdir -p ~/prova-opencode',
+  macCdTest: 'cd ~/prova-opencode',
+  markitdown: 'uvx --from "markitdown[all]" markitdown pratiche-uscite-dicembre.pdf',
+  url: 'opencode.ai/download',
+  req1: 'Rispondi con una frase: come ti chiami e che modello sei?',
+  req2: 'Crea un file ciao.txt con scritto: Ciao dal laboratorio. Poi leggilo e dimmi cosa contiene.',
+  reqDocs: 'Leggi i due PDF e dimmi quali pratiche non rispettano il regolamento. Per ogni pratica scrivi l\'articolo che non è rispettato.',
+  reqLook: 'Cosa c\'è in questa cartella? Spiegamelo in poche righe, senza modificare niente.',
+};
+
+const OPENCODE_JSON = `{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "autoupdate": false,
+  "enabled_providers": ["corso"],
+  "provider": {
+    "corso": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Server del corso",
+      "options": {
+        "baseURL": "<indirizzo del server>/v1",
+        "apiKey": "{env:CORSO_API_KEY}"
+      },
+      "models": {
+        "claude-haiku-5-5": { "name": "Haiku (veloce)" },
+        "claude-sonnet-5-5": { "name": "Sonnet (più capace)" }
+      }
+    }
+  },
+  "model": "corso/claude-haiku-5-5"
+}`;
+
+const AGENTS_MD = `# Istruzioni per l'agente
+
+Lavori per una persona che non è esperta di informatica. Rispondi sempre in italiano, con frasi semplici.
+
+## Leggere i documenti
+
+Per leggere un PDF, un file Word, Excel o PowerPoint non aprirlo come testo: convertilo con MarkItDown, con questo comando (sostituisci il nome del file):
+
+uvx --from "markitdown[all]" markitdown nome-del-file.pdf
+
+Poi lavora sul testo ottenuto. Se il comando scrive avvisi sui caratteri del PDF, ignorali. Se una tabella del PDF esce con righe spezzate o colonne mescolate, dillo e non indovinare i valori mancanti.
+
+## Calcoli e tabelle
+
+Per conteggi, percentuali e confronti tra valori usa Python con le librerie caricate al volo, per esempio:
+
+uv run --with pandas python nome-dello-script.py
+
+Per leggere o scrivere file Excel usa uv run --with openpyxl python nome-dello-script.py. Non fare i conti a mente: calcolali.
+
+## Risultati
+
+Scrivi i risultati in file nella cartella di lavoro (per esempio in formato Markdown, CSV o Excel), non solo nella chat.
+
+## Cosa non fare
+
+- Non installare programmi. I comandi uvx e uv run scritti qui sopra sono permessi.
+- Non modificare i file originali: scrivi i risultati in file nuovi.
+- Non cancellare file.
+- Non inviare niente a nessuno (email, messaggi, caricamenti) senza chiedere prima.
+- Alla fine scrivi che cosa non hai potuto verificare.`;
+
+const GUIDE_HTML = '../materiali/argomento-10/guida-opencode-laboratorio.html';
+const GUIDE_PDF = '../materiali/argomento-10/guida-opencode-laboratorio.pdf';
+const GuideBadges = () => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+    <ActivityBadge href={GUIDE_HTML} label="Guida completa: OpenCode sul PC (pagina)" />
+    <ActivityBadge href={GUIDE_PDF} label="Guida completa in PDF" />
+  </div>
+);
+
+/* ---------- slide ---------- */
+
+const MAP = [
+  ['1', 'Scaricare e installare', 'OpenCode desktop, senza aprirlo'],
+  ['2', 'La chiave', 'la variabile CORSO_API_KEY'],
+  ['3', 'Il file opencode.json', 'dice a OpenCode dove trovare il server'],
+  ['4', 'Chiudere e riaprire', 'anche i processi in secondo piano'],
+  ['5', 'Prova di connessione', 'il server risponde?'],
+  ['6', 'Il kit minimo', 'uv e MarkItDown per leggere i documenti'],
+  ['7', 'Il file AGENTS.md', 'dice all\'agente come usarli'],
+  ['8', 'La prima prova', 'cartella prova-opencode'],
+  ['9', 'La cartella delle adesioni', 'il foglio «Provate l\'agente»'],
+];
+
+const slides = [
+  {
+    block: `${T} · Apertura`,
+    content: () => (
+      <div style={{ textAlign: 'center', padding: '50px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(65vh / var(--zoom, 1))' }}>
+        <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>💻</div>
+        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 'var(--fs-h3)', color: colors.text, marginBottom: '6px' }}>
+          AI Tools per l'Organizzazione scolastica
+        </div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accent, letterSpacing: '3px', textTransform: 'uppercase', fontSize: 'var(--fs-sm)', marginBottom: '18px' }}>
+          Corso di intelligenza artificiale per il personale della scuola
+        </div>
+        <h1 style={{ fontSize: 'var(--fs-h1)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '18px' }}>
+          Argomento 13
+        </h1>
+        <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '900px' }}>Il tuo agente sul PC: installare OpenCode</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '22px', maxWidth: '820px' }}>
+          Prima di questo argomento conviene aver visto: <a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>. Si abbina bene dopo l'<a href="../argomento-12/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 12 — Una squadra di agenti</a>.
+        </p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: colors.textMuted, marginTop: '26px' }}>ITTS "Belluzzi-Da Vinci" — Rimini</p>
+      </div>
+    ),
+    notes: `Argomento pratico, tutto al PC del laboratorio: ognuno installa OpenCode e lo prova. Le slide seguono la guida «OpenCode sul PC del laboratorio»: chi resta indietro può proseguire da lì. Ogni passo ha un punto di controllo: non si passa al successivo finché non torna.`
+  },
+  {
+    block: `${T} · Prima di cominciare`,
+    content: () => (
+      <div style={wrap}>
+        <BlockTag>{T} · Prima di cominciare</BlockTag>
+        <h2 style={h2s}>Cosa serve</h2>
+        <Glow>
+          <Ul>
+            <Li>Un PC Windows 10 o 11, oppure un Mac.</Li>
+            <Li>Il <S>foglio consegnato in aula</S>, con l'indirizzo del server del corso e la vostra chiave personale.</Li>
+            <Li>Una connessione a internet per scaricare i programmi; il server del corso si raggiunge dalla rete del laboratorio.</Li>
+          </Ul>
+        </Glow>
+        <P style={{ marginTop: '12px' }}>Nei comandi compaiono due segnaposto, che si sostituiscono con i dati del foglio prima di premere Invio:</P>
+        <Ul>
+          <Li><code className="kbd">{'<indirizzo del server>'}</code> è l'indirizzo del server del corso.</Li>
+          <Li><code className="kbd">{'<la tua chiave>'}</code> è la chiave personale: è come una password, non si mostra a nessuno.</Li>
+        </Ul>
+        <GuideBadges />
+      </div>
+    ),
+    notes: `Consegnate ora il foglio con l'indirizzo del server e le chiavi, uno per partecipante. Ricordate due regole: la chiave non si fotografa e non si scrive in chat; sul proiettore non si mostra mai né il foglio né la chiave. L'indirizzo del server non compare nelle slide: sta solo sul foglio. L'app si installa per il solo utente e di norma non servono i permessi di amministratore; se Windows li chiede, si ferma tutto e si chiama il docente (da verificare a schermo sui PC del laboratorio).`
+  },
+  {
+    block: `${T} · Il percorso`,
+    content: () => (
+      <div style={wrap}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px 20px', marginBottom: '10px' }}>
+          <h2 style={{ ...h2s, marginBottom: 0 }}>Nove passi</h2>
+          <OsSwitch />
+        </div>
+        <P>Scegliete Windows o Mac: la scelta resta per tutte le slide dei passi, anche se ricaricate la pagina.</P>
+        <div className="map-grid">
+          {MAP.map(([n, t, s]) => (
+            <div key={n} style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderTop: `3px solid ${colors.accent}`, borderRadius: '8px', padding: '8px 12px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+              <span style={{ fontFamily: "'Fraunces', serif", fontWeight: 900, color: colors.accent, fontSize: 'var(--fs-lead)', lineHeight: 1.1 }}>{n}</span>
+              <div>
+                <div style={{ color: colors.text, fontWeight: 700, fontSize: 'var(--fs-sm)', lineHeight: 1.25 }}>{t}</div>
+                <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', lineHeight: 1.3 }}>{s}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <GuideBadges />
+      </div>
+    ),
+    notes: `Percorso in nove passi. I primi cinque portano OpenCode a parlare con il server del corso; il sesto e il settimo gli danno gli strumenti per leggere PDF, Word ed Excel; l'ottavo e il nono sono le prove. Il selettore Windows / Mac cambia i comandi in tutte le slide dei passi. Su Mac il passo 2 è diverso: le app aperte dal Dock non vedono le variabili del Terminale, quindi la chiave si dà con un comando apposta.`
+  },
+
+  /* --- 1 --- */
+  {
+    block: `${T} · Passo 1 · Installare`,
+    content: () => (
+      <Step n="1" title="Scaricare e installare OpenCode desktop">
+        <Os
+          win={<>
+            <Ol>
+              <Li>Aprite la pagina di download di OpenCode.</Li>
+              <Li>Nel riquadro dell'app desktop scegliete <S>Windows (x64)</S>; se il PC ha un processore ARM, <S>Windows (ARM64)</S>.</Li>
+              <Li>Aprite il file scaricato e seguite l'installazione fino alla fine.</Li>
+            </Ol>
+            <CommandBox cmd={CMD.url} label="Indirizzo da aprire nel browser" />
+            <Note type="danger" title="Non aprite ancora OpenCode">Prima servono la chiave e il file di configurazione: l'app li legge all'avvio.</Note>
+            <Note type="warn" title="Se Windows avvisa o chiede la password di amministratore">Fermatevi e chiamate il docente.<Verify /></Note>
+          </>}
+          mac={<>
+            <Ol>
+              <Li>Aprite la pagina di download e cercate il riquadro dell'app desktop.</Li>
+              <Li>Scegliete <S>macOS (Apple Silicon)</S> oppure <S>macOS (Intel)</S>. Per saperlo: menu Apple, <S>Informazioni su questo Mac</S>, riga <S>Chip</S>.</Li>
+              <Li>Aprite il file <code className="kbd">.dmg</code> e trascinate l'icona di OpenCode nella cartella <S>Applicazioni</S>.</Li>
+            </Ol>
+            <CommandBox cmd={CMD.url} label="Indirizzo da aprire nel browser" />
+            <Note type="danger" title="Non aprite ancora OpenCode">Prima servono la chiave e il file di configurazione.</Note>
+            <Note type="warn" title="Alla prima apertura macOS può chiedere conferma">Si sceglie «Apri». Se blocca l'app senza dare l'opzione, chiamate il docente.<Verify /></Note>
+          </>}
+        />
+        <Checkpoint><Os win="Il programma è installato e nessuna finestra di OpenCode è aperta." mac="OpenCode è nella cartella Applicazioni e nessuna finestra è aperta." /></Checkpoint>
+      </Step>
+    ),
+    notes: `Sulla pagina ufficiale di download, il 23/11/2026, le voci per Mac erano «macOS (Apple Silicon)» e «macOS (Intel)»; per Windows «Windows (x64)» e «Windows (ARM64)». Su Windows l'app si installa nel profilo dell'utente. I passaggi della finestra di installazione e gli avvisi di protezione di Windows e macOS non sono ancora stati provati sui PC del laboratorio: da verificare a schermo. Insistete su «non aprite ancora OpenCode»: aprirlo prima di dare la chiave è la causa più frequente di errori.`
+  },
+
+  /* --- 2 --- */
+  {
+    block: `${T} · Passo 2 · La chiave`,
+    content: () => (
+      <Step n="2" title="La chiave: CORSO_API_KEY">
+        <Os
+          win={<>
+            <Ol>
+              <Li>Menu Start: scrivete <code className="kbd">variabili</code> e scegliete la voce che finisce con <S>relative all'account</S>, non quella «di sistema».</Li>
+              <Li>Nella lista <S>in alto</S> premete <S>Nuova</S>.</Li>
+              <Li>Nome: <code className="kbd">CORSO_API_KEY</code>. Valore: incollate la chiave dal foglio. Confermate con OK su tutte le finestre.</Li>
+            </Ol>
+            <P>Poi aprite una finestra PowerShell <S>nuova</S> e provate:</P>
+            <CommandBox cmd={CMD.winCheckKey} label="Controllo, senza mostrare la chiave" />
+            <Checkpoint>Deve uscire <S>chiave presente</S>. Se esce «chiave mancante», ripetete i tre passaggi; se la finestra delle variabili non si apre, chiamate il docente.</Checkpoint>
+          </>}
+          mac={<>
+            <P>Le app aperte dal Dock non vedono le variabili del Terminale: la chiave si dà al sistema con un comando. Aprite il Terminale (Launchpad, cartella Altro). Sostituite <code className="kbd">{'<la tua chiave>'}</code> con quella del foglio, tenendo le virgolette, e premete Invio.</P>
+            <CommandBox cmd={CMD.macKey} label="Dare la chiave al sistema" />
+            <Note type="warn" title="Vale fino al riavvio del Mac">Dopo un riavvio il comando si ripete, e poi Cmd+Q su OpenCode e <code className="kbd">pkill</code> (passo 4).</Note>
+            <Checkpoint>Su Mac non c'è un controllo immediato che non mostri la chiave: si vede quando l'app risponde alla prima richiesta (passo 8). Se non la vede, la guida spiega due alternative.</Checkpoint>
+          </>}
+        />
+      </Step>
+    ),
+    notes: `La chiave è una password: non va scritta nei file di un progetto, solo nella variabile. Su Windows deve essere una variabile utente (non basta scriverla in una finestra di PowerShell). Se la finestra delle variabili non si apre sul PC del laboratorio, si chiama il docente. Su Mac la variabile impostata con launchctl vale fino al riavvio; che l'app desktop la legga è da verificare a schermo. La seconda alternativa della guida (scrivere la chiave nel file) vale solo su un Mac personale: in laboratorio non si fa. Non mostrate mai la chiave sul proiettore.`
+  },
+
+  /* --- 3 --- */
+  {
+    block: `${T} · Passo 3 · opencode.json`,
+    content: () => (
+      <Step n="3" title="opencode.json: creare il file">
+        <Os
+          win={<>
+            <P>In PowerShell, un comando alla volta. Il primo crea la cartella di configurazione:</P>
+            <CommandBox cmd={CMD.winMkConfig} label="1. Crea la cartella" />
+            <P style={{ marginTop: '8px' }}>Il secondo apre il file in Blocco note; se chiede di crearlo, rispondete di sì:</P>
+            <CommandBox cmd={CMD.winOpenJson} label="2. Apre il file" />
+            <Note type="info" title="Al salvataggio">Il nome deve restare <code className="kbd">opencode.json</code>, non <code className="kbd">opencode.json.txt</code>: scegliete «Tutti i file».</Note>
+          </>}
+          mac={<>
+            <P>Nel Terminale, un comando alla volta. Il primo crea la cartella, il secondo il file vuoto, il terzo lo apre in TextEdit:</P>
+            <CommandBox cmd={CMD.macMkConfig} label="1. Crea la cartella" />
+            <CommandBox cmd={CMD.macTouchJson} label="2. Crea il file vuoto" />
+            <CommandBox cmd={CMD.macOpenJson} label="3. Apre il file in TextEdit" />
+          </>}
+        />
+      </Step>
+    ),
+    notes: `Il file sta nella cartella di configurazione personale di OpenCode. Su Windows: cartella .config\\opencode dentro il profilo utente; su Mac: ~/.config/opencode. I comandi si incollano uno alla volta, ognuno con il suo tasto Copia.`
+  },
+  {
+    block: `${T} · Passo 3 · opencode.json`,
+    content: () => (
+      <Step n="3" title="opencode.json: il testo da incollare">
+        <P>Incollate tutto il testo. Sostituite <code className="kbd">{'<indirizzo del server>'}</code> con quello del foglio e lasciate <code className="kbd">/v1</code> in fondo. <S>Non scrivete la chiave</S>: c'è già {'{env:CORSO_API_KEY}'}, che la legge dalla variabile.</P>
+        <CommandBox cmd={OPENCODE_JSON} label="Contenuto di opencode.json" tall />
+        <Os
+          win={<P style={{ marginTop: '8px' }}>Salvate con <span className="kbd">Ctrl+S</span>.</P>}
+          mac={<P style={{ marginTop: '8px' }}>Salvate con <span className="kbd">Cmd+S</span>. Il file deve essere in <S>solo testo</S> (menu Formato, «Converti in formato solo testo») e con le <S>virgolette dritte</S> (Modifica, Sostituzioni, togliete «Virgolette intelligenti»).</P>}
+        />
+      </Step>
+    ),
+    notes: `Il riquadro scorre: il tasto Copia copia sempre tutto il testo. Righe importanti: enabled_providers mostra solo il server del corso (senza, OpenCode propone anche modelli gratuiti di altri servizi, e lì finirebbero i testi dei partecipanti); autoupdate disattivato lascia la versione provata; share disabilitato impedisce di pubblicare una conversazione; i nomi dei modelli devono essere identici a quelli del server. Il segnaposto va sostituito con l'indirizzo scritto sul foglio: non lo mostriamo sul proiettore.`
+  },
+  {
+    block: `${T} · Passo 3 · opencode.json`,
+    content: () => (
+      <Step n="3" title="opencode.json: il controllo">
+        <Os
+          win={<>
+            <P>Senza aprire l'app, si chiede a OpenCode che modelli vede:</P>
+            <CommandBox cmd={CMD.winModels} label="Elenco dei modelli" />
+            <Checkpoint>Devono comparire due righe: <S>corso/claude-haiku-5-5</S> e <S>corso/claude-sonnet-5-5</S> (Haiku e Sonnet). Se ne vedete altre, il file non è stato letto: ricontrollate virgole, virgolette e parentesi. Se il comando non trova il programma, la cartella ha un altro nome sul vostro PC.<Verify /></Checkpoint>
+          </>}
+          mac={<>
+            <P>Controllate come si chiama il file:</P>
+            <CommandBox cmd={CMD.macLs} label="Contenuto della cartella" />
+            <Checkpoint>Deve comparire <S>opencode.json</S>. Se c'è <S>opencode.json.rtf</S>, TextEdit ha salvato un documento formattato: riaprite il file, convertite in solo testo, salvate di nuovo e cancellate quello sbagliato.</Checkpoint>
+          </>}
+        />
+        <P style={{ marginTop: '8px', color: colors.textMuted }}>Haiku e Sonnet nel selettore dell'app li vedrete dopo il passo 4.</P>
+      </Step>
+    ),
+    notes: `Su Windows il controllo usa il programma a riga di comando installato insieme all'app: dice se il file è letto e quali modelli compaiono, senza aprire l'app. Il percorso è quello dell'installazione per utente ed è da verificare a schermo sui PC del laboratorio. Haiku è il modello veloce con cui si parte, Sonnet è più capace e costa di più: si passa a Sonnet solo se Haiku sbaglia.`
+  },
+
+  /* --- 4 --- */
+  {
+    block: `${T} · Passo 4 · Chiudere e riaprire`,
+    content: () => (
+      <Step n="4" title="Chiudere tutto e riaprire">
+        <P>L'app lascia un servizio attivo in secondo piano, e quel servizio non vede una variabile creata dopo la sua partenza. Per questo i processi vanno fermati.</P>
+        <Os
+          win={<>
+            <Ol>
+              <Li>Se OpenCode è aperto, chiudetelo dalla sua finestra.</Li>
+              <Li>In PowerShell, fermate i processi rimasti:</Li>
+            </Ol>
+            <CommandBox cmd={CMD.winStop} label="Ferma i processi di OpenCode" />
+            <Ol><Li>Riaprite OpenCode dal menu Start.</Li></Ol>
+          </>}
+          mac={<>
+            <Ol>
+              <Li>Chiudete OpenCode con <span className="kbd">Cmd+Q</span>: chiudere la finestra non basta.</Li>
+              <Li>Nel Terminale, fermate i processi rimasti:</Li>
+            </Ol>
+            <CommandBox cmd={CMD.macStop} label="Ferma i processi di OpenCode" />
+            <Ol><Li>Riaprite OpenCode da Applicazioni.</Li></Ol>
+          </>}
+        />
+        <Checkpoint>Se il comando non scrive niente, non c'erano processi aperti: va bene. Nel selettore dei modelli devono comparire <S>Haiku</S> e <S>Sonnet</S> del corso, e nient'altro.<Verify /></Checkpoint>
+      </Step>
+    ),
+    notes: `È il passaggio che più spesso fa perdere tempo. Regola da ripetere: ogni volta che si cambia la chiave o il file, si rifà il passo 4. Se in laboratorio la variabile non viene vista nemmeno così, la guida suggerisce di uscire da Windows e rientrare con il proprio utente (da verificare a schermo). La posizione del selettore dei modelli nell'app è da verificare a schermo.`
+  },
+
+  /* --- 5 --- */
+  {
+    block: `${T} · Passo 5 · Prova di connessione`,
+    content: () => (
+      <Step n="5" title="Prova di connessione (facoltativa)">
+        <P>Il server risponde, prima ancora di usare OpenCode? Sostituite <code className="kbd">{'<indirizzo del server>'}</code> con quello del foglio. Nel primo comando l'indirizzo va <S>senza</S> <code className="kbd">/v1</code>; nel secondo c'è <code className="kbd">/v1</code> dopo il nome del server.</P>
+        <Os
+          win={<>
+            <CommandBox cmd={CMD.winHealth} label="1. Il server è acceso?" />
+            <CommandBox cmd={CMD.winModelsApi} label="2. Quali modelli può usare la mia chiave?" />
+          </>}
+          mac={<>
+            <CommandBox cmd={CMD.macHealth} label="1. Il server è acceso?" />
+            <CommandBox cmd={CMD.macModelsApi} label="2. Quali modelli può usare la mia chiave? (dopo aver dato la chiave con export)" />
+            <P style={{ fontSize: 'var(--fs-xs)', color: colors.textMuted }}>Se la chiave l'avete data solo con launchctl, il Terminale non la vede: nel comando sostituite <code className="kbd">$CORSO_API_KEY</code> con la chiave. Oppure date la chiave anche al Terminale (si copia, si sostituisce, si preme Invio):</P>
+            <CommandBox cmd={CMD.macExport} label="Chiave per questa finestra del Terminale" />
+          </>}
+        />
+        <Checkpoint>Il primo comando deve scrivere <S>200</S>. Il secondo mostra l'elenco dei modelli, con Haiku e Sonnet. Se non risponde, avvisate il docente.</Checkpoint>
+      </Step>
+    ),
+    notes: `Nelle prove, una porta sbagliata non produce nessun messaggio: l'agente resta fermo. Per questo la prova da terminale è utile: se risponde un elenco di modelli, il server funziona e il problema è nel file. Dire alla sala che il foglio riporta l'indirizzo già con /v1 (serve nel file), e che per il primo comando quel pezzo va tolto. Su Mac la chiave data con launchctl non è visibile al Terminale.`
+  },
+
+  /* --- 6 --- */
+  {
+    block: `${T} · Passo 6 · Kit minimo`,
+    content: () => (
+      <Step n="6" title="Il kit minimo: uv e MarkItDown">
+        <P>Un agente legge i file di testo, ma un PDF delle pratiche o un foglio Excel hanno dentro altro. Servono due strumenti: <S>uv</S>, che scarica ed esegue al volo piccoli programmi, e <S>MarkItDown</S>, che trasforma PDF, Word, Excel e PowerPoint in testo con le tabelle. MarkItDown non si installa: lo lancia uv quando serve. Serve internet.</P>
+        <Os
+          win={<>
+            <P>In PowerShell, il comando intero su una riga:</P>
+            <CommandBox cmd={CMD.winUv} label="Installa uv (senza amministratore)" />
+            <P style={{ marginTop: '8px' }}>Chiudete la finestra di PowerShell e apritene <S>una nuova</S>, poi:</P>
+            <CommandBox cmd={CMD.winUvCheck} label="Controllo" />
+          </>}
+          mac={<>
+            <P>Nel Terminale:</P>
+            <CommandBox cmd={CMD.macUv} label="Installa uv" />
+            <P style={{ marginTop: '8px' }}>Chiudete il Terminale e apritene <S>uno nuovo</S>, poi:</P>
+            <CommandBox cmd={CMD.winUvCheck} label="Controllo" />
+          </>}
+        />
+        <Checkpoint>Deve scrivere un numero di versione, per esempio <S>uvx 0.11.19</S>. <Os win={<>Se la rete della scuola blocca lo scaricamento, o PowerShell rifiuta di eseguirlo, fermatevi e chiamate il docente.<Verify /></>} mac="Se lo scaricamento non parte, chiamate il docente." /></Checkpoint>
+      </Step>
+    ),
+    notes: `Il comando di Windows scarica dal sito ufficiale di uv il programma di installazione e lo esegue; l'opzione ByPass toglie il blocco sui programmi scaricati solo per quel comando, senza cambiare le impostazioni del PC. uv finisce nella cartella .local\\bin del profilo utente: non dovrebbero servire permessi di amministratore (da verificare sui PC del laboratorio). La finestra va riaperta perché il percorso si aggiorna solo nelle finestre nuove.`
+  },
+  {
+    block: `${T} · Passo 6 · Kit minimo`,
+    content: () => (
+      <Step n="6" title="Provare MarkItDown su un PDF">
+        <P>Serve una cartella di prova, <code className="kbd">prova-opencode</code>, che userete anche nei passi seguenti. Un comando alla volta:</P>
+        <Os
+          win={<CommandBox cmd={CMD.winMkTest} label="1. Crea la cartella di prova" />}
+          mac={<CommandBox cmd={CMD.macMkTest} label="1. Crea la cartella di prova" />}
+        />
+        <P style={{ marginTop: '8px' }}>2. Scaricate dai materiali dell'argomento 5 il PDF {ext('../materiali/argomento-5/pratiche-uscite-dicembre.pdf', 'pratiche-uscite-dicembre.pdf')} e mettetelo nella cartella <code className="kbd">prova-opencode</code>.</P>
+        <Os
+          win={<CommandBox cmd={CMD.winCdTest} label="3. Entra nella cartella" />}
+          mac={<CommandBox cmd={CMD.macCdTest} label="3. Entra nella cartella" />}
+        />
+        <CommandBox cmd={CMD.markitdown} label="4. Converte il PDF in testo (cambiate il nome del file se serve)" />
+        <Checkpoint>Compare il contenuto del PDF come testo. La prima volta è lento e scrive molte righe di scaricamento: è normale. Gli avvisi «Could not get FontBBox» non impediscono la lettura.</Checkpoint>
+      </Step>
+    ),
+    notes: `Le tabelle dei PDF a volte escono con le righe spezzate o le colonne mescolate: è un limite della lettura dei PDF, non un errore dei partecipanti. Per questo l'AGENTS.md del passo seguente chiede all'agente di dirlo e non di indovinare. Un Excel piccolo è uscito come tabella pulita; Word e PowerPoint non sono ancora stati provati su file reali (da verificare a schermo). Il PDF è un materiale pubblicato con dati inventati.`
+  },
+
+  /* --- 7 --- */
+  {
+    block: `${T} · Passo 7 · AGENTS.md`,
+    content: () => (
+      <Step n="7" title="AGENTS.md: istruzioni per l'agente">
+        <P>OpenCode legge all'inizio di ogni sessione il file <code className="kbd">AGENTS.md</code> della sua cartella di configurazione, la stessa di <code className="kbd">opencode.json</code>. Dice all'agente che MarkItDown c'è e quando usarlo.</P>
+        <Os
+          win={<>
+            <CommandBox cmd={CMD.winMkConfig} label="1. Crea la cartella (se non c'è già)" />
+            <CommandBox cmd={CMD.winOpenAgents} label="2. Apre il file in Blocco note (se chiede di crearlo, sì)" />
+            <Note type="info" title="Al salvataggio">Scegliete «Tutti i file»: il nome deve restare <code className="kbd">AGENTS.md</code>, non <code className="kbd">AGENTS.md.txt</code>.</Note>
+          </>}
+          mac={<>
+            <CommandBox cmd={CMD.macMkConfig} label="1. Crea la cartella (se non c'è già)" />
+            <CommandBox cmd={CMD.macTouchAgents} label="2. Crea il file vuoto (se non c'è già)" />
+            <CommandBox cmd={CMD.macOpenAgents} label="3. Apre il file in TextEdit" />
+          </>}
+        />
+      </Step>
+    ),
+    notes: `Senza questo file l'agente non sa che MarkItDown esiste e prova strade peggiori: leggere il PDF come testo, fare i conti a mente. Il file si legge all'inizio della sessione: dopo averlo creato serve una sessione nuova. Se l'app era già aperta si rifà il passo 4.`
+  },
+  {
+    block: `${T} · Passo 7 · AGENTS.md`,
+    content: () => (
+      <Step n="7" title="AGENTS.md: il testo da incollare">
+        <CommandBox cmd={AGENTS_MD} label="Contenuto di AGENTS.md" tall kind="text" />
+        <Os
+          win={<P style={{ marginTop: '8px' }}>Salvate con <span className="kbd">Ctrl+S</span>.</P>}
+          mac={<P style={{ marginTop: '8px' }}>Salvate con <span className="kbd">Cmd+S</span>, in <S>solo testo</S> e con le virgolette dritte (altrimenti diventa <code className="kbd">AGENTS.md.rtf</code> e non viene letto). Poi Cmd+Q su OpenCode, <code className="kbd">pkill -f opencode</code> e riaprite.</P>}
+        />
+        <Checkpoint>Il file si chiama proprio <S>AGENTS.md</S> e sta nella cartella di configurazione di OpenCode. Per usarlo, aprite una <S>sessione nuova</S>: se l'app era già aperta, rifate il passo 4.</Checkpoint>
+      </Step>
+    ),
+    notes: `Il riquadro scorre: il tasto Copia copia tutto. Le parti che contano: la conversione dei documenti con MarkItDown, i calcoli con Python caricato al volo (non a mente), i risultati in file e non solo in chat, e le regole di prudenza. Dentro c'è scritto che uvx e uv run sono permessi: senza, l'agente li rifiuta perché «non installa programmi». Che l'app desktop veda uv dopo l'installazione è da verificare a schermo.`
+  },
+
+  /* --- 8 --- */
+  {
+    block: `${T} · Passo 8 · Prima prova`,
+    content: () => (
+      <Step n="8" title="La prima prova: la cartella di lavoro">
+        <P>OpenCode lavora dentro una cartella: ciò che l'agente legge, crea e modifica sta lì. Per le prove si usa la cartella <code className="kbd">prova-opencode</code> creata al passo 6.</P>
+        <P style={{ marginTop: '8px' }}>Dall'app, aprite quella cartella come progetto: cercate una voce come «Apri progetto» o «Open project» e scegliete <code className="kbd">prova-opencode</code>.<Verify /></P>
+        <Note type="danger" title="Solo cartelle di prova">L'agente può creare, modificare e cancellare file nella cartella in cui lo aprite. Non apritelo in Documenti o sul Desktop.</Note>
+        <Checkpoint>L'app mostra <S>prova-opencode</S> come cartella di lavoro.</Checkpoint>
+      </Step>
+    ),
+    notes: `Il nome del pulsante o della voce di menu per aprire una cartella è da verificare a schermo. La cartella di prova si crea una volta sola, al passo 6: chi l'ha saltato torna lì.`
+  },
+  {
+    block: `${T} · Passo 8 · Prima prova`,
+    content: () => (
+      <Step n="8" title="La prima prova: due richieste">
+        <P>Nella finestra di scrittura dell'app, una richiesta alla volta. La prima è una risposta di testo:</P>
+        <CommandBox cmd={CMD.req1} label="Richiesta 1" kind="text" />
+        <P style={{ marginTop: '8px' }}>La seconda è un compito con gli strumenti:</P>
+        <CommandBox cmd={CMD.req2} label="Richiesta 2" kind="text" />
+        <Checkpoint>Alla seconda compaiono le azioni dell'agente (scrittura e lettura del file) e <S>ciao.txt</S> è nella cartella di prova. Se l'app chiede un permesso, leggetelo e rispondete sì solo se è quello che vi aspettate.</Checkpoint>
+      </Step>
+    ),
+    notes: `È la differenza tra un chatbot e un agente: il chatbot risponde, l'agente fa delle cose sul computer, qui dentro la cartella in cui lo avete aperto. Si parte con Haiku e si passa a Sonnet solo se serve. Se l'app non risponde senza dare errori, di solito sono sbagliati l'indirizzo o la porta del server nel file: si rifà la prova di connessione del passo 5.`
+  },
+  {
+    block: `${T} · Passo 8 · Prima prova`,
+    content: () => (
+      <Step n="8" title="Una prova con i documenti">
+        <P>Nella cartella <code className="kbd">prova-opencode</code> mettete i due PDF dei materiali dell'argomento 5: {ext('../materiali/argomento-5/pratiche-uscite-dicembre.pdf', 'pratiche-uscite-dicembre.pdf')} e {ext('../materiali/argomento-5/regolamento-viaggi-di-prova.pdf', 'regolamento-viaggi-di-prova.pdf')}. Aprite una sessione nuova e chiedete:</P>
+        <CommandBox cmd={CMD.reqDocs} label="Richiesta" kind="text" />
+        <Checkpoint>Tra le azioni dell'agente deve comparire <S>uvx ... markitdown</S>. Se non compare e l'agente prova a leggere i PDF in altri modi, controllate nome e posizione del file <code className="kbd">AGENTS.md</code> (passo 7).</Checkpoint>
+        <P style={{ marginTop: '8px', color: colors.textMuted, fontSize: 'var(--fs-xs)' }}>Se una tabella del PDF esce spezzata, l'agente deve dirlo: è un limite della lettura dei PDF.</P>
+      </Step>
+    ),
+    notes: `Questa prova, fatta con il server del corso, non è ancora stata eseguita: da verificare a schermo. Se l'agente non usa MarkItDown o dice che uvx non c'è anche se nel terminale funziona, di solito l'app è partita prima dell'installazione di uv: si rifà il passo 4 e si apre una sessione nuova. Le soluzioni di questo controllo non sono nella slide.`
+  },
+
+  /* --- 9 --- */
+  {
+    block: `${T} · Passo 9 · Le adesioni`,
+    content: () => (
+      <Step n="9" title="La cartella delle adesioni">
+        <P>L'ultimo passo è un lavoro vero: ordinare i moduli di adesione di una classe inventata, la 4ª Y. Servono due file:</P>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0 10px' }}>
+          <ActivityBadge href="../materiali/argomento-5/provate-l-agente.html" label="Foglio: Provate l'agente" />
+          <ActivityBadge href="../materiali/argomento-5/adesioni-4Y-opencode.zip" label="Cartella delle adesioni (zip)" />
+        </div>
+        <Ol>
+          <Li>Scaricate lo zip ed estraetelo in una cartella vostra, <S>non</S> in Documenti e non sul Desktop.</Li>
+          <Li>In OpenCode aprite come progetto la cartella estratta, <code className="kbd">adesioni-4Y</code>.</Li>
+          <Li>Partite con Haiku. Seguite le richieste del foglio, una alla volta; la prima è questa:</Li>
+        </Ol>
+        <CommandBox cmd={CMD.reqLook} label="Richiesta 1 del foglio" kind="text" />
+        <Checkpoint>L'agente descrive i moduli e l'elenco della classe, senza modificare niente. Se chiede di inviare qualcosa a qualcuno, rispondete no.</Checkpoint>
+      </Step>
+    ),
+    notes: `Il foglio «Provate l'agente» contiene le richieste, le regole e le domande di confronto con Gemini; lo zip è la cartella di lavoro, con documenti tutti inventati. Si lavora da soli o in coppia. Le soluzioni del foglio non sono pubblicate.`
+  },
+
+  /* --- se qualcosa non va --- */
+  {
+    block: `${T} · Se qualcosa non va`,
+    content: () => (
+      <div style={wrap}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px 20px', marginBottom: '8px' }}>
+          <h2 style={{ ...h2s, marginBottom: 0 }}>Se qualcosa non va: la chiave</h2>
+          <OsSwitch />
+        </div>
+        <div className="two-col">
+          <div className="trouble">
+            <div className="trouble-title">Invalid proxy server token passed</div>
+            <P style={{ fontSize: 'var(--fs-xs)' }}>La chiave c'è ma è sbagliata o copiata male: un carattere in più o in meno, uno spazio in fondo, o la chiave di un'altra persona.</P>
+            <Os
+              win={<>
+                <P style={{ fontSize: 'var(--fs-xs)' }}>In una finestra PowerShell nuova, guardate le ultime quattro lettere e confrontatele con il foglio:</P>
+                <CommandBox cmd={CMD.winLast4} label="Ultime quattro lettere" />
+                <P style={{ fontSize: 'var(--fs-xs)' }}>Se sono diverse, correggete la variabile e rifate il passo 4.</P>
+              </>}
+              mac={<P style={{ fontSize: 'var(--fs-xs)' }}>Ricopiate la chiave dal foglio, rifate il comando con <code className="kbd">launchctl</code> del passo 2 e poi il passo 4.</P>}
+            />
+          </div>
+          <div className="trouble">
+            <div className="trouble-title">No api key passed in</div>
+            <P style={{ fontSize: 'var(--fs-xs)' }}>Il servizio in background è partito prima della variabile e non la vede, oppure il nome è scritto diverso da <code className="kbd">CORSO_API_KEY</code>.</P>
+            <P style={{ fontSize: 'var(--fs-xs)' }}>Controllate il nome, poi chiudete l'app, fermate i processi e riaprite:</P>
+            <Os
+              win={<CommandBox cmd={CMD.winStop} label="Ferma i processi" />}
+              mac={<CommandBox cmd={CMD.macStop} label="Ferma i processi (dopo Cmd+Q)" />}
+            />
+          </div>
+        </div>
+        <GuideBadges />
+      </div>
+    ),
+    notes: `Sono i due errori più frequenti. Quando si cambia la chiave o il file, il servizio in background resta acceso con le impostazioni vecchie: si rifà sempre il passo 4. Se le ultime quattro lettere coincidono e l'errore resta, si chiama il docente: il docente può anche revocare la chiave e darne un'altra. Altri errori e le soluzioni complete sono nella guida.`
+  },
+  {
+    block: `${T} · Se qualcosa non va`,
+    content: () => (
+      <div style={wrap}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px 20px', marginBottom: '8px' }}>
+          <h2 style={{ ...h2s, marginBottom: 0 }}>Se qualcosa non va: i file</h2>
+          <OsSwitch />
+        </div>
+        <div className="two-col">
+          <div className="trouble">
+            <div className="trouble-title"><Os win="Il file è stato salvato come .txt" mac="Il file è stato salvato come .rtf" /></div>
+            <Os
+              win={<P style={{ fontSize: 'var(--fs-xs)' }}>Blocco note ha aggiunto <code className="kbd">.txt</code> a <code className="kbd">opencode.json</code> o ad <code className="kbd">AGENTS.md</code>. Riaprite, salvate con «Tutti i file» e controllate che il file stia in <code className="kbd">%USERPROFILE%\.config\opencode\</code>. Poi rifate il passo 4.</P>}
+              mac={<>
+                <P style={{ fontSize: 'var(--fs-xs)' }}>TextEdit ha salvato un documento formattato: <code className="kbd">opencode.json.rtf</code> o <code className="kbd">AGENTS.md.rtf</code>. Riaprite, convertite in solo testo, salvate e cancellate quello sbagliato.</P>
+                <CommandBox cmd={CMD.macLs} label="Controllo dei nomi" />
+              </>}
+            />
+          </div>
+          <div className="trouble">
+            <div className="trouble-title"><Os win="Il selettore mostra altri modelli" mac="Le virgolette sono curve" /></div>
+            <Os
+              win={<P style={{ fontSize: 'var(--fs-xs)' }}>Il file non è stato letto per intero (virgole, virgolette o parentesi) oppure è nella cartella sbagliata. Dopo averlo corretto, rifate il passo 4.</P>}
+              mac={<P style={{ fontSize: 'var(--fs-xs)' }}>TextEdit ha trasformato le virgolette dritte in virgolette tipografiche e il JSON non è più valido. Togliete «Virgolette intelligenti» (Modifica, Sostituzioni), cancellate il contenuto, incollate di nuovo il testo e salvate.</P>}
+            />
+          </div>
+        </div>
+      </div>
+    ),
+    notes: `Su Windows il caso tipico è il nome del file con .txt in fondo; su Mac sono due: il formato .rtf e le virgolette curve. In entrambi i casi il sintomo è lo stesso: OpenCode ignora il file e i modelli del corso non compaiono. Il controllo del passo 3 lo mostra subito.`
+  },
+  {
+    block: `${T} · Se qualcosa non va`,
+    content: () => (
+      <div style={wrap}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px 20px', marginBottom: '8px' }}>
+          <h2 style={{ ...h2s, marginBottom: 0 }}>Se qualcosa non va: gli strumenti</h2>
+          <OsSwitch />
+        </div>
+        <div className="two-col">
+          <div className="trouble">
+            <div className="trouble-title">uv o uvx non trovato</div>
+            <P style={{ fontSize: 'var(--fs-xs)' }}>La finestra è stata aperta prima dell'installazione: il percorso si aggiorna solo nelle finestre nuove. Chiudetela e apritene una nuova.</P>
+            <Os
+              win={<>
+                <P style={{ fontSize: 'var(--fs-xs)' }}>Se non basta, provate questo: se risponde con una versione, uv c'è e il problema è solo il percorso. Chiamate il docente.</P>
+                <CommandBox cmd={CMD.winUvPath} label="Prova con il percorso completo" />
+              </>}
+              mac={<P style={{ fontSize: 'var(--fs-xs)' }}>Se non basta, chiamate il docente.</P>}
+            />
+          </div>
+          <div className="trouble">
+            <div className="trouble-title">PDF con le tabelle spezzate</div>
+            <P style={{ fontSize: 'var(--fs-xs)' }}>Righe spezzate o colonne mescolate sono un limite della lettura dei PDF, non un vostro errore. L'AGENTS.md chiede all'agente di dirlo e di non indovinare: controllate che lo faccia.</P>
+            <P style={{ fontSize: 'var(--fs-xs)' }}>La prima volta uvx è lento e scrive tante righe: sta scaricando MarkItDown. Aspettate; le volte dopo parte subito.</P>
+          </div>
+        </div>
+        <GuideBadges />
+      </div>
+    ),
+    notes: `Se l'agente non usa MarkItDown o dice che uvx non c'è anche se nel terminale funziona, l'app è partita prima dell'installazione di uv, oppure l'AGENTS.md non è stato letto: si rifà il passo 4, si apre una sessione nuova e si controllano nome e posizione del file. Gli avvisi sui caratteri del PDF sono innocui.`
+  },
+
+  /* --- cosa non fare --- */
+  {
+    block: `${T} · Cosa non fare`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={h2s}>Cosa non fare</h2>
+        <Ul>
+          <Li><S>Non condividete la chiave</S>: non fotografatela, non scrivetela in chat, non passatela a un compagno. È legata al vostro nome e al vostro budget. Se pensate che qualcuno l'abbia vista, ditelo al docente.</Li>
+          <Li>Non scrivete la chiave in un file di progetto (un <code className="kbd">opencode.json</code> in una cartella di lavoro, l'AGENTS.md, gli appunti). Solo nella variabile.</Li>
+          <Li>Non date all'agente dati personali di studenti, famiglie o colleghi, né documenti riservati. Solo materiale inventato o pubblico.</Li>
+          <Li>Aprite OpenCode solo in cartelle di prova, mai in Documenti o sul Desktop: l'agente può creare, modificare e cancellare file.</Li>
+          <Li>Leggete ogni richiesta di permesso prima di rispondere sì.</Li>
+          <Li>A fine corso, su un PC condiviso, togliete la variabile <code className="kbd">CORSO_API_KEY</code> e disinstallate l'app.</Li>
+        </Ul>
+      </div>
+    ),
+    notes: `La chiave ha un budget: ogni richiesta ne consuma un po', Sonnet più di Haiku. Quando finisce, il server rifiuta le richieste con un messaggio di errore: non succede niente di grave, si avvisa il docente. Il docente può revocare una chiave e darne un'altra. Collegamento con l'argomento 6 sull'uso dell'IA con giudizio.`
+  },
+
+  /* --- chiusura --- */
+  {
+    block: `${T} · Chiusura`,
+    content: () => (
+      <div style={wrap}>
+        <h2 style={{ color: colors.accent, marginBottom: '14px' }}>Dopo questo argomento</h2>
+        <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '8px' }}>Gli argomenti che vengono bene subito dopo:</p>
+        <ul style={{ paddingLeft: '28px', color: colors.textDim }}>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-5/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 5 — Chatbot e agente</a>: cosa distingue un agente da un chatbot, con la stessa cartella delle adesioni.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-9/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 9 — Agenti al lavoro con Claude Code</a>: un gruppo di agenti con un revisore.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-10/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 10 — Dentro un agente: OmniRoute e OpenCode</a>: come è fatto un agente e dove si sceglie il modello.</li>
+          <li style={{ marginBottom: '8px', fontSize: 'var(--fs-sm)' }}><a href="../argomento-12/slide.html" onClick={e => e.stopPropagation()} className="text-link">Argomento 12 — Una squadra di agenti</a>: ruoli, livelli di modello, memoria condivisa e regole di controllo.</li>
+        </ul>
+        <div style={{ marginTop: '14px' }}>
+          <BlockTag>La guida completa resta a disposizione</BlockTag>
+          <GuideBadges />
+        </div>
+      </div>
+    ),
+    notes: `Ultima slide. Ricordate che la guida completa, con tutti i problemi frequenti e la versione da terminale, resta nei materiali dell'argomento 10. A fine corso, sui PC condivisi, si toglie la variabile e si disinstalla l'app.`
+  },
+];
+
+/* ---------- icone barra di navigazione ---------- */
+
+const IconChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+const IconNotes = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 4h16v12H8l-4 4z" />
+    <line x1="7.5" y1="8.5" x2="16.5" y2="8.5" />
+    <line x1="7.5" y1="12" x2="13" y2="12" />
+  </svg>
+);
+const IconExpand = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="9 3 3 3 3 9" /><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><polyline points="15 21 21 21 21 15" />
+  </svg>
+);
+const IconCollapse = () => (
+  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="4 9 9 9 9 4" /><polyline points="20 9 15 9 15 4" /><polyline points="4 15 9 15 9 20" /><polyline points="20 15 15 15 15 20" />
+  </svg>
+);
+
+/* ---------- app ---------- */
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [notesOn, setNotesOn] = useState(false);
+  // Scala per schermi grandi (PC, proiettore): lega dimensioni di testo e riquadri a larghezza e altezza; sotto 1366x768 e su mobile resta 1.
+  const calcZoom = () => (window.innerWidth <= 900 ? 1 : Math.min(2.4, Math.max(1, Math.min(window.innerWidth / 1366, window.innerHeight / 768))));
+  const [zoom, setZoom] = useState(calcZoom);
+  useEffect(() => {
+    const onResize = () => setZoom(calcZoom());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const [os, setOsState] = useState(readOs);
+  const setOs = v => { setOsState(v); saveOs(v); };
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const total = slides.length;
+  const slide = slides[current];
+
+  const fullscreenSupported = typeof document !== 'undefined' &&
+    !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+
+  const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+  const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+  const toggleFullscreen = () => {
+    if (!fullscreenSupported) return;
+    try {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!active) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen ? el.requestFullscreen.bind(el)
+          : (el.webkitRequestFullscreen ? el.webkitRequestFullscreen.bind(el) : null);
+        if (req) { const p = req(); if (p && p.catch) p.catch(() => {}); }
+      } else {
+        const exit = document.exitFullscreen ? document.exitFullscreen.bind(document)
+          : (document.webkitExitFullscreen ? document.webkitExitFullscreen.bind(document) : null);
+        if (exit) { const p = exit(); if (p && p.catch) p.catch(() => {}); }
+      }
+    } catch (err) { /* niente: alcuni browser non supportano l'API */ }
+  };
+
+  useEffect(() => {
+    document.title = `${slide.block}`;
+  }, [current]);
+
+  useEffect(() => {
+    const handler = e => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (e.target && e.target.dataset && e.target.dataset.ownKeys && (e.key === ' ' || e.key === 'Enter')) return;
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'n' || e.key === 'N') { setNotesOn(v => !v); }
+      if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+    };
+  }, []);
+
+  return (
+    <OsCtx.Provider value={{ os, setOs }}>
+    <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+      <div className="bg-texture"></div>
+
+      <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '58px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 22px', zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+          <a href="../index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+          <span style={{ color: colors.border }}>|</span>
+          <span title={slide.block} style={{ color: colors.accent, fontWeight: 700, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{slide.block}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+          <div style={{ width: '110px', height: '7px', background: colors.bgLight, borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '4px', transition: 'width 0.3s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, paddingTop: '58px', paddingBottom: notesOn ? 'calc(60px + 42vh)' : '76px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className="slide-content" style={{ width: '100%', maxWidth: '1280px', margin: 'auto', padding: '0 24px', zoom, '--zoom': zoom }}>
+          {slide.content()}
+        </div>
+      </div>
+
+      {notesOn && (
+        <div className="notes-panel">
+          <strong>Note per chi parla</strong> — {slide.block}
+          <p style={{ marginTop: '8px' }}>{slide.notes}</p>
+        </div>
+      )}
+
+      <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '60px', background: colors.bgCard + 'ee', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 100, padding: '8px 16px' }}>
+        <div className="icon-btn-group">
+          <button onClick={prev} disabled={current === 0} className="icon-btn" aria-label="Slide precedente" title="Slide precedente">
+            <IconChevronLeft />
+          </button>
+          <button onClick={next} disabled={current === total - 1} className="icon-btn" aria-label="Slide successiva" title="Slide successiva">
+            <IconChevronRight />
+          </button>
+        </div>
+        <div className="icon-btn-group">
+          <button
+            onClick={() => setNotesOn(v => !v)}
+            className={notesOn ? 'icon-btn active' : 'icon-btn'}
+            aria-label="Note per chi parla (N)"
+            title="Note per chi parla (N)"
+            aria-pressed={notesOn}
+          >
+            <IconNotes />
+          </button>
+          {fullscreenSupported && (
+            <button
+              onClick={toggleFullscreen}
+              className={isFullscreen ? 'icon-btn active' : 'icon-btn'}
+              aria-label="Schermo intero (F)"
+              title="Schermo intero (F)"
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <IconCollapse /> : <IconExpand />}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+    </OsCtx.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -246,6 +246,9 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <p>OpenCode lavora dentro una cartella: ciò che l'agente legge, crea e modifica sta lì. Create una cartella di prova, in PowerShell:</p>
 <pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\prova-opencode&quot; | Out-Null
 </code></pre>
+<p>Sul Mac, nel Terminale:</p>
+<pre><code class="language-bash">mkdir -p ~/prova-opencode
+</code></pre>
 <p>Poi, dall'app, aprite quella cartella come progetto. Il nome del pulsante o della voce di menu per aprire una cartella è da verificare a schermo: cercate qualcosa come "Apri progetto" o "Open project" e scegliete <code>prova-opencode</code> dentro il vostro profilo utente.</p>
 <p>Nella finestra di scrittura dell'app provate due richieste, una alla volta. La prima è una risposta di testo:</p>
 <pre><code class="language-text">Rispondi con una frase: come ti chiami e che modello sei?
