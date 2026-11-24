@@ -308,6 +308,23 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Causa: il servizio in background è rimasto acceso con le impostazioni vecchie.</li>
 <li>Cosa fare: rifate il passaggio 4, sempre.</li>
 </ul>
+<p><strong>8. <code>uv</code> o <code>uvx</code> non trovato (dice che non è un comando riconosciuto).</strong></p>
+<ul>
+<li>Causa: la finestra di PowerShell o del Terminale è stata aperta prima dell'installazione di uv, che aggiorna il percorso solo per le finestre nuove.</li>
+<li>Cosa fare: chiudete la finestra e apritene una nuova. Se non basta, provate questo comando: se risponde con una versione, uv c'è e il problema è solo il percorso, quindi chiamate il docente.</li>
+</ul>
+<pre><code class="language-powershell">&amp; &quot;$env:USERPROFILE\.local\bin\uvx.exe&quot; --version
+</code></pre>
+<p><strong>9. La prima volta <code>uvx</code> è lento e scrive tante righe.</strong></p>
+<ul>
+<li>Causa: sta scaricando MarkItDown e le sue librerie. Serve internet.</li>
+<li>Cosa fare: aspettate che finisca. Le volte dopo parte subito, perché i pacchetti sono già nel computer.</li>
+</ul>
+<p><strong>10. L'agente non usa MarkItDown, o dice che <code>uvx</code> non c'è, anche se nel terminale funziona.</strong></p>
+<ul>
+<li>Causa: l'app desktop è partita prima dell'installazione di uv e non vede il nuovo percorso, oppure l'<code>AGENTS.md</code> non è stato letto.</li>
+<li>Cosa fare: chiudete OpenCode e fermate i processi rimasti (passaggio 4), riaprite e iniziate una sessione nuova. Controllate che il file si chiami proprio <code>AGENTS.md</code> e sia in <code>%USERPROFILE%\.config\opencode\</code>.</li>
+</ul>
 <h2 id="9-cosa-non-fare">9. Cosa non fare</h2>
 <ul>
 <li>Non condividete la chiave: non fotografatela, non scrivetela in chat, non passatela a un compagno. È collegata al vostro nome e al vostro budget. Se pensate che qualcuno l'abbia vista, ditelo al docente: il docente può revocarla e darvene un'altra.</li>
@@ -317,6 +334,98 @@ footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border
 <li>Leggete ogni richiesta di permesso prima di rispondere sì.</li>
 <li>Alla fine del corso, se il PC è condiviso, rimuovete la variabile <code>CORSO_API_KEY</code> dalle variabili d'ambiente dell'account e disinstallate l'app (Impostazioni di Windows, App installate).</li>
 </ul>
+<h2 id="kit-minimo-gli-strumenti-per-lagente">Kit minimo: gli strumenti per l'agente</h2>
+<p>Un agente di programmazione sa leggere file di testo, ma un PDF delle pratiche, un foglio Excel con le adesioni o un Word con una circolare sono un'altra cosa: dentro non c'è testo semplice. Per leggerli bene all'agente servono due strumenti, che si installano da soli, senza amministratore:</p>
+<ul>
+<li><strong>uv</strong>: un programma che scarica ed esegue al volo piccoli programmi in Python, senza installare Python nel computer (se lo porta lui);</li>
+<li><strong>MarkItDown</strong>: un programma di Microsoft che trasforma PDF, Word, Excel e PowerPoint in testo, con le tabelle in forma di tabella. Lo lancia uv quando serve.</li>
+</ul>
+<p>Poi un file di istruzioni, <code>AGENTS.md</code>, dice all'agente che questi strumenti ci sono e quando usarli. Serve internet: la prima volta uv scarica i pacchetti, le volte dopo li ritrova.</p>
+<h3 id="installare-uv-su-windows">Installare uv su Windows</h3>
+<p>In PowerShell, il comando intero su una riga. Non dovrebbero servire permessi di amministratore: uv si mette nella cartella <code>.local\bin</code> del vostro profilo utente (da verificare sui PC del laboratorio).</p>
+<p>Il comando scarica dal sito ufficiale di uv il programma di installazione e lo esegue. Di solito Windows non lascia eseguire programmi scaricati da internet scritti per PowerShell: <code>-ExecutionPolicy ByPass</code> toglie questo blocco solo per questo comando, senza cambiare le impostazioni del computer.</p>
+<pre><code class="language-powershell">powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;
+</code></pre>
+<p>Chiudete la finestra di PowerShell e apritene una nuova, altrimenti il comando <code>uv</code> non viene trovato. Poi provate:</p>
+<pre><code class="language-powershell">uvx --version
+</code></pre>
+<p>Deve scrivere un numero di versione, per esempio <code>uvx 0.11.19</code>. Se la rete della scuola blocca lo scaricamento dello script, o PowerShell rifiuta di eseguirlo, fermatevi e chiamate il docente (da verificare a schermo sui PC del laboratorio).</p>
+<h3 id="installare-uv-su-mac">Installare uv su Mac</h3>
+<p>Nel Terminale:</p>
+<pre><code class="language-bash">curl -LsSf https://astral.sh/uv/install.sh | sh
+</code></pre>
+<p>Chiudete il Terminale e apritene uno nuovo. Poi provate:</p>
+<pre><code class="language-bash">uvx --version
+</code></pre>
+<h3 id="provare-la-conversione-di-un-pdf">Provare la conversione di un PDF</h3>
+<p>Vi serve un PDF qualsiasi: per esempio il foglio delle pratiche delle uscite di dicembre, scaricato dai materiali dell'argomento 5. Mettetelo nella cartella di prova <code>prova-opencode</code>, quella creata nella sezione 5. Poi, in PowerShell, entrate nella cartella:</p>
+<pre><code class="language-powershell">cd &quot;$env:USERPROFILE\prova-opencode&quot;
+</code></pre>
+<p>Sul Mac, nel Terminale:</p>
+<pre><code class="language-bash">cd ~/prova-opencode
+</code></pre>
+<p>Il comando seguente va bene per Windows e per Mac. Cambiate <code>pratiche-uscite-dicembre.pdf</code> con il nome del vostro file. Alla prima esecuzione scarica i pacchetti, quindi è più lento e scrive molte righe di scaricamento: è normale.</p>
+<pre><code class="language-powershell">uvx --from &quot;markitdown[all]&quot; markitdown pratiche-uscite-dicembre.pdf
+</code></pre>
+<p>Vedrete il contenuto del PDF come testo. Messaggi del tipo <code>Could not get FontBBox from font descriptor</code> sono avvisi sui caratteri del PDF e non impediscono la lettura. Le tabelle dei PDF a volte escono con le righe spezzate o le colonne mescolate: è un limite della lettura dei PDF, non un vostro errore. Per questo l'<code>AGENTS.md</code> qui sotto chiede all'agente di dirlo, e non di indovinare. In una prova un file Excel piccolo è uscito come tabella pulita; Word e PowerPoint non sono ancora stati provati su file reali (da verificare a schermo).</p>
+<h3 id="creare-lagentsmd-globale">Creare l'AGENTS.md globale</h3>
+<p>OpenCode legge all'inizio di ogni sessione il file <code>AGENTS.md</code> che sta nella sua cartella di configurazione personale, la stessa di <code>opencode.json</code>. Vale per tutte le cartelle di lavoro.</p>
+<p>In PowerShell, un comando alla volta. Il primo crea la cartella, se non c'è già:</p>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$env:USERPROFILE\.config\opencode&quot; | Out-Null
+</code></pre>
+<p>Il secondo apre il file in Blocco note (se chiede di crearlo, rispondete di sì):</p>
+<pre><code class="language-powershell">notepad &quot;$env:USERPROFILE\.config\opencode\AGENTS.md&quot;
+</code></pre>
+<p>Incollate questo testo e salvate con Ctrl+S. Il nome deve restare <code>AGENTS.md</code>, non <code>AGENTS.md.txt</code>: al salvataggio scegliete "Tutti i file".</p>
+<pre><code class="language-text"># Istruzioni per l'agente
+
+Lavori per una persona che non è esperta di informatica. Rispondi sempre in italiano, con frasi semplici.
+
+## Leggere i documenti
+
+Per leggere un PDF, un file Word, Excel o PowerPoint non aprirlo come testo: convertilo con MarkItDown, con questo comando (sostituisci il nome del file):
+
+uvx --from &quot;markitdown[all]&quot; markitdown nome-del-file.pdf
+
+Poi lavora sul testo ottenuto. Se il comando scrive avvisi sui caratteri del PDF, ignorali. Se una tabella del PDF esce con righe spezzate o colonne mescolate, dillo e non indovinare i valori mancanti.
+
+## Calcoli e tabelle
+
+Per conteggi, percentuali e confronti tra valori usa Python con le librerie caricate al volo, per esempio:
+
+uv run --with pandas python nome-dello-script.py
+
+Per leggere o scrivere file Excel usa uv run --with openpyxl python nome-dello-script.py. Non fare i conti a mente: calcolali.
+
+## Risultati
+
+Scrivi i risultati in file nella cartella di lavoro (per esempio in formato Markdown, CSV o Excel), non solo nella chat.
+
+## Cosa non fare
+
+- Non installare programmi. I comandi uvx e uv run scritti qui sopra sono permessi.
+- Non modificare i file originali: scrivi i risultati in file nuovi.
+- Non cancellare file.
+- Non inviare niente a nessuno (email, messaggi, caricamenti) senza chiedere prima.
+- Alla fine scrivi che cosa non hai potuto verificare.
+</code></pre>
+<p>Per cominciare a usarlo, aprite una sessione nuova in OpenCode: il file si legge all'inizio della sessione. Se l'app era già aperta, rifate il passaggio 4: chiudere, fermare i processi, riaprire. Che l'app desktop veda <code>uv</code> dopo l'installazione è da verificare a schermo.</p>
+<h3 id="creare-lagentsmd-su-mac">Creare l'AGENTS.md su Mac</h3>
+<p>Stesso percorso: <code>~/.config/opencode/AGENTS.md</code>. Nel Terminale, un comando alla volta. Il primo crea la cartella, se non c'è già:</p>
+<pre><code class="language-bash">mkdir -p ~/.config/opencode
+</code></pre>
+<p>Il secondo crea il file vuoto, se non c'è già:</p>
+<pre><code class="language-bash">touch ~/.config/opencode/AGENTS.md
+</code></pre>
+<p>Il terzo lo apre in TextEdit:</p>
+<pre><code class="language-bash">open -e ~/.config/opencode/AGENTS.md
+</code></pre>
+<p>Incollate il testo del riquadro qui sopra (quello che comincia con <code># Istruzioni per l'agente</code>) e salvate con Cmd+S. Valgono le attenzioni della sezione "Il file di configurazione su Mac", più sotto: il file deve essere in <strong>solo testo</strong> (menu <strong>Formato</strong>, <strong>Converti in formato solo testo</strong>), altrimenti diventa <code>AGENTS.md.rtf</code> e non viene letto; e le virgolette devono restare dritte, quindi togliete la spunta a <strong>Virgolette intelligenti</strong> (menu <strong>Modifica</strong>, <strong>Sostituzioni</strong>) o incollate senza riscrivere. Poi Cmd+Q su OpenCode, <code class="cmd">pkill -f opencode</code> e riaprite.</p>
+<h3 id="una-prova-con-i-documenti">Una prova con i documenti</h3>
+<p>Nella cartella <code>prova-opencode</code> mettete il PDF delle pratiche e il PDF del regolamento (dai materiali dell'argomento 5), apritela come progetto e chiedete:</p>
+<pre><code class="language-text">Leggi i due PDF e dimmi quali pratiche non rispettano il regolamento. Per ogni pratica scrivi l'articolo che non è rispettato.
+</code></pre>
+<p>Se l'<code>AGENTS.md</code> è stato letto, tra le azioni dell'agente comparirà il comando <code>uvx ... markitdown</code>. Se non compare e l'agente prova a leggere i PDF in altri modi, controllate nome e posizione del file <code>AGENTS.md</code>. Questa prova, fatta con il server del corso, non è ancora stata eseguita: da verificare a schermo.</p>
 <h2 id="su-mac">Su Mac</h2>
 <p>Questa sezione vale per chi usa un Mac, al posto delle sezioni 1-4 (da 5 in poi la guida è la stessa). Le differenze sono quattro: dove si scarica l'app, come si dà la chiave, come si modifica il file e come si prova il server. Il contenuto di <code>opencode.json</code> è identico a quello della sezione 3.</p>
 <h3 id="installare-opencode-desktop-su-mac">Installare OpenCode desktop su Mac</h3>
